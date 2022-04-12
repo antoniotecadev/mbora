@@ -37,3 +37,4 @@ export default (): JSX.Element => {
     </GestureHandlerRootView>
   );
 };
+

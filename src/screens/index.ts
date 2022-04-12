@@ -1,6 +1,9 @@
 import {ModalScreenLayouts, ScreenLayouts, TabScreenLayouts} from '../services/navigation/types';
 
 import {Main} from './main';
+import ProductsList from './ProductsList';
+import { ProductDetails } from './ProductDetails.js';
+import { Cart } from './Cart.js';
 import {Settings} from './settings';
 import {Example} from './screen-sample';
 import {genRootNavigator, genStackNavigator, genTabNavigator} from '../services/navigation/help';
@@ -9,7 +12,7 @@ import {screenDefaultOptions, tabBarDefaultOptions} from '../services/navigation
 // Describe your screens here
 export type Tabs = 'Main' | 'WIP' | 'Settings';
 export type Modal = 'ExampleModal';
-export type Screen = 'Main' | 'Example' | 'Settings';
+export type Screen = 'Main' | 'Example' | 'Settings' | 'ProductDetails' | 'Cart';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -18,13 +21,14 @@ export type ScreenProps = {
   Main: undefined;
   Example: ExampleScreenProps;
   Settings: undefined;
+  ProductDetails: undefined;
 } & ModalProps;
 
 // Screens
 const screens: ScreenLayouts = {
   Main: {
     name: 'Main',
-    component: Main,
+    component: ProductsList,
     options: () => ({
       title: 'Home',
       ...screenDefaultOptions(),
@@ -46,8 +50,24 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
+  ProductDetails: {
+    name: 'ProductDetails',
+    component: ProductDetails,
+    options: () => ({
+      title: 'Detalhe de produto',
+      ...screenDefaultOptions(),
+    }),
+  },
+  Cart: {
+    name: 'Cart',
+    component: Cart,
+    options: () => ({
+      title: 'Carrinho de compra',
+      ...screenDefaultOptions(),
+    }),
+  },
 };
-const HomeStack = () => genStackNavigator([screens.Main, screens.Example]);
+const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Main, screens.Example]);

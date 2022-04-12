@@ -6,6 +6,7 @@ import {Colors} from 'react-native-ui-lib';
 
 import {getHeaderBlurEffect} from '../../utils/designSystem';
 import {Icon} from '../../components/icon';
+import { CartIcon } from '../../components/CartIcon.js';
 
 export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   headerShadowVisible: false,
@@ -14,8 +15,9 @@ export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   // this setup makes large title work on iOS
   ...Platform.select({
     ios: {
-      headerLargeTitle: true,
-      headerTransparent: true,
+      headerRight: () => <CartIcon />,
+      headerLargeTitle: false,
+      headerTransparent: false,
       headerBlurEffect: getHeaderBlurEffect(), // this sets up blurred nav bar
       // if you'd like to have a solid color for a nav bar, then you should
       // set up `headerStyle: {backgroundColor: Colors.bg2Color}`
