@@ -32,26 +32,24 @@ export default function ProductsList({ navigation }) {
   });
 
   return (
-      <FlatList
-        columnWrapperStyle={{
-          justifyContent: "space-between",
-        }}
-        numColumns={2}
-        style={styles.productsList}
-        contentContainerStyle={styles.productsListContainer}
-        // keyExtractor={(item) => item.id.toString()}
-        data={products}
-        renderItem={renderProduct}
-      />
+    <FlatList
+      columnWrapperStyle={{
+        justifyContent: "space-between",
+      }}
+      numColumns={2}
+      contentContainerStyle={styles.productsListContainer}
+      // keyExtractor={(item) => item.id.toString()}
+      data={products}
+      renderItem={renderProduct}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   productsList: {
-    backgroundColor: '#eeeeee',
+    backgroundColor: 'black',
   },
   productsListContainer: {
-    backgroundColor: '#eeeeee',
     paddingVertical: 8,
     marginHorizontal: 8,
   },
