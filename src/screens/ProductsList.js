@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
 import { Product } from '../components/Product.js';
 import { getProducts } from '../services/ProductsService.js';
-import { View } from 'react-native-ui-lib';
+import { Text, View, Card } from 'react-native-ui-lib';
+
+const cardImage2 = require('../../assets/products/car-101.jpg');
 
 export default function ProductsList({ navigation }) {
 
@@ -24,6 +26,34 @@ export default function ProductsList({ navigation }) {
       />
     );
   }
+  function renderCategory({ item: product }) {
+    return (
+      <Card
+        onPress={() => alert()}
+        height={150}
+        marginR-8
+        elevation={1}
+      >
+        <Card.Image style={styles.thumb} source={cardImage2} />
+        <Card.Section
+          padding-4
+          content={[{ text: 'Card', text80: true, grey10: true }]}
+        />
+      </Card>
+    );
+  }
+
+  function flatListHeader() {
+    return (
+      <FlatList
+        contentContainerStyle={styles.productsListContainer}
+        // keyExtractor={(item) => item.id.toString()}
+        data={products}
+        horizontal={true}
+        renderItem={renderCategory}
+      />
+    );
+  }
 
   const [products, setProducts] = useState([]);
 
@@ -32,16 +62,19 @@ export default function ProductsList({ navigation }) {
   });
 
   return (
-    <FlatList
-      columnWrapperStyle={{
-        justifyContent: "space-between",
-      }}
-      numColumns={2}
-      contentContainerStyle={styles.productsListContainer}
-      // keyExtractor={(item) => item.id.toString()}
-      data={products}
-      renderItem={renderProduct}
-    />
+    <>
+      <FlatList
+        columnWrapperStyle={{
+          justifyContent: "space-between",
+        }}
+        numColumns={2}
+        contentContainerStyle={styles.productsListContainer}
+        // keyExtractor={(item) => item.id.toString()}
+        data={products}
+        renderItem={renderProduct}
+        ListHeaderComponent={flatListHeader}
+      />
+    </>
   );
 }
 
@@ -52,5 +85,9 @@ const styles = StyleSheet.create({
   productsListContainer: {
     paddingVertical: 8,
     marginHorizontal: 8,
+  },
+  thumb: {
+    height: '50%',
+    width: 100,
   },
 });
