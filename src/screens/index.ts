@@ -10,7 +10,7 @@ import {genRootNavigator, genStackNavigator, genTabNavigator} from '../services/
 import {screenDefaultOptions, tabBarDefaultOptions} from '../services/navigation/options';
 
 // Describe your screens here
-export type Tabs = 'Main' | 'Perfil' | 'Cart'| 'Notification' | 'Settings';
+export type Tabs = 'Main' | 'Perfil' | 'Cart'| 'Notification' | 'Menu';
 export type Modal = 'ExampleModal';
 export type Screen = 'Main' | 'Example' | 'Settings' | 'ProductDetails' | 'Cart';
 
@@ -107,16 +107,16 @@ const tabs: TabScreenLayouts = {
       ...tabBarDefaultOptions('NotificationNavigator'),
     }),
   },
-  Settings: {
-    name: 'SettingsNavigator',
+  Menu: {
+    name: 'MenuNavigator',
     component: SettingsStack,
     options: () => ({
-      title: 'Settings',
-      ...tabBarDefaultOptions('SettingsNavigator'),
+      title: 'Menu',
+      ...tabBarDefaultOptions('MenuNavigator'),
     }),
   },
 };
-const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Perfil, tabs.Cart, tabs.Notification, tabs.Settings]);
+const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Perfil, tabs.Cart, tabs.Notification, tabs.Menu]);
 
 // Modals
 const modals: ModalScreenLayouts = {
