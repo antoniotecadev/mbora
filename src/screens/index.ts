@@ -30,7 +30,7 @@ const screens: ScreenLayouts = {
     name: 'Main',
     component: ProductsList,
     options: () => ({
-      title: 'Home',
+      title: 'Casa',
       ...screenDefaultOptions(),
     }),
   },
