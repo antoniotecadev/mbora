@@ -10,7 +10,7 @@ import {genRootNavigator, genStackNavigator, genTabNavigator} from '../services/
 import {screenDefaultOptions, tabBarDefaultOptions} from '../services/navigation/options';
 
 // Describe your screens here
-export type Tabs = 'Main' | 'WIP' | 'Settings';
+export type Tabs = 'Main' | 'Perfil' | 'Cart'| 'Notification' | 'Settings';
 export type Modal = 'ExampleModal';
 export type Screen = 'Main' | 'Example' | 'Settings' | 'ProductDetails' | 'Cart';
 
@@ -78,16 +78,32 @@ const tabs: TabScreenLayouts = {
     name: 'MainNavigator',
     component: HomeStack,
     options: () => ({
-      title: 'Home',
+      title: 'Casa',
       ...tabBarDefaultOptions('MainNavigator'),
     }),
   },
-  WIP: {
-    name: 'ExampleNavigator',
+  Perfil: {
+    name: 'PerfilNavigator',
     component: ExampleStack,
     options: () => ({
-      title: 'WIP',
-      ...tabBarDefaultOptions('ExampleNavigator'),
+      title: 'Perfil',
+      ...tabBarDefaultOptions('PerfilNavigator'),
+    }),
+  },
+  Cart: {
+    name: 'CartNavigator',
+    component: ExampleStack,
+    options: () => ({
+      title: 'Carrinho',
+      ...tabBarDefaultOptions('CartNavigator'),
+    }),
+  },
+  Notification: {
+    name: 'NotificationNavigator',
+    component: ExampleStack,
+    options: () => ({
+      title: 'Notificação',
+      ...tabBarDefaultOptions('NotificationNavigator'),
     }),
   },
   Settings: {
@@ -99,7 +115,7 @@ const tabs: TabScreenLayouts = {
     }),
   },
 };
-const TabNavigator = () => genTabNavigator([tabs.Main, tabs.WIP, tabs.Settings]);
+const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Perfil, tabs.Cart, tabs.Notification, tabs.Settings]);
 
 // Modals
 const modals: ModalScreenLayouts = {

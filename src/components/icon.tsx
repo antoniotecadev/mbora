@@ -12,7 +12,7 @@ type IconProps = {
   bounceable?: boolean;
 };
 
-const ICON_SIZE = 26;
+const ICON_SIZE = 24;
 
 export const IconComponent = Ionicons;
 export const Icon: React.FC<IconProps> = ({
