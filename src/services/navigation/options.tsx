@@ -12,7 +12,7 @@ import { CartContext } from '../../CartContext';
 
 export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   headerShadowVisible: false,
-  headerTintColor: Colors.primary,
+  headerTintColor: 'orange',
 
   // this setup makes large title work on iOS
   ...Platform.select({
@@ -28,7 +28,7 @@ export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
 
 export const tabBarDefaultOptions = (routeName: string): BottomTabNavigationOptions => ({
   headerShown: false,
-  tabBarActiveTintColor: Colors.primary,
+  tabBarActiveTintColor: 'orange',
   tabBarInactiveTintColor: Colors.grey40,
   tabBarStyle: { backgroundColor: Colors.bgColor, borderTopWidth: 0, elevation: 0 },
   tabBarIcon: ({ focused, color, size }) => (
@@ -42,7 +42,7 @@ export const tabBarDefaultOptions = (routeName: string): BottomTabNavigationOpti
 const BadgeCartCount = () => {
   const { getItemsCount } = useContext(CartContext);
   return (
-    <Badge containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={getItemsCount()} size={12} />
+    <Badge backgroundColor={Colors.red20} containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={getItemsCount()} size={12} />
   );
 }
 

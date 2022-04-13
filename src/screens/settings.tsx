@@ -40,7 +40,7 @@ export const Settings: React.FC = observer(() => {
   };
 
   const openLink = (link: string) => () => {
-    Linking.openURL(link);
+    // Linking.openURL(link);
   };
 
   const appearancePickOption = (option: UIAppearance) => () => {

@@ -30,7 +30,7 @@ export const Action: React.FC<ActionProps> = ({
           <View row centerV>
             {icon ? (
               <View marginR-s2>
-                <Icon name={icon} size={iconSize} color={Colors.primary} />
+                <Icon name={icon} size={iconSize} color={'orange'} />
               </View>
             ) : null}
 
@@ -50,7 +50,7 @@ export const Action: React.FC<ActionProps> = ({
 
             {rightIcon ? (
               <View marginL-s2>
-                <Icon name={rightIcon} size={iconSize} color={Colors.primary} />
+                <Icon name={rightIcon} size={iconSize} color={'orange'} />
               </View>
             ) : null}
           </View>
