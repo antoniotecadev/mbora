@@ -71,6 +71,7 @@ const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screen
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Main, screens.Example]);
+const CartStack = () => genStackNavigator([screens.Cart]);
 
 // Tabs
 const tabs: TabScreenLayouts = {
@@ -92,7 +93,7 @@ const tabs: TabScreenLayouts = {
   },
   Cart: {
     name: 'CartNavigator',
-    component: ExampleStack,
+    component: CartStack,
     options: () => ({
       title: 'Carrinho',
       ...tabBarDefaultOptions('CartNavigator'),
