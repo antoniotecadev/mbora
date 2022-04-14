@@ -4,7 +4,7 @@ import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
-import { Product } from '../components/Product.js';
+import { Cantina } from '../components/Cantina.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
@@ -17,7 +17,7 @@ export default function ListaCantinas({ navigation }) {
 
   function renderProduct({ item: product }) {
     return (
-      <Product {...product}
+      <Cantina {...product}
         onPress={() => {
           nav.show('ProductDetails', {
             productId: product.id,
@@ -26,34 +26,34 @@ export default function ListaCantinas({ navigation }) {
       />
     );
   }
-  function renderCategory({ item: product }) {
-    return (
-      <Card
-        onPress={() => alert()}
-        height={150}
-        marginR-8
-        elevation={1}
-      >
-        <Card.Image style={styles.thumb} source={cardImage2} />
-        <Card.Section
-          padding-4
-          content={[{ text: 'Card', text80: true, grey10: true }]}
-        />
-      </Card>
-    );
-  }
+  // function renderCategory({ item: product }) {
+  //   return (
+  //     <Card
+  //       onPress={() => alert()}
+  //       height={150}
+  //       marginR-8
+  //       elevation={1}
+  //     >
+  //       <Card.Image style={styles.thumb} source={cardImage2} />
+  //       <Card.Section
+  //         padding-4
+  //         content={[{ text: 'Card', text80: true, grey10: true }]}
+  //       />
+  //     </Card>
+  //   );
+  // }
 
-  function flatListHeader() {
-    return (
-      <FlatList
-        contentContainerStyle={styles.productsListContainer}
-        // keyExtractor={(item) => item.id.toString()}
-        data={products}
-        horizontal={true}
-        renderItem={renderCategory}
-      />
-    );
-  }
+  // function flatListHeader() {
+  //   return (
+  //     <FlatList
+  //       contentContainerStyle={styles.productsListContainer}
+  //       // keyExtractor={(item) => item.id.toString()}
+  //       data={products}
+  //       horizontal={true}
+  //       renderItem={renderCategory}
+  //     />
+  //   );
+  // }
 
   const [products, setProducts] = useState([]);
 
@@ -72,7 +72,7 @@ export default function ListaCantinas({ navigation }) {
         // keyExtractor={(item) => item.id.toString()}
         data={products}
         renderItem={renderProduct}
-        ListHeaderComponent={flatListHeader}
+        // ListHeaderComponent={flatListHeader}
       />
     </>
   );
@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginHorizontal: 8,
   },
-  thumb: {
-    height: '50%',
-    width: 100,
-  },
+  // thumb: {
+  //   height: '100%',
+  //   width: 100,
+  // },
 });
  
