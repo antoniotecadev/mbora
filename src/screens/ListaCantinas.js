@@ -4,7 +4,7 @@ import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
-import { Cantina } from '../components/CantinaCard.js';
+import { CantinaCard } from '../components/CantinaCard.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
@@ -17,7 +17,7 @@ export default function ListaCantinas({ navigation }) {
 
   function renderProduct({ item: product }) {
     return (
-      <Cantina {...product}
+      <CantinaCard {...product}
         onPress={() => {
           nav.show('ProductDetails', {
             productId: product.id,
