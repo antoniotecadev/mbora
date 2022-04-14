@@ -5,7 +5,7 @@ import Perfil from './Perfil';
 import ProductsList from './ProductsList';
 import ListaCantinas from './ListaCantinas';
 import { ProductDetails } from './ProductDetails.js';
-import { Cart } from './Cart.js';
+import { Carrinho } from './Carrinho.js';
 import { Settings } from './settings';
 import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
@@ -69,8 +69,8 @@ const screens: ScreenLayouts = {
     }),
   },
   Cart: {
-    name: 'Cart',
-    component: Cart,
+    name: 'Carrinho',
+    component: Carrinho,
     options: () => ({
       title: 'Carrinho de compra',
       ...screenDefaultOptions(),
