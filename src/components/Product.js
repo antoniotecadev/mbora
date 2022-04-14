@@ -8,7 +8,7 @@ const cartIcon = require('../../assets/icons/cart.png');
 const cestoIcon = require('../../assets/icons/cesto-de-compras.png');
 const chevronDown = require('../../assets/icons/chevronDown.png');
 const chevronUp = require('../../assets/icons/chevronUp.png');
-const cardImage2 = require('../../assets/empty-state.jpg');
+const denunciaIcon = require('../../assets/icons/denuncia.png');
 
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
@@ -113,6 +113,12 @@ export function Product({ name, price, image, onPress }) {
                 animateLayout
                 animateTo={'left'}
               />
+              <Button
+                size={'small'}
+                backgroundColor={Colors.red40}
+                iconSource={denunciaIcon}
+                {...iconButton}
+                onPress={onShare} />
               <Button
                 size={'small'}
                 backgroundColor={Colors.green20}
