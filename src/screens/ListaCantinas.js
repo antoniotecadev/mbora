@@ -4,7 +4,7 @@ import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
-import { Cantina } from '../components/Cantina.js';
+import { Cantina } from '../components/CantinaCard.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 

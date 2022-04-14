@@ -10,7 +10,7 @@ const denunciaIcon = require('../../assets/icons/denuncia.png');
 
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Cantina({ name, price, image, onPress }) {
+export function CantinaCard({ name, price, image, onPress }) {
 
     const onShare = async () => {
         try {
