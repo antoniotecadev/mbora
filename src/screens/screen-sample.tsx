@@ -25,7 +25,7 @@ export const Example: React.FC<Props> = observer(({route}) => {
   return (
     <View flex bg-bgColor>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        <View padding-s4>
+        {/* <View padding-s4>
           <Section title={t.do('section.navigation.title')}>
             {!value ? null : (
               <Text textColor text50R>
@@ -61,7 +61,7 @@ export const Example: React.FC<Props> = observer(({route}) => {
               />
             </View>
           </Section>
-        </View>
+        </View> */}
       </ScrollView>
     </View>
   );
