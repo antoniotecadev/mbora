@@ -17,7 +17,7 @@ export default function Perfil({ route }) {
             <ScrollView>
                 <View style={styles.infoContainer}>
                     <Avatar source={perfilImage} size={100} animate={true} />
-                    <Text orange40 marginL-6 text70BL>António Teca</Text>
+                    <Text color='orange' marginL-6 text70BL>António Teca</Text>
                 </View>
                 <Button
                     text90
@@ -29,7 +29,7 @@ export default function Perfil({ route }) {
                     iconStyle={{ tintColor: Colors.black }}
                 />
                 <TabController items={[{ label: 'Compras' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
-                    <TabController.TabBar enableShadows />
+                    <TabController.TabBar activeBackgroundColor={'orange'} enableShadows />
                     <View flex>
                         <TabController.TabPage index={0}><Text>hhhhhh</Text></TabController.TabPage>
                         <TabController.TabPage index={1} lazy><Text>oooo</Text></TabController.TabPage>
