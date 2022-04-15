@@ -8,7 +8,7 @@ import { Product } from '../components/Product.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
-const cardImage2 = require('../../assets/products/car-101.jpg');
+const cardImage2 = require('../../assets/products/oleo.jpg');
 
 export default function ProductsList({ navigation }) {
 
@@ -37,7 +37,7 @@ export default function ProductsList({ navigation }) {
         <Card.Image style={styles.thumb} source={cardImage2} />
         <Card.Section
           padding-4
-          content={[{ text: 'Card', text80: true, grey10: true }]}
+          content={[{ text: 'Categoria', text80: true, grey10: true }]}
         />
       </Card>
     );

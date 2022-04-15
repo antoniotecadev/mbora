@@ -12,6 +12,8 @@ const denunciaIcon = require('../../assets/icons/denuncia.png');
 
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
+const cardImage = require('../../assets/products/cantina2.jpg');
+
 export function CantinaCard({ name, price, image, onPress }) {
 
     const { nav, t, api } = useServices();
@@ -40,7 +42,7 @@ export function CantinaCard({ name, price, image, onPress }) {
         <Card style={styles.card} center onPress={() => {
             nav.show('PerfilCantina');
         }}>
-            <Card.Image style={styles.thumb} source={image} />
+            <Card.Image style={styles.thumb} source={cardImage} />
             <View maxWidth={180}>
                 <View row style={styles.section}>
                     <Text $textDefault style={{ ...Typography.text90 }}>💢Maliana</Text>

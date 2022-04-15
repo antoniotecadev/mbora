@@ -8,8 +8,6 @@ import { CantinaCard } from '../components/CantinaCard.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
-const cardImage = require('../../assets/products/car-101.jpg');
-
 export default function ListaCantinas({ navigation }) {
 
   const { nav, t, api } = useServices();

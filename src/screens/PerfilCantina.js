@@ -10,7 +10,7 @@ import {
 
 import { Button, TabController, Colors } from 'react-native-ui-lib';
 
-const perfilImage = require('../../assets/products/car-101.jpg');
+const perfilImage = require('../../assets/products/cantina1.jpg');
 
 export default function PerfilCantina({ route }) {
 

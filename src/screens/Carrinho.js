@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { FlatList, StyleSheet, TextInput } from 'react-native';
 import { Card, Text, View, Button, Colors, TextField } from 'react-native-ui-lib';
 
-const cardImage = require('../../assets/products/car-101.jpg');
+const cardImage = require('../../assets/products/feijao1.jpg');
 
 const shareIcon = require('../../assets/icons/excluir.png');
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
