@@ -1,18 +1,19 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
-  Text, 
-  Image, 
-  View, 
-  ScrollView, 
-  SafeAreaView, 
-  Button, 
+  Text,
+  Image,
+  View,
+  ScrollView,
+  SafeAreaView,
   StyleSheet
-  } from 'react-native';
+} from 'react-native';
 
-  const perfilImage = require('../../assets/products/car-101.jpg');
+import { Button, TabController, Colors } from 'react-native-ui-lib';
 
-export default function PerfilCantina({route}) {
-  
+const perfilImage = require('../../assets/products/car-101.jpg');
+
+export default function PerfilCantina({ route }) {
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -20,9 +21,23 @@ export default function PerfilCantina({route}) {
           style={styles.image}
           source={perfilImage}
         />
-        <View style={styles.infoContainer}>
-          
-        </View>
+        <Button
+          text90
+          margin-16
+          label="Seguir"
+          size={Button.sizes.large}
+          borderRadius={5}
+          style={{ backgroundColor: Colors.$backgroundSuccessHeavy }}
+          iconStyle={{ tintColor: Colors.black }}
+        />
+        <TabController items={[{ label: 'Produtos' }, { label: 'Promoção' }, { label: 'Seguidores' }]}>
+          <TabController.TabBar activeBackgroundColor={'orange'} enableShadows />
+          <View flex>
+            <TabController.TabPage index={0}><Text>hhhhhh</Text></TabController.TabPage>
+            <TabController.TabPage index={1} lazy><Text>oooo</Text></TabController.TabPage>
+            <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
+          </View>
+        </TabController>
       </ScrollView>
     </SafeAreaView>
   );

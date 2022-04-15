@@ -2,6 +2,7 @@ import { ModalScreenLayouts, ScreenLayouts, TabScreenLayouts } from '../services
 
 import { Main } from './main';
 import Perfil from './Perfil';
+import PerfilCantina from './PerfilCantina';
 import ProductsList from './ProductsList';
 import ListaCantinas from './ListaCantinas';
 import { ProductDetails } from './ProductDetails.js';
@@ -14,7 +15,7 @@ import { screenDefaultOptions, tabBarDefaultOptions } from '../services/navigati
 // Describe your screens here
 export type Tabs = 'Main' | 'Perfil' | 'Cart' | 'Notification' | 'Cantinas';
 export type Modal = 'ExampleModal';
-export type Screen = 'Main' | 'Example' | 'Perfil'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas';
+export type Screen = 'Main' | 'Example' | 'Perfil'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -84,13 +85,21 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
+  PerfilCantina: {
+    name: 'PerfilCantina',
+    component: PerfilCantina,
+    options: () => ({
+      title: 'Perfil cantina',
+      ...screenDefaultOptions(),
+    }),
+  },
 };
 const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Main, screens.Example]);
 const CartStack = () => genStackNavigator([screens.Cart]);
-const CantinasStack = () => genStackNavigator([screens.ListaCantinas]);
+const CantinasStack = () => genStackNavigator([screens.ListaCantinas, screens.PerfilCantina]);
 const PerfilStack = () => genStackNavigator([screens.Perfil]);
 
 // Tabs

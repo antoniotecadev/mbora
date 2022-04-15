@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, StyleSheet, Share } from 'react-native';
 import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 
+import { useServices } from '../services';
+
 const featureIcon = require('../../assets/icons/star.png');
 const shareIcon = require('../../assets/icons/share.png');
 const cartIcon = require('../../assets/icons/cart.png');
@@ -11,6 +13,8 @@ const denunciaIcon = require('../../assets/icons/denuncia.png');
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
 export function CantinaCard({ name, price, image, onPress }) {
+
+    const { nav, t, api } = useServices();
 
     const onShare = async () => {
         try {
@@ -33,7 +37,9 @@ export function CantinaCard({ name, price, image, onPress }) {
     };
 
     return (
-        <Card style={styles.card} center onPress={onPress}>
+        <Card style={styles.card} center onPress={() => {
+            nav.show('PerfilCantina');
+        }}>
             <Card.Image style={styles.thumb} source={image} />
             <View maxWidth={180}>
                 <View row style={styles.section}>
