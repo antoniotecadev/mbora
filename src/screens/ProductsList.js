@@ -67,7 +67,6 @@ export default function ProductsList({ navigation }) {
         const childData = childSnapshot.val();
         setProdutos((a) => [...a, childData]);
       });
-
     }); 
   return () => ref(firebase, 'produtos').off();
   }, []);

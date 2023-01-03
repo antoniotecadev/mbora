@@ -12,14 +12,29 @@ import {
 import { CartContext } from '../CartContext';
 import { currency } from '../utils/utilitario';
 
+import firebase from '../services/firebase';
+import { ref, child, get } from "firebase/database";
+
 export function ProductDetails({route}) {
   const { produto } = route.params;
   const [product, setProduct] = useState({});
+  const [parceiro, setParceiro] = useState([]);
   const { addItemToCart } = useContext(CartContext);
   
-  
   useEffect(() => {
-    setProduct(produto);
+    setProduct(produto); 
+    const dbRef = ref(firebase);
+    get(child(dbRef, `parceiros/${produto.imei}`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setParceiro(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+  
+  return () => ref(firebase, `parceiros/${produto.imei}`).off();
   },[]);
   
   function onAddToCart() {
@@ -29,6 +44,7 @@ export function ProductDetails({route}) {
   return (
     <SafeAreaView>
       <ScrollView>
+      {/* <Text style = {{color: 'white'}}>{JSON.stringify(parceiro) + ''+parceiro.bairro}</Text> */}
         <Image
           style={styles.image}
           source={{ uri: product.urlImage}}
