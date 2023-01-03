@@ -14,7 +14,7 @@ const denunciaIcon = require('../../assets/icons/denuncia.png');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ nome, preco, urlImage, onPress }) {
+export function Product({ nome, preco, urlImage, endereco, empresa, onPress }) {
 
   const statusColor = Colors.$textSuccess;
 
@@ -119,10 +119,10 @@ export function Product({ nome, preco, urlImage, onPress }) {
               />
             </View>
             <Text marginT-8 text100 grey40>
-              Morro Bento, Prédio
+              {endereco}
             </Text>
             <View style={styles.section}>
-              <Text $textDefault style={{ ...Typography.text90 }}>Maliana</Text>
+              <Text $textDefault style={{ ...Typography.text90 }}>{empresa}</Text>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
                 size={24}
                 animate={true}
