@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Share } from 'react-native';
+import { View, StyleSheet, Share, TouchableOpacity, Text as Texto } from 'react-native';
 import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 import { currency } from '../utils/utilitario';
 
@@ -14,8 +14,9 @@ const denunciaIcon = require('../../assets/icons/denuncia.png');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ nome, preco, urlImage, endereco, empresa, onPress }) {
+export function Product({ nome, preco, categoria, urlImage, endereco, empresa, onPress }) {
 
+  const ctg = '#' + categoria;
   const statusColor = Colors.$textSuccess;
 
   const [buttonProps, setButtonProps] = useState(iconButton)
@@ -130,6 +131,11 @@ export function Product({ nome, preco, urlImage, endereco, empresa, onPress }) {
                 badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
               />
             </View>
+            <TouchableOpacity>
+              <Texto>
+                {ctg.replace(/\s/g, "")}
+              </Texto>
+          </TouchableOpacity>
           </View>
         </View>
       </ExpandableSection>
