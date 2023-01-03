@@ -9,21 +9,21 @@ import {
   StyleSheet
   } from 'react-native';
 
-import { getProduct } from '../services/ProductsService.js';
 import { CartContext } from '../CartContext';
+import { currency } from '../utils/utilitario';
 
 export function ProductDetails({route}) {
-  const { productId } = route.params;
+  const { produto } = route.params;
   const [product, setProduct] = useState({});
   const { addItemToCart } = useContext(CartContext);
   
   
   useEffect(() => {
-    setProduct(getProduct(productId));
-  });
+    setProduct(produto);
+  },[]);
   
   function onAddToCart() {
-    addItemToCart(product.id);
+    // addItemToCart(product.id);
   }
   
   return (
@@ -31,12 +31,12 @@ export function ProductDetails({route}) {
       <ScrollView>
         <Image
           style={styles.image}
-          source={product.image}
+          source={{ uri: product.urlImage}}
         />
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{product.name}</Text>
-          <Text style={styles.price}>$ {product.price}</Text>
-          <Text style={styles.description}>{product.description}</Text>
+          <Text style={styles.name}>{product.nome}</Text>
+          <Text style={styles.price}>{currency(String(product.preco))}</Text>
+          <Text style={styles.description}>{product.categoria}</Text>
             <Button
             onPress={onAddToCart}
             title="Add to cart"

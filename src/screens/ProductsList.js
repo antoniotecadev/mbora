@@ -25,7 +25,7 @@ export default function ProductsList({ navigation }) {
       <Product {...product}
         onPress={() => {
           nav.show('ProductDetails', {
-            productId: product.id,
+            produto: product,
           });
         }}
       />
@@ -34,7 +34,7 @@ export default function ProductsList({ navigation }) {
   function renderCategory({ item: product }) {
     return (
       <Card
-        onPress={() => alert()}
+        onPress={() => Alert.alert()}
         height={150}
         marginR-8
         elevation={1}
@@ -70,7 +70,7 @@ export default function ProductsList({ navigation }) {
       });
 
     }); 
-  return () => ref(firebase, 'produtos ').off;
+  return () => ref(firebase, 'produtos').off();
   }, []);
 
   return (
