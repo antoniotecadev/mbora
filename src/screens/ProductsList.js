@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { TextInput, FlatList, StyleSheet, Alert } from 'react-native';
+import { FlatList, StyleSheet, Alert } from 'react-native';
 
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
 import { Product } from '../components/Product.js';
-import { Text, View, Card } from 'react-native-ui-lib';
+import { Card } from 'react-native-ui-lib';
 
 import firebase from '../services/firebase';
 import { ref, onChildAdded, query } from "firebase/database";
