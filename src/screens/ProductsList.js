@@ -5,7 +5,6 @@ import { useServices } from '../services';
 import { useStores } from '../stores';
 
 import { Product } from '../components/Product.js';
-import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
 import firebase from '../services/firebase';
