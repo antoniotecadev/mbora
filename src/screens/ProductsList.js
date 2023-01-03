@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet } from 'react-native';
+import { TextInput, FlatList, StyleSheet, Alert } from 'react-native';
 
 import { useServices } from '../services';
 import { useStores } from '../stores';
@@ -8,9 +8,14 @@ import { Product } from '../components/Product.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
+import firebase from '../services/firebase';
+import { ref, onChildAdded, query } from "firebase/database";
+
 const cardImage2 = require('../../assets/products/oleo.jpg');
 
 export default function ProductsList({ navigation }) {
+
+  const [produtos, setProdutos] = useState([]);
 
   const { nav, t, api } = useServices();
   const { counter, ui } = useStores();
@@ -48,18 +53,25 @@ export default function ProductsList({ navigation }) {
       <FlatList
         contentContainerStyle={styles.productsListContainer}
         // keyExtractor={(item) => item.id.toString()}
-        data={products}
+        data={produtos}
         horizontal={true}
         renderItem={renderCategory}
       />
     );
   }
 
-  const [products, setProducts] = useState([]);
-
   useEffect(() => {
-    setProducts(getProducts());
-  });
+    const pds = query(ref(firebase, 'produtos'));
+      onChildAdded(pds, (snapshot) => {
+      snapshot.forEach((childSnapshot) => {
+        const childKey = childSnapshot.key;
+        const childData = childSnapshot.val();
+        setProdutos((a) => [...a, childData]);
+      });
+
+    }); 
+  return () => ref(firebase, 'produtos ').off;
+  }, []);
 
   return (
     <>
@@ -69,8 +81,8 @@ export default function ProductsList({ navigation }) {
         }}
         numColumns={2}
         contentContainerStyle={styles.productsListContainer}
-        // keyExtractor={(item) => item.id.toString()}
-        data={products}
+        keyExtractor={(item) => item.urlImage.toString()}
+        data={produtos}
         renderItem={renderProduct}
         ListHeaderComponent={flatListHeader}
       />

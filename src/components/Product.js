@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Share } from 'react-native';
 import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
+import { currency } from '../utils/utilitario';
 
 const featureIcon = require('../../assets/icons/star.png');
 const shareIcon = require('../../assets/icons/share.png');
@@ -13,7 +14,7 @@ const denunciaIcon = require('../../assets/icons/denuncia.png');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ name, price, image, onPress }) {
+export function Product({ nome, preco, urlImage, onPress }) {
 
   const statusColor = Colors.$textSuccess;
 
@@ -35,14 +36,14 @@ export function Product({ name, price, image, onPress }) {
     setExpanded(!expanded);
   }
 
-  function getHeaderElement(name) {
+  function getHeaderElement(nome, preco) {
     return (
       <View spread row maxWidth={180}>
         <Text text80 $textDefault>
-          {name}
+          {nome}
         </Text>
         <Text text80 $textDefault green20 marginB-4>
-          {'1 250,00 kz'}
+          {currency(preco)}
         </Text>
       </View>
     );
@@ -70,11 +71,11 @@ export function Product({ name, price, image, onPress }) {
 
   return (
     <Card style={styles.card} center onPress={onPress}>
-      <Card.Image style={styles.thumb} source={image} />
+      <Card.Image style={styles.thumb} source={{ uri: urlImage }} />
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={getHeaderElement(name)}
+        sectionHeader={getHeaderElement(nome, preco)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
