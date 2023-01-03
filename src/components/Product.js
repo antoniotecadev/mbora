@@ -82,22 +82,18 @@ export function Product({ nome, preco, urlImage, onPress }) {
           <View center>
             <Button
               text90
-              iconSource={cestoIcon}
               label="Comprar agora"
-              size={Button.sizes.small}
+              size={Button.sizes.large}
               borderRadius={10}
               style={{ marginBottom: 5, backgroundColor: 'orange' }}
-              iconStyle={{ tintColor: Colors.black, right: 20 }}
             />
             <Button
               text90
               marginB-10
-              iconSource={cartIcon}
               label="Adicionar ao carrinho"
-              size={Button.sizes.small}
+              size={Button.sizes.large}
               borderRadius={10}
               style={{ backgroundColor: Colors.$backgroundSuccessHeavy }}
-              iconStyle={{ tintColor: Colors.black }}
             />
             <View style={{
               flexDirection: 'row',
@@ -116,12 +112,6 @@ export function Product({ nome, preco, urlImage, onPress }) {
               />
               <Button
                 size={'small'}
-                backgroundColor={Colors.red40}
-                iconSource={denunciaIcon}
-                {...iconButton}
-                onPress={onShare} />
-              <Button
-                size={'small'}
                 backgroundColor={Colors.green20}
                 iconSource={shareIcon}
                 {...iconButton}
@@ -129,10 +119,10 @@ export function Product({ nome, preco, urlImage, onPress }) {
               />
             </View>
             <Text marginT-8 text100 grey40>
-              📍 Morro Bento, Prédio
+              Morro Bento, Prédio
             </Text>
             <View style={styles.section}>
-              <Text $textDefault style={{ ...Typography.text90 }}>💢Maliana</Text>
+              <Text $textDefault style={{ ...Typography.text90 }}>Maliana</Text>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
                 size={24}
                 animate={true}
