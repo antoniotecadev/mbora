@@ -55,14 +55,11 @@ export default function ProductsList({ navigation }) {
 
   const FooterComponente = () => {
     return (
-    //Footer View with Load More button
       <View style={styles.footer}>
         <TouchableOpacity
           activeOpacity={0.9}
           onPress={fetchMoreProducts}
-          //On Click of button load more data
           style={styles.loadMoreBtn}>
-
           <Text style={styles.btnText}>Ver mais</Text>
           {loading ? (
             <ActivityIndicator
