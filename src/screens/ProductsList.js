@@ -16,8 +16,9 @@ const cardImage2 = require('../../assets/products/oleo.jpg');
 export default function ProductsList({ navigation }) {
 
   const [produtos, setProdutos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
   const [limit, setLimit] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({ctg: false, pdt: false});
   const [refreshing, setRefreshing] = useState(false);
   const [lastVisible, setLastVisible] = useState(null);
   const [countPage, setCountPage] = useState(0);
@@ -36,18 +37,21 @@ export default function ProductsList({ navigation }) {
       />
     );
   }
-  const renderCategory = ({ item: product }) => {
+  const renderCategory = ({ item: category }) => {
     return (
       <Card
         onPress={() => Alert.alert()}
         height={150}
         marginR-8
+        width={100}
+        backgroundColor = 'orange'
         elevation={1}
       >
-        <Card.Image style={styles.thumb} source={cardImage2} />
+        {/* <Card.Image style={styles.thumb} source={cardImage2} /> */}
         <Card.Section
           padding-4
-          content={[{ text: 'Categoria', text80: true, grey10: true }]}
+          backgroundColor = 'green'
+          content={[{ text: category.nome, text80: true, grey10: true, white: true }]}
         />
       </Card>
     );
@@ -61,7 +65,7 @@ export default function ProductsList({ navigation }) {
           onPress={fetchMoreProducts}
           style={styles.loadMoreBtn}>
           <Text style={styles.btnText}>Ver mais</Text>
-          {loading ? (
+          {loading.pdt ? (
             <ActivityIndicator
               color="white"
               style={{marginLeft: 8}} />
@@ -75,17 +79,30 @@ export default function ProductsList({ navigation }) {
     return (
       <FlatList
         contentContainerStyle={styles.productsListContainer}
-        // keyExtractor={(item) => item.id.toString()}
-        data={produtos}
+        keyExtractor={(item) => item.id}
+        data={categorias}
         horizontal={true}
         renderItem={renderCategory}
       />
     );
   }
 
+  const fetchCategorys = async () => {
+    try {
+      setLoading({ctg: true});
+      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/categorias/mbora');
+      let responseJsonData = await response.json();
+      setCategorias(responseJsonData);
+      setLoading({ctg: false});
+    } catch (error) {
+      setLoading({ctg: false});
+      console.log(error);
+    }
+  }
+
   const fetchProducts = async () => {
     try {
-      setLoading(true);
+      setLoading({pdt: true});
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/json/index');
       let responseJsonData = await response.json();
       if(countPage > 4) {
@@ -95,9 +112,9 @@ export default function ProductsList({ navigation }) {
         setCountPage(countPage + 1);
         setProdutos([...produtos, ...responseJsonData]);
       }
-      setLoading(false);
+      setLoading({pdt: false});
     } catch (error) {
-      setLoading(false);
+      setLoading({pdt: false});
       console.log(error);
     }
   }
@@ -150,6 +167,7 @@ export default function ProductsList({ navigation }) {
   }
 
   useEffect(() => {
+    fetchCategorys();
     fetchProducts();
   }, []);
 
