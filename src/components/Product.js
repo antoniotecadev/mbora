@@ -11,6 +11,9 @@ const chevronDown = require('../../assets/icons/chevronDown.png');
 const chevronUp = require('../../assets/icons/chevronUp.png');
 const denunciaIcon = require('../../assets/icons/denuncia.png');
 
+const cardImageAlt = require('../../assets/products/oleo.jpg');
+
+
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
@@ -44,7 +47,7 @@ export function Product({ nome, preco, categoria, urlImage, endereco, empresa, o
           {nome}
         </Text>
         <Text text80 $textDefault green20 marginB-4>
-          {currency(preco)}
+          {currency(String(preco))}
         </Text>
       </View>
     );
