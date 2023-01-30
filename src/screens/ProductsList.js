@@ -103,7 +103,7 @@ export default function ProductsList({ navigation }) {
   const fetchProducts = async () => {
     try {
       setLoading({pdt: true});
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/json/index');
+      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
       if(countPage > 4) {
         setCountPage(0);
