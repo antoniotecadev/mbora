@@ -52,6 +52,12 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
     );
   }
 
+  const Tag = (props) => {
+    return <TouchableOpacity>
+            <Texto style={{color: 'green'}}>{removeSpaceLowerCase('#' + props.tag)}</Texto>
+          </TouchableOpacity>
+  } 
+
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -134,12 +140,8 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
                 badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
               />
             </View>
-            <TouchableOpacity>
-              <Texto>{removeSpaceLowerCase('#' + tag)}</Texto>
-          </TouchableOpacity>
-            <TouchableOpacity>
-              <Texto>{removeSpaceLowerCase('#' + nomeCategoria)}</Texto>
-          </TouchableOpacity>
+            <Tag tag = {tag}/>
+            <Tag tag = {nomeCategoria}/>
           </View>
         </View>
       </ExpandableSection>
