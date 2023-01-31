@@ -17,9 +17,9 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ nome, preco, categoria, urlImage, endereco, empresa, onPress }) {
+export function Product({ nome, preco, tag, urlImage, endereco, empresa, onPress }) {
 
-  const ctg = '#' + categoria;
+  const ctg = '#' + tag;
   const statusColor = Colors.$textSuccess;
 
   const [buttonProps, setButtonProps] = useState(iconButton)
