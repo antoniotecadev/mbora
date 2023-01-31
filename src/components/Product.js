@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Share, TouchableOpacity, Text as Texto } from 'react-native';
 import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
-import { currency } from '../utils/utilitario';
+import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 
 const featureIcon = require('../../assets/icons/star.png');
 const shareIcon = require('../../assets/icons/share.png');
@@ -17,9 +17,8 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ nome, preco, tag, urlImage, empresa, district, street, nomeProvincia, onPress }) {
+export function Product({ nome, preco, tag, urlImage, empresa, district, street, nomeProvincia, nomeCategoria, onPress }) {
 
-  const ctg = '#' + tag;
   const statusColor = Colors.$textSuccess;
 
   const [buttonProps, setButtonProps] = useState(iconButton)
@@ -87,7 +86,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
           <View center>
             <Button
               text90
-              label="Comprar agora"
+              label="Adicionar aos favoritos"
               size={Button.sizes.large}
               borderRadius={10}
               style={{ marginBottom: 5, backgroundColor: 'orange' }}
@@ -95,7 +94,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
             <Button
               text90
               marginB-10
-              label="Adicionar ao carrinho"
+              label="Partilhar"
               size={Button.sizes.large}
               borderRadius={10}
               style={{ backgroundColor: 'green' }}
@@ -136,9 +135,10 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
               />
             </View>
             <TouchableOpacity>
-              <Texto>
-                {ctg.replace(/\s/g, "")}
-              </Texto>
+              <Texto>{removeSpaceLowerCase('#' + tag)}</Texto>
+          </TouchableOpacity>
+            <TouchableOpacity>
+              <Texto>{removeSpaceLowerCase('#' + nomeCategoria)}</Texto>
           </TouchableOpacity>
           </View>
         </View>
