@@ -98,7 +98,7 @@ export function Product({ nome, preco, categoria, urlImage, endereco, empresa, o
               label="Adicionar ao carrinho"
               size={Button.sizes.large}
               borderRadius={10}
-              style={{ backgroundColor: Colors.$backgroundSuccessHeavy }}
+              style={{ backgroundColor: 'green' }}
             />
             <View style={{
               flexDirection: 'row',
@@ -107,7 +107,7 @@ export function Product({ nome, preco, categoria, urlImage, endereco, empresa, o
             }}>
               <Button
                 size={'small'}
-                backgroundColor={Colors.green20}
+                backgroundColor = 'green'
                 iconSource={featureIcon}
                 {...buttonProps}
                 onPress={changeProps}
@@ -117,7 +117,7 @@ export function Product({ nome, preco, categoria, urlImage, endereco, empresa, o
               />
               <Button
                 size={'small'}
-                backgroundColor={Colors.green20}
+                backgroundColor = 'green' 
                 iconSource={shareIcon}
                 {...iconButton}
                 onPress={onShare}
