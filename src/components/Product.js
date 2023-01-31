@@ -17,7 +17,7 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ nome, preco, tag, urlImage, endereco, empresa, onPress }) {
+export function Product({ nome, preco, tag, urlImage, empresa, district, street, nomeProvincia, onPress }) {
 
   const ctg = '#' + tag;
   const statusColor = Colors.$textSuccess;
@@ -124,7 +124,7 @@ export function Product({ nome, preco, tag, urlImage, endereco, empresa, onPress
               />
             </View>
             <Text marginT-8 text100 grey40>
-              {endereco}
+              {`${nomeProvincia}, ${district} , ${street}`}
             </Text>
             <View style={styles.section}>
               <Text $textDefault style={{ ...Typography.text90 }}>{empresa}</Text>
