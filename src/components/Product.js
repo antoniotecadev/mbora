@@ -5,11 +5,6 @@ import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 
 const featureIcon = require('../../assets/icons/star.png');
 const shareIcon = require('../../assets/icons/share.png');
-const cartIcon = require('../../assets/icons/cart.png');
-const cestoIcon = require('../../assets/icons/cesto-de-compras.png');
-const chevronDown = require('../../assets/icons/chevronDown.png');
-const chevronUp = require('../../assets/icons/chevronUp.png');
-const denunciaIcon = require('../../assets/icons/denuncia.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
