@@ -40,7 +40,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
         <Text text80 $textDefault>
           {nome}
         </Text>
-        <Text text80 $textDefault green20 marginB-4>
+        <Text text80 $textDefault green10 marginB-4>
           {currency(String(preco))}
         </Text>
       </View>
@@ -90,7 +90,8 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
               label="Adicionar aos favoritos"
               size={Button.sizes.large}
               borderRadius={10}
-              style={{ marginBottom: 5, backgroundColor: 'orange' }}
+              marginB-5
+              backgroundColor = 'orange'
             />
             <Button
               text90
@@ -98,7 +99,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
               label="Partilhar"
               size={Button.sizes.large}
               borderRadius={10}
-              style={{ backgroundColor: 'green' }}
+              backgroundColor = 'green'
             />
             <View style={{
               flexDirection: 'row',
