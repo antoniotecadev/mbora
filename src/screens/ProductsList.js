@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Alert, View, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { FlatList, StyleSheet, Alert, View, TouchableOpacity, Text, ActivityIndicator, RefreshControl } from 'react-native';
 
 import { useServices } from '../services';
 import { useStores } from '../stores';
@@ -25,6 +25,13 @@ export default function ProductsList({ navigation }) {
 
   const { nav, t, api } = useServices();
   const { counter, ui } = useStores();
+
+  const onRefresh = React.useCallback(()=>{
+    setRefreshing(true);
+    setTimeout(() => {
+      fetchProducts();
+    }, 2000);
+  }, []);
 
   const ItemProduct = ({ item: product }) => {
     return (
@@ -62,7 +69,7 @@ export default function ProductsList({ navigation }) {
       <View style={styles.footer}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={fetchMoreProducts}
+          onPress={fetchProducts}
           style={styles.loadMoreBtn}>
           <Text style={styles.btnText}>Ver mais</Text>
           {loading.pdt ? (
@@ -93,10 +100,10 @@ export default function ProductsList({ navigation }) {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/categorias/mbora');
       let responseJsonData = await response.json();
       setCategorias(responseJsonData);
-      setLoading({ctg: false});
     } catch (error) {
-      setLoading({ctg: false});
       Alert.alert('Erro ao carregar categorias', error.message + '');
+    }finally {
+      setLoading({ctg: false});
     }
   }
 
@@ -112,17 +119,12 @@ export default function ProductsList({ navigation }) {
         setCountPage(countPage + 1);
         setProdutos([...produtos, ...responseJsonData]);
       }
-      setLoading({pdt: false});
     } catch (error) {
-      setLoading({pdt: false});
       Alert.alert('Erro ao carregar produtos', error.message + '');
+    } finally {
+      setLoading({pdt: false});
+      setRefreshing(false)
     }
-  }
-
-  const fetchMoreProducts = () => {
-    setRefreshing(true);
-    fetchProducts();
-    setRefreshing(false);
   }
 
   const getData = () => {
@@ -185,9 +187,9 @@ export default function ProductsList({ navigation }) {
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
         onEndReachedThreshold={0.2}
-        onEndReached={fetchMoreProducts}
+        onEndReached={fetchProducts}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados 😥</Text>}
-        refreshing={refreshing}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         />
     </>
   );
