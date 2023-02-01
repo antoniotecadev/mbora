@@ -186,6 +186,7 @@ export default function ProductsList({ navigation }) {
         ListFooterComponent={FooterComponente}
         onEndReachedThreshold={0.2}
         onEndReached={fetchMoreProducts}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados 😥</Text>}
         refreshing={refreshing}
         />
     </>
@@ -227,4 +228,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
   },
+  emptyListStyle: {
+    color: '#df4759',
+    padding: 10,
+    textAlign: 'center',
+  }
 });
