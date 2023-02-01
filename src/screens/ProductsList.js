@@ -96,7 +96,7 @@ export default function ProductsList({ navigation }) {
       setLoading({ctg: false});
     } catch (error) {
       setLoading({ctg: false});
-      console.log(error);
+      Alert.alert('Erro ao carregar categorias', error.message + '');
     }
   }
 
@@ -115,7 +115,7 @@ export default function ProductsList({ navigation }) {
       setLoading({pdt: false});
     } catch (error) {
       setLoading({pdt: false});
-      console.log(error);
+      Alert.alert('Erro ao carregar produtos', error.message + '');
     }
   }
 
