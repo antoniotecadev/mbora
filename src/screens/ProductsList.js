@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Alert, View, TouchableOpacity, Text, ActivityIndicator, RefreshControl } from 'react-native';
 
 import { useServices } from '../services';
@@ -6,6 +6,8 @@ import { useStores } from '../stores';
 
 import { Product } from '../components/Product.js';
 import { Card } from 'react-native-ui-lib';
+
+const ITEM_HEIGHT = 150;
 
 import firebase from '../services/firebase';
 import { ref, onChildAdded, query, limitToFirst, limitToLast, orderByChild, orderByValue, get, child, startAfter, orderByKey, QueryConstraint  } from "firebase/database";
@@ -26,25 +28,27 @@ export default function ProductsList({ navigation }) {
   const { nav, t, api } = useServices();
   const { counter, ui } = useStores();
 
-  const onRefresh = React.useCallback(()=>{
+  const onRefresh = useCallback(()=>{
     setRefreshing(true);
     setTimeout(() => {
       fetchProducts();
     }, 2000);
   }, []);
 
-  const ItemProduct = ({ item: product }) => {
-    return (
-      <Product {...product}
-        onPress={() => {
-          nav.show('ProductDetails', {
-            produto: product,
-          });
-        }}
-      />
-    );
+  const showProductDetails = (product)=> {
+    nav.show('ProductDetails', {
+      produto: product,
+    });
   }
-  const renderCategory = ({ item: category }) => {
+
+  const renderItemProduct = useCallback(({ item: product }) => { 
+    return <Product {...product} onPress={()=> showProductDetails(product)} />
+  },[]);
+
+  const keyExtractor = useCallback((item)=> item.id, [])
+  const getItemLayout = useCallback((_, index)=>({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }), []);
+
+  const renderCategory = useCallback(({ item: category }) => {
     return (
       <Card
         onPress={() => Alert.alert()}
@@ -62,7 +66,7 @@ export default function ProductsList({ navigation }) {
         />
       </Card>
     );
-  }
+  }, []);
 
   const FooterComponente = () => {
     return (
@@ -86,10 +90,11 @@ export default function ProductsList({ navigation }) {
     return (
       <FlatList
         contentContainerStyle={styles.productsListContainer}
-        keyExtractor={(item) => item.id}
+        keyExtractor={keyExtractor}
         data={categorias}
         horizontal={true}
         renderItem={renderCategory}
+        getItemLayout={getItemLayout}
       />
     );
   }
@@ -181,8 +186,8 @@ export default function ProductsList({ navigation }) {
         }}
         numColumns={2}
         contentContainerStyle={styles.productsListContainer}
-        keyExtractor={(item) => item.id}
-        renderItem={ItemProduct}
+        keyExtractor={keyExtractor}
+        renderItem={renderItemProduct}
         data={produtos}
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
