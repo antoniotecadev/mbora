@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Alert, View, TouchableOpacity, Text, ActivityIndicator, RefreshControl } from 'react-native';
-
+import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
