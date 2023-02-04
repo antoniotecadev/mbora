@@ -30,9 +30,7 @@ export default function ProductsList({ navigation }) {
 
   const onRefresh = ()=> {
     setRefreshing(true);
-    setTimeout(() => {
-      fetchProducts();
-    }, 1000);
+    fetchProducts();
   };
 
   const showProductDetails = (product)=> {
