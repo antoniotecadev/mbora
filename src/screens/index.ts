@@ -11,6 +11,7 @@ import { Settings } from './settings';
 import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
 import { screenDefaultOptions, tabBarDefaultOptions } from '../services/navigation/options';
+import { Text } from 'react-native';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Perfil' | 'Cart' | 'Notification' | 'Cantinas';
@@ -33,7 +34,7 @@ const screens: ScreenLayouts = {
     name: 'Main',
     component: ProductsList,
     options: () => ({
-      title: 'Casa',
+      title: 'Mbora',
       ...screenDefaultOptions(),
     }),
   },
@@ -42,7 +43,7 @@ const screens: ScreenLayouts = {
     component: Example,
     options: () => ({
       title: 'Example',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   Perfil: {
@@ -50,7 +51,7 @@ const screens: ScreenLayouts = {
     component: Perfil,
     options: () => ({
       title: 'Perfil',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   Settings: {
@@ -58,7 +59,7 @@ const screens: ScreenLayouts = {
     component: Settings,
     options: () => ({
       title: 'Settings',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   ProductDetails: {
@@ -66,7 +67,7 @@ const screens: ScreenLayouts = {
     component: ProductDetails,
     options: () => ({
       title: 'Detalhe de produto',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   Cart: {
@@ -74,7 +75,7 @@ const screens: ScreenLayouts = {
     component: Carrinho,
     options: () => ({
       title: 'Carrinho de compra',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   ListaCantinas: {
@@ -82,7 +83,7 @@ const screens: ScreenLayouts = {
     component: ListaCantinas,
     options: () => ({
       title: 'Cantinas',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   PerfilCantina: {
@@ -90,7 +91,7 @@ const screens: ScreenLayouts = {
     component: PerfilCantina,
     options: () => ({
       title: 'Perfil cantina',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
 };

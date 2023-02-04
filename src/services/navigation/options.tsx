@@ -17,12 +17,18 @@ export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   // this setup makes large title work on iOS
   ...Platform.select({
     ios: {
-      headerLargeTitle: false,
+      headerLargeTitle: true,
       headerTransparent: false,
       headerBlurEffect: getHeaderBlurEffect(), // this sets up blurred nav bar
       // if you'd like to have a solid color for a nav bar, then you should
       // set up `headerStyle: {backgroundColor: Colors.bg2Color}`
     },
+    android: {
+      headerTitleStyle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+      },
+    }
   }),
 });
 
