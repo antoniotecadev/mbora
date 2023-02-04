@@ -28,12 +28,12 @@ export default function ProductsList({ navigation }) {
   const { nav, t, api } = useServices();
   const { counter, ui } = useStores();
 
-  const onRefresh = useCallback(()=>{
+  const onRefresh = ()=> {
     setRefreshing(true);
     setTimeout(() => {
       fetchProducts();
-    }, 2000);
-  }, []);
+    }, 1000);
+  };
 
   const showProductDetails = (product)=> {
     nav.show('ProductDetails', {
@@ -42,13 +42,13 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product {...product} onPress={()=> showProductDetails(product)} />
+    return <Product {...product} key={product.id} onPress={()=> showProductDetails(product)} />
   },[]);
 
-  const keyExtractor = useCallback((item)=> item.id.toString(), [])
-  const getItemLayout = useCallback((_, index)=>({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }), []);
+  const keyExtractor = (item)=> item.id;
+  const getItemLayout = (_, index)=>({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index });
 
-  const renderCategory = useCallback(({ item: category }) => {
+  const renderItemCategory = useCallback(({ item: category }) => {
     return (
       <Card
         onPress={() => Alert.alert()}
@@ -73,7 +73,7 @@ export default function ProductsList({ navigation }) {
       <View style={styles.footer}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={fetchProducts}
+          onPress={fetchMoreProducts}
           style={styles.loadMoreBtn}>
           <Text style={styles.btnText}>Ver mais</Text>
           {loading.pdt ? (
@@ -93,13 +93,13 @@ export default function ProductsList({ navigation }) {
         keyExtractor={keyExtractor}
         data={categorias}
         horizontal={true}
-        renderItem={renderCategory}
+        renderItem={renderItemCategory}
         getItemLayout={getItemLayout}
       />
     );
   }
 
-  const fetchCategorys = async () => {
+  const fetchCategorys = useCallback(async () => {
     try {
       setLoading({ctg: true});
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/categorias/mbora');
@@ -110,27 +110,37 @@ export default function ProductsList({ navigation }) {
     }finally {
       setLoading({ctg: false});
     }
-  }
+  }, [])
 
-  const fetchProducts = async () => {
+  const fetchMoreProducts = useCallback(async () => {
+    setLoading({pdt: true});
     try {
-      setLoading({pdt: true});
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
-      if(countPage > 4) {
-        setCountPage(0);
-        setProdutos(responseJsonData);
-      } else {
-        setCountPage(countPage + 1);
-        setProdutos([...produtos, ...responseJsonData]);
-      }
+      setProdutos((prevState) => [...prevState, ...responseJsonData]);
+      setLoading({pdt: false});
     } catch (error) {
+      setLoading({pdt: false});
       Alert.alert('Erro ao carregar produtos', error.message + '');
     } finally {
-      setLoading({pdt: false});
       setRefreshing(false)
     }
-  }
+  }, []);
+
+  const fetchProducts = useCallback(async () => {
+    setLoading({pdt: true});
+    try {
+      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
+      let responseJsonData = await response.json();
+      setProdutos(responseJsonData);
+      setLoading({pdt: false});
+    } catch (error) {
+      setLoading({pdt: false});
+      Alert.alert('Erro ao carregar produtos', error.message + '');
+    } finally {
+      setRefreshing(false)
+    }
+  }, []);
 
   const getData = () => {
     // let imei = [];
@@ -191,8 +201,6 @@ export default function ProductsList({ navigation }) {
         data={produtos}
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
-        onEndReachedThreshold={0.2}
-        onEndReached={fetchProducts}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados 😥</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         />
