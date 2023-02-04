@@ -30,7 +30,7 @@ export default function ProductsList({ navigation }) {
 
   const onRefresh = ()=> {
     setRefreshing(true);
-    fetchProducts();
+    fetchProducts(true);
   };
 
   const showProductDetails = (product)=> {
@@ -71,7 +71,7 @@ export default function ProductsList({ navigation }) {
       <View style={styles.footer}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={fetchMoreProducts}
+          onPress={()=> fetchProducts(false)}
           style={styles.loadMoreBtn}>
           <Text style={styles.btnText}>Ver mais</Text>
           {loading.pdt ? (
@@ -110,26 +110,16 @@ export default function ProductsList({ navigation }) {
     }
   }, [])
 
-  const fetchMoreProducts = useCallback(async () => {
+  const fetchProducts = useCallback(async (isRefresh) => {
     setLoading({pdt: true});
     try {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
-      setProdutos((prevState) => [...prevState, ...responseJsonData]);
-    } catch (error) {
-      Alert.alert('Erro ao carregar produtos', error.message + '');
-    } finally {
-      setLoading({pdt: false});
-      setRefreshing(false)
-    }
-  }, []);
-
-  const fetchProducts = useCallback(async () => {
-    setLoading({pdt: true});
-    try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
-      let responseJsonData = await response.json();
-      setProdutos(responseJsonData);
+      if(isRefresh) {
+        setProdutos(responseJsonData);
+      } else {
+        setProdutos((prevState) => [...prevState, ...responseJsonData]);
+      }
     } catch (error) {
       Alert.alert('Erro ao carregar produtos', error.message + '');
     } finally {
@@ -181,7 +171,7 @@ export default function ProductsList({ navigation }) {
 
   useEffect(() => {
     fetchCategorys();
-    fetchProducts();
+    fetchProducts(true);
   }, []);
 
   return (
@@ -197,7 +187,7 @@ export default function ProductsList({ navigation }) {
         data={produtos}
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
-        onEndReached={fetchMoreProducts}
+        onEndReached={()=> fetchProducts(false)}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados 😥</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
