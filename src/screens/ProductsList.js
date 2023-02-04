@@ -116,11 +116,10 @@ export default function ProductsList({ navigation }) {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
       setProdutos((prevState) => [...prevState, ...responseJsonData]);
-      setLoading({pdt: false});
     } catch (error) {
-      setLoading({pdt: false});
       Alert.alert('Erro ao carregar produtos', error.message + '');
     } finally {
+      setLoading({pdt: false});
       setRefreshing(false)
     }
   }, []);
@@ -131,11 +130,10 @@ export default function ProductsList({ navigation }) {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
       setProdutos(responseJsonData);
-      setLoading({pdt: false});
     } catch (error) {
-      setLoading({pdt: false});
       Alert.alert('Erro ao carregar produtos', error.message + '');
     } finally {
+      setLoading({pdt: false});
       setRefreshing(false)
     }
   }, []);
