@@ -201,6 +201,8 @@ export default function ProductsList({ navigation }) {
         data={produtos}
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
+        onEndReached={fetchMoreProducts}
+        onEndReachedThreshold={0.2}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados 😥</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         />
