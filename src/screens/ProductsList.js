@@ -45,7 +45,7 @@ export default function ProductsList({ navigation }) {
     return <Product {...product} onPress={()=> showProductDetails(product)} />
   },[]);
 
-  const keyExtractor = useCallback((item)=> item.id, [])
+  const keyExtractor = useCallback((item)=> item.id.toString(), [])
   const getItemLayout = useCallback((_, index)=>({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index }), []);
 
   const renderCategory = useCallback(({ item: category }) => {
