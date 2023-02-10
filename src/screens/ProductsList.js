@@ -187,7 +187,6 @@ export default function ProductsList({ navigation }) {
         data={produtos}
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
-        onEndReached={()=> fetchProducts(false)}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados 😥</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
