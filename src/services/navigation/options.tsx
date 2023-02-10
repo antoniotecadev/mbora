@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform, TouchableOpacity, Alert } from 'react-native';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Colors, Badge, View } from 'react-native-ui-lib';
@@ -7,12 +7,13 @@ import { Colors, Badge, View } from 'react-native-ui-lib';
 import { getHeaderBlurEffect } from '../../utils/designSystem';
 import { Icon } from '../../components/icon';
 import { CartIcon } from '../../components/CartIcon.js';
-
+import { useServices } from '..';
 import { CartContext } from '../../CartContext';
 
 export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   headerShadowVisible: false,
   headerTintColor: 'orange',
+  headerRight: ()=> (<IconSearch/>),
 
   // this setup makes large title work on iOS
   ...Platform.select({
@@ -50,6 +51,22 @@ const BadgeCartCount = () => {
   return (
     <Badge backgroundColor={Colors.red20} containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={String(getItemsCount())} size={12} />
   );
+}
+
+const IconSearch = ()=> {
+
+  const { nav } = useServices();
+
+  const onPressHandler = ()=> {
+    // Alert.alert('Pesquisa');
+    nav.show('SearchProductModal');
+  }
+
+  return (
+    <TouchableOpacity onPress={onPressHandler}>
+      <Icon name="search-circle-sharp" size={40} color="orange"/>
+    </TouchableOpacity>
+  )
 }
 
 const getIconName = (routeName: string, focused: boolean): string => {

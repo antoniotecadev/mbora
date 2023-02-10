@@ -5,6 +5,7 @@ import Perfil from './Perfil';
 import PerfilCantina from './PerfilCantina';
 import ProductsList from './ProductsList';
 import ListaCantinas from './ListaCantinas';
+import SearchProduct from './SearchProduct';
 import { ProductDetails } from './ProductDetails.js';
 import { Carrinho } from './Carrinho.js';
 import { Settings } from './settings';
@@ -15,11 +16,12 @@ import { Text } from 'react-native';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Perfil' | 'Cart' | 'Notification' | 'Cantinas';
-export type Modal = 'ExampleModal';
+export type Modal = 'ExampleModal' | 'SearchProductModal';
 export type Screen = 'Main' | 'Example' | 'Perfil'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina';
 
 export type ModalProps = {
   ExampleModal: undefined;
+  SearchProductModal: undefined;
 };
 export type ScreenProps = {
   Main: undefined;
@@ -43,7 +45,7 @@ const screens: ScreenLayouts = {
     component: Example,
     options: () => ({
       title: 'Example',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
   Perfil: {
@@ -51,7 +53,7 @@ const screens: ScreenLayouts = {
     component: Perfil,
     options: () => ({
       title: 'Perfil',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
   Settings: {
@@ -59,7 +61,7 @@ const screens: ScreenLayouts = {
     component: Settings,
     options: () => ({
       title: 'Settings',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
   ProductDetails: {
@@ -67,7 +69,7 @@ const screens: ScreenLayouts = {
     component: ProductDetails,
     options: () => ({
       title: 'Detalhe de produto',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
   Cart: {
@@ -75,7 +77,7 @@ const screens: ScreenLayouts = {
     component: Carrinho,
     options: () => ({
       title: 'Carrinho de compra',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
   ListaCantinas: {
@@ -83,7 +85,7 @@ const screens: ScreenLayouts = {
     component: ListaCantinas,
     options: () => ({
       title: 'Cantinas',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
   PerfilCantina: {
@@ -91,14 +93,14 @@ const screens: ScreenLayouts = {
     component: PerfilCantina,
     options: () => ({
       title: 'Perfil cantina',
-      headerTintColor: 'orange',
+      ...screenDefaultOptions(),
     }),
   },
 };
 const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
-const ExampleModalStack = () => genStackNavigator([screens.Main, screens.Example]);
+const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CantinasStack = () => genStackNavigator([screens.ListaCantinas, screens.PerfilCantina]);
 const PerfilStack = () => genStackNavigator([screens.Perfil]);
@@ -157,8 +159,15 @@ const modals: ModalScreenLayouts = {
       title: 'ExampleModal',
     }),
   },
+  SearchProductModal: {
+    name: 'SearchProductModal',
+    component: SearchProduct,
+    options: () => ({
+      title: 'SearchProduct',
+    }),
+  },
 };
 
 // Root Navigator
 export const RootNavigator = (): JSX.Element =>
-  genRootNavigator(TabNavigator, [modals.ExampleModal]);
+  genRootNavigator(TabNavigator, [modals.ExampleModal, modals.SearchProductModal]);
