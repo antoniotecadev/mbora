@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
-import { useStores } from '../stores';
 
 import { Product } from '../components/Product.js';
 import { Card } from 'react-native-ui-lib';
@@ -25,8 +24,7 @@ export default function ProductsList({ navigation }) {
   const [lastVisible, setLastVisible] = useState(null);
   const [countPage, setCountPage] = useState(0);
 
-  const { nav, t, api } = useServices();
-  const { counter, ui } = useStores();
+  const { nav } = useServices();
 
   const onRefresh = ()=> {
     setRefreshing(true);
