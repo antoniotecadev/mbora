@@ -3,7 +3,6 @@ import { Platform, TouchableOpacity, Alert } from 'react-native';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Colors, Badge, View } from 'react-native-ui-lib';
-
 import { getHeaderBlurEffect } from '../../utils/designSystem';
 import { Icon } from '../../components/icon';
 import { CartIcon } from '../../components/CartIcon.js';
@@ -56,14 +55,11 @@ const BadgeCartCount = () => {
 const IconSearch = ()=> {
 
   const { nav } = useServices();
-
-  const onPressHandler = ()=> {
-    // Alert.alert('Pesquisa');
-    nav.show('SearchProductModal');
+  const onPressShow = ()=> {
+    nav.show('SearchProduct');
   }
-
   return (
-    <TouchableOpacity onPress={onPressHandler}>
+    <TouchableOpacity onPress={onPressShow}>
       <Icon name="search-circle-sharp" size={40} color="orange"/>
     </TouchableOpacity>
   )
