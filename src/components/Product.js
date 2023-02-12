@@ -35,25 +35,6 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
     setExpanded(!expanded);
   }
 
-  function getHeaderElement(nome, preco) {
-    return (
-      <View spread row maxWidth={180}>
-        <Text text80 $textDefault>
-          {nome}
-        </Text>
-        <Text text80 $textDefault green10 marginB-4>
-          {currency(String(preco))}
-        </Text>
-      </View>
-    );
-  }
-
-  const Tag = (props) => {
-    return <TouchableOpacity>
-            <Texto style={{color: 'green'}}>{removeSpaceLowerCase('#' + props.tag)}</Texto>
-          </TouchableOpacity>
-  } 
-
   const onShare = async () => {
     try {
       const result = await Share.share({
@@ -84,7 +65,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={getHeaderElement(nome, preco)}
+        sectionHeader={HeaderElement(nome, preco)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -148,6 +129,25 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
     </Card>
   );
 }
+
+const HeaderElement = (nome, preco) => {
+  return (
+    <View spread row maxWidth={180}>
+      <Text text80 $textDefault>
+        {nome}
+      </Text>
+      <Text text80 $textDefault green10 marginB-4>
+        {currency(String(preco))}
+      </Text>
+    </View>
+  );
+}
+
+const Tag = (props) => {
+  return <TouchableOpacity>
+          <Texto style={{color: 'green'}}>{removeSpaceLowerCase('#' + props.tag)}</Texto>
+        </TouchableOpacity>
+} 
 
 const styles = StyleSheet.create({
   card: {
