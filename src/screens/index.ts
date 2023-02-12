@@ -1,6 +1,5 @@
 import { ModalScreenLayouts, ScreenLayouts, TabScreenLayouts } from '../services/navigation/types';
 
-import { Main } from './main';
 import Perfil from './Perfil';
 import PerfilCantina from './PerfilCantina';
 import ProductsList from './ProductsList';
@@ -12,16 +11,15 @@ import { Settings } from './settings';
 import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
 import { screenDefaultOptions, tabBarDefaultOptions } from '../services/navigation/options';
-import { Text } from 'react-native';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Perfil' | 'Cart' | 'Notification' | 'Cantinas';
-export type Modal = 'ExampleModal' | 'SearchProductModal';
-export type Screen = 'Main' | 'Example' | 'Perfil'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina';
+export type Modal = 'ExampleModal';
+export type Screen = 'Main' | 'Example' | 'Perfil'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
-  SearchProductModal: undefined;
+  SearchProduct: undefined;
 };
 export type ScreenProps = {
   Main: undefined;
@@ -96,8 +94,16 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
+  SearchProduct: {
+    name: 'SearchProduct',
+    component: SearchProduct,
+    options: () => ({
+      title: 'Pesquisa',
+      headerTintColor: 'orange',
+    }),
+  },
 };
-const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart]);
+const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
@@ -159,15 +165,8 @@ const modals: ModalScreenLayouts = {
       title: 'ExampleModal',
     }),
   },
-  SearchProductModal: {
-    name: 'SearchProductModal',
-    component: SearchProduct,
-    options: () => ({
-      title: 'SearchProduct',
-    }),
-  },
 };
 
 // Root Navigator
 export const RootNavigator = (): JSX.Element =>
-  genRootNavigator(TabNavigator, [modals.ExampleModal, modals.SearchProductModal]);
+  genRootNavigator(TabNavigator, [modals.ExampleModal]);
