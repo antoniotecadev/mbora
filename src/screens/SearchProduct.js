@@ -12,11 +12,15 @@ const SearchProduct = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
   const [fakeData, setFakeData] = useState();
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       const apiResponse = await fetch("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json");
       const data = await apiResponse.json();
       setFakeData(data);
+      setLoading(false);
     };
     getData();
   }, []);
@@ -30,6 +34,7 @@ const SearchProduct = () => {
         clicked={clicked}
         setClicked={setClicked}
       />
+      {loading ? <ActivityIndicator /> : null}
       {(
           <List
             searchPhrase={searchPhrase}
