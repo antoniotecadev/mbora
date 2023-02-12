@@ -40,7 +40,7 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
       {clicked && (
         <View>
           <Button
-            title="Cancel"
+            title="Cancelar"
             onPress={() => {
               Keyboard.dismiss();
               setClicked(false);

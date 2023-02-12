@@ -4,6 +4,7 @@ import {
   Text,
   SafeAreaView,
   ActivityIndicator,
+  Alert,
 } from "react-native";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
@@ -14,16 +15,28 @@ const SearchProduct = () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
 
+  const searchProduct = (produto) => {
+    getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(produto));
+  }
+
+  const getData = async (url) => {
+    setLoading(true);
+    try {
+    const apiResponse = await fetch(url);
+    const responseJsonData = await apiResponse.json();
+    setData(responseJsonData);
+    } catch (error) {
+        Alert.alert(error.message);
+    }finally{
+        setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      setLoading(true);
-      const apiResponse = await fetch("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json");
-      const responseJsonData = await apiResponse.json();
-      setData(responseJsonData);
-      setLoading(false);
-    };
-    getData();
-  }, []);
+    if(searchPhrase) {
+        searchProduct(searchPhrase);
+    } 
+  }, [searchPhrase]);
 
   return (
     <SafeAreaView style={styles.root}>

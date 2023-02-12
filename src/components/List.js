@@ -34,15 +34,16 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
 
 const List = ({ searchPhrase, setClicked, data }) => {
   const renderItem = ({ item }) => {
-    if (searchPhrase === "") {
-      return <Item item={item} />;
-    }
-    if (item.nome.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
-      return <Item item={item} />;
-    }
-    if (item.empresa.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
-      return <Item item={item}/>;
-    }
+    return <Item item={item} />;
+    // if (searchPhrase === "") {
+      // return <Item item={item} />;
+    // }
+    // if (item.nome.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
+    //   return <Item item={item} />;
+    // }
+    // if (item.empresa.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
+    //   return <Item item={item}/>;
+    // }
   };
 
   return (
@@ -56,6 +57,7 @@ const List = ({ searchPhrase, setClicked, data }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
+          ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto não encontrado</Text>}
         />
       </View>
     </SafeAreaView>
@@ -84,4 +86,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  emptyListStyle: {
+    color: '#df4759',
+    padding: 10,
+    textAlign: 'center',
+  }
 });
