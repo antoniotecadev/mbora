@@ -5,38 +5,43 @@ import {
   View,
   FlatList,
   SafeAreaView,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 import { currency } from "../utils/utilitario";
+import { useNavigation } from "@react-navigation/native"
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
+const Item = ({ item }) => {
 
-// definition of the Item, which will be rendered in the FlatList
-const Item = ({ name, price }) => (
-  <View style={styles.item}>
-    <View style={styles.section}>
-    <Text style={styles.title}>{name}</Text>
-      <Image style={{width: 50, height: 50, borderRadius: 25}} source= {imageProduct} />
-    </View>
-    <Text style={{color: 'green'}}>{currency(String(price))}</Text>
-  </View>
-);
+const navigation = useNavigation();
 
-// the filter
+const showProductDetails = (item)=> {
+  navigation.navigate('ProductDetails', { produto: item });
+}
+
+return <TouchableOpacity onPress={()=> showProductDetails(item)}>
+        <View style={styles.item}>
+          <View style={styles.section}>
+          <Text style={styles.title}>{item.nome}</Text>
+            <Image style={{width: 50, height: 50, borderRadius: 25}} source= {imageProduct} />
+          </View>
+          <Text style={{color: 'green'}}>{currency(String(item.preco))}</Text>
+        </View>
+      </TouchableOpacity>
+};
+
 const List = ({ searchPhrase, setClicked, data }) => {
   const renderItem = ({ item }) => {
-    // when no input, show all
     if (searchPhrase === "") {
-      return <Item name={item.nome} price={item.preco} />;
+      return <Item item={item} />;
     }
-    // filter of the name
     if (item.nome.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
-      return <Item name={item.nome} price={item.preco} />;
+      return <Item item={item} />;
     }
-    // filter of the description
     if (item.empresa.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
-      return <Item name={item.nome} price={item.preco} />;
+      return <Item item={item}/>;
     }
   };
 
