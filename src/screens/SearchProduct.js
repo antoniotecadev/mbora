@@ -11,15 +11,15 @@ import SearchBar from "../components/SearchBar";
 const SearchProduct = () => {
   const [searchPhrase, setSearchPhrase] = useState("");
   const [clicked, setClicked] = useState(false);
-  const [fakeData, setFakeData] = useState();
+  const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
       setLoading(true);
       const apiResponse = await fetch("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json");
-      const data = await apiResponse.json();
-      setFakeData(data);
+      const responseJsonData = await apiResponse.json();
+      setData(responseJsonData);
       setLoading(false);
     };
     getData();
@@ -38,7 +38,7 @@ const SearchProduct = () => {
       {(
           <List
             searchPhrase={searchPhrase}
-            data={fakeData}
+            data={data}
             setClicked={setClicked}
           />
       )}
