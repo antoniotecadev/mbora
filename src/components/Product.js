@@ -91,7 +91,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
           <View center>
             <Button
               text90
-              label="Adicionar aos favoritos"
+              label="Adicionar ao carrinho"
               size={Button.sizes.large}
               borderRadius={10}
               marginB-5
@@ -100,7 +100,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
             <Button
               text90
               marginB-10
-              label="Partilhar"
+              label="Encomendar"
               size={Button.sizes.large}
               borderRadius={10}
               backgroundColor = 'green'
