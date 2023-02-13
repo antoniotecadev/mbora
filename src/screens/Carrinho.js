@@ -1,32 +1,18 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { FlatList, StyleSheet, TextInput } from 'react-native';
+import { FlatList, StyleSheet, TextInput, Alert } from 'react-native';
 import { Card, Text, View, Button, Colors, TextField } from 'react-native-ui-lib';
+import { CartContext } from '../CartContext';
+import { currency } from '../utils/utilitario';
 
 const cardImage = require('../../assets/products/feijao1.jpg');
-
-const shareIcon = require('../../assets/icons/excluir.png');
+const removeIcon = require('../../assets/icons/excluir.png');
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
 export function Carrinho({ navigation }) {
-    function Totals() {
-        return (
-            <>
-                <View style={styles.cartLineTotal}>
-                    <Text style={[styles.lineLeft, styles.lineTotal]}>Total</Text>
-                    <Text style={styles.lineRight}>1500,00 kz</Text>
-                </View>
-                <Button
-                    borderRadius={5}
-                    size={'large'}
-                    backgroundColor={Colors.green20}
-                    label='Finalizar compra' />
-            </>
-        );
-    }
+    
+    const { items, getTotalPrice, getItemsCount, quantity, removeItemToCart } = useContext(CartContext);
 
-    function renderItem({ item }) {
-
-
+    const renderItem = ({ item }) => {
         return (
             <Card
                 row
@@ -36,23 +22,23 @@ export function Carrinho({ navigation }) {
                 bg-$backgroundElevated
                 activeOpacity={1}
                 activeScale={0.96}
-            >
+>
                 <Card.Image source={cardImage} style={{ width: 100, height: '100%' }} />
                 <View maxWidth={240} margin-8>
                     <Text text70 $textDefault>
-                        Arroz Tio João
+                        {JSON.stringify(items.index)}
                     </Text>
-                    <Text text70BO $textDefault>
-                        1500,00 kz
+                    <Text text70 $textDefault>
+                        {item.product.nome}
                     </Text>
-                    <Text text70 green40>
-                        Disponível
+                    <Text text80 $textDefault green10 marginB-4>
+                        {currency(String(item.product.preco))}
                     </Text>
-                    <Text $textDefault text90>💢Maliana</Text>
+                    <Text $textDefault text90>{item.product.empresa}</Text>
                     <Text text100 grey40 marginB-8>
-                        📍 Morro Bento, Prédio de Ferro
+                        {`${item.product.nomeProvincia}, ${item.product.district} , ${item.product.street}`}
                     </Text>
-                    <Count />
+                    <Count qtd={item.qty} id={item.product.id} quantity={quantity} removeItemToCart={removeItemToCart} />
                 </View>
             </Card>
         );
@@ -62,54 +48,72 @@ export function Carrinho({ navigation }) {
         <FlatList
             style={styles.itemsList}
             contentContainerStyle={styles.itemsListContainer}
-            data={[1, 2, 3, 4, 5]}
+            data={items}
             renderItem={renderItem}
-            keyExtractor={(item, index) => index}
-            ListFooterComponent={Totals}
+            keyExtractor={(item, index) => item.id}
+            ListFooterComponent={<Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length}/>}
         />
     );
 }
 
-const Count = () => {
-
-    const [qtd, setQtd] = useState(0);
+const Count = ({ qtd, id, quantity, removeItemToCart }) => {
 
     return <View style={{
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginBottom: 8
     }}>
         <Button
             borderRadius={5}
             size={'small'}
             backgroundColor={Colors.grey40}
             label='-'
-            onPress={() => setQtd(parseInt(qtd) - 1)}
-        />
-
+            onPress={() => parseInt(qtd) <= 1 ? null: quantity(id, {isSum: false})}/>
         <TextInput
             width={30}
             keyboardType='numeric'
-            value={qtd + ''}
+            value={String(qtd)}
             maxLength={2}  //setting limit of input
-            textAlign='center'
-
-        />
+            textAlign='center'/>
         <Button
             borderRadius={5}
             size={'small'}
             backgroundColor={Colors.grey40}
             label='+'
-            onPress={() => setQtd(parseInt(qtd) + 1)}
+            onPress={() => quantity(id, {isSum: true})}
         />
         <Button
-            marginL-8
+            marginL-80
             size={'small'}
-            backgroundColor={Colors.red40}
-            iconSource={shareIcon}
-            {...iconButton} />
+            backgroundColor={Colors.red20}
+            iconSource={removeIcon}
+            {...iconButton} 
+            onPress={() => removeItemToCart(id)} />
     </View>
+}
+
+const Totals = ({ price, totalQty, distincQty })=> {
+    return (
+        <>
+            <View style={styles.cartLineTotal}>
+                <Text style={[styles.lineLeft]}>Quantidade Distinta</Text>
+                <Text style={styles.lineRight}>{String(distincQty)}</Text>
+            </View>
+            <View style={styles.cartLineTotal}>
+                <Text style={[styles.lineLeft]}>Quantidade Total</Text>
+                <Text style={styles.lineRight}>{String(totalQty)}</Text>
+            </View>
+            <View style={styles.cartLineTotal}>
+                <Text style={[styles.lineLeft]}>Total</Text>
+                <Text style={styles.lineRight}>{currency(String(price))}</Text>
+            </View>
+            <Button
+                borderRadius={5}
+                size={'large'}
+                backgroundColor ='green'
+                label='Encomendar' />
+        </>
+    );
 }
 
 const styles = StyleSheet.create({
@@ -121,18 +125,14 @@ const styles = StyleSheet.create({
         borderTopColor: '#dddddd',
         borderTopWidth: 1
     },
-    lineTotal: {
-        fontWeight: 'bold',
-    },
     lineLeft: {
-        fontSize: 20,
+        fontSize: 18,
         lineHeight: 40,
         color: '#333333'
     },
     lineRight: {
         flex: 1,
-        fontSize: 20,
-        fontWeight: 'bold',
+        fontSize: 18,
         lineHeight: 40,
         color: '#333333',
         textAlign: 'right',

@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Share, TouchableOpacity, Text as Texto } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, Share, TouchableOpacity, Text as Texto, ToastAndroid } from 'react-native';
 import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
+import { CartContext } from '../CartContext';
 
 const featureIcon = require('../../assets/icons/star.png');
 const shareIcon = require('../../assets/icons/share.png');
@@ -13,12 +14,13 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Product({ nome, preco, tag, urlImage, empresa, district, street, nomeProvincia, nomeCategoria, onPress }) {
+// export function Product({ id, nome, preco, tag, urlImage, empresa, district, street, nomeProvincia, nomeCategoria, onPress }) {
+export function Product(produto, { onPress } ) {
 
   const statusColor = Colors.$textSuccess;
 
+  const { addItemToCart } = useContext(CartContext);
   const [buttonProps, setButtonProps] = useState(iconButton)
-
   const [expanded, setExpanded] = useState(false)
   const [top] = useState(false)
 
@@ -65,7 +67,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(nome, preco)}
+        sectionHeader={HeaderElement(produto.nome, produto.preco)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -77,6 +79,7 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
               borderRadius={10}
               marginB-5
               backgroundColor = 'orange'
+              onPress={()=> addItemToCart(produto)}
             />
             <Button
               text90
@@ -110,10 +113,10 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
               />
             </View>
             <Text marginT-8 text100 grey40>
-              {`${nomeProvincia}, ${district} , ${street}`}
+              {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
             </Text>
             <View style={styles.section}>
-              <Text $textDefault style={{ ...Typography.text90 }}>{empresa}</Text>
+              <Text $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</Text>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
                 size={24}
                 animate={true}
@@ -121,8 +124,8 @@ export function Product({ nome, preco, tag, urlImage, empresa, district, street,
                 badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
               />
             </View>
-            <Tag tag = {tag}/>
-            <Tag tag = {nomeCategoria}/>
+            <Tag tag = {produto.tag}/>
+            <Tag tag = {produto.nomeCategoria}/>
           </View>
         </View>
       </ExpandableSection>

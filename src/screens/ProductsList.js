@@ -2,9 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
-
 import { Product } from '../components/Product.js';
-import { Card } from 'react-native-ui-lib';
+import { Card, Toast } from 'react-native-ui-lib';
 
 const ITEM_HEIGHT = 150;
 
@@ -23,6 +22,7 @@ export default function ProductsList({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [lastVisible, setLastVisible] = useState(null);
   const [countPage, setCountPage] = useState(0);
+  const [visible, setVisible] = useState(false);
 
   const { nav } = useServices();
 
@@ -38,7 +38,7 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product {...product} key={product.id} onPress={()=> showProductDetails(product)} />
+    return <Product {...product} key={product.id} onPress={()=> showProductDetails(product)}/>
   },[]);
 
   const keyExtractor = (item)=> item.id;
@@ -84,14 +84,13 @@ export default function ProductsList({ navigation }) {
 
   const FlatListHeaderComponent = () =>  {
     return (
-      <FlatList
+        <FlatList
         contentContainerStyle={styles.productsListContainer}
         keyExtractor={keyExtractor}
         data={categorias}
         horizontal={true}
         renderItem={renderItemCategory}
-        getItemLayout={getItemLayout}
-      />
+        getItemLayout={getItemLayout}/>
     );
   }
 
@@ -174,6 +173,15 @@ export default function ProductsList({ navigation }) {
 
   return (
     <>
+      <Toast
+        message='Adicionado ao carrinho' 
+        visible={visible} 
+        position={'top'} 
+        onDismiss={()=> setVisible(false)}
+        autoDismiss={1000}
+        backgroundColor={'black'}
+        />
+
       <FlatList
         columnWrapperStyle={{
           justifyContent: "space-between",

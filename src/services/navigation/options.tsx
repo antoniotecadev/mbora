@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import { Platform, TouchableOpacity, Alert } from 'react-native';
 import { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
@@ -33,24 +33,23 @@ export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
 });
 
 export const tabBarDefaultOptions = (routeName: string): BottomTabNavigationOptions => ({
+  tabBarBadgeStyle: {fontSize: 8, backgroundColor: Colors.red20},
   headerShown: false,
   tabBarActiveTintColor: 'orange',
   tabBarInactiveTintColor: Colors.grey40,
   tabBarStyle: { backgroundColor: Colors.bgColor, borderTopWidth: 0, elevation: 0 },
   tabBarIcon: ({ focused, color, size }) => (
-    <View>
-      {routeName === 'CartNavigator' && <BadgeCartCount />}
       <Icon name={getIconName(routeName, focused)} size={size} color={color} />
-    </View>
   ),
 });
 
-const BadgeCartCount = () => {
+export const badgeCartCount = () => {
   const { getItemsCount } = useContext(CartContext);
-  return (
-    <Badge backgroundColor={Colors.red20} containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={String(getItemsCount())} size={12} />
-  );
-}
+  return getItemsCount();
+};
+// return (
+//   <Badge backgroundColor={Colors.red20} containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={String(getItemsCount())} size={12} />
+// );
 
 const IconSearch = ()=> {
 

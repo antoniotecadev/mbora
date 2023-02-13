@@ -10,7 +10,7 @@ import { Carrinho } from './Carrinho.js';
 import { Settings } from './settings';
 import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
-import { screenDefaultOptions, tabBarDefaultOptions } from '../services/navigation/options';
+import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Perfil' | 'Cart' | 'Notification' | 'Cantinas';
@@ -74,7 +74,7 @@ const screens: ScreenLayouts = {
     name: 'Carrinho',
     component: Carrinho,
     options: () => ({
-      title: 'Carrinho de compra',
+      title: 'Carrinho de encomenda',
       ...screenDefaultOptions(),
     }),
   },
@@ -134,6 +134,7 @@ const tabs: TabScreenLayouts = {
     component: CartStack,
     options: () => ({
       title: 'Carrinho',
+      tabBarBadge: badgeCartCount(),
       ...tabBarDefaultOptions('CartNavigator'),
     }),
   },
