@@ -52,7 +52,7 @@ export function Carrinho({ navigation }) {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => item.id}
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Carrinho vazio</Text>}
-                ListFooterComponent={<Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart}/>}
+                ListFooterComponent={items.length == 0 ? null : <Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart}/>}
             />
         </>
     );
