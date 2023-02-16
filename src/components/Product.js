@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Share, TouchableOpacity, Text as Texto, ToastAndroid } from 'react-native';
+import { View, StyleSheet, Share, TouchableOpacity, Text as Texto } from 'react-native';
 import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
@@ -14,7 +14,6 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 const labelButton = { label: 'Add favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-// export function Product({ id, nome, preco, tag, urlImage, empresa, district, street, nomeProvincia, nomeCategoria, onPress }) {
 export function Product(produto, { onPress } ) {
 
   const statusColor = Colors.$textSuccess;
