@@ -36,7 +36,7 @@ export function Carrinho({ navigation }) {
                     <Text text100 grey40 marginB-8>
                         {`${item.product.nomeProvincia}, ${item.product.district} , ${item.product.street}`}
                     </Text>
-                    <Count qtd={item.qty} id={item.product.id} quantity={quantity} removeItemToCart={removeItemToCart} nomeProduto={item.product.nome} />
+                    <Footer qtd={item.qty} id={item.product.id} quantity={quantity} removeItemToCart={removeItemToCart} nomeProduto={item.product.nome} />
                 </View>
             </Card>
         );
@@ -57,7 +57,7 @@ export function Carrinho({ navigation }) {
     );
 }
 
-const Count = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
+const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
 
     return <View style={{
         flexDirection: 'row',
