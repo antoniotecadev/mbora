@@ -60,7 +60,8 @@ export function CartProvider(props) {
     });
   }
 
-  function removeItemToCart(id){
+  function removeItemToCart(id, msg, bckClr){
+    setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
     setItems(items.filter(p=> p.id !== id));
   }
   

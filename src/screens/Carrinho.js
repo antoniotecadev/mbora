@@ -1,7 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { FlatList, StyleSheet, TextInput, Alert } from 'react-native';
-import { Card, Text, View, Button, Colors, TextField } from 'react-native-ui-lib';
+import React, { useContext } from 'react';
+import { FlatList, StyleSheet, TextInput } from 'react-native';
+import { Card, Text, View, Button, Colors } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
+import ToastMessage from '../components/ToastMessage';
 import { currency } from '../utils/utilitario';
 
 const cardImage = require('../../assets/products/feijao1.jpg');
@@ -38,25 +39,28 @@ export function Carrinho({ navigation }) {
                     <Text text100 grey40 marginB-8>
                         {`${item.product.nomeProvincia}, ${item.product.district} , ${item.product.street}`}
                     </Text>
-                    <Count qtd={item.qty} id={item.product.id} quantity={quantity} removeItemToCart={removeItemToCart} />
+                    <Count qtd={item.qty} id={item.product.id} quantity={quantity} removeItemToCart={removeItemToCart} nomeProduto={item.product.nome} />
                 </View>
             </Card>
         );
     }
 
     return (
-        <FlatList
-            style={styles.itemsList}
-            contentContainerStyle={styles.itemsListContainer}
-            data={items}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => item.id}
-            ListFooterComponent={<Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length}/>}
-        />
+        <>
+            <ToastMessage />
+            <FlatList
+                style={styles.itemsList}
+                contentContainerStyle={styles.itemsListContainer}
+                data={items}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => item.id}
+                ListFooterComponent={<Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length}/>}
+            />
+        </>
     );
 }
 
-const Count = ({ qtd, id, quantity, removeItemToCart }) => {
+const Count = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
 
     return <View style={{
         flexDirection: 'row',
@@ -88,7 +92,7 @@ const Count = ({ qtd, id, quantity, removeItemToCart }) => {
             backgroundColor={Colors.red20}
             iconSource={removeIcon}
             {...iconButton} 
-            onPress={() => removeItemToCart(id)} />
+            onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red')} />
     </View>
 }
 
