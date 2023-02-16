@@ -27,9 +27,6 @@ export function Carrinho({ navigation }) {
                 <Card.Image source={cardImage} style={{ width: 100, height: '100%' }} />
                 <View maxWidth={240} margin-8>
                     <Text text70 $textDefault>
-                        {JSON.stringify(items.index)}
-                    </Text>
-                    <Text text70 $textDefault>
                         {item.product.nome}
                     </Text>
                     <Text text80 $textDefault green10 marginB-4>
