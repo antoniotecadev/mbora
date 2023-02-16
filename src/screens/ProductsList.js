@@ -187,7 +187,7 @@ export default function ProductsList({ navigation }) {
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados</Text>}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>☹ {'\n\n'} Produtos não carregados</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
         />
     </>
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
   },
   emptyListStyle: {
     color: '#df4759',
-    padding: 10,
+    paddingTop: 150,
     textAlign: 'center',
   }
 });

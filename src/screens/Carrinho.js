@@ -51,7 +51,7 @@ export function Carrinho({ navigation }) {
                 data={items}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => item.id}
-                ListEmptyComponent={<Text style={styles.emptyListStyle}>Carrinho vazio</Text>}
+                ListEmptyComponent={<Text style={styles.emptyListStyle}>☹ {'\n\n'} Carrinho vazio</Text>}
                 ListFooterComponent={items.length == 0 ? null : <Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart}/>}
             />
         </>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     },
     emptyListStyle: {
         color: '#df4759',
-        padding: 10,
+        paddingTop: 250,
         textAlign: 'center',
       }
 });
