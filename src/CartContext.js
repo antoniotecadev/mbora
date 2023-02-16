@@ -60,9 +60,13 @@ export function CartProvider(props) {
     });
   }
 
-  function removeItemToCart(id, msg, bckClr){
+  function removeItemToCart(id, msg, bckClr, {isAll}){
+    if(isAll) {
+      setItems([]);
+    } else {
+      setItems(items.filter(p=> p.id !== id));
+    }
     setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
-    setItems(items.filter(p=> p.id !== id));
   }
   
   return (

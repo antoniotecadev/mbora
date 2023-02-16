@@ -51,7 +51,7 @@ export function Carrinho({ navigation }) {
                 data={items}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => item.id}
-                ListFooterComponent={<Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length}/>}
+                ListFooterComponent={<Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart}/>}
             />
         </>
     );
@@ -89,13 +89,19 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
             backgroundColor={Colors.red20}
             iconSource={removeIcon}
             {...iconButton} 
-            onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red')} />
+            onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red', {isAll: false})} />
     </View>
 }
 
-const Totals = ({ price, totalQty, distincQty })=> {
+const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
     return (
         <>
+            <Button
+                borderRadius={5}
+                size={'large'}
+                backgroundColor ='orange'
+                label='Remover todos os produtos do carrinho'
+                onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} />
             <View style={styles.cartLineTotal}>
                 <Text style={[styles.lineLeft]}>Quantidade Distinta</Text>
                 <Text style={styles.lineRight}>{String(distincQty)}</Text>
