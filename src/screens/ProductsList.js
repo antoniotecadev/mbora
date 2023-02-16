@@ -174,7 +174,7 @@ export default function ProductsList({ navigation }) {
 
   return (
     <>
-      <ToastMessage message={'Adicionado ao carrinho'} backgroundColor={'green'} />
+      <ToastMessage />
       <FlatList
         columnWrapperStyle={{
           justifyContent: "space-between",

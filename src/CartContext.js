@@ -7,11 +7,11 @@ export const CartContext = createContext();
 
 export function CartProvider(props) {
   const [items, setItems] = useState([]);
-  const [visibleToast, setVisibleToast] = useState(false);
+  const [visibleToast, setVisibleToast] = useState({visible: false, message: null, backgroundColor: null});
   
-  function addItemToCart(produto) {
+  function addItemToCart(produto, msg, bckClr) {
     // const product = getProduct(id);
-    setVisibleToast(true);
+    setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
     const product = produto;
     setItems((prevItems) => {
       const item = prevItems.find((item) => (item.id == product.id));

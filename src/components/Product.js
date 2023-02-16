@@ -78,7 +78,7 @@ export function Product(produto, { onPress } ) {
               borderRadius={10}
               marginB-5
               backgroundColor = 'orange'
-              onPress={()=> addItemToCart(produto)}
+              onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}
             />
             <Button
               text90
