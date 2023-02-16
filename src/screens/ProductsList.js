@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
 import { Product } from '../components/Product.js';
 import { Card, Toast } from 'react-native-ui-lib';
+import { CartContext } from '../CartContext';
 
 const ITEM_HEIGHT = 150;
 
@@ -22,9 +23,9 @@ export default function ProductsList({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [lastVisible, setLastVisible] = useState(null);
   const [countPage, setCountPage] = useState(0);
-  const [visible, setVisible] = useState(false);
 
   const { nav } = useServices();
+  const { visibleToast, setVisibleToast} = useContext(CartContext);
 
   const onRefresh = ()=> {
     setRefreshing(true);
@@ -175,11 +176,11 @@ export default function ProductsList({ navigation }) {
     <>
       <Toast
         message='Adicionado ao carrinho' 
-        visible={visible} 
+        visible={visibleToast} 
         position={'top'} 
-        onDismiss={()=> setVisible(false)}
+        onDismiss={()=> setVisibleToast(false)}
         autoDismiss={1000}
-        backgroundColor={'black'}
+        backgroundColor={'green'}
         />
 
       <FlatList

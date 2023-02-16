@@ -7,9 +7,11 @@ export const CartContext = createContext();
 
 export function CartProvider(props) {
   const [items, setItems] = useState([]);
+  const [visibleToast, setVisibleToast] = useState(false);
   
   function addItemToCart(produto) {
     // const product = getProduct(id);
+    setVisibleToast(true);
     const product = produto;
     setItems((prevItems) => {
       const item = prevItems.find((item) => (item.id == product.id));
@@ -64,7 +66,7 @@ export function CartProvider(props) {
   
   return (
     <CartContext.Provider 
-      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart}}>
+      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast}}>
       {props.children}
     </CartContext.Provider>
   );
