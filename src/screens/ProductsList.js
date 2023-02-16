@@ -3,8 +3,9 @@ import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshCont
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
 import { Product } from '../components/Product.js';
-import { Card, Toast } from 'react-native-ui-lib';
-import { CartContext } from '../CartContext';
+import { Card } from 'react-native-ui-lib';
+import ToastMessage from '../components/ToastMessage';
+
 
 const ITEM_HEIGHT = 150;
 
@@ -25,7 +26,6 @@ export default function ProductsList({ navigation }) {
   const [countPage, setCountPage] = useState(0);
 
   const { nav } = useServices();
-  const { visibleToast, setVisibleToast} = useContext(CartContext);
 
   const onRefresh = ()=> {
     setRefreshing(true);
@@ -174,15 +174,7 @@ export default function ProductsList({ navigation }) {
 
   return (
     <>
-      <Toast
-        message='Adicionado ao carrinho' 
-        visible={visibleToast} 
-        position={'top'} 
-        onDismiss={()=> setVisibleToast(false)}
-        autoDismiss={1000}
-        backgroundColor={'green'}
-        />
-
+      <ToastMessage message={'Adicionado ao carrinho'} backgroundColor={'green'} />
       <FlatList
         columnWrapperStyle={{
           justifyContent: "space-between",
