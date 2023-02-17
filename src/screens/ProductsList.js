@@ -5,7 +5,8 @@ import { useServices } from '../services';
 import { Product } from '../components/Product.js';
 import { Card } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
-
+import ErrorMessage from '../components/ErrorMessage';
+import { CartContext } from '../CartContext';
 
 const ITEM_HEIGHT = 150;
 
@@ -26,6 +27,7 @@ export default function ProductsList({ navigation }) {
   const [countPage, setCountPage] = useState(0);
 
   const { nav } = useServices();
+  const { error, setError} = useContext(CartContext);
 
   const onRefresh = ()=> {
     setRefreshing(true);
@@ -113,13 +115,14 @@ export default function ProductsList({ navigation }) {
     try {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
+      setError(null);
       if(isRefresh) {
         setProdutos(responseJsonData);
       } else {
         setProdutos((prevState) => [...prevState, ...responseJsonData]);
       }
     } catch (error) {
-      Alert.alert('Erro ao carregar produtos', error.message + '');
+      setError(error.message);
     } finally {
       setLoading({pdt: false});
       setRefreshing(false)
@@ -175,6 +178,7 @@ export default function ProductsList({ navigation }) {
   return (
     <>
       <ToastMessage />
+      { error == null ? 
       <FlatList
         columnWrapperStyle={{
           justifyContent: "space-between",
@@ -188,8 +192,8 @@ export default function ProductsList({ navigation }) {
         ListFooterComponent={FooterComponente}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>☹ {'\n\n'} Produtos não carregados</Text>}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
-        />
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
+        : <ErrorMessage onLoading={()=> fetchProducts(true)} error={error} loading={loading} />}
     </>
   );
 }
