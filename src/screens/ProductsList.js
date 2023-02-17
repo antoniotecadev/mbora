@@ -117,7 +117,7 @@ export default function ProductsList({ navigation }) {
       let responseJsonData = await response.json();
       setError(null);
       if(isRefresh) {
-        setProdutos(responseJsonData);
+        setProdutos([]);
       } else {
         setProdutos((prevState) => [...prevState, ...responseJsonData]);
       }
@@ -191,7 +191,7 @@ export default function ProductsList({ navigation }) {
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>☹ {'\n\n'} Produtos não carregados</Text>}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
         : <ErrorMessage onLoading={()=> fetchProducts(true)} error={error} loading={loading} />}
     </>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   emptyListStyle: {
-    color: '#df4759',
+    color: 'gray',
     paddingTop: 150,
     textAlign: 'center',
   }

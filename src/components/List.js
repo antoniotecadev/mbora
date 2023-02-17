@@ -57,7 +57,7 @@ const List = ({ searchPhrase, setClicked, data }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          ListEmptyComponent={<Text style={styles.emptyListStyle}>☹ {'\n\n'} Produto não encontrado</Text>}
+          ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto não encontrado</Text>}
         />
       </View>
     </SafeAreaView>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   emptyListStyle: {
-    color: '#df4759',
+    color: 'gray',
     paddingTop: 200,
     textAlign: 'center',
   }
