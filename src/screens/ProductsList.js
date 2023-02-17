@@ -117,7 +117,7 @@ export default function ProductsList({ navigation }) {
       let responseJsonData = await response.json();
       setError(null);
       if(isRefresh) {
-        setProdutos([]);
+        setProdutos(responseJsonData);
       } else {
         setProdutos((prevState) => [...prevState, ...responseJsonData]);
       }
