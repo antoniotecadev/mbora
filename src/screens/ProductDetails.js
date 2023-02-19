@@ -49,7 +49,7 @@ export function ProductDetails({route}) {
               }}>
                 <IconButton iconNames={'cart-outline'} size={25}/>
                 <IconButton iconNames={'chatbox-outline'} size={25}/>
-                <IconButton iconNames={'heart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
+                <IconButton iconNames={'star-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
             </View>
