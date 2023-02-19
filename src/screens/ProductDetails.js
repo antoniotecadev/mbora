@@ -1,66 +1,81 @@
-import React, {useEffect, useState, useContext} from 'react';
+import React, {useEffect, useContext} from 'react';
 import {
   Text, 
-  Image, 
   View, 
   ScrollView, 
-  SafeAreaView, 
-  Button, 
-  StyleSheet
+  SafeAreaView,
+  TouchableOpacity, 
+  StyleSheet,
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
-import { currency } from '../utils/utilitario';
-
-import firebase from '../services/firebase';
-import { ref, child, get } from "firebase/database";
+import { currency, removeSpaceLowerCase } from '../utils/utilitario';
+import {Image} from 'react-native-expo-image-cache';
+import { Icon } from '../components/icon';
+import { Text as TextUILB, View as ViewUILB, Avatar, Colors } from 'react-native-ui-lib';
 
 export function ProductDetails({route}) {
   const { produto } = route.params;
-  const [product, setProduct] = useState({});
-  const [parceiro, setParceiro] = useState([]);
   const { addItemToCart } = useContext(CartContext);
   
   useEffect(() => {
-    setProduct(produto); 
-    const dbRef = ref(firebase);
-    get(child(dbRef, `parceiros/${produto.imei}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        setParceiro(snapshot.val());
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  
-  return () => ref(firebase, `parceiros/${produto.imei}`).off();
+    
   },[]);
   
-  function onAddToCart() {
-    // addItemToCart(product.id);
-  }
-  
+  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+  const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
     <SafeAreaView>
       <ScrollView>
-      {/* <Text style = {{color: 'white'}}>{JSON.stringify(parceiro) + ''+parceiro.bairro}</Text> */}
-        <Image
-          style={styles.image}
-          source={{ uri: product.urlImage}}
-        />
+      <ViewUILB marginH-16 style={styles.section}>
+          <Text $textDefault>{produto.empresa}</Text>
+          <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
+            size={24}
+            animate={true}
+            imageProps={{ animationDuration: 1000 }}
+            badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
+          />
+        </ViewUILB>
+        <TextUILB marginH-16 marginB-16 grey40>
+            {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
+          </TextUILB>
+        <Image style={styles.image} {...{preview, uri}} />
         <View style={styles.infoContainer}>
-          <Text style={styles.name}>{product.nome}</Text>
-          <Text style={styles.price}>{currency(String(product.preco))}</Text>
-          <Text style={styles.description}>{product.categoria}</Text>
-            <Button
-            onPress={onAddToCart}
-            title="Add to cart"
-            / >
+          <View style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 16
+              }}>
+                <IconButton iconNames={'cart-outline'} size={25}/>
+                <IconButton iconNames={'chatbox-outline'} size={25}/>
+                <IconButton iconNames={'heart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
+                <IconButton iconNames={'qr-code-outline'} size={25}/>
+                <IconButton iconNames={'share-outline'} size={25}/>
+            </View>
+          <Text style={styles.name}>{produto.nome}</Text>
+          <Text style={styles.price}>{currency(String(produto.preco))}</Text>
+          <Text style={styles.description}>{produto.nomeCategoria}</Text>
+          <Tag tag = {produto.tag}/>
+          <TextUILB marginT-8 grey40>Publicado {produto.created_at}</TextUILB>
+          {produto.updated_at && <TextUILB marginT-8 grey40>Alterado {produto.updated_at}</TextUILB>}
+          <TextUILB marginT-8 grey40>{`13 visualizações`}</TextUILB>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
+}
+
+const Tag = (props) => {
+  return <TouchableOpacity>
+          <Text style={{color: 'green'}}>{removeSpaceLowerCase('#' + props.tag)}</Text>
+        </TouchableOpacity>
+} 
+
+const IconButton = ({iconNames , size, onPress}) =>{
+  return <TouchableOpacity onPress={onPress}>
+            <Icon name={iconNames} size={size} color="green"/>
+          </TouchableOpacity>
 }
 
 const styles = StyleSheet.create({
@@ -86,17 +101,22 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 22,
-    fontWeight: 'bold',
+    marginBottom: 8,
   },
   price: {
     fontSize: 16,
-    fontWeight: '600',
     marginBottom: 8,
+    color: 'green'
   },
   description: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '400',
     color: '#787878',
-    marginBottom: 16,
+    marginBottom: 8,
+  },
+  section: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });

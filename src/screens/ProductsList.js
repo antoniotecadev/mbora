@@ -41,7 +41,7 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product {...product} key={product.id} onPress={()=> showProductDetails(product)}/>
+    return <Product produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
   },[]);
 
   const keyExtractor = (item)=> item.id;
