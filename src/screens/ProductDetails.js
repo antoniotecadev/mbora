@@ -13,6 +13,7 @@ import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
 import { Text as TextUILB, View as ViewUILB, Avatar, Colors } from 'react-native-ui-lib';
+import ToastMessage from '../components/ToastMessage';
 
 export function ProductDetails({route}) {
   const { produto } = route.params;
@@ -26,6 +27,7 @@ export function ProductDetails({route}) {
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
     <SafeAreaView>
+      <ToastMessage />
       <ScrollView>
       <ViewUILB marginH-16 style={styles.section}>
           <Text $textDefault>{produto.empresa}</Text>
@@ -47,9 +49,9 @@ export function ProductDetails({route}) {
                 justifyContent: 'space-between',
                 marginBottom: 16
               }}>
-                <IconButton iconNames={'cart-outline'} size={25}/>
+                <IconButton iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 <IconButton iconNames={'chatbox-outline'} size={25}/>
-                <IconButton iconNames={'star-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
+                <IconButton iconNames={'star-outline'} size={25}/>
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
             </View>
