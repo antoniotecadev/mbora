@@ -123,7 +123,7 @@ export function Product({ produto, onPress } ) {
             <TextUILB marginB-8 text100 grey30>
               {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
             </TextUILB>
-            <TextUILB marginB-8 text100 grey50>{`13 visualizações`}</TextUILB>
+            <TextUILB marginB-8 text100 grey50>{produto.visualizacao} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</TextUILB>
           </View>
         </View>
       </ExpandableSection>
