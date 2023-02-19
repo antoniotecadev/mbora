@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Share, TouchableOpacity, Text as Texto } from 'react-native';
-import { Card, Text, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
-import { currency, removeSpaceLowerCase } from '../utils/utilitario';
+import { View, StyleSheet, Share } from 'react-native';
+import { Card, Text as TextUILB, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
+import { currency } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
 
@@ -11,7 +11,7 @@ const shareIcon = require('../../assets/icons/share.png');
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 
-const labelButton = { label: 'Add favoritos' };
+const labelButton = { label: 'Favoritos' };
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
 export function Product({ produto, onPress } ) {
@@ -73,7 +73,7 @@ export function Product({ produto, onPress } ) {
           <View center>
             <Button
               text90
-              label="Adicionar ao carrinho"
+              label="Adicionar ao Carrinho"
               size={Button.sizes.large}
               borderRadius={10}
               marginB-5
@@ -83,7 +83,7 @@ export function Product({ produto, onPress } ) {
             <Button
               text90
               marginB-10
-              label="Encomendar"
+              label="Encomendar Agora"
               size={Button.sizes.large}
               borderRadius={10}
               backgroundColor = 'green'
@@ -111,11 +111,8 @@ export function Product({ produto, onPress } ) {
                 onPress={onShare}
               />
             </View>
-            <Text marginT-8 text100 grey40>
-              {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
-            </Text>
             <View style={styles.section}>
-              <Text $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</Text>
+              <TextUILB $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</TextUILB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
                 size={24}
                 animate={true}
@@ -123,8 +120,10 @@ export function Product({ produto, onPress } ) {
                 badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
               />
             </View>
-            <Tag tag = {produto.tag}/>
-            <Tag tag = {produto.nomeCategoria}/>
+            <TextUILB marginB-8 text100 grey30>
+              {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
+            </TextUILB>
+            <TextUILB marginB-8 text100 grey50>{`13 visualizações`}</TextUILB>
           </View>
         </View>
       </ExpandableSection>
@@ -135,20 +134,14 @@ export function Product({ produto, onPress } ) {
 const HeaderElement = (nome, preco) => {
   return (
     <View spread row maxWidth={180}>
-      <Text text80 $textDefault>
+      <TextUILB text80 $textDefault>
         {nome}
-      </Text>
-      <Text text80 $textDefault green10 marginB-4>
+      </TextUILB>
+      <TextUILB text80 $textDefault green10 marginB-4>
         {currency(String(preco))}
-      </Text>
+      </TextUILB>
     </View>
   );
-}
-
-const Tag = (props) => {
-  return <TouchableOpacity>
-          <Texto style={{color: 'green'}}>{removeSpaceLowerCase('#' + props.tag)}</Texto>
-        </TouchableOpacity>
 } 
 
 const styles = StyleSheet.create({
@@ -188,8 +181,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 15,
-    marginRight: 15
+    marginTop:8
   },
   icon: {
     alignSelf: 'center'
