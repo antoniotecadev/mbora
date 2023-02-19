@@ -53,13 +53,16 @@ export function ProductDetails({route}) {
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
             </View>
+          <ViewUILB borderBottomWidth marginB-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
           <Text style={styles.name}>{produto.nome}</Text>
           <Text style={styles.price}>{currency(String(produto.preco))}</Text>
           <Text style={styles.description}>{produto.nomeCategoria}</Text>
           <Tag tag = {produto.tag}/>
-          <TextUILB marginT-8 grey40>Publicado {produto.created_at}</TextUILB>
+          <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
+          <TextUILB grey40>Publicado {produto.created_at}</TextUILB>
           {produto.updated_at && <TextUILB marginT-8 grey40>Alterado {produto.updated_at}</TextUILB>}
           <TextUILB marginT-8 grey40>{`13 visualizações`}</TextUILB>
+          <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
         </View>
       </ScrollView>
     </SafeAreaView>
