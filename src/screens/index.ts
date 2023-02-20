@@ -13,9 +13,9 @@ import { genRootNavigator, genStackNavigator, genTabNavigator } from '../service
 import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
 
 // Describe your screens here
-export type Tabs = 'Main' | 'Perfil' | 'Cart' | 'Notification' | 'Cantinas';
+export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Cantinas';
 export type Modal = 'ExampleModal';
-export type Screen = 'Main' | 'Example' | 'Perfil'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
+export type Screen = 'Main' | 'Example' | 'Profile'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -46,7 +46,7 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
-  Perfil: {
+  Profile: {
     name: 'Perfil',
     component: Perfil,
     options: () => ({
@@ -109,7 +109,7 @@ const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CantinasStack = () => genStackNavigator([screens.ListaCantinas, screens.PerfilCantina]);
-const PerfilStack = () => genStackNavigator([screens.Perfil]);
+const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails]);
 
 // Tabs
 const tabs: TabScreenLayouts = {
@@ -121,9 +121,9 @@ const tabs: TabScreenLayouts = {
       ...tabBarDefaultOptions('MainNavigator'),
     }),
   },
-  Perfil: {
+  Profile: {
     name: 'PerfilNavigator',
-    component: PerfilStack,
+    component: ProfileStack,
     options: () => ({
       title: 'Perfil',
       ...tabBarDefaultOptions('PerfilNavigator'),
@@ -155,7 +155,7 @@ const tabs: TabScreenLayouts = {
     }),
   },
 };
-const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Perfil, tabs.Cart, tabs.Notification, tabs.Cantinas]);
+const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Profile, tabs.Cart, tabs.Notification, tabs.Cantinas]);
 
 // Modals
 const modals: ModalScreenLayouts = {

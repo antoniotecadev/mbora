@@ -15,11 +15,28 @@ import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
 import { Text as TextUILB, View as ViewUILB, Avatar, Colors } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 export function ProductDetails({route}) {
   const { produto } = route.params;
-  const { addItemToCart } = useContext(CartContext);
+  const { addItemToCart, setVisibleToast } = useContext(CartContext);
   const [view, setView] = useState(0);
+  const [value, setValue] = useState([]);
+  const { getItem, setItem } = useAsyncStorage('p-' + produto.id);
+
+  const isFavorite = async () => {
+    setValue(await getItem());
+  }
+
+  const addProductFavorite = async (product)=> { 
+    try {
+      await setItem(JSON.stringify(product));
+      isFavorite();
+      setVisibleToast({visible: true, message: product.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
+    } catch (error) {
+      setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
+    }
+  }
 
   const getViewNumberProduct = useCallback(async ()=> {
     let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/view/count/' + produto.id);
@@ -29,6 +46,7 @@ export function ProductDetails({route}) {
   
   useEffect(() => {
     try {
+      isFavorite();
       getViewNumberProduct();
     } catch (error) {
       Alert.alert(error.message);     
@@ -63,7 +81,7 @@ export function ProductDetails({route}) {
               }}>
                 <IconButton iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 <IconButton iconNames={'chatbox-outline'} size={25}/>
-                <IconButton iconNames={'star-outline'} size={25}/>
+                <IconButton iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> addProductFavorite(produto)}/>
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
             </View>
@@ -93,6 +111,14 @@ const IconButton = ({iconNames , size, onPress}) =>{
   return <TouchableOpacity onPress={onPress}>
             <Icon name={iconNames} size={size} color="green"/>
           </TouchableOpacity>
+}
+
+const removeProductFavorite = async ()=> {
+  try {
+    await AsyncStorage.removeItem('key');
+  } catch (error) {
+    
+  }
 }
 
 const styles = StyleSheet.create({
