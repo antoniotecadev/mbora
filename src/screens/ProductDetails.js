@@ -1,4 +1,4 @@
-import React, {useEffect, useContext} from 'react';
+import React, {useEffect, useContext, useCallback, useState} from 'react';
 import {
   Text, 
   View, 
@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   TouchableOpacity, 
   StyleSheet,
+  Alert
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
@@ -18,9 +19,20 @@ import ToastMessage from '../components/ToastMessage';
 export function ProductDetails({route}) {
   const { produto } = route.params;
   const { addItemToCart } = useContext(CartContext);
+  const [view, setView] = useState(0);
+
+  const getViewNumberProduct = useCallback(async ()=> {
+    let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/view/count/' + produto.id);
+    let responseJsonData = await response.json();
+    setView(responseJsonData.view);
+    }, [produto.id]);
   
   useEffect(() => {
-    
+    try {
+      getViewNumberProduct();
+    } catch (error) {
+      Alert.alert(error.message);     
+    }
   },[]);
   
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
@@ -63,7 +75,7 @@ export function ProductDetails({route}) {
           <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
           <TextUILB grey40>Publicado {produto.created_at}</TextUILB>
           {produto.updated_at && <TextUILB marginT-8 grey40>Alterado {produto.updated_at}</TextUILB>}
-          <TextUILB marginT-8 grey40>{produto.visualizacao} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</TextUILB>
+          <TextUILB marginT-8 grey40>{view} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</TextUILB>
           <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
         </View>
       </ScrollView>
