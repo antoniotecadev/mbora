@@ -10,27 +10,11 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-
-const labelButton = { label: 'Favoritos' };
-const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
-
 export function Product({ produto, onPress } ) {
 
-  const statusColor = Colors.$textSuccess;
-
   const { addItemToCart } = useContext(CartContext);
-  const [buttonProps, setButtonProps] = useState(iconButton)
   const [expanded, setExpanded] = useState(false)
   const [top] = useState(false)
-
-  const changeProps = () => {
-    if (buttonProps === iconButton) {
-      setButtonProps(labelButton);
-      setTimeout(() => {
-        setButtonProps(iconButton);
-      }, 1000);
-    }
-  };
 
   function onExpand() {
     setExpanded(!expanded);
