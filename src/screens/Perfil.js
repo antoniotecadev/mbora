@@ -93,7 +93,7 @@ const Favoritos = ({produts})=> {
             renderItem={renderItemProduct}
             data={produts}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados</Text>}/>
+            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}/>
     )
 }
 
