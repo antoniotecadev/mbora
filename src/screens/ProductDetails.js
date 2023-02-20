@@ -22,17 +22,27 @@ export function ProductDetails({route}) {
   const { addItemToCart, setVisibleToast } = useContext(CartContext);
   const [view, setView] = useState(0);
   const [value, setValue] = useState([]);
-  const { getItem, setItem } = useAsyncStorage('p-' + produto.id);
+  const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
 
   const isFavorite = async () => {
     setValue(await getItem());
   }
 
-  const addProductFavorite = async (product)=> { 
+  const addProductFavorite = async ()=> { 
     try {
-      await setItem(JSON.stringify(product));
+      await setItem(JSON.stringify(produto));
       isFavorite();
-      setVisibleToast({visible: true, message: product.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
+      setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
+    } catch (error) {
+      setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
+    }
+  }
+
+  const removeProductFavorite = async ()=> { 
+    try {
+      await removeItem();
+      isFavorite();
+      setVisibleToast({visible: true, message: produto.nome + ' removido dos favoritos.', backgroundColor: 'red'});
     } catch (error) {
       setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
     }
@@ -81,7 +91,7 @@ export function ProductDetails({route}) {
               }}>
                 <IconButton iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 <IconButton iconNames={'chatbox-outline'} size={25}/>
-                <IconButton iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> addProductFavorite(produto)}/>
+                <IconButton iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
             </View>
