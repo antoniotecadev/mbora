@@ -191,7 +191,7 @@ export default function ProductsList({ navigation }) {
         ListHeaderComponent={FlatListHeaderComponent}
         ListFooterComponent={FooterComponente}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Produtos não carregados</Text>}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
         : <ErrorMessage onLoading={()=> fetchProducts(true)} error={error} loading={loading} />}
     </>
