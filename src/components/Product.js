@@ -88,29 +88,6 @@ export function Product({ produto, onPress } ) {
               borderRadius={10}
               backgroundColor = 'green'
             />
-            <View style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}>
-              <Button
-                size={'small'}
-                backgroundColor = 'green'
-                iconSource={featureIcon}
-                {...buttonProps}
-                onPress={changeProps}
-                iconOnRight
-                animateLayout
-                animateTo={'left'}
-              />
-              <Button
-                size={'small'}
-                backgroundColor = 'green' 
-                iconSource={shareIcon}
-                {...iconButton}
-                onPress={onShare}
-              />
-            </View>
             <View style={styles.section}>
               <TextUILB $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</TextUILB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
