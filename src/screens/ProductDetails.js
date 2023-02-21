@@ -123,14 +123,6 @@ const IconButton = ({iconNames , size, onPress}) =>{
           </TouchableOpacity>
 }
 
-const removeProductFavorite = async ()=> {
-  try {
-    await AsyncStorage.removeItem('key');
-  } catch (error) {
-    
-  }
-}
-
 const styles = StyleSheet.create({
   card: {
     backgroundColor: 'white',
