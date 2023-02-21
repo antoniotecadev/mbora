@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import { StyleSheet, Alert, FlatList } from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { StyleSheet, Alert, FlatList, RefreshControl } from 'react-native';
 import { Avatar, Text, Button, TabController, View } from 'react-native-ui-lib';
 import { Product } from '../components/Product';
 import { useServices } from '../services';
@@ -10,6 +10,7 @@ const perfilImage = require('../../assets/products/car-101.jpg');
 export default function Perfil({ route }) {
 
     const [produts, setProduts] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
     const getProducts = useCallback(async ()=> {
         let keys = [];
@@ -27,7 +28,15 @@ export default function Perfil({ route }) {
         }
     }, [produts]);
 
+    const onRefresh = async ()=> {
+        setRefreshing(true);
+        setProduts([]);
+        getProducts();
+        setRefreshing(false);
+    }
+
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+    
     return (
         <>
             <View style={styles.infoContainer}>
@@ -54,7 +63,7 @@ export default function Perfil({ route }) {
                         <Text>Chilala</Text>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos produts={produts}/>
+                        <Favoritos produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </View>
@@ -63,7 +72,7 @@ export default function Perfil({ route }) {
     );
 }
 
-const Favoritos = ({produts})=> {
+const Favoritos = ({produts, onRefresh, refreshing})=> {
 
     const { nav } = useServices();
     
@@ -79,9 +88,6 @@ const Favoritos = ({produts})=> {
         return <Product produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
     }, []);
 
-    useEffect(()=>{  
-    }, []);
-    
     return(
         <FlatList
             columnWrapperStyle={{
@@ -93,8 +99,9 @@ const Favoritos = ({produts})=> {
             renderItem={renderItemProduct}
             data={produts}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}/>
-    )
+            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
+        )
 }
 
 const styles = StyleSheet.create({
