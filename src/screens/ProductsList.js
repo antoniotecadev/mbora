@@ -30,7 +30,7 @@ export default function ProductsList({ navigation }) {
   const { error, setError} = useContext(CartContext);
 
   const onRefresh = ()=> {
-    setRefreshing(true);
+    // setRefreshing(true);
     fetchProducts(true);
   };
 
@@ -99,14 +99,11 @@ export default function ProductsList({ navigation }) {
 
   const fetchCategorys = useCallback(async () => {
     try {
-      setLoading({ctg: true});
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/categorias/mbora');
       let responseJsonData = await response.json();
       setCategorias(responseJsonData);
     } catch (error) {
       Alert.alert('Erro ao carregar categorias', error.message + '');
-    }finally {
-      setLoading({ctg: false});
     }
   }, [])
 
@@ -115,7 +112,6 @@ export default function ProductsList({ navigation }) {
     try {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
       let responseJsonData = await response.json();
-      setError(null);
       if(isRefresh) {
         setProdutos(responseJsonData);
       } else {
@@ -193,7 +189,7 @@ export default function ProductsList({ navigation }) {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
-        : <ErrorMessage onLoading={()=> fetchProducts(true)} error={error} loading={loading} />}
+        : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true);}} error={error} loading={loading} />}
     </>
   );
 }
