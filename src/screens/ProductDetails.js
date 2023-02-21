@@ -103,7 +103,7 @@ export function ProductDetails({route}) {
           <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
           <TextUILB grey40>Publicado {produto.created_at}</TextUILB>
           {produto.updated_at && <TextUILB marginT-8 grey40>Alterado {produto.updated_at}</TextUILB>}
-          <TextUILB marginT-8 grey40>{view} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</TextUILB>
+          <TextUILB marginT-8 grey40>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</TextUILB>
           <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
         </View>
       </ScrollView>
