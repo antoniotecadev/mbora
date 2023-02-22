@@ -10,7 +10,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ produto, onPress } ) {
+export function Product({ isFavorite = false, removeFavorite, produto, onPress } ) {
 
   const { addItemToCart } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false)
@@ -66,12 +66,20 @@ export function Product({ produto, onPress } ) {
             />
             <Button
               text90
-              marginB-10
+              marginB-5
               label="Encomendar Agora"
               size={Button.sizes.large}
               borderRadius={10}
               backgroundColor = 'green'
             />
+            {isFavorite && 
+            <Button
+              text90
+              label="Remover"
+              size={Button.sizes.large}
+              borderRadius={10}
+              backgroundColor = 'red'
+              onPress={removeFavorite}/>}
             <View style={styles.section}>
               <TextUILB $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</TextUILB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}

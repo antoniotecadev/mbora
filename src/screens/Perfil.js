@@ -1,8 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useContext } from 'react';
 import { StyleSheet, Alert, FlatList, RefreshControl } from 'react-native';
 import { Avatar, Text, Button, TabController, View } from 'react-native-ui-lib';
+import { CartContext } from '../CartContext';
 import { Product } from '../components/Product';
+import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
@@ -75,6 +77,8 @@ export default function Perfil({ route }) {
 const Favoritos = ({produts, onRefresh, refreshing})=> {
 
     const { nav } = useServices();
+    const { setVisibleToast } = useContext(CartContext);
+
     
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
@@ -82,25 +86,38 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
         });
     }
 
+    const removeFavorite = useCallback(async (product)=> {
+        try {     
+            await AsyncStorage.removeItem('p-' +  product.id);
+            onRefresh();
+            setVisibleToast({visible: true, message: product.nome + ' removido dos favoritos.', backgroundColor: 'red'});
+        } catch (error) {
+            setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
+        }    
+    }, []);
+
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+        return <Product isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(
-        <FlatList
-            columnWrapperStyle={{
-            justifyContent: "space-between",
-            }}
-            numColumns={2}
-            contentContainerStyle={styles.productsListContainer}
-            keyExtractor={keyExtractor}
-            renderItem={renderItemProduct}
-            data={produts}
-            showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
-            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
+        <>
+            <ToastMessage />
+            <FlatList
+                columnWrapperStyle={{
+                justifyContent: "space-between",
+                }}
+                numColumns={2}
+                contentContainerStyle={styles.productsListContainer}
+                keyExtractor={keyExtractor}
+                renderItem={renderItemProduct}
+                data={produts}
+                showsVerticalScrollIndicator={false}
+                ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
+        </>
         )
 }
 
