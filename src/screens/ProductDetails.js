@@ -96,11 +96,11 @@ export function ProductDetails({route}) {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-                <IconButton iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
-                {loading ? <ActivityIndicator/> : <IconButton iconNames={'chatbox-outline'} size={25} onPress={()=> encomendarProduct()}/>}
-                <IconButton iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
-                <IconButton iconNames={'qr-code-outline'} size={25}/>
-                <IconButton iconNames={'share-outline'} size={25}/>
+                <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
+                {loading ? <ActivityIndicator/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> encomendarProduct()}/>}
+                <IconButton text={'Favorito'} iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
+                <IconButton text={'Qr code'} iconNames={'qr-code-outline'} size={25}/>
+                <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
           <View style={styles.divisor}></View>
           <Text style={styles.name}>{produto.nome}</Text>
@@ -124,9 +124,10 @@ const Tag = (props) => {
         </TouchableOpacity>
 } 
 
-const IconButton = ({iconNames , size, onPress}) =>{
-  return <TouchableOpacity onPress={onPress}>
-            <Icon name={iconNames} size={size} color="green"/>
+const IconButton = ({iconNames, text, size, onPress}) =>{
+  return <TouchableOpacity style={{ alignItems: 'center' }} onPress={onPress}>
+              <Icon name={iconNames} size={size} color="green"/>
+              <Text style={{ fontSize: 12 }}>{text}</Text>
           </TouchableOpacity>
 }
 
