@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
-import { Card, Text as TextUILB, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
+import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
+import { Card, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 import { currency } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
@@ -66,36 +66,35 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: 'orange' }]} 
               onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}>
-              <TextUILB text90 color='white' center>Adicionar ao Carrinho</TextUILB>
+              <Text style={styles.textButton}>Adicionar ao Carrinho</Text>
             </TouchableOpacity>
 
             {loading ? <ActivityIndicator /> :
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: 'green' }]} 
               onPress={()=> encomendarProduct()}>
-              <TextUILB text90 color='white' center>Encomendar Agora</TextUILB>
+              <Text style={styles.textButton}>Encomendar Agora</Text>
             </TouchableOpacity>}
 
             {isFavorite && 
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: 'red' }]} 
               onPress={removeFavorite}>
-              <TextUILB text90 color='white' center>Remover</TextUILB>
+              <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
 
             <View style={styles.section}>
-              <TextUILB $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</TextUILB>
+              <Text style={{ ...Typography.text90 }}>{produto.empresa}</Text>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
-                size={24}
-                animate={true}
-                imageProps={{ animationDuration: 1000 }}
+                size={20}
+                animate={false}
                 badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
               />
             </View>
-            <TextUILB marginB-8 text100 grey30>
+            <Text style={{ marginBottom: 8, color: Colors.grey30, fontSize: 10 }}>
               {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
-            </TextUILB>
-            <TextUILB marginB-8 text100 grey50>{produto.visualizacao} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</TextUILB>
+            </Text>
+            <Text style={{ marginBottom: 8, color: Colors.grey40, fontSize: 10 }}>{produto.visualizacao} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</Text>
           </View>
         </View>
       </ExpandableSection>
@@ -106,12 +105,12 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
 const HeaderElement = (nome, preco) => {
   return (
     <View spread row maxWidth={180}>
-      <TextUILB text80 $textDefault>
+      <Text>
         {nome}
-      </TextUILB>
-      <TextUILB text80 $textDefault green10 marginB-4>
+      </Text>
+      <Text style={{ color: Colors.green10, marginBottom: 4 }}>
         {currency(String(preco))}
-      </TextUILB>
+      </Text>
     </View>
   );
 } 
@@ -164,4 +163,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20
   },
+  textButton: { 
+    color: 'white', 
+    textAlign: 'center' }
 });
