@@ -26,7 +26,7 @@ const SearchProduct = () => {
     const responseJsonData = await apiResponse.json();
     setData(responseJsonData);
     } catch (error) {
-        Alert.alert(error.message);
+        Alert.alert('Erro', error.message);
     }finally{
         setLoading(false);
     }

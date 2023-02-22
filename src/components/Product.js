@@ -37,7 +37,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
         // dismissed
       }
     } catch (error) {
-      alert(error.message);
+      Alert.alert('Erro', error.message);
     }
   };
 

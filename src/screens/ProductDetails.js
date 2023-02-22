@@ -68,7 +68,7 @@ export function ProductDetails({route}) {
       isFavorite();
       getViewNumberProduct();
     } catch (error) {
-      Alert.alert(error.message);     
+      Alert.alert('Erro', error.message);     
     }
   },[]);
   

@@ -26,7 +26,7 @@ export default function Perfil({ route }) {
                 }
             });
         } catch (error) {
-            Alert.alert(error.message);
+            Alert.alert('Erro', error.message);
         }
     }, [produts]);
 
