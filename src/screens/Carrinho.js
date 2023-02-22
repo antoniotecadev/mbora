@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { FlatList, StyleSheet, TextInput } from 'react-native';
+import { FlatList, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { Card, Text, View, Button, Colors } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
@@ -65,44 +65,33 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
         alignItems: 'center',
         justifyContent: 'space-between',
     }}>
-        <Button
-            borderRadius={5}
-            size={'small'}
-            backgroundColor={Colors.grey40}
-            label='-'
-            onPress={() => parseInt(qtd) <= 1 ? null: quantity(id, {isSum: false})}/>
+        <TouchableOpacity style={styles.buttonQuantity} onPress={() => parseInt(qtd) <= 1 ? null: quantity(id, {isSum: false})}>
+            <Text color='white'>-</Text>
+        </TouchableOpacity>
+
         <TextInput
             width={30}
             keyboardType='numeric'
             value={String(qtd)}
             maxLength={2}  //setting limit of input
             textAlign='center'/>
-        <Button
-            borderRadius={5}
-            size={'small'}
-            backgroundColor={Colors.grey40}
-            label='+'
-            onPress={() => quantity(id, {isSum: true})}
-        />
-        <Button
-            marginL-80
-            size={'small'}
-            backgroundColor={Colors.red20}
-            iconSource={removeIcon}
-            {...iconButton} 
-            onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red', {isAll: false})} />
+
+        <TouchableOpacity style={styles.buttonQuantity} onPress={() => quantity(id, {isSum: true})}>
+            <Text color='white'>+</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={{backgroundColor: Colors.red20, paddingHorizontal:10, paddingVertical: 5, marginLeft: 110, borderRadius: 50}} onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red', {isAll: false})}>
+            <Text color='white'>x</Text>
+        </TouchableOpacity>
     </View>
 }
 
 const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
     return (
         <>
-            <Button
-                borderRadius={5}
-                size={'large'}
-                backgroundColor ='orange'
-                label='Remover todos os produtos do carrinho'
-                onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} />
+            <TouchableOpacity onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} style={{backgroundColor: 'orange', borderRadius: 5, paddingVertical: 10}}>
+                <Text color='white' center>Remover todos os produtos do carrinho</Text>
+            </TouchableOpacity>
             <View style={styles.cartLineTotal}>
                 <Text style={[styles.lineLeft]}>Quantidade Distinta</Text>
                 <Text style={styles.lineRight}>{String(distincQty)}</Text>
@@ -115,11 +104,9 @@ const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
                 <Text style={[styles.lineLeft]}>Total</Text>
                 <Text style={styles.lineRight}>{currency(String(price))}</Text>
             </View>
-            <Button
-                borderRadius={5}
-                size={'large'}
-                backgroundColor ='green'
-                label='Encomendar' />
+            <TouchableOpacity style={{backgroundColor: 'green', borderRadius: 5, paddingVertical: 10}}>
+                <Text color='white' center>Encomendar</Text>
+            </TouchableOpacity>
         </>
     );
 }
@@ -162,5 +149,11 @@ const styles = StyleSheet.create({
         color: 'gray',
         paddingTop: 250,
         textAlign: 'center',
-      }
+    },
+    buttonQuantity: {
+        backgroundColor: Colors.grey40, 
+        borderRadius: 5, 
+        paddingHorizontal: 25, 
+        paddingVertical: 5
+    }
 });

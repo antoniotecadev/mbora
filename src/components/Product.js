@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Share, Alert, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { Card, Text as TextUILB, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 import { currency } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
@@ -63,33 +63,26 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
       >
         <View maxWidth={180}>
           <View center>
-            <Button
-              text90
-              label="Adicionar ao Carrinho"
-              size={Button.sizes.large}
-              borderRadius={10}
-              marginB-5
-              backgroundColor = 'orange'
-              onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}
-            />
-            {loading ? <ActivityIndicator /> : 
-            <Button
-              text90
-              marginB-5
-              label="Encomendar Agora"
-              size={Button.sizes.large}
-              borderRadius={10}
-              backgroundColor = 'green'
-              onPress={()=> encomendarProduct()}
-            />}
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: 'orange' }]} 
+              onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}>
+              <TextUILB text90 color='white' center>Adicionar ao Carrinho</TextUILB>
+            </TouchableOpacity>
+
+            {loading ? <ActivityIndicator /> :
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: 'green' }]} 
+              onPress={()=> encomendarProduct()}>
+              <TextUILB text90 color='white' center>Encomendar Agora</TextUILB>
+            </TouchableOpacity>}
+
             {isFavorite && 
-            <Button
-              text90
-              label="Remover"
-              size={Button.sizes.large}
-              borderRadius={10}
-              backgroundColor = 'red'
-              onPress={removeFavorite}/>}
+            <TouchableOpacity 
+              style={[styles.button, { backgroundColor: 'red' }]} 
+              onPress={removeFavorite}>
+              <TextUILB text90 color='white' center>Remover</TextUILB>
+            </TouchableOpacity>}
+
             <View style={styles.section}>
               <TextUILB $textDefault style={{ ...Typography.text90 }}>{produto.empresa}</TextUILB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
@@ -164,5 +157,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     alignSelf: 'center'
+  },
+  button: {
+    borderRadius: 10, 
+    marginBottom: 5, 
+    paddingVertical: 8,
+    paddingHorizontal: 20
   },
 });
