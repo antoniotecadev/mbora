@@ -74,7 +74,7 @@ export default function ProductsList({ navigation }) {
           activeOpacity={0.9}
           onPress={()=> fetchProducts(false)}
           style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>Ver mais</Text>
+          <Text style={styles.btnText}>{loading.pdt ? 'A carregar produtos': 'Ver mais'}</Text>
           {loading.pdt ? (
             <ActivityIndicator
               color="white"
