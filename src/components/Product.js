@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, Share } from 'react-native';
+import { View, StyleSheet, Share, Alert, ActivityIndicator } from 'react-native';
 import { Card, Text as TextUILB, Button, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
 import { currency } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
@@ -12,8 +12,9 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 
 export function Product({ isFavorite = false, removeFavorite, produto, onPress } ) {
 
-  const { addItemToCart } = useContext(CartContext);
+  const { addItemToCart, encomendar } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [top] = useState(false)
 
   function onExpand() {
@@ -40,6 +41,13 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
     }
   };
 
+  const encomendarProduct = ()=> {
+    Alert.alert('Encomenda', 'Encomendar ' + produto.nome, [
+      { text: 'Cancelar', undefined, style: 'cancel'},
+      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, '123456', produto.id, produto.nome)},
+    ]);
+  }
+
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";
   {/* <Card.Image style={styles.thumb} source={{ uri: urlImage }} /> */}
@@ -64,6 +72,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
               backgroundColor = 'orange'
               onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}
             />
+            {loading ? <ActivityIndicator /> : 
             <Button
               text90
               marginB-5
@@ -71,7 +80,8 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
               size={Button.sizes.large}
               borderRadius={10}
               backgroundColor = 'green'
-            />
+              onPress={()=> encomendarProduct()}
+            />}
             {isFavorite && 
             <Button
               text90

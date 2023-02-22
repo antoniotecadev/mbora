@@ -69,10 +69,55 @@ export function CartProvider(props) {
     }
     setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
   }
+
+  const encomendar = async (setLoading, imei, userId, productId, productName)=> {
+    setLoading(true);
+    try {
+      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/encomenda',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imei_contacts: imei,
+          id_users_mbora: userId,
+          id_produtos_mbora: productId,
+        }),
+      }
+      );
+      let rjd = await response.json();
+      if(rjd.success) {
+        setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
+        Alert.alert('Sucesso', productName + ' ' + rjd.data.message);
+      } else {
+        if(rjd.message == 'Erro de validação') {
+          let messageError;
+          if (rjd.data.message.imei_contacts != undefined){
+            messageError = rjd.data.message.imei_contacts;
+          } else if (rjd.data.message.id_users_mbora != undefined) {
+            messageError = rjd.data.message.id_users_mbora;
+          } else {
+            messageError = rjd.data.message.id_produtos_mbora;
+          }
+          setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
+          Alert.alert('Erro de validação', messageError[0]);
+        } else {
+          setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
+          Alert.alert('Erro Throwable', rjd.data.message);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      Alert.alert('Erro', error.message);
+    }
+  }
   
   return (
     <CartContext.Provider 
-      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast, error, setError}}>
+      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast, error, setError, encomendar}}>
       {props.children}
     </CartContext.Provider>
   );

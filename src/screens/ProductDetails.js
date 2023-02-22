@@ -6,7 +6,8 @@ import {
   SafeAreaView,
   TouchableOpacity, 
   StyleSheet,
-  Alert
+  Alert,
+  ActivityIndicator
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
@@ -19,9 +20,10 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 export function ProductDetails({route}) {
   const { produto } = route.params;
-  const { addItemToCart, setVisibleToast } = useContext(CartContext);
+  const { addItemToCart, setVisibleToast, encomendar } = useContext(CartContext);
   const [view, setView] = useState(0);
   const [value, setValue] = useState([]);
+  const [loading, setLoading] = useState(false);
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
 
   const isFavorite = async () => {
@@ -53,6 +55,13 @@ export function ProductDetails({route}) {
     let responseJsonData = await response.json();
     setView(responseJsonData.view);
     }, [produto.id]);
+
+  const encomendarProduct = ()=> {
+    Alert.alert('Encomenda', 'Encomendar ' + produto.nome, [
+      { text: 'Cancelar', undefined, style: 'cancel'},
+      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, '123456', produto.id, produto.nome)},
+    ]);
+  }
   
   useEffect(() => {
     try {
@@ -90,7 +99,7 @@ export function ProductDetails({route}) {
                 marginBottom: 16
               }}>
                 <IconButton iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
-                <IconButton iconNames={'chatbox-outline'} size={25}/>
+                {loading ? <ActivityIndicator/> : <IconButton iconNames={'chatbox-outline'} size={25} onPress={()=> encomendarProduct()}/>}
                 <IconButton iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
