@@ -14,7 +14,7 @@ import { CartContext } from '../CartContext';
 import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
-import { Text as TextUILB, View as ViewUILB, Avatar, Colors } from 'react-native-ui-lib';
+import { Avatar, Colors } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
@@ -78,25 +78,23 @@ export function ProductDetails({route}) {
     <SafeAreaView>
       <ToastMessage />
       <ScrollView>
-      <ViewUILB marginH-16 style={styles.section}>
+        <View style={styles.section}>
           <Text $textDefault>{produto.empresa}</Text>
           <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
-            size={24}
-            animate={true}
-            imageProps={{ animationDuration: 1000 }}
+            size={20}
+            animate={false}
             badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
           />
-        </ViewUILB>
-        <TextUILB marginH-16 marginB-16 grey40>
+        </View>
+          <Text style={{ marginHorizontal: 16, marginBottom: 16, color: Colors.grey40 }}>
             {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
-          </TextUILB>
+          </Text>
         <Image style={styles.image} {...{preview, uri}} />
         <View style={styles.infoContainer}>
           <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginBottom: 16
               }}>
                 <IconButton iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 {loading ? <ActivityIndicator/> : <IconButton iconNames={'chatbox-outline'} size={25} onPress={()=> encomendarProduct()}/>}
@@ -104,16 +102,16 @@ export function ProductDetails({route}) {
                 <IconButton iconNames={'qr-code-outline'} size={25}/>
                 <IconButton iconNames={'share-outline'} size={25}/>
             </View>
-          <ViewUILB borderBottomWidth marginB-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
+          <View style={styles.divisor}></View>
           <Text style={styles.name}>{produto.nome}</Text>
           <Text style={styles.price}>{currency(String(produto.preco))}</Text>
           <Text style={styles.description}>{produto.nomeCategoria}</Text>
           <Tag tag = {produto.tag}/>
-          <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
-          <TextUILB grey40>Publicado {produto.created_at}</TextUILB>
-          {produto.updated_at && <TextUILB marginT-8 grey40>Alterado {produto.updated_at}</TextUILB>}
-          <TextUILB marginT-8 grey40>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</TextUILB>
-          <ViewUILB borderBottomWidth marginV-10 borderBottomColor={Colors.$backgroundDisabled}></ViewUILB>
+          <View style={styles.divisor}></View>
+          <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
+          {produto.updated_at && <Text style={[styles.colorGrey, { marginTop: 8 }]}>Alterado {produto.updated_at}</Text>}
+          <Text style={[styles.colorGrey, { marginTop: 8 }]}>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
+          <View style={styles.divisor}></View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -172,5 +170,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginHorizontal: 16
   },
-});
+  divisor: {
+    borderBottomWidth: 1, 
+    borderBottomColor: Colors.$backgroundDisabled, 
+    marginVertical: 10
+  }, 
+  colorGrey: {
+    color: Colors.grey40
+  }
+}); 
