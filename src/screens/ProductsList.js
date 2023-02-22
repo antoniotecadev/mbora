@@ -30,7 +30,7 @@ export default function ProductsList({ navigation }) {
   const { error, setError} = useContext(CartContext);
 
   const onRefresh = ()=> {
-    // setRefreshing(true);
+    setRefreshing(true);
     fetchProducts(true);
   };
 
