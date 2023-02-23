@@ -7,7 +7,8 @@ import {
   TouchableOpacity, 
   StyleSheet,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
+  Image as Img
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
@@ -17,6 +18,8 @@ import { Icon } from '../components/icon';
 import { Avatar, Colors } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+
+const imageProduct = require('../../assets/products/oleo.jpg');
 
 export function ProductDetails({route}) {
   const { produto } = route.params;
@@ -89,7 +92,8 @@ export function ProductDetails({route}) {
           <Text style={{ marginHorizontal: 16, marginBottom: 16, color: Colors.grey40 }}>
             {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
           </Text>
-        <Image style={styles.image} {...{preview, uri}} />
+        {/* <Image style={styles.image} {...{preview, uri}} /> */}
+        <Img style={styles.image} source= {imageProduct} />
         <View style={styles.infoContainer}>
           <View style={{
                 flexDirection: 'row',
@@ -147,7 +151,8 @@ const styles = StyleSheet.create({
   },
   image: {
     height: 300,
-    width: '100%'
+    width: '100%',
+    resizeMode: 'contain',
   },
   infoContainer: {
     padding: 16,
