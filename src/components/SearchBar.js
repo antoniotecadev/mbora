@@ -6,51 +6,51 @@ import { Colors } from "react-native-ui-lib";
 const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
     return (
     <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-    <View style={styles.container}>
-      <View
-        style={
-            clicked
-            ? styles.searchBar__clicked
-            : styles.searchBar__unclicked
-        }
-        >
-        {/* search Icon */}
-        <Feather
-          name="search"
-          size={20}
-          color="black"
-          style={{ marginLeft: 1 }}
-        />
-        {/* Input field */}
-        <TextInput
-          style={styles.input}
-          placeholder="Pesquisa: produto, empresa"
-          value={searchPhrase}
-          onChangeText={setSearchPhrase}
-          onFocus={() => {
-            setClicked(true);
-          }}
-        />
-        {/* cross Icon, depending on whether the search bar is clicked or not */}
+      <View style={styles.container}>
+        <View
+          style={
+              clicked
+              ? styles.searchBar__clicked
+              : styles.searchBar__unclicked
+          }
+          >
+          {/* search Icon */}
+          <Feather
+            name="search"
+            size={20}
+            color="black"
+            style={{ marginLeft: 1 }}
+          />
+          {/* Input field */}
+          <TextInput
+            style={styles.input}
+            placeholder="Pesquisa: produto, empresa"
+            value={searchPhrase}
+            onChangeText={setSearchPhrase}
+            onFocus={() => {
+              setClicked(true);
+            }}
+          />
+          {/* cross Icon, depending on whether the search bar is clicked or not */}
+          {clicked && (
+              <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
+                setSearchPhrase("")
+              }}/>
+          )}
+        </View>
+        {/* cancel button, depending on whether the search bar is clicked or not */}
         {clicked && (
-            <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
-              setSearchPhrase("")
-            }}/>
+          <View>
+            <TouchableOpacity style={{marginHorizontal: 5, padding: 10}}
+              onPress={() => {
+                Keyboard.dismiss();
+                setClicked(false);
+              }}>
+              <Text style={{color: Colors.blue10}}>Cancelar</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
-      {/* cancel button, depending on whether the search bar is clicked or not */}
-      {clicked && (
-        <View>
-          <TouchableOpacity style={{marginHorizontal: 5, padding: 10}}
-            onPress={() => {
-              Keyboard.dismiss();
-              setClicked(false);
-            }}>
-            <Text style={{color: Colors.blue10}}>Cancelar</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
     </KeyboardAvoidingView>
   );
 };
