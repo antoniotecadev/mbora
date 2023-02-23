@@ -54,7 +54,8 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
   {/* <Card.Image style={styles.thumb} source= {imageProduct} /> */}
   return (
     <Card style={styles.card} center onPress={onPress}>
-    <Image style={styles.thumb} {...{preview, uri}} />
+    {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
+    <Card.Image style={styles.thumb} source= {imageProduct} />
       <ExpandableSection
         top={top}
         expanded={expanded}
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
   },
   thumb: {
     height: 210,
+    resizeMode: 'contain',
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     width: '100%',
