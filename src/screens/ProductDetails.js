@@ -95,6 +95,7 @@ export function ProductDetails({route}) {
         {/* <Image style={styles.image} {...{preview, uri}} /> */}
         <Img style={styles.image} source= {imageProduct} />
         <View style={styles.infoContainer}>
+        <View style={styles.divisor}></View>
           <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
