@@ -1,9 +1,11 @@
 import React from "react";
-import { StyleSheet, TextInput, View, Keyboard, Button } from "react-native";
+import { StyleSheet, TextInput, View, Keyboard, TouchableOpacity, Text, KeyboardAvoidingView, Platform} from "react-native";
 import { Feather, Entypo } from "@expo/vector-icons";
+import { Colors } from "react-native-ui-lib";
 
 const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
     return (
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
     <View style={styles.container}>
       <View
         style={
@@ -39,16 +41,17 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
       {/* cancel button, depending on whether the search bar is clicked or not */}
       {clicked && (
         <View>
-          <Button
-            title="Cancelar"
+          <TouchableOpacity style={{marginHorizontal: 5, padding: 10}}
             onPress={() => {
               Keyboard.dismiss();
               setClicked(false);
-            }}
-          ></Button>
+            }}>
+            <Text style={{color: Colors.blue10}}>Cancelar</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
+    </KeyboardAvoidingView>
   );
 };
 export default SearchBar;
@@ -80,7 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
   },
   input: {
-    fontSize: 20,
+    fontSize: 14,
     marginLeft: 10,
     width: "90%",
   },
