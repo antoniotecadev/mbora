@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import { FlatList, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { Card, Text, View, Button, Colors } from 'react-native-ui-lib';
+import { FlatList, StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
+import { Card, Colors, Typography } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
 import { currency } from '../utils/utilitario';
@@ -22,18 +22,17 @@ export function Carrinho({ navigation }) {
                 useNative
                 bg-$backgroundElevated
                 activeOpacity={1}
-                activeScale={0.96}
->
+                activeScale={0.96}>
                 <Card.Image source={cardImage} style={{ width: 100, height: '100%' }} />
-                <View maxWidth={240} margin-8>
-                    <Text text70 $textDefault>
+                <View style={{maxWidth: 240, margin: 8}}>
+                    <Text>
                         {item.product.nome}
                     </Text>
-                    <Text text80 $textDefault green10 marginB-4>
+                    <Text style={{color: Colors.green10, marginBottom: 4}}>
                         {currency(String(item.product.preco))}
                     </Text>
-                    <Text $textDefault text90>{item.product.empresa}</Text>
-                    <Text text100 grey40 marginB-8>
+                    <Text style={{...Typography.text90}}>{item.product.empresa}</Text>
+                    <Text style={{color: Colors.grey40, marginBottom: 8, fontSize: 10}}>
                         {`${item.product.nomeProvincia}, ${item.product.district} , ${item.product.street}`}
                     </Text>
                     <Footer qtd={item.qty} id={item.product.id} quantity={quantity} removeItemToCart={removeItemToCart} nomeProduto={item.product.nome} />
@@ -66,7 +65,7 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
         justifyContent: 'space-between',
     }}>
         <TouchableOpacity style={styles.buttonQuantity} onPress={() => parseInt(qtd) <= 1 ? null: quantity(id, {isSum: false})}>
-            <Text color='white'>-</Text>
+            <Text style={{color: 'white'}}>-</Text>
         </TouchableOpacity>
 
         <TextInput
@@ -77,11 +76,11 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
             textAlign='center'/>
 
         <TouchableOpacity style={styles.buttonQuantity} onPress={() => quantity(id, {isSum: true})}>
-            <Text color='white'>+</Text>
+            <Text style={{color: 'white'}}>+</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={{backgroundColor: Colors.red20, paddingHorizontal:10, paddingVertical: 5, marginLeft: 110, borderRadius: 50}} onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red', {isAll: false})}>
-            <Text color='white'>x</Text>
+            <Text style={{color: 'white'}}>x</Text>
         </TouchableOpacity>
     </View>
 }
@@ -90,7 +89,7 @@ const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
     return (
         <>
             <TouchableOpacity onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} style={{backgroundColor: 'orange', borderRadius: 5, paddingVertical: 10}}>
-                <Text color='white' center>Remover todos os produtos do carrinho</Text>
+                <Text style={{color: 'white', textAlign: 'center'}}>Remover todos os produtos do carrinho</Text>
             </TouchableOpacity>
             <View style={styles.cartLineTotal}>
                 <Text style={[styles.lineLeft]}>Quantidade Distinta</Text>
@@ -105,7 +104,7 @@ const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
                 <Text style={styles.lineRight}>{currency(String(price))}</Text>
             </View>
             <TouchableOpacity style={{backgroundColor: 'green', borderRadius: 5, paddingVertical: 10}}>
-                <Text color='white' center>Encomendar</Text>
+                <Text style={{color: 'white', textAlign: 'center'}}>Encomendar</Text>
             </TouchableOpacity>
         </>
     );
@@ -121,13 +120,13 @@ const styles = StyleSheet.create({
         borderTopWidth: 1
     },
     lineLeft: {
-        fontSize: 18,
+        fontSize: 14,
         lineHeight: 40,
         color: '#333333'
     },
     lineRight: {
         flex: 1,
-        fontSize: 18,
+        fontSize: 14,
         lineHeight: 40,
         color: '#333333',
         textAlign: 'right',
