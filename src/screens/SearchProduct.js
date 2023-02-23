@@ -39,7 +39,7 @@ const SearchProduct = () => {
   }, [searchPhrase]);
 
   return (
-    <SafeAreaView style={styles.root}>
+    <SafeAreaView style={[styles.root, {marginTop: clicked ? 20 : 0}]}>
       {!clicked && <Text style={styles.title}></Text>}
       <SearchBar
         searchPhrase={searchPhrase}
