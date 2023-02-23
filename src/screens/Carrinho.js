@@ -24,7 +24,7 @@ export function Carrinho({ navigation }) {
                 activeOpacity={1}
                 activeScale={0.96}>
                 <Card.Image source={cardImage} style={{ width: 100, height: '100%' }} />
-                <View style={{maxWidth: 240, margin: 8}}>
+                <View style={{maxWidth: '100%', margin: 8}}>
                     <Text>
                         {item.product.nome}
                     </Text>
@@ -79,7 +79,7 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
             <Text style={{color: 'white'}}>+</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={{backgroundColor: Colors.red20, paddingHorizontal:10, paddingVertical: 5, marginLeft: 110, borderRadius: 50}} onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red', {isAll: false})}>
+        <TouchableOpacity style={{ left: 50, backgroundColor: Colors.red20, paddingHorizontal:10, paddingVertical:4, borderRadius: 20}} onPress={() => removeItemToCart(id, nomeProduto + ' removido.', 'red', {isAll: false})}>
             <Text style={{color: 'white'}}>x</Text>
         </TouchableOpacity>
     </View>
