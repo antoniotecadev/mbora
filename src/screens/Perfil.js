@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useCallback, useContext } from 'react';
-import { StyleSheet, Alert, FlatList, RefreshControl } from 'react-native';
-import { Avatar, Text, Button, TabController, View } from 'react-native-ui-lib';
+import { StyleSheet, Alert, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
+import { Avatar, TabController, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
@@ -42,25 +42,19 @@ export default function Perfil({ route }) {
     return (
         <>
             <View style={styles.infoContainer}>
-                <Avatar source={preview} size={100} animate={true} />
-                <Text color='grey' marginH-6 text80BO>António Teca</Text>
+                <Avatar source={preview} size={100} animate={false} />
+                <Text style={{ color: 'gray', marginHorizontal: 6 }}>António Teca</Text>
             </View>
-            <Button
-                text90
-                marginH-14
-                marginB-8
-                label="Editar perfil"
-                size={Button.sizes.large}
-                borderRadius={5}
-                style={{ backgroundColor: 'green' }}
-                />
+                <TouchableOpacity style={styles.buttonEditProfile}>
+                    <Text style={{color: 'white', textAlign: 'center'}} >Editar perfil</Text>
+                </TouchableOpacity>
                 <TabController onChangeIndex={(index)=> index == 1 ? getProducts() : setProduts([])} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar 
                     enableShadows 
                     indicatorStyle={{backgroundColor: 'orange', height: 3}} 
                     labelColor={'green'}
                     selectedLabelColor={'orange'}/>
-                <View flex>
+                <ViewUILIB flex>
                     <TabController.TabPage index={0}>
                         <Text>Chilala</Text>
                     </TabController.TabPage>
@@ -68,7 +62,7 @@ export default function Perfil({ route }) {
                         <Favoritos produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
-                </View>
+                </ViewUILIB>
             </TabController>
         </>
     );
@@ -117,7 +111,7 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
-        </>
+         </>
         )
 }
 
@@ -135,5 +129,12 @@ const styles = StyleSheet.create({
         color: 'gray',
         paddingTop: 150,
         textAlign: 'center',
+    },
+    buttonEditProfile: {
+        marginHorizontal: 14, 
+        marginBottom: 8, 
+        borderRadius: 5, 
+        backgroundColor: 'green', 
+        paddingVertical: 5
     }
 });
