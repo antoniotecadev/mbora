@@ -104,7 +104,7 @@ export function ProductDetails({route}) {
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 {loading ? <ActivityIndicator/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> encomendarProduct()}/>}
                 <IconButton text={'Favorito'} iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
-                <IconButton text={'Qr code'} iconNames={'qr-code-outline'} size={25}/>
+                {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
           <View style={styles.divisor}></View>
