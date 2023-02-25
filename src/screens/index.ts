@@ -11,11 +11,12 @@ import { Settings } from './settings';
 import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
 import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
+import { SignInForm } from './SignIn';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Cantinas';
 export type Modal = 'ExampleModal';
-export type Screen = 'Main' | 'Example' | 'Profile'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'Main' | 'Example' | 'Profile'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -30,6 +31,14 @@ export type ScreenProps = {
 
 // Screens
 const screens: ScreenLayouts = {
+  SignInForm: {
+    name: 'SignInForm',
+    component: SignInForm,
+    options: () => ({
+      title: 'Entrar',
+      ...screenDefaultOptions(),
+    }),
+  },
   Main: {
     name: 'Main',
     component: ProductsList,
@@ -103,7 +112,7 @@ const screens: ScreenLayouts = {
     }),
   },
 };
-const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
+const HomeStack = () => genStackNavigator([screens.SignInForm, screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
