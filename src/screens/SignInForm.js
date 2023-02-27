@@ -1,18 +1,14 @@
 import React from 'react';
-import { Text, View, StyleSheet, TextInput, Alert, Button, TouchableOpacity, ActivityIndicator, Image, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Button, ScrollView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 
 export default SignInForm = ()=> {
     let passwordInput = null;
     return (
       <View style={styles.container}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.viewIcon}>
-                <Image style={styles.icon} source={require('../../assets/icon.png')}/>
-            </View>
-          </TouchableWithoutFeedback>
-        <Text style={styles.title}>Entrar na Conta</Text>
+        <FormHeader title='Entrar na Conta' />
         <Formik
           initialValues={{email: '', password: '' }}
           validationSchema={Yup.object({
@@ -44,9 +40,7 @@ export default SignInForm = ()=> {
                   }}
                   ref={el => emailInput = el}
                 />
-                {props.touched.email && props.errors.email ? (
-                  <Text style={styles.error}>{props.errors.email}</Text>
-                ) : null}
+                <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                 <TextInput
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
@@ -55,10 +49,8 @@ export default SignInForm = ()=> {
                   style={styles.input}
                   ref={el => passwordInput = el}
                 />
-                {props.touched.password && props.errors.password ? (
-                  <Text style={styles.error}>{props.errors.password}</Text>
-                ) : null}
-                <ButtonLogin onPress={props.handleSubmit} loading={props.isSubmitting} />
+                <ErroMessage touched={props.touched.password} errors={props.errors.password} />
+                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A entrar...' textButton='Entrar'/>
                 <Button
                   color={'orange'}
                   onPress={props.handleReset}
@@ -74,39 +66,11 @@ export default SignInForm = ()=> {
     );
   }
 
-  const ButtonLogin = ({ onPress, loading}) => {
-    return (
-        <TouchableOpacity
-          onPress={onPress}
-          disabled={loading}
-          style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>{loading ? 'A entrar...': 'Entrar'}</Text>
-          {loading ? (
-            <ActivityIndicator
-              color="white"
-              style={{marginLeft: 8}} />
-          ) : null}
-        </TouchableOpacity>
-    );
-  }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ecf0f1',
     padding: 8,
-  },
-  title: {
-    marginBottom: 24,
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'orange'
-  },
-  error: {
-    margin: 8,
-    fontSize: 14,
-    color: 'red',
   },
   input: {
     height: 50,
@@ -118,32 +82,4 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 6
   },
-  loadMoreBtn: {
-    width: '100%',
-    height: 45,
-    marginVertical: 8,
-    backgroundColor: 'green',
-    borderRadius: 4,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  btnText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  viewIcon: {
-    flexDirection: 'row', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginVertical: 16
-  },
-  icon: {
-    width: 60, 
-    height: 80, 
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 4, 
-  }
 });

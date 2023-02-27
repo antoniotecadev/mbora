@@ -1,18 +1,14 @@
 import React from 'react';
-import { Text, View, StyleSheet, TextInput, Alert, Button, TouchableOpacity, ActivityIndicator, Image, Keyboard, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Button, ScrollView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 
 export default SignUpForm = ()=> {
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
     return (
       <View style={styles.container}>
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <View style={styles.viewIcon}>
-                <Image style={styles.icon} source={require('../../assets/icon.png')}/>
-            </View>
-          </TouchableWithoutFeedback>
-        <Text style={styles.title}>Criar Conta</Text>
+        <FormHeader title='Criar Conta' />
         <Formik
           initialValues={{firstName: '', lastName: '', email: '', password: '', comfirm_password: '' }}
           validationSchema={Yup.object({
@@ -44,7 +40,7 @@ export default SignUpForm = ()=> {
           }}>
           {props => (
             <ScrollView>
-              <TextInput
+                <TextInput
                   onChangeText={props.handleChange('firstName')}
                   onBlur={props.handleBlur('firstName')}
                   value={props.values.firstName}
@@ -54,10 +50,8 @@ export default SignUpForm = ()=> {
                     sobrenomeInput.focus()
                   }}
                 />
-                {props.touched.firstName && props.errors.firstName ? (
-                  <Text style={styles.error}>{props.errors.firstName}</Text>
-                ) : null}
-              <TextInput
+                <ErroMessage touched={props.touched.firstName} errors={props.errors.firstName} />
+                <TextInput
                   onChangeText={props.handleChange('lastName')}
                   onBlur={props.handleBlur('lastName')}
                   value={props.values.lastName}
@@ -68,10 +62,8 @@ export default SignUpForm = ()=> {
                   }}
                   ref={el => sobrenomeInput = el}
                 />
-                {props.touched.lastName && props.errors.lastName ? (
-                  <Text style={styles.error}>{props.errors.lastName}</Text>
-                ) : null}
-              <TextInput
+                <ErroMessage touched={props.touched.lastName} errors={props.errors.lastName} />
+                <TextInput
                   onChangeText={props.handleChange('email')}
                   onBlur={props.handleBlur('email')}
                   value={props.values.email}
@@ -82,9 +74,7 @@ export default SignUpForm = ()=> {
                   }}
                   ref={el => emailInput = el}
                 />
-                {props.touched.email && props.errors.email ? (
-                  <Text style={styles.error}>{props.errors.email}</Text>
-                ) : null}
+                <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                 <TextInput
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
@@ -96,9 +86,7 @@ export default SignUpForm = ()=> {
                   }}
                   ref={el => passwordInput = el}
                 />
-                {props.touched.password && props.errors.password ? (
-                  <Text style={styles.error}>{props.errors.password}</Text>
-                ) : null}
+                <ErroMessage touched={props.touched.password} errors={props.errors.password} />
                 <TextInput
                   onChangeText={props.handleChange('comfirm_password' )}
                   onBlur={props.handleBlur('comfirm_password')}
@@ -107,10 +95,8 @@ export default SignUpForm = ()=> {
                   style={styles.input}
                   ref={el => comfirmPasswordInput = el}
                 />
-                {props.touched.comfirm_password && props.errors.comfirm_password ? (
-                  <Text style={styles.error}>{props.errors.comfirm_password}</Text>
-                ) : null}
-                <ButtonLogin onPress={props.handleSubmit} loading={props.isSubmitting} />
+                <ErroMessage touched={props.touched.comfirm_password} errors={props.errors.comfirm_password} />
+                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A criar...' textButton='Criar'/>
                 <Button
                   color={'orange'}
                   onPress={props.handleReset}
@@ -126,39 +112,11 @@ export default SignUpForm = ()=> {
     );
   }
 
-  const ButtonLogin = ({ onPress, loading}) => {
-    return (
-        <TouchableOpacity
-          onPress={onPress}
-          disabled={loading}
-          style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>{loading ? 'A criar...': 'Criar'}</Text>
-          {loading ? (
-            <ActivityIndicator
-              color="white"
-              style={{marginLeft: 8}} />
-          ) : null}
-        </TouchableOpacity>
-    );
-  }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#ecf0f1',
     padding: 8,
-  },
-  title: {
-    marginBottom: 24,
-    fontSize: 24,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: 'orange'
-  },
-  error: {
-    margin: 8,
-    fontSize: 14,
-    color: 'red',
   },
   input: {
     height: 50,
@@ -170,32 +128,4 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 6
   },
-  loadMoreBtn: {
-    width: '100%',
-    height: 45,
-    marginVertical: 8,
-    backgroundColor: 'green',
-    borderRadius: 4,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  btnText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  viewIcon: {
-    flexDirection: 'row', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    marginVertical: 16
-  },
-  icon: {
-    width: 60, 
-    height: 80, 
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 4, 
-  }
 });
