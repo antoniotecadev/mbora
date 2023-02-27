@@ -67,6 +67,7 @@ export default SignUpForm = ()=> {
                 <ErroMessage touched={props.touched.lastName} errors={props.errors.lastName} />
                 <View style={styles.divisor}></View>
                 <TextInput
+                  keyboardType='email-address'
                   onChangeText={props.handleChange('email')}
                   onBlur={props.handleBlur('email')}
                   value={props.values.email}
@@ -80,6 +81,7 @@ export default SignUpForm = ()=> {
                 <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                 <View style={styles.divisor}></View>
                 <TextInput
+                  keyboardType='visible-password'
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
                   value={props.values.password}
@@ -93,6 +95,7 @@ export default SignUpForm = ()=> {
                 />
                 <ErroMessage touched={props.touched.password} errors={props.errors.password} />
                 <TextInput
+                  keyboardType='visible-password'
                   onChangeText={props.handleChange('comfirm_password' )}
                   onBlur={props.handleBlur('comfirm_password')}
                   value={props.values.comfirm_password}

@@ -30,6 +30,7 @@ export default SignInForm = ()=> {
           {props => (
             <ScrollView>
               <TextInput
+                  keyboardType='email-address'
                   onChangeText={props.handleChange('email')}
                   onBlur={props.handleBlur('email')}
                   value={props.values.email}
@@ -42,6 +43,7 @@ export default SignInForm = ()=> {
                 />
                 <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                 <TextInput
+                  keyboardType='visible-password'
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
                   value={props.values.password}
