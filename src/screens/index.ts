@@ -11,16 +11,18 @@ import { Settings } from './settings';
 import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
 import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
-import { SignInForm } from './SignIn';
+import SignInForm from './SignInForm';
+import SignUpForm from './SignUpForm';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Cantinas';
 export type Modal = 'ExampleModal';
-export type Screen = 'SignInForm' | 'Main' | 'Example' | 'Profile'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Example' | 'Profile'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
   SearchProduct: undefined;
+  ExampleScreenProps: undefined;
 };
 export type ScreenProps = {
   Main: undefined;
@@ -35,8 +37,14 @@ const screens: ScreenLayouts = {
     name: 'SignInForm',
     component: SignInForm,
     options: () => ({
-      title: 'Entrar',
-      ...screenDefaultOptions(),
+      title: 'Mbora',
+    }),
+  },
+  SignUpForm: {
+    name: 'SignUpForm',
+    component: SignUpForm,
+    options: () => ({
+      title: 'Mbora',
     }),
   },
   Main: {
