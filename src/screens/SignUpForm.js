@@ -85,6 +85,7 @@ export default SignUpForm = ()=> {
                   value={props.values.password}
                   placeholder="Palavra - passe"
                   style={styles.input}
+                  secureTextEntry={true}
                   onSubmitEditing={() => {
                     comfirmPasswordInput.focus()
                   }}
@@ -97,6 +98,7 @@ export default SignUpForm = ()=> {
                   value={props.values.comfirm_password}
                   placeholder="Confirmar palavra - passe"
                   style={styles.input}
+                  secureTextEntry={true}
                   ref={el => comfirmPasswordInput = el}
                 />
                 <ErroMessage touched={props.touched.comfirm_password} errors={props.errors.comfirm_password} />

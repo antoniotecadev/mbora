@@ -47,6 +47,7 @@ export default SignInForm = ()=> {
                   value={props.values.password}
                   placeholder="Palavra - passe"
                   style={styles.input}
+                  secureTextEntry={true}
                   ref={el => passwordInput = el}
                 />
                 <ErroMessage touched={props.touched.password} errors={props.errors.password} />
