@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, Alert, Button, ScrollView } from 'react-na
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
+import { Colors } from 'react-native-ui-lib';
 
 export default SignUpForm = ()=> {
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
@@ -40,6 +41,7 @@ export default SignUpForm = ()=> {
           }}>
           {props => (
             <ScrollView>
+                <View style={styles.divisor}></View>
                 <TextInput
                   onChangeText={props.handleChange('firstName')}
                   onBlur={props.handleBlur('firstName')}
@@ -63,6 +65,7 @@ export default SignUpForm = ()=> {
                   ref={el => sobrenomeInput = el}
                 />
                 <ErroMessage touched={props.touched.lastName} errors={props.errors.lastName} />
+                <View style={styles.divisor}></View>
                 <TextInput
                   onChangeText={props.handleChange('email')}
                   onBlur={props.handleBlur('email')}
@@ -75,6 +78,7 @@ export default SignUpForm = ()=> {
                   ref={el => emailInput = el}
                 />
                 <ErroMessage touched={props.touched.email} errors={props.errors.email} />
+                <View style={styles.divisor}></View>
                 <TextInput
                   onChangeText={props.handleChange('password')}
                   onBlur={props.handleBlur('password')}
@@ -96,6 +100,7 @@ export default SignUpForm = ()=> {
                   ref={el => comfirmPasswordInput = el}
                 />
                 <ErroMessage touched={props.touched.comfirm_password} errors={props.errors.comfirm_password} />
+                <View style={styles.divisor}></View>
                 <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A criar...' textButton='Criar'/>
                 <Button
                   color={'orange'}
@@ -105,6 +110,7 @@ export default SignUpForm = ()=> {
                   title='Limpar'
                   >
                 </Button>
+                <View style={styles.divisor}></View>
             </ScrollView>
           )}
         </Formik>
@@ -128,4 +134,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 6
   },
+  divisor: {
+    borderBottomWidth: 1, 
+    borderBottomColor: Colors.$backgroundDisabled, 
+    marginTop: 10,
+    marginBottom: 5
+  }, 
 });
