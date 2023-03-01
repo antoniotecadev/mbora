@@ -1,23 +1,88 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Alert, Button, ScrollView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { Colors } from 'react-native-ui-lib';
+import { modelName as device_name } from 'expo-device';
 
-export default SignUpForm = ()=> {
+export default SignUpForm = (user)=> {
+
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
+
+  const initialValues = { 
+    device_name: null,
+    first_name: null,
+    last_name: null,
+    email: null,
+    password: null,
+    password_confirmation: null,
+  }
+
+  const [error, setError] = useState(user);
+
+    const createUserAccount = async (user)=> {
+      try {
+        let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/auth/register',
+        {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(user),
+        });
+
+        let rjd = await response.json();
+        if(rjd.message == 'Erro de validação') {
+          let messageError;
+          if (rjd.data.message.device_name != undefined){
+            messageError = rjd.data.message.device_name;
+            setError({ device_name: messageError[0] });
+          } else if (rjd.data.message.first_name != undefined) {
+            messageError = rjd.data.message.first_name;
+            setError({ first_name: messageError[0] });
+          } else if (rjd.data.message.last_name != undefined) {
+            messageError = rjd.data.message.last_name;
+            setError({ last_name: messageError[0] });
+          } else if (rjd.data.message.email != undefined) {
+            messageError = rjd.data.message.email;
+            setError({ email: messageError[0] });
+          } else if (rjd.data.message.password != undefined) {
+            messageError = rjd.data.message.password;
+            setError({ password: messageError[0] });
+          } else {
+            messageError = rjd.data.message.password_confirmation;
+            setError({ password_confirmation: messageError[0] });
+          }
+          // Alert.alert(rjd.message, messageError[0]); // Test
+        } else {
+          setError({ password_confirmation: rjd.data.message });
+          // Alert.alert(rjd.message, rjd.data.message); // Test
+        }
+        // Alert.alert('Result', JSON.stringify(rjd)); // Test
+        // console.log(JSON.stringify(rjd)); // Test
+      } catch (error) {
+        Alert.alert('Erro', error.message);
+      }
+    }
+
+    const handleReset = (resetFields)=> {
+      resetFields();
+      setError(initialValues);
+    }
+
     return (
       <View style={styles.container}>
         <FormHeader title='Criar Conta' />
         <Formik
-          initialValues={{firstName: '', lastName: '', email: '', password: '', comfirm_password: '' }}
+          initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
           validationSchema={Yup.object({
-            firstName: Yup.string()
+            first_name: Yup.string()
                 .min(4, 'O nome tem que ter no mínimo 4 caracteres')
                 .max(15, 'O nome tem que ter no máximo 15 caracteres')
                 .required('Digite seu nome'),
-            lastName: Yup.string()
+            last_name: Yup.string()
                 .min(4, 'O sobrenome tem que ter no mínimo 4 caracteres')
                 .max(20, 'O sobrenome tem que ter no máximo 20 caracteres')
                 .required('Digite seu sobrenome'),
@@ -27,36 +92,34 @@ export default SignUpForm = ()=> {
             password: Yup.string()
                 .min(8, 'A palavra - passe tem que ter no mínimo 8 caracteres')
                 .required('Digite a palavra - passe'),
-            comfirm_password: Yup.string()
+            password_confirmation: Yup.string()
                 .min(8, 'A palavra - passe tem que ter no mínimo 8 caracteres')
                 .required('Confirme a palavra - passe'),
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
-              Alert.alert(JSON.stringify(values));
-              // Important: Make sure to setSubmitting to false so our loading indicator
-              // goes away.
-              formikActions.setSubmitting(false);
+              createUserAccount({...{device_name}, ...values}).then(()=> formikActions.setSubmitting(false));
             }, 500);
           }}>
           {props => (
             <ScrollView>
                 <View style={styles.divisor}></View>
                 <TextInput
-                  onChangeText={props.handleChange('firstName')}
-                  onBlur={props.handleBlur('firstName')}
-                  value={props.values.firstName}
+                  onChangeText={props.handleChange('first_name')}
+                  onBlur={props.handleBlur('first_name')}
+                  value={props.values.first_name}
                   placeholder="Nome"
                   style={styles.input}
                   onSubmitEditing={() => {
                     sobrenomeInput.focus()
                   }}
                 />
-                <ErroMessage touched={props.touched.firstName} errors={props.errors.firstName} />
+                <ErroMessage touched={props.touched.first_name} errors={props.errors.first_name} />
+                <ErroMessage touched={true} errors={error.first_name} />
                 <TextInput
-                  onChangeText={props.handleChange('lastName')}
-                  onBlur={props.handleBlur('lastName')}
-                  value={props.values.lastName}
+                  onChangeText={props.handleChange('last_name')}
+                  onBlur={props.handleBlur('last_name')}
+                  value={props.values.last_name}
                   placeholder="Sobrenome"
                   style={styles.input}
                   onSubmitEditing={() => {
@@ -64,7 +127,8 @@ export default SignUpForm = ()=> {
                   }}
                   ref={el => sobrenomeInput = el}
                 />
-                <ErroMessage touched={props.touched.lastName} errors={props.errors.lastName} />
+                <ErroMessage touched={props.touched.last_name} errors={props.errors.last_name} />
+                <ErroMessage touched={true} errors={error.last_name} />
                 <View style={styles.divisor}></View>
                 <TextInput
                   keyboardType='email-address'
@@ -79,6 +143,7 @@ export default SignUpForm = ()=> {
                   ref={el => emailInput = el}
                 />
                 <ErroMessage touched={props.touched.email} errors={props.errors.email} />
+                <ErroMessage touched={true} errors={error.email} />
                 <View style={styles.divisor}></View>
                 <TextInput
                   keyboardType='visible-password'
@@ -94,17 +159,20 @@ export default SignUpForm = ()=> {
                   ref={el => passwordInput = el}
                 />
                 <ErroMessage touched={props.touched.password} errors={props.errors.password} />
+                <ErroMessage touched={true} errors={error.password} />
                 <TextInput
                   keyboardType='visible-password'
-                  onChangeText={props.handleChange('comfirm_password' )}
-                  onBlur={props.handleBlur('comfirm_password')}
-                  value={props.values.comfirm_password}
+                  onChangeText={props.handleChange('password_confirmation' )}
+                  onBlur={props.handleBlur('password_confirmation')}
+                  value={props.values.password_confirmation}
                   placeholder="Confirmar palavra - passe"
                   style={styles.input}
                   secureTextEntry={true}
                   ref={el => comfirmPasswordInput = el}
                 />
-                <ErroMessage touched={props.touched.comfirm_password} errors={props.errors.comfirm_password} />
+                <ErroMessage touched={props.touched.password_confirmation} errors={props.errors.password_confirmation} />
+                <ErroMessage touched={true} errors={error.password_confirmation} />
+                <ErroMessage touched={true} errors={error.device_name} />
                 <View style={styles.divisor}></View>
                 <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A criar...' textButton='Criar'/>
                 <Button
