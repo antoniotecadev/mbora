@@ -62,7 +62,7 @@ export function ProductDetails({route}) {
   const encomendarProduct = ()=> {
     Alert.alert('Encomenda', 'Encomendar ' + produto.nome, [
       { text: 'Cancelar', undefined, style: 'cancel'},
-      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, '123456', produto.id, produto.nome)},
+      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, '123456', produto.id, produto.nome).then(()=> setLoading(false))},
     ]);
   }
   

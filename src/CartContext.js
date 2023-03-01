@@ -108,7 +108,6 @@ export function CartProvider(props) {
           Alert.alert('Erro Throwable', rjd.data.message);
         }
       }
-      setLoading(false);
     } catch (error) {
       setLoading(false);
       Alert.alert('Erro', error.message);
