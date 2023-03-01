@@ -4,7 +4,8 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
-import { setItemAsync, getItemAsync } from 'expo-secure-store';
+import { setItemAsync } from 'expo-secure-store';
+import { getValueItemAsync } from '../utils/utilitario';
 
 export default SignInForm = ()=> {
 
@@ -24,7 +25,7 @@ export default SignInForm = ()=> {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + getValueToken('token').catch((error)=> Alert.alert('Erro ao carregar token', error.message)),
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
                     },
                 body: JSON.stringify(credential),
             });
@@ -66,16 +67,6 @@ export default SignInForm = ()=> {
     async function saveToken(key, token, user_id) {
         await setItemAsync(key, token);
         await setItemAsync('user_id', user_id);
-    }
-
-    async function getValueToken(key) {
-        let result = await getItemAsync(key);
-        if (result) {
-            return result;
-        } else {
-            Alert.alert('Erro', 'Token não encontrado');
-            return null;
-        }
     }
 
     return (

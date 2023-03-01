@@ -1,5 +1,6 @@
 import React, {createContext, useState, useEffect} from 'react';
 import { Alert } from 'react-native';
+import { getValueItemAsync } from './utils/utilitario';
 
 import { getProduct } from './services/ProductsService.js';
 
@@ -70,7 +71,7 @@ export function CartProvider(props) {
     setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
   }
 
-  const encomendar = async (setLoading, imei, userId, productId, productName)=> {
+  const encomendar = async (setLoading, imei, productId, productName)=> {
     setLoading(true);
     try {
       let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/encomenda',
@@ -82,7 +83,7 @@ export function CartProvider(props) {
         },
         body: JSON.stringify({
           imei_contacts: imei,
-          id_users_mbora: userId,
+          id_users_mbora: await getValueItemAsync('user_id').catch((error)=> Alert.alert('Identificador de usuário', error.message)),
           id_produtos_mbora: productId,
         }),
       }

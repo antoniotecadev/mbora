@@ -44,7 +44,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
   const encomendarProduct = ()=> {
     Alert.alert('Encomenda', 'Encomendar ' + produto.nome, [
       { text: 'Cancelar', undefined, style: 'cancel'},
-      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, '123456', produto.id, produto.nome).then(()=> setLoading(false))},
+      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, produto.id, produto.nome).then(()=> setLoading(false))},
     ]);
   }
 
