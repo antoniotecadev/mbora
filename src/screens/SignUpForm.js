@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Alert, Button, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
@@ -102,6 +102,7 @@ export default SignUpForm = (user)=> {
             }, 500);
           }}>
           {props => (
+            <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
             <ScrollView>
                 <View style={styles.divisor}></View>
                 <TextInput
@@ -185,6 +186,7 @@ export default SignUpForm = (user)=> {
                 </Button>
                 <View style={styles.divisor}></View>
             </ScrollView>
+            </KeyboardAvoidingView>
           )}
         </Formik>
       </View>

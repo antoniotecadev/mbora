@@ -120,7 +120,7 @@ const screens: ScreenLayouts = {
     }),
   },
 };
-const HomeStack = () => genStackNavigator([screens.SignInForm, screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
+const HomeStack = () => genStackNavigator([screens.SignUpForm, screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
