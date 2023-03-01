@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
+import { setItemAsync } from 'expo-secure-store';
 
 export default SignUpForm = (user)=> {
 
@@ -34,31 +35,35 @@ export default SignUpForm = (user)=> {
         });
 
         let rjd = await response.json();
-        if(rjd.message == 'Erro de validação') {
-          let messageError;
-          if (rjd.data.message.device_name != undefined){
-            messageError = rjd.data.message.device_name;
-            setError({ device_name: messageError[0] });
-          } else if (rjd.data.message.first_name != undefined) {
-            messageError = rjd.data.message.first_name;
-            setError({ first_name: messageError[0] });
-          } else if (rjd.data.message.last_name != undefined) {
-            messageError = rjd.data.message.last_name;
-            setError({ last_name: messageError[0] });
-          } else if (rjd.data.message.email != undefined) {
-            messageError = rjd.data.message.email;
-            setError({ email: messageError[0] });
-          } else if (rjd.data.message.password != undefined) {
-            messageError = rjd.data.message.password;
-            setError({ password: messageError[0] });
-          } else {
-            messageError = rjd.data.message.password_confirmation;
-            setError({ password_confirmation: messageError[0] });
-          }
-          // Alert.alert(rjd.message, messageError[0]); // Test
+        if(rjd.success) {
+          saveToken('token', rjd.data.token).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
         } else {
-          setError({ password_confirmation: rjd.data.message });
-          // Alert.alert(rjd.message, rjd.data.message); // Test
+          if (rjd.message == 'Erro de validação') {
+            let messageError;
+            if (rjd.data.message.device_name != undefined){
+              messageError = rjd.data.message.device_name;
+              setError({ device_name: messageError[0] });
+            } else if (rjd.data.message.first_name != undefined) {
+              messageError = rjd.data.message.first_name;
+              setError({ first_name: messageError[0] });
+            } else if (rjd.data.message.last_name != undefined) {
+              messageError = rjd.data.message.last_name;
+              setError({ last_name: messageError[0] });
+            } else if (rjd.data.message.email != undefined) {
+              messageError = rjd.data.message.email;
+              setError({ email: messageError[0] });
+            } else if (rjd.data.message.password != undefined) {
+              messageError = rjd.data.message.password;
+              setError({ password: messageError[0] });
+            } else {
+              messageError = rjd.data.message.password_confirmation;
+              setError({ password_confirmation: messageError[0] });
+            }
+            // Alert.alert(rjd.message, messageError[0]); // Test
+          } else {
+            setError({ password_confirmation: rjd.data.message });
+            // Alert.alert(rjd.message, rjd.data.message); // Test
+          }
         }
         // Alert.alert('Result', JSON.stringify(rjd)); // Test
         // console.log(JSON.stringify(rjd)); // Test
@@ -70,6 +75,10 @@ export default SignUpForm = (user)=> {
     const handleReset = (resetFields)=> {
       resetFields();
       setError(initialValues);
+    }
+
+    async function saveToken(key, value) {
+      await setItemAsync(key, value);
     }
 
     return (
