@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
+import { setItemAsync, getItemAsync } from 'expo-secure-store';
 
 export default SignInForm = ()=> {
 
@@ -23,24 +24,28 @@ export default SignInForm = ()=> {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer 1|XcHPPRdlilHD3J5eR4zULkgWHHAqcbffPYtLnKY8',
+                    'Authorization': 'Bearer ' + getValueToken('token').catch((error)=> Alert.alert('Erro ao carregar token', error.message)),
                     },
                 body: JSON.stringify(credential),
             });
             let rjd = await response.json();
-            if(rjd.message == 'Erro de validação') {
-                let messageError;
-                if(rjd.data.message.email != undefined) {
-                    messageError = rjd.data.message.email;
-                    setError({ email: messageError[0] });
-                } else if (rjd.data.message.password != undefined) {
-                    messageError = rjd.data.message.password;
-                    setError({ password: messageError[0] });
-                } 
-                // Alert.alert(rjd.message, messageError[0]); // For test
+            if(rjd.success) {
+                saveToken('token', rjd.data.token).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
             } else {
-                setError({ emailPass: rjd.data.message });
-                // Alert.alert(rjd.message, rjd.data.message); // For test
+                if(rjd.message == 'Erro de validação') {
+                    let messageError;
+                    if(rjd.data.message.email != undefined) {
+                        messageError = rjd.data.message.email;
+                        setError({ email: messageError[0] });
+                    } else if (rjd.data.message.password != undefined) {
+                        messageError = rjd.data.message.password;
+                        setError({ password: messageError[0] });
+                    } 
+                    // Alert.alert(rjd.message, messageError[0]); // For test
+                } else {
+                    setError({ emailPass: rjd.data.message });
+                    // Alert.alert(rjd.message, rjd.data.message); // For test
+                }
             }
             // Alert.alert('Result', JSON.stringify(rjd)); // For test
             // console.log(JSON.stringify(rjd)); // For test
@@ -56,6 +61,20 @@ export default SignInForm = ()=> {
             password: null,
             emailPass: null
          });
+    }
+
+    async function saveToken(key, value) {
+        await setItemAsync(key, value);
+    }
+
+    async function getValueToken(key) {
+        let result = await getItemAsync(key);
+        if (result) {
+            return result;
+        } else {
+            Alert.alert('Erro', 'Token não encontrado');
+            return null;
+        }
     }
 
     return (
