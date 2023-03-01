@@ -19,7 +19,7 @@ export default SignUpForm = (user)=> {
     password_confirmation: null,
   }
 
-  const [error, setError] = useState(user);
+  const [error, setError] = useState(initialValues);
 
     const createUserAccount = async (user)=> {
       try {
@@ -177,7 +177,7 @@ export default SignUpForm = (user)=> {
                 <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A criar...' textButton='Criar'/>
                 <Button
                   color={'orange'}
-                  onPress={props.handleReset}
+                  onPress={()=> handleReset(props.handleReset)}
                   disabled={props.isSubmitting}
                   style={{ marginTop: 16 }}
                   title='Limpar'
