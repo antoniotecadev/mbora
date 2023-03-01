@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
-import { setItemAsync } from 'expo-secure-store';
+import { saveTokenId } from '../utils/utilitario';
 
 export default SignUpForm = (user)=> {
 
@@ -36,7 +36,7 @@ export default SignUpForm = (user)=> {
 
         let rjd = await response.json();
         if(rjd.success) {
-          saveToken('token', rjd.data.token, rjd.data.user_id).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
+          saveTokenId('token', rjd.data.token, rjd.data.user_id).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
         } else {
           if (rjd.message == 'Erro de validação') {
             let messageError;
@@ -75,11 +75,6 @@ export default SignUpForm = (user)=> {
     const handleReset = (resetFields)=> {
       resetFields();
       setError(initialValues);
-    }
-
-    async function saveToken(key, token, user_id) {
-      await setItemAsync(key, token);
-      await setItemAsync('user_id', user_id);
     }
 
     return (
