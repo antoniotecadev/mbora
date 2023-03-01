@@ -31,7 +31,10 @@ export default function ProductsList({ navigation }) {
 
   const onRefresh = ()=> {
     setRefreshing(true);
-    fetchProducts(true);
+    fetchProducts(true).then(()=> {
+      setLoading({pdt: false});
+      setRefreshing(false);
+    });
   };
 
   const showProductDetails = (product)=> {
@@ -72,7 +75,7 @@ export default function ProductsList({ navigation }) {
       <View style={styles.footer}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=> fetchProducts(false)}
+          onPress={()=> fetchProducts(false).then(()=> { setLoading({pdt: false}) })}
           style={styles.loadMoreBtn}>
           <Text style={styles.btnText}>{loading.pdt ? 'A carregar produtos': 'Ver mais'}</Text>
           {loading.pdt ? (
@@ -120,8 +123,8 @@ export default function ProductsList({ navigation }) {
     } catch (error) {
       setError(error.message);
     } finally {
-      setLoading({pdt: false});
-      setRefreshing(false)
+      // setLoading({pdt: false});
+      // setRefreshing(false)
     }
   }, []);
 
@@ -168,7 +171,7 @@ export default function ProductsList({ navigation }) {
 
   useEffect(() => {
     fetchCategorys();
-    fetchProducts(true);
+    fetchProducts(true).then(()=> { setLoading({pdt: false}) });
   }, []);
 
   return (
@@ -189,7 +192,7 @@ export default function ProductsList({ navigation }) {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
-        : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true);}} error={error} loading={loading} />}
+        : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />}
     </>
   );
 }

@@ -26,6 +26,7 @@ export default function Perfil({ route }) {
                 }
             });
         } catch (error) {
+            setRefreshing(false);
             Alert.alert('Erro', error.message);
         }
     }, [produts]);
@@ -33,8 +34,7 @@ export default function Perfil({ route }) {
     const onRefresh = async ()=> {
         setRefreshing(true);
         setProduts([]);
-        getProducts();
-        setRefreshing(false);
+        getProducts().then(()=> setRefreshing(false));
     }
 
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
