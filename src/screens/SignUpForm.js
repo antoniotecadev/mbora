@@ -36,7 +36,7 @@ export default SignUpForm = (user)=> {
 
         let rjd = await response.json();
         if(rjd.success) {
-          saveToken('token', rjd.data.token).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
+          saveToken('token', rjd.data.token, rjd.data.user_id).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
         } else {
           if (rjd.message == 'Erro de validação') {
             let messageError;
@@ -77,8 +77,9 @@ export default SignUpForm = (user)=> {
       setError(initialValues);
     }
 
-    async function saveToken(key, value) {
-      await setItemAsync(key, value);
+    async function saveToken(key, token, user_id) {
+      await setItemAsync(key, token);
+      await setItemAsync('user_id', user_id);
     }
 
     return (
