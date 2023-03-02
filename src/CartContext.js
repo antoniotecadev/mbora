@@ -80,6 +80,7 @@ export function CartProvider(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
         },
         body: JSON.stringify({
           imei_contacts: imei,
@@ -93,21 +94,22 @@ export function CartProvider(props) {
         setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
         Alert.alert('Sucesso', productName + ' ' + rjd.data.message);
       } else {
-        if(rjd.message == 'Erro de validação') {
-          let messageError;
-          if (rjd.data.message.imei_contacts != undefined){
-            messageError = rjd.data.message.imei_contacts;
-          } else if (rjd.data.message.id_users_mbora != undefined) {
-            messageError = rjd.data.message.id_users_mbora;
-          } else {
-            messageError = rjd.data.message.id_produtos_mbora;
-          }
-          setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
-          Alert.alert(rjd.message, messageError[0]);
-        } else {
-          setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
-          Alert.alert(rjd.message, rjd.data.message);
-        }
+        // if(rjd.message == 'Erro de validação') {
+        //   let messageError;
+        //   if (rjd.data.message.imei_contacts != undefined){
+        //     messageError = rjd.data.message.imei_contacts;
+        //   } else if (rjd.data.message.id_users_mbora != undefined) {
+        //     messageError = rjd.data.message.id_users_mbora;
+        //   } else {
+        //     messageError = rjd.data.message.id_produtos_mbora;
+        //   }
+        //   setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
+        //   Alert.alert(rjd.message, messageError[0]);
+        // } else {
+        //   setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
+        //   Alert.alert(rjd.message, rjd.data.message);
+        // }
+        Alert.alert(rjd.message, JSON.stringify(rjd));
       }
     } catch (error) {
       setLoading(false);
