@@ -98,6 +98,7 @@ export default SignUpForm = (user)=> {
                 .min(8, 'A palavra - passe tem que ter no mínimo 8 caracteres')
                 .required('Digite a palavra - passe'),
             password_confirmation: Yup.string()
+                .oneOf([Yup.ref('password')], 'Palavra - passe não coincide')
                 .min(8, 'A palavra - passe tem que ter no mínimo 8 caracteres')
                 .required('Confirme a palavra - passe'),
           })}
