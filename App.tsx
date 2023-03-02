@@ -1,13 +1,17 @@
 import 'expo-dev-client';
 import React, {useCallback, useEffect, useState} from 'react';
 import * as SplashScreen from 'expo-splash-screen';
-import {LogBox} from 'react-native';
+import {LogBox, Alert} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {AppNavigator} from './src/app';
 import {configureDesignSystem} from './src/utils/designSystem';
 import {hydrateStores, StoresProvider} from './src/stores';
 import {initServices, ServicesProvider} from './src/services';
+import { getValueItemAsync } from './src/utils/utilitario';
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs(['Require']);
 
@@ -15,15 +19,37 @@ export default (): JSX.Element => {
   const [ready, setReady] = useState(false);
 
   const startApp = useCallback(async () => {
-    await SplashScreen.preventAutoHideAsync();
 
     await hydrateStores();
     await initServices();
     configureDesignSystem();
+    await checkUserAuthenticated();
 
-    setReady(true);
-    await SplashScreen.hideAsync();
   }, []);
+
+  const checkUserAuthenticated = async () => {
+    try {
+      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/user/autenticated',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
+        }
+      });
+      let rjd = await response.json();
+      if (rjd.success) {
+        await SplashScreen.hideAsync();
+      } else {
+        Alert.alert(rjd.message, rjd.data.message);
+      }
+    } catch (error) {
+      Alert.alert('Erro', error.message);
+    } finally {
+      setReady(true);
+    }
+  }
 
   useEffect(() => {
     startApp();
