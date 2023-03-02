@@ -80,7 +80,7 @@ export function CartProvider(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer lll' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
         },
         body: JSON.stringify({
           imei_contacts: imei,
