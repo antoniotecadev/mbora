@@ -103,10 +103,10 @@ export function CartProvider(props) {
             messageError = rjd.data.message.id_produtos_mbora;
           }
           setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
-          Alert.alert('Erro de validação', messageError[0]);
+          Alert.alert(rjd.message, messageError[0]);
         } else {
           setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
-          Alert.alert('Erro Throwable', rjd.data.message);
+          Alert.alert(rjd.message, rjd.data.message);
         }
       }
     } catch (error) {
