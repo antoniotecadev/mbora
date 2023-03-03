@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { View, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
+import { ButtonSubmit, ErroMessage } from '../components/Form';
 import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
 import { saveTokenId } from '../utils/utilitario';
+import { RootNavigator } from '.';
 
 export default SignUpForm = (user)=> {
 
@@ -21,6 +22,7 @@ export default SignUpForm = (user)=> {
   }
 
   const [error, setError] = useState(initialValues);
+  const [isSignedIn , setIsSignedIn] = useState(0);
 
     const createUserAccount = async (user)=> {
       try {
@@ -36,7 +38,9 @@ export default SignUpForm = (user)=> {
 
         let rjd = await response.json();
         if(rjd.success) {
-          saveTokenId('token', rjd.data.token, rjd.data.user_id).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
+          saveTokenId('token', rjd.data.token, rjd.data.user_id)
+          .then(()=> setIsSignedIn(1))
+          .catch((error)=> Alert.alert('Erro ao salvar token', error.message));
         } else {
           if (rjd.message == 'Erro de validação') {
             let messageError;
@@ -78,6 +82,8 @@ export default SignUpForm = (user)=> {
     }
 
     return (
+      <>
+      {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
       <View style={styles.container}>
         <Formik
           initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
@@ -193,7 +199,8 @@ export default SignUpForm = (user)=> {
             </KeyboardAvoidingView>
           )}
         </Formik>
-      </View>
+      </View>}
+      </>
     );
   }
 
