@@ -76,8 +76,8 @@ const screens: ScreenLayouts = {
     name: 'Settings',
     component: Settings,
     options: () => ({
-      title: 'Settings',
-      ...screenDefaultOptions(),
+      title: 'Configurações',
+      headerTintColor: 'orange',
     }),
   },
   ProductDetails: {
@@ -123,7 +123,7 @@ const screens: ScreenLayouts = {
 };
 
 const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm]);
-const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
+const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct, screens.Settings]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);

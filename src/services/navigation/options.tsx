@@ -5,14 +5,17 @@ import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Colors, Badge, View } from 'react-native-ui-lib';
 import { getHeaderBlurEffect } from '../../utils/designSystem';
 import { Icon } from '../../components/icon';
-import { CartIcon } from '../../components/CartIcon.js';
 import { useServices } from '..';
 import { CartContext } from '../../CartContext';
 
 export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   headerShadowVisible: false,
   headerTintColor: 'orange',
-  headerRight: ()=> (<IconSearch/>),
+  headerRight: ()=> (
+  <>
+    <IconHeader screen='SearchProduct' icon='search-circle-sharp' size={40}/>
+    <IconHeader screen='Settings' icon='settings-outline' size={30}/>
+  </>),
 
   // this setup makes large title work on iOS
   ...Platform.select({
@@ -51,15 +54,14 @@ export const badgeCartCount = () => {
 //   <Badge backgroundColor={Colors.red20} containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={String(getItemsCount())} size={12} />
 // );
 
-const IconSearch = ()=> {
-
+const IconHeader = ({ screen, icon, size })=> {
   const { nav } = useServices();
   const onPressShow = ()=> {
-    nav.show('SearchProduct');
+    nav.show(screen);
   }
   return (
     <TouchableOpacity onPress={onPressShow}>
-      <Icon name="search-circle-sharp" size={40} color="orange"/>
+      <Icon name={icon} size={size} color="orange"/>
     </TouchableOpacity>
   )
 }
