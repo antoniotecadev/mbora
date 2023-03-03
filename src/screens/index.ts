@@ -38,6 +38,7 @@ const screens: ScreenLayouts = {
     component: SignInForm,
     options: () => ({
       title: 'Mbora',
+      headerShown: false
     }),
   },
   SignUpForm: {
@@ -45,6 +46,7 @@ const screens: ScreenLayouts = {
     component: SignUpForm,
     options: () => ({
       title: 'Mbora',
+      headerShown: false
     }),
   },
   Main: {
@@ -120,6 +122,8 @@ const screens: ScreenLayouts = {
     }),
   },
 };
+
+const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm]);
 const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
@@ -173,7 +177,6 @@ const tabs: TabScreenLayouts = {
   },
 };
 const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Profile, tabs.Cart, tabs.Notification, tabs.Cantinas]);
-const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm]);
 
 // Modals
 const modals: ModalScreenLayouts = {
