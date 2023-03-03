@@ -45,8 +45,7 @@ const screens: ScreenLayouts = {
     name: 'SignUpForm',
     component: SignUpForm,
     options: () => ({
-      title: 'Mbora',
-      headerShown: false
+      title: 'Criar conta',
     }),
   },
   Main: {
