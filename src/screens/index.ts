@@ -120,7 +120,7 @@ const screens: ScreenLayouts = {
     }),
   },
 };
-const HomeStack = () => genStackNavigator([screens.SignUpForm, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
+const HomeStack = () => genStackNavigator([screens.Main, screens.Example, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
 const ExampleStack = () => genStackNavigator([screens.Example]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
@@ -173,6 +173,7 @@ const tabs: TabScreenLayouts = {
   },
 };
 const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Profile, tabs.Cart, tabs.Notification, tabs.Cantinas]);
+const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm]);
 
 // Modals
 const modals: ModalScreenLayouts = {
@@ -186,5 +187,5 @@ const modals: ModalScreenLayouts = {
 };
 
 // Root Navigator
-export const RootNavigator = (): JSX.Element =>
-  genRootNavigator(TabNavigator, [modals.ExampleModal]);
+export const RootNavigator = ({ isSignedIn }): JSX.Element =>
+  genRootNavigator(isSignedIn == 0 ? SigInStack : TabNavigator, [modals.ExampleModal]);

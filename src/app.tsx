@@ -11,10 +11,10 @@ import {
 import { useServices } from './services';
 import { CartProvider } from './CartContext.js';
 
-export const AppNavigator = (): JSX.Element => {
+export const AppNavigator = ({ isSignedIn }): JSX.Element => {
   useColorScheme();
   const { nav } = useServices();
-
+  
   return (
     <>
       <StatusBar barStyle={getThemeStatusBarStyle()} backgroundColor={getThemeStatusBarBGColor()} />
@@ -25,7 +25,7 @@ export const AppNavigator = (): JSX.Element => {
           onStateChange={nav.onStateChange}
           theme={getNavigationTheme()}
         >
-          <RootNavigator />
+          <RootNavigator isSignedIn={isSignedIn}/>
         </NavigationContainer>
       </CartProvider>
     </>

@@ -16,7 +16,8 @@ SplashScreen.preventAutoHideAsync();
 LogBox.ignoreLogs(['Require']);
 
 export default (): JSX.Element => {
-  const [ready, setReady] = useState(false);
+  
+  const [isSignedIn , setIsSignedIn] = useState(null);
 
   const startApp = useCallback(async () => {
 
@@ -40,14 +41,14 @@ export default (): JSX.Element => {
       });
       let rjd = await response.json();
       if (rjd.success) {
+        setIsSignedIn(1);
         await SplashScreen.hideAsync();
       } else {
-        Alert.alert(rjd.message, rjd.data.message);
+        setIsSignedIn(0);
+        await SplashScreen.hideAsync();
       }
     } catch (error) {
       Alert.alert('Erro', error.message);
-    } finally {
-      setReady(true);
     }
   }
 
@@ -58,7 +59,7 @@ export default (): JSX.Element => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <StoresProvider>
-        <ServicesProvider>{ready ? <AppNavigator /> : null}</ServicesProvider>
+        <ServicesProvider>{isSignedIn != null && <AppNavigator isSignedIn={isSignedIn}/>}</ServicesProvider>
       </StoresProvider>
     </GestureHandlerRootView>
   );
