@@ -122,9 +122,6 @@ export default function ProductsList({ navigation }) {
       }
     } catch (error) {
       setError(error.message);
-    } finally {
-      // setLoading({pdt: false});
-      // setRefreshing(false)
     }
   }, []);
 
