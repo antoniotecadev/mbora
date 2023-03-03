@@ -56,7 +56,6 @@ export const ErroMessage = ({ touched, errors })=> {
       fontWeight: 'bold'
     },
     title: {
-      marginBottom: 24,
       fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'center',
@@ -66,7 +65,6 @@ export const ErroMessage = ({ touched, errors })=> {
       flexDirection: 'row', 
       justifyContent: 'center', 
       alignItems: 'center', 
-      marginVertical: 16
     },
     icon: {
       width: 60, 

@@ -79,7 +79,6 @@ export default SignUpForm = (user)=> {
 
     return (
       <View style={styles.container}>
-        <FormHeader title='Criar Conta' />
         <Formik
           initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
           validationSchema={Yup.object({
@@ -110,7 +109,6 @@ export default SignUpForm = (user)=> {
           {props => (
             <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
             <ScrollView>
-                <View style={styles.divisor}></View>
                 <TextInput
                   onChangeText={props.handleChange('first_name')}
                   onBlur={props.handleBlur('first_name')}
