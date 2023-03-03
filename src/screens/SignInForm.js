@@ -7,8 +7,11 @@ import { modelName as device_name } from 'expo-device';
 import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
 import { RootNavigator } from '.';
 import { Colors } from 'react-native-ui-lib';
+import { useServices } from '../services';
 
 export default SignInForm = ()=> {
+
+    const { nav } = useServices();
 
     let passwordInput = null;
 
@@ -128,7 +131,7 @@ export default SignInForm = ()=> {
                     <Text style={{ textAlign: 'center', marginVertical: 16 }}>Esqueceu a palavra - passe ?</Text>
                   </TouchableOpacity>
                   <View style={styles.divisor}></View>
-                  <TouchableOpacity style={styles.buttonCreate}>
+                  <TouchableOpacity style={styles.buttonCreate} onPress={()=> nav.show('SignUpForm')}>
                     <Text style={styles.btnText}>Criar Nova Conta</Text>
                   </TouchableOpacity>
               </ScrollView>
