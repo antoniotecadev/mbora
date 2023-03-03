@@ -71,7 +71,7 @@ export default SignInForm = ()=> {
       <>
         {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
         <View style={styles.container}>
-          <FormHeader title='Entrar na Conta' />
+          <FormHeader title='Mbora' />
           <Formik
             initialValues={{email: '', password: '' }}
             validationSchema={Yup.object({
