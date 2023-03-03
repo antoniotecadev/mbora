@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
 import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
+import { RootNavigator } from '.';
 
 export default SignInForm = ()=> {
 
@@ -15,6 +16,7 @@ export default SignInForm = ()=> {
         password: null,
         emailPass: null
      });
+     const [isSignedIn , setIsSignedIn] = useState(0);
 
     const loginUser = async (credential)=> {
         try {
@@ -30,7 +32,9 @@ export default SignInForm = ()=> {
             });
             let rjd = await response.json();
             if(rjd.success) {
-                saveTokenId('token', rjd.data.token, rjd.data.user_id).catch((error)=> Alert.alert('Erro ao salvar token', error.message));
+                saveTokenId('token', rjd.data.token, rjd.data.user_id)
+                .then(()=> setIsSignedIn(1))
+                .catch((error)=> Alert.alert('Erro ao salvar token', error.message));
             } else {
                 if(rjd.message == 'Erro de validação') {
                     let messageError;
@@ -64,64 +68,67 @@ export default SignInForm = ()=> {
     }
 
     return (
-      <View style={styles.container}>
-        <FormHeader title='Entrar na Conta' />
-        <Formik
-          initialValues={{email: '', password: '' }}
-          validationSchema={Yup.object({
-            email: Yup.string()
-                .email('Email não é válido')              
-                .required('Digite o email'),
-            password: Yup.string()
-                .required('Digite a palavra - passe'),
-          })}
-          onSubmit={(values, formikActions) => {
-            setTimeout(() => {
-              loginUser({...{device_name}, ...values}).then(()=> formikActions.setSubmitting(false));
-            }, 500);
-          }}>
-          {props => (
-            <ScrollView>
-              <TextInput
-                  keyboardType='email-address'
-                  onChangeText={props.handleChange('email')}
-                  onBlur={props.handleBlur('email')}
-                  value={props.values.email}
-                  placeholder="E-mail"
-                  style={styles.input}
-                  onSubmitEditing={() => {
-                    passwordInput.focus()
-                  }}
-                  ref={el => emailInput = el}
-                />
-                <ErroMessage touched={props.touched.email} errors={props.errors.email} />
-                <ErroMessage touched={true} errors={error.email} />
+      <>
+        {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
+        <View style={styles.container}>
+          <FormHeader title='Entrar na Conta' />
+          <Formik
+            initialValues={{email: '', password: '' }}
+            validationSchema={Yup.object({
+              email: Yup.string()
+                  .email('Email não é válido')              
+                  .required('Digite o email'),
+              password: Yup.string()
+                  .required('Digite a palavra - passe'),
+            })}
+            onSubmit={(values, formikActions) => {
+              setTimeout(() => {
+                loginUser({...{device_name}, ...values}).then(()=> formikActions.setSubmitting(false));
+              }, 500);
+            }}>
+            {props => (
+              <ScrollView>
                 <TextInput
-                  keyboardType='visible-password'
-                  onChangeText={props.handleChange('password')}
-                  onBlur={props.handleBlur('password')}
-                  value={props.values.password}
-                  placeholder="Palavra - passe"
-                  style={styles.input}
-                  secureTextEntry={true}
-                  ref={el => passwordInput = el}
-                />
-                <ErroMessage touched={props.touched.password} errors={props.errors.password} />
-                <ErroMessage touched={true} errors={error.password} />
-                <ErroMessage touched={true} errors={error.emailPass} />
-                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A entrar...' textButton='Entrar'/>
-                <Button
-                  color={'orange'}
-                  onPress={()=> handleReset(props.handleReset)}
-                  disabled={props.isSubmitting}
-                  style={{ marginTop: 16 }}
-                  title='Limpar'
-                  >
-                </Button>
-            </ScrollView>
-          )}
-        </Formik>
-      </View>
+                    keyboardType='email-address'
+                    onChangeText={props.handleChange('email')}
+                    onBlur={props.handleBlur('email')}
+                    value={props.values.email}
+                    placeholder="E-mail"
+                    style={styles.input}
+                    onSubmitEditing={() => {
+                      passwordInput.focus()
+                    }}
+                    ref={el => emailInput = el}
+                  />
+                  <ErroMessage touched={props.touched.email} errors={props.errors.email} />
+                  <ErroMessage touched={true} errors={error.email} />
+                  <TextInput
+                    keyboardType='visible-password'
+                    onChangeText={props.handleChange('password')}
+                    onBlur={props.handleBlur('password')}
+                    value={props.values.password}
+                    placeholder="Palavra - passe"
+                    style={styles.input}
+                    secureTextEntry={true}
+                    ref={el => passwordInput = el}
+                  />
+                  <ErroMessage touched={props.touched.password} errors={props.errors.password} />
+                  <ErroMessage touched={true} errors={error.password} />
+                  <ErroMessage touched={true} errors={error.emailPass} />
+                  <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A entrar...' textButton='Entrar'/>
+                  <Button
+                    color={'orange'}
+                    onPress={()=> handleReset(props.handleReset)}
+                    disabled={props.isSubmitting}
+                    style={{ marginTop: 16 }}
+                    title='Limpar'
+                    >
+                  </Button>
+              </ScrollView>
+            )}
+          </Formik>
+        </View>}
+      </>
     );
   }
 
