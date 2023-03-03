@@ -8,7 +8,7 @@ import { modelName as device_name } from 'expo-device';
 import { saveTokenId } from '../utils/utilitario';
 import { RootNavigator } from '.';
 
-export default SignUpForm = (user)=> {
+export default SignUpForm = ()=> {
 
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
 
