@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Alert, Button, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Button, ScrollView, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
@@ -72,7 +72,7 @@ export default SignInForm = ()=> {
     }
 
     return (
-      <>
+      <SafeAreaView style={{ flex: 1 }}>
         {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
         <View style={styles.container}>
           <FormHeader title='Mbora' />
@@ -137,8 +137,11 @@ export default SignInForm = ()=> {
               </ScrollView>
             )}
           </Formik>
+          <View style={styles.viewImage}>
+              <Image style={styles.image} source={require('../../assets/logotipo-yoga-original-removebg.png')}/>
+          </View>
         </View>}
-      </>
+      </SafeAreaView>
     );
   }
 
@@ -178,5 +181,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  }, 
+  },
+  viewImage: {
+    flexDirection: 'row', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+  image: {
+    width: 100, 
+    height: 50,
+  },
 });

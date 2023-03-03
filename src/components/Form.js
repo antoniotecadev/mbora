@@ -22,7 +22,7 @@ export const FormHeader = ({ title }) =>{
     <>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View style={styles.viewIcon}>
-              <Image style={styles.icon} source={require('../../assets/icon.png')}/>
+              <Image style={styles.icon} source={require('../../assets/icon-removebg.png')}/>
           </View>
         </TouchableWithoutFeedback>
         <Text style={styles.title}>{title}</Text>
@@ -69,9 +69,6 @@ export const ErroMessage = ({ touched, errors })=> {
     icon: {
       width: 60, 
       height: 80, 
-      borderWidth: 1,
-      borderColor: '#ddd',
-      borderRadius: 4, 
     },
     error: {
       margin: 8,
