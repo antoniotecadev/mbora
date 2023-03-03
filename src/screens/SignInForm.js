@@ -103,7 +103,7 @@ export default SignInForm = ()=> {
                   <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                   <ErroMessage touched={true} errors={error.email} />
                   <TextInput
-                    keyboardType='visible-password'
+                    keyboardType='default'
                     onChangeText={props.handleChange('password')}
                     onBlur={props.handleBlur('password')}
                     value={props.values.password}
