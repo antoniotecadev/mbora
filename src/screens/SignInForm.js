@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Alert, Button, ScrollView } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Button, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
 import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
 import { RootNavigator } from '.';
+import { Colors } from 'react-native-ui-lib';
 
 export default SignInForm = ()=> {
 
@@ -120,10 +121,16 @@ export default SignInForm = ()=> {
                     color={'orange'}
                     onPress={()=> handleReset(props.handleReset)}
                     disabled={props.isSubmitting}
-                    style={{ marginTop: 16 }}
                     title='Limpar'
                     >
                   </Button>
+                  <TouchableOpacity>
+                    <Text style={{ textAlign: 'center', marginVertical: 16 }}>Esqueceu a palavra - passe ?</Text>
+                  </TouchableOpacity>
+                  <View style={styles.divisor}></View>
+                  <TouchableOpacity style={styles.buttonCreate}>
+                    <Text style={styles.btnText}>Criar Nova Conta</Text>
+                  </TouchableOpacity>
               </ScrollView>
             )}
           </Formik>
@@ -148,4 +155,25 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     marginTop: 6
   },
+  divisor: {
+    borderBottomWidth: 1, 
+    borderBottomColor: Colors.$backgroundDisabled,
+    marginVertical: 6 
+  },
+  btnText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  buttonCreate: {
+    width: '100%',
+    height: 45,
+    marginVertical: 16,
+    backgroundColor: 'royalblue',
+    borderRadius: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }, 
 });

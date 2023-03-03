@@ -6,7 +6,7 @@ export const ButtonSubmit = ({ onPress, loading, textButtonLoading, textButton})
         <TouchableOpacity
           onPress={onPress}
           disabled={loading}
-          style={styles.loadMoreBtn}>
+          style={styles.loadBtn}>
           <Text style={styles.btnText}>{loading ? textButtonLoading: textButton}</Text>
           {loading ? (
             <ActivityIndicator
@@ -39,7 +39,7 @@ export const ErroMessage = ({ touched, errors })=> {
 } 
 
   const styles = StyleSheet.create({
-    loadMoreBtn: {
+    loadBtn: {
       width: '100%',
       height: 45,
       marginVertical: 8,
@@ -53,6 +53,7 @@ export const ErroMessage = ({ touched, errors })=> {
       color: 'white',
       fontSize: 16,
       textAlign: 'center',
+      fontWeight: 'bold'
     },
     title: {
       marginBottom: 24,
