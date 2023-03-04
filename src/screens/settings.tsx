@@ -179,6 +179,11 @@ export const Settings: React.FC = observer(() => {
               <Action disabled title="Versão" info={appInfo.expo.version} />
             </View>
           </Section>
+          <Section bg title="">
+            <View>
+              <Action title="Terminar sessão" icon="log-out-outline" onPress={()=> alert('')} />
+            </View>
+          </Section>
         </View>
       </ScrollView>
     </View>
