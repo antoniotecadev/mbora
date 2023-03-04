@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useEffect} from 'react';
 import {Alert, Linking, ScrollView} from 'react-native';
 import {View, ActionSheet, Text} from 'react-native-ui-lib';
 import {observer, useLocalObservable} from 'mobx-react';
@@ -10,6 +10,8 @@ import {useStores} from '../stores';
 import {Section} from '../components/section';
 import {Action} from '../components/action';
 
+import { useNavigation } from '@react-navigation/native';
+
 type PickersStateKey = keyof Omit<PickersState, 'show' | 'hide'>;
 type PickersState = {
   appearance: boolean;
@@ -19,9 +21,26 @@ type PickersState = {
   hide: <T extends PickersStateKey>(what: T) => void;
 };
 
+interface Props {
+  navigation: any
+}
+
 export const Settings: React.FC = observer(() => {
   const {ui} = useStores();
   const {links} = useConstants();
+
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        display: "none"
+      }
+    });
+    return () => navigation.getParent()?.setOptions({
+      tabBarStyle: 'flex'
+    });
+  }, [navigation]);
 
   const pickers: PickersState = useLocalObservable(() => ({
     appearance: false,
