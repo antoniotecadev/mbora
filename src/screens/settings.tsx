@@ -79,7 +79,7 @@ export const Settings: React.FC = observer(() => {
   const AppearanceActionSheet = useMemo(
     () => (
       <ActionSheet
-        title={'Appearance'}
+        title={'Aparência'}
         cancelButtonIndex={appearanceActions.length}
         useNativeIOS
         options={[
@@ -106,7 +106,7 @@ export const Settings: React.FC = observer(() => {
   const LanguageActionSheet = useMemo(
     () => (
       <ActionSheet
-        title={'Language'}
+        title={'Linguagem'}
         cancelButtonIndex={languageActions.length}
         useNativeIOS
         options={[
@@ -129,7 +129,7 @@ export const Settings: React.FC = observer(() => {
   const UINote = useMemo(
     () => (
       <View paddingH-s3 marginB-s4>
-        <Text grey40>Changing UI options will reload the app</Text>
+        <Text grey40>A alteração das opções da interface do usuário recarregará o aplicativo</Text>
       </View>
     ),
     [],
@@ -141,7 +141,7 @@ export const Settings: React.FC = observer(() => {
         <View padding-s4>
           <Section bg title="UI">
             <Action
-              title="Appearance"
+              title="Aparência"
               info={ui.appearanceName}
               onPress={() => pickers.show('appearance')}
               rightIcon="chevron-forward"
@@ -149,7 +149,7 @@ export const Settings: React.FC = observer(() => {
             {AppearanceActionSheet}
 
             <Action
-              title="Language"
+              title="Linguagem"
               info={ui.languageName}
               onPress={() => pickers.show('language')}
               rightIcon="chevron-forward"
@@ -158,11 +158,11 @@ export const Settings: React.FC = observer(() => {
           </Section>
           {UINote}
 
-          <Section bg title="General">
+          <Section bg title="Geral">
             <View>
-              <Action title="Share" icon="share-outline" onPress={doSomething('Share')} />
-              <Action title="Rate" icon="star-outline" onPress={doSomething('Rate')} />
-              <Action title="Support" icon="mail-unread-outline" onPress={doSomething('Support')} />
+              <Action title="Partilha" icon="share-outline" onPress={doSomething('Share')} />
+              <Action title="Estrela" icon="star-outline" onPress={doSomething('Rate')} />
+              <Action title="Suporte" icon="mail-unread-outline" onPress={doSomething('Support')} />
             </View>
           </Section>
 
@@ -173,10 +173,10 @@ export const Settings: React.FC = observer(() => {
             </View>
           </Section>
 
-          <Section bg title="About">
+          <Section bg title="Acerca">
             <View>
-              <Action disabled title="App name" info={appInfo.expo.name} />
-              <Action disabled title="Version" info={appInfo.expo.version} />
+              <Action disabled title="App" info={appInfo.expo.name} />
+              <Action disabled title="Versão" info={appInfo.expo.version} />
             </View>
           </Section>
         </View>
