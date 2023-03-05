@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
-import { Card, Colors, Avatar, Typography, ExpandableSection } from 'react-native-ui-lib';
+import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { currency } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
@@ -85,7 +85,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
             </TouchableOpacity>}
 
             <View style={styles.section}>
-              <Text style={{ ...Typography.text90 }}>{produto.empresa}</Text>
+              <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
                 size={20}
                 animate={false}
@@ -106,9 +106,9 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
 const HeaderElement = (nome, preco) => {
   return (
     <View spread row maxWidth={180}>
-      <Text>
+      <TextUILIB textColor>
         {nome}
-      </Text>
+      </TextUILIB>
       <Text style={{ color: Colors.green10, marginBottom: 4 }}>
         {currency(String(preco))}
       </Text>
@@ -119,11 +119,11 @@ const HeaderElement = (nome, preco) => {
 const styles = StyleSheet.create({
   card: {
     width: '49%',
-    backgroundColor: 'white',
+    backgroundColor: Colors.getScheme() == 'light' ? 'white' : 'black',
     borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    shadowColor: 'black',
+    shadowColor: Colors.getScheme() == 'light' ? 'black' : 'white',
     shadowOffset: {
       height: 0,
       width: 0,
