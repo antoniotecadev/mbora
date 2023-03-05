@@ -21,10 +21,6 @@ type PickersState = {
   hide: <T extends PickersStateKey>(what: T) => void;
 };
 
-interface Props {
-  navigation: any
-}
-
 export const Settings: React.FC = observer(() => {
   const {ui} = useStores();
   const {links} = useConstants();
