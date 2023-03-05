@@ -119,7 +119,7 @@ const HeaderElement = (nome, preco) => {
 const styles = StyleSheet.create({
   card: {
     width: '49%',
-    backgroundColor: Colors.getScheme() == 'light' ? 'white' : 'black',
+    backgroundColor: Colors.getScheme() == 'light' ? 'white' : Colors.dmBlack,
     borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 4,
