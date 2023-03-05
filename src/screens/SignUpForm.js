@@ -207,7 +207,7 @@ export default SignUpForm = ()=> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: Colors.getScheme() == 'light' ? '#ecf0f1' : Colors.dmBlack,
     padding: 16,
   },
   input: {

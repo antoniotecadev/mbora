@@ -6,7 +6,7 @@ import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
 import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
 import { RootNavigator } from '.';
-import { Colors } from 'react-native-ui-lib';
+import { Colors, Text as TextUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
 
 export default SignInForm = ()=> {
@@ -128,7 +128,7 @@ export default SignInForm = ()=> {
                     >
                   </Button>
                   <TouchableOpacity>
-                    <Text style={{ textAlign: 'center', marginVertical: 16 }}>Esqueceu a palavra - passe ?</Text>
+                    <TextUILIB textColor style={{ textAlign: 'center', marginVertical: 16 }}>Esqueceu a palavra - passe ?</TextUILIB>
                   </TouchableOpacity>
                   <View style={styles.divisor}></View>
                   <TouchableOpacity style={styles.buttonCreate} onPress={()=> nav.show('SignUpForm')}>
@@ -148,7 +148,7 @@ export default SignInForm = ()=> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: Colors.getScheme() == 'light' ? '#ecf0f1' : Colors.dmBlack,
     padding: 16 ,
   },
   input: {
