@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
-import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
+import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB } from 'react-native-ui-lib';
 import { currency } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';

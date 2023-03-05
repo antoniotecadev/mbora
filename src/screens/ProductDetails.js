@@ -15,7 +15,7 @@ import { CartContext } from '../CartContext';
 import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
-import { Avatar, Colors } from 'react-native-ui-lib';
+import { Avatar, Colors, Text as TextUILIB } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
@@ -82,7 +82,7 @@ export function ProductDetails({route}) {
       <ToastMessage />
       <ScrollView>
         <View style={styles.section}>
-          <Text $textDefault>{produto.empresa}</Text>
+          <TextUILIB $textDefault textColor>{produto.empresa}</TextUILIB>
           <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
             size={20}
             animate={false}
@@ -108,7 +108,7 @@ export function ProductDetails({route}) {
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
           <View style={styles.divisor}></View>
-          <Text style={styles.name}>{produto.nome}</Text>
+          <TextUILIB textColor style={styles.name}>{produto.nome}</TextUILIB>
           <Text style={styles.price}>{currency(String(produto.preco))}</Text>
           <Text style={styles.description}>{produto.nomeCategoria}</Text>
           <Tag tag = {produto.tag}/>
@@ -132,7 +132,7 @@ const Tag = (props) => {
 const IconButton = ({iconNames, text, size, onPress}) =>{
   return <TouchableOpacity style={{ alignItems: 'center' }} onPress={onPress}>
               <Icon name={iconNames} size={size} color="green"/>
-              <Text style={{ fontSize: 12 }}>{text}</Text>
+              <TextUILIB textColor style={{ fontSize: 12 }}>{text}</TextUILIB>
           </TouchableOpacity>
 }
 
