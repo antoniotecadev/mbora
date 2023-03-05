@@ -37,8 +37,8 @@ const screens: ScreenLayouts = {
     name: 'SignInForm',
     component: SignInForm,
     options: () => ({
-      title: 'Mbora',
-      headerShown: false
+      title: 'Login',
+      headerTintColor: 'orange',
     }),
   },
   SignUpForm: {
@@ -46,6 +46,7 @@ const screens: ScreenLayouts = {
     component: SignUpForm,
     options: () => ({
       title: 'Criar conta',
+      headerTintColor: 'orange',
     }),
   },
   Main: {
