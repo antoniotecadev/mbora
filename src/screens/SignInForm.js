@@ -119,12 +119,12 @@ export default SignInForm = ()=> {
                   <ErroMessage touched={props.touched.password} errors={props.errors.password} />
                   <ErroMessage touched={true} errors={error.password} />
                   <ErroMessage touched={true} errors={error.emailPass} />
-                  <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A entrar...' textButton='Entrar'/>
+                  <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A ENTRAR...' textButton='ENTRAR'/>
                   <Button
                     color={'orange'}
                     onPress={()=> handleReset(props.handleReset)}
                     disabled={props.isSubmitting}
-                    title='Limpar'
+                    title='LIMPAR'
                     >
                   </Button>
                   <TouchableOpacity>
@@ -132,7 +132,7 @@ export default SignInForm = ()=> {
                   </TouchableOpacity>
                   <View style={styles.divisor}></View>
                   <TouchableOpacity style={styles.buttonCreate} onPress={()=> nav.show('SignUpForm')}>
-                    <Text style={styles.btnText}>Criar Nova Conta</Text>
+                    <Text style={styles.btnText}>CRIAR NOVA CONTA</Text>
                   </TouchableOpacity>
               </ScrollView>
             )}
