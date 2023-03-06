@@ -26,12 +26,12 @@ export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
       // if you'd like to have a solid color for a nav bar, then you should
       // set up `headerStyle: {backgroundColor: Colors.bg2Color}`
     },
-    android: {
-      headerTitleStyle: {
-        fontSize: 24,
-        fontWeight: 'bold',
-      },
-    }
+    // android: {
+    //   headerTitleStyle: {
+    //     fontSize: 24,
+    //     fontWeight: 'bold',
+    //   },
+    // }
   }),
 });
 
