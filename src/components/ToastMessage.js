@@ -11,6 +11,6 @@ export default function ToastMessage() {
             visible={visibleToast.visible} 
             position={'top'} 
             onDismiss={()=> setVisibleToast({visible: false})}
-            autoDismiss={2000}
+            autoDismiss={1000}
             backgroundColor={visibleToast.backgroundColor}/>
 }
