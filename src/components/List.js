@@ -9,7 +9,8 @@ import {
   TouchableOpacity
 } from "react-native";
 import { currency } from "../utils/utilitario";
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native";
+import { Text as TextUILIB } from "react-native-ui-lib";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
@@ -24,7 +25,7 @@ const showProductDetails = (item)=> {
 return <TouchableOpacity onPress={()=> showProductDetails(item)}>
         <View style={styles.item}>
           <View style={styles.section}>
-          <Text style={styles.title}>{item.nome}</Text>
+            <TextUILIB textColor style={styles.title}>{item.nome}</TextUILIB>
             <Image style={{width: 50, height: 50, borderRadius: 25}} source= {imageProduct} />
           </View>
           <Text style={{color: 'green'}}>{currency(String(item.preco))}</Text>
