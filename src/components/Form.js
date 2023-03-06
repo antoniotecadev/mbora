@@ -64,7 +64,8 @@ export const ErroMessage = ({ touched, errors })=> {
     viewIcon: {
       flexDirection: 'row', 
       justifyContent: 'center', 
-      alignItems: 'center', 
+      alignItems: 'center',
+      paddingTop: 30 
     },
     icon: {
       width: 60, 
