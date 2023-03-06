@@ -116,7 +116,6 @@ export function ProductDetails({route}) {
           <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
           {produto.updated_at && <Text style={[styles.colorGrey, { marginTop: 8 }]}>Alterado {produto.updated_at}</Text>}
           <Text style={[styles.colorGrey, { marginTop: 8 }]}>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
-          <View style={styles.divisor}></View>
         </View>
       </ScrollView>
     </SafeAreaView>
