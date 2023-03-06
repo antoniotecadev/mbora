@@ -39,6 +39,7 @@ const screens: ScreenLayouts = {
     options: () => ({
       title: 'Login',
       headerTintColor: 'orange',
+      headerShown: false
     }),
   },
   SignUpForm: {
@@ -47,6 +48,7 @@ const screens: ScreenLayouts = {
     options: () => ({
       title: 'Criar conta',
       headerTintColor: 'orange',
+      headerShown: false
     }),
   },
   Main: {
