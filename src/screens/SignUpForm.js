@@ -186,7 +186,7 @@ export default SignUpForm = ({ navigation })=> {
                 <ErroMessage touched={true} errors={error.password_confirmation} />
                 <ErroMessage touched={true} errors={error.device_name} />
                 <View style={styles.divisor}></View>
-                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A CRIAR...' textButton='CRIAR'/>
+                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='A CRIAR...' textButton='CRIAR CONTA'/>
                 <Button
                   color={'orange'}
                   onPress={()=> handleReset(props.handleReset)}
