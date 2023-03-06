@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage, FormHeader } from '../components/Form';
@@ -8,7 +8,7 @@ import { modelName as device_name } from 'expo-device';
 import { saveTokenId } from '../utils/utilitario';
 import { RootNavigator } from '.';
 
-export default SignUpForm = ()=> {
+export default SignUpForm = ({ navigation })=> {
 
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
 
@@ -196,6 +196,9 @@ export default SignUpForm = ()=> {
                   >
                 </Button>
                 <View style={styles.divisor}></View>
+                <TouchableOpacity style={styles.buttonBack} onPress={()=> navigation.goBack()}>
+                    <Text style={styles.btnText}>CANCELAR</Text>
+                </TouchableOpacity>
             </ScrollView>
             </KeyboardAvoidingView>
           )}
@@ -226,5 +229,21 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.$backgroundDisabled, 
     marginTop: 10,
     marginBottom: 5
+  },
+  btnText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+    fontWeight: 'bold'
+  },
+  buttonBack: {
+    width: '100%',
+    height: 45,
+    marginVertical: 16,
+    backgroundColor: 'royalblue',
+    borderRadius: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   }, 
 });
