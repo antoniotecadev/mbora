@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { FlatList, StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
-import { Card, Colors, Typography } from 'react-native-ui-lib';
+import { Card, Colors, Typography, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
 import { currency } from '../utils/utilitario';
@@ -22,16 +22,17 @@ export function Carrinho({ navigation }) {
                 useNative
                 bg-$backgroundElevated
                 activeOpacity={1}
+                style={styles.card}
                 activeScale={0.96}>
                 <Card.Image source={cardImage} style={{ width: 100, height: '100%' }} />
-                <View style={{maxWidth: '100%', margin: 8}}>
-                    <Text>
+                <View style={{maxWidth: '100%', margin: 8 }}>
+                    <TextUILIB textColor>
                         {item.product.nome}
-                    </Text>
+                    </TextUILIB>
                     <Text style={{color: Colors.green10, marginBottom: 4}}>
                         {currency(String(item.product.preco))}
                     </Text>
-                    <Text style={{...Typography.text90}}>{item.product.empresa}</Text>
+                    <TextUILIB textColor style={{...Typography.text90}}>{item.product.empresa}</TextUILIB>
                     <Text style={{color: Colors.grey40, marginBottom: 8, fontSize: 10}}>
                         {`${item.product.nomeProvincia}, ${item.product.district} , ${item.product.street}`}
                     </Text>
@@ -42,7 +43,7 @@ export function Carrinho({ navigation }) {
     }
 
     return (
-        <>
+        <View>
             <ToastMessage />
             <FlatList
                 style={styles.itemsList}
@@ -53,7 +54,7 @@ export function Carrinho({ navigation }) {
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Carrinho vazio</Text>}
                 ListFooterComponent={items.length == 0 ? null : <Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart}/>}
             />
-        </>
+        </View>
     );
 }
 
@@ -73,7 +74,8 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
             keyboardType='numeric'
             value={String(qtd)}
             maxLength={2}  //setting limit of input
-            textAlign='center'/>
+            textAlign='center'
+            color={Colors.getScheme() == 'light' ? Colors.dmBlack : 'white'}/>
 
         <TouchableOpacity style={styles.buttonQuantity} onPress={() => quantity(id, {isSum: true})}>
             <Text style={{color: 'white'}}>+</Text>
@@ -88,20 +90,20 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
 const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
     return (
         <>
-            <TouchableOpacity onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} style={{backgroundColor: 'orange', borderRadius: 5, paddingVertical: 10}}>
+            <TouchableOpacity onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} style={{backgroundColor: 'orange', borderRadius: 5, paddingVertical: 10, marginBottom: 5}}>
                 <Text style={{color: 'white', textAlign: 'center'}}>Remover todos os produtos do carrinho</Text>
             </TouchableOpacity>
             <View style={styles.cartLineTotal}>
-                <Text style={[styles.lineLeft]}>Quantidade Distinta</Text>
-                <Text style={styles.lineRight}>{String(distincQty)}</Text>
+                <TextUILIB textColor style={[styles.lineLeft]}>Quantidade Distinta</TextUILIB>
+                <TextUILIB textColor style={styles.lineRight}>{String(distincQty)}</TextUILIB>
             </View>
             <View style={styles.cartLineTotal}>
-                <Text style={[styles.lineLeft]}>Quantidade Total</Text>
-                <Text style={styles.lineRight}>{String(totalQty)}</Text>
+                <TextUILIB textColor style={[styles.lineLeft]}>Quantidade Total</TextUILIB>
+                <TextUILIB textColor style={styles.lineRight}>{String(totalQty)}</TextUILIB>
             </View>
             <View style={styles.cartLineTotal}>
-                <Text style={[styles.lineLeft]}>Total</Text>
-                <Text style={styles.lineRight}>{currency(String(price))}</Text>
+                <TextUILIB textColor style={[styles.lineLeft]}>Total</TextUILIB>
+                <TextUILIB textColor style={styles.lineRight}>{currency(String(price))}</TextUILIB>
             </View>
             <TouchableOpacity style={{backgroundColor: 'green', borderRadius: 5, paddingVertical: 10}}>
                 <Text style={{color: 'white', textAlign: 'center'}}>Encomendar</Text>
@@ -122,20 +124,17 @@ const styles = StyleSheet.create({
     lineLeft: {
         fontSize: 14,
         lineHeight: 40,
-        color: '#333333'
     },
     lineRight: {
         flex: 1,
         fontSize: 14,
         lineHeight: 40,
-        color: '#333333',
         textAlign: 'right',
     },
     itemsList: {
-        backgroundColor: '#eeeeee',
+        backgroundColor: Colors.getScheme() == 'light' ? '#eeeeee' : 'black',
     },
     itemsListContainer: {
-        backgroundColor: '#eeeeee',
         paddingVertical: 8,
         marginHorizontal: 8,
     },
@@ -154,5 +153,9 @@ const styles = StyleSheet.create({
         borderRadius: 5, 
         paddingHorizontal: 25, 
         paddingVertical: 5
+    },
+    card: {
+        backgroundColor: Colors.getScheme() == 'light' ? 'white' : Colors.dmBlack,
+        shadowColor: Colors.getScheme() == 'light' ? Colors.dmBlack : 'white',
     }
 });
