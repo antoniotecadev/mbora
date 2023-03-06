@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { ButtonSubmit, ErroMessage } from '../components/Form';
+import { ButtonSubmit, ErroMessage, FormHeader } from '../components/Form';
 import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
 import { saveTokenId } from '../utils/utilitario';
@@ -82,9 +82,10 @@ export default SignUpForm = ()=> {
     }
 
     return (
-      <>
+      <SafeAreaView style={{ flex: 1 }}>
       {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
       <View style={styles.container}>
+        <FormHeader title='Mbora' />
         <Formik
           initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
           validationSchema={Yup.object({
@@ -200,7 +201,7 @@ export default SignUpForm = ()=> {
           )}
         </Formik>
       </View>}
-      </>
+      </SafeAreaView>
     );
   }
 
