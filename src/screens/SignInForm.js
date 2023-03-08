@@ -5,12 +5,13 @@ import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
 import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
-import { RootNavigator } from '.';
 import { Colors, Text as TextUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
+import { useStores } from '../stores';
 
 export default SignInForm = ()=> {
 
+    const {user} = useStores();
     const { nav } = useServices();
 
     let passwordInput = null;
@@ -20,7 +21,6 @@ export default SignInForm = ()=> {
         password: null,
         emailPass: null
      });
-     const [isSignedIn , setIsSignedIn] = useState(0);
 
     const loginUser = async (credential)=> {
         try {
@@ -37,7 +37,7 @@ export default SignInForm = ()=> {
             let rjd = await response.json();
             if(rjd.success) {
                 saveTokenId('token', rjd.data.token, rjd.data.user_id)
-                .then(()=> setIsSignedIn(1))
+                .then(()=> user.setAuth(true))
                 .catch((error)=> Alert.alert('Erro ao salvar token', error.message));
             } else {
                 if(rjd.message == 'Erro de validação') {
@@ -73,7 +73,6 @@ export default SignInForm = ()=> {
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-        {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
         <View style={styles.container}>
           <FormHeader title='Mbora' />
           <Formik
@@ -140,7 +139,7 @@ export default SignInForm = ()=> {
           <View style={styles.viewImage}>
               <Image style={styles.image} source={require('../../assets/logotipo-yoga-original-removebg.png')}/>
           </View>
-        </View>}
+        </View>
       </SafeAreaView>
     );
   }

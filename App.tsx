@@ -1,24 +1,25 @@
 import 'expo-dev-client';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import {LogBox, Alert} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {AppNavigator} from './src/app';
 import {configureDesignSystem} from './src/utils/designSystem';
-import {hydrateStores, StoresProvider} from './src/stores';
+import {hydrateStores, StoresProvider, useStores} from './src/stores';
 import {initServices, ServicesProvider} from './src/services';
 import { getValueItemAsync } from './src/utils/utilitario';
+import { observer } from 'mobx-react-lite';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs(['Require']);
 
-export default (): JSX.Element => {
-  
-  const [isSignedIn , setIsSignedIn] = useState(null);
+export default observer((): JSX.Element => {
 
+  const {user} = useStores();
+  
   const startApp = useCallback(async () => {
 
     await hydrateStores();
@@ -41,10 +42,10 @@ export default (): JSX.Element => {
       });
       let rjd = await response.json();
       if (rjd.success) {
-        setIsSignedIn(1);
+        user.setAuth(true);
         await SplashScreen.hideAsync();
       } else {
-        setIsSignedIn(0);
+        user.setAuth(false);
         await SplashScreen.hideAsync();
       }
     } catch (error) {
@@ -59,9 +60,9 @@ export default (): JSX.Element => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <StoresProvider>
-        <ServicesProvider>{isSignedIn != null && <AppNavigator isSignedIn={isSignedIn}/>}</ServicesProvider>
+        <ServicesProvider><AppNavigator auth={user.auth}/></ServicesProvider>
       </StoresProvider>
     </GestureHandlerRootView>
   );
-};
+});
 

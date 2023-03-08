@@ -11,7 +11,7 @@ import {
 import { useServices } from './services';
 import { CartProvider } from './CartContext.js';
 
-export const AppNavigator = ({ isSignedIn }): JSX.Element => {
+export const AppNavigator = ({auth}): JSX.Element => {
   useColorScheme();
   const { nav } = useServices();
   
@@ -23,9 +23,8 @@ export const AppNavigator = ({ isSignedIn }): JSX.Element => {
           ref={nav.n}
           onReady={nav.onReady}
           onStateChange={nav.onStateChange}
-          theme={getNavigationTheme()}
-        >
-          <RootNavigator isSignedIn={isSignedIn}/>
+          theme={getNavigationTheme()}>
+          <RootNavigator auth={auth}/>
         </NavigationContainer>
       </CartProvider>
     </>

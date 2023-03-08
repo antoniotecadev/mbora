@@ -3,10 +3,12 @@ import React from 'react';
 import './_hydration';
 import {UIStore} from './ui';
 import {CounterStore} from './counter';
+import { UserAuth } from './auth';
 
 export const stores = {
   ui: new UIStore(),
   counter: new CounterStore(),
+  user: new UserAuth(),
 };
 type ContextStores = typeof stores;
 
