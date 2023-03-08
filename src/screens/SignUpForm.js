@@ -7,8 +7,11 @@ import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
 import { saveTokenId } from '../utils/utilitario';
 import { RootNavigator } from '.';
+import { useStores } from '../stores';
 
 export default SignUpForm = ({ navigation })=> {
+
+  const {user} = useStores();
 
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
 
@@ -21,10 +24,9 @@ export default SignUpForm = ({ navigation })=> {
     password_confirmation: null,
   }
 
-  const [error, setError] = useState(initialValues);
-  const [isSignedIn , setIsSignedIn] = useState(0);
+    const [error, setError] = useState(initialValues);
 
-    const createUserAccount = async (user)=> {
+    const createUserAccount = async (us)=> {
       try {
         let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/auth/register',
         {
@@ -33,13 +35,13 @@ export default SignUpForm = ({ navigation })=> {
             Accept: 'application/json',
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(user),
+          body: JSON.stringify(us),
         });
 
         let rjd = await response.json();
         if(rjd.success) {
           saveTokenId('token', rjd.data.token, rjd.data.user_id)
-          .then(()=> setIsSignedIn(1))
+          .then(()=> user.setAuth(true))
           .catch((error)=> Alert.alert('Erro ao salvar token', error.message));
         } else {
           if (rjd.message == 'Erro de validação') {
@@ -83,7 +85,6 @@ export default SignUpForm = ({ navigation })=> {
 
     return (
       <SafeAreaView style={{ flex: 1 }}>
-      {isSignedIn == 1 ? <RootNavigator isSignedIn={isSignedIn}/> :
       <View style={styles.container}>
         <FormHeader title='Mbora' />
         <Formik
@@ -203,7 +204,7 @@ export default SignUpForm = ({ navigation })=> {
             </KeyboardAvoidingView>
           )}
         </Formik>
-      </View>}
+      </View>
       </SafeAreaView>
     );
   }
