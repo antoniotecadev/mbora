@@ -1,4 +1,5 @@
 import React from 'react';
+import {ActivityIndicator} from 'react-native';
 import {View, Text, Colors} from 'react-native-ui-lib';
 import {Bounceable} from 'rn-bounceable';
 import {Icon} from './icon';
@@ -10,6 +11,7 @@ type ActionProps = {
   info?: string;
   disabled?: boolean;
   onPress?: () => void;
+  loading?: boolean;
 };
 
 export const Action: React.FC<ActionProps> = ({
@@ -19,6 +21,7 @@ export const Action: React.FC<ActionProps> = ({
   info,
   disabled,
   onPress,
+  loading = false,
 }: ActionProps) => {
   const b = {disabled, onPress};
   const iconSize = 22;
@@ -38,6 +41,11 @@ export const Action: React.FC<ActionProps> = ({
               <Text textColor text60R>
                 {title}
               </Text>
+            ) : null}
+
+            {loading && true ? (
+              <ActivityIndicator
+                style={{marginLeft: 8}} />
             ) : null}
           </View>
 

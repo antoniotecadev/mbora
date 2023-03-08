@@ -1,5 +1,5 @@
-import React, {useMemo, useEffect} from 'react';
-import {Alert, Linking, ScrollView} from 'react-native';
+import React, {useMemo, useEffect, useState} from 'react';
+import {Alert, Linking, ScrollView, ActivityIndicator} from 'react-native';
 import {View, ActionSheet, Text} from 'react-native-ui-lib';
 import {observer, useLocalObservable} from 'mobx-react';
 import appInfo from '../../app.json';
@@ -11,6 +11,7 @@ import {Section} from '../components/section';
 import {Action} from '../components/action';
 
 import { useNavigation } from '@react-navigation/native';
+import { getValueItemAsync } from '../utils/utilitario';
 
 type PickersStateKey = keyof Omit<PickersState, 'show' | 'hide'>;
 type PickersState = {
@@ -22,8 +23,9 @@ type PickersState = {
 };
 
 export const Settings: React.FC = observer(() => {
-  const {ui} = useStores();
+  const {ui, user} = useStores();
   const {links} = useConstants();
+  const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
 
@@ -131,6 +133,31 @@ export const Settings: React.FC = observer(() => {
     [],
   );
 
+  const logout = async ()=> {
+    setLoading(true);
+    try {
+      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/logout/user',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
+        },
+      });
+        let rjd = await response.json();
+        if(rjd.success) {
+          user.setAuth(false);
+        } else {
+          Alert.alert(rjd.message, rjd.data.message);
+        }
+      } catch (error) {
+        Alert.alert(error.message);
+      } finally {
+        setLoading(false);
+      }
+  }
+
   return (
     <View flex bg-bgColor>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -177,7 +204,7 @@ export const Settings: React.FC = observer(() => {
           </Section>
           <Section bg title="">
             <View>
-              <Action title="Terminar sessão" icon="log-out-outline" onPress={()=> alert('')} />
+              <Action loading={loading} title="Terminar sessão" icon="log-out-outline" onPress={()=> logout()} />
             </View>
           </Section>
         </View>
