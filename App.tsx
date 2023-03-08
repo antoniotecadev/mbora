@@ -9,14 +9,13 @@ import {configureDesignSystem} from './src/utils/designSystem';
 import {hydrateStores, StoresProvider, useStores} from './src/stores';
 import {initServices, ServicesProvider} from './src/services';
 import { getValueItemAsync } from './src/utils/utilitario';
-import { observer } from 'mobx-react-lite';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs(['Require']);
 
-export default observer((): JSX.Element => {
+export default (): JSX.Element => {
 
   const {user} = useStores();
   
@@ -60,9 +59,9 @@ export default observer((): JSX.Element => {
   return (
     <GestureHandlerRootView style={{flex: 1}}>
       <StoresProvider>
-        <ServicesProvider><AppNavigator auth={user.auth}/></ServicesProvider>
+        <ServicesProvider><AppNavigator user={user}/></ServicesProvider>
       </StoresProvider>
     </GestureHandlerRootView>
   );
-});
+};
 

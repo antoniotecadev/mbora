@@ -10,8 +10,9 @@ import {
 } from './utils/designSystem';
 import { useServices } from './services';
 import { CartProvider } from './CartContext.js';
+import { observer } from 'mobx-react';
 
-export const AppNavigator = ({auth}): JSX.Element => {
+export const AppNavigator = observer(({user}): JSX.Element => {
   useColorScheme();
   const { nav } = useServices();
   
@@ -24,10 +25,10 @@ export const AppNavigator = ({auth}): JSX.Element => {
           onReady={nav.onReady}
           onStateChange={nav.onStateChange}
           theme={getNavigationTheme()}>
-          <RootNavigator auth={auth}/>
+          <RootNavigator auth={user.auth}/>
         </NavigationContainer>
       </CartProvider>
     </>
   );
-};
+});
 
