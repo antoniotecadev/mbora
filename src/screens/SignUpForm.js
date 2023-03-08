@@ -6,7 +6,6 @@ import { ButtonSubmit, ErroMessage, FormHeader } from '../components/Form';
 import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
 import { saveTokenId } from '../utils/utilitario';
-import { RootNavigator } from '.';
 import { useStores } from '../stores';
 
 export default SignUpForm = ({ navigation })=> {
