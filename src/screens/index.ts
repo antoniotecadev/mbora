@@ -192,6 +192,4 @@ const modals: ModalScreenLayouts = {
 };
 
 // Root Navigator
-export const RootNavigator = ({auth}): JSX.Element => {
- return genRootNavigator(auth ? TabNavigator : SigInStack, [modals.ExampleModal]);
-};
+export const RootNavigator = ({auth}): JSX.Element => genRootNavigator(auth ? TabNavigator : SigInStack, [modals.ExampleModal]);
