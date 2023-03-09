@@ -55,7 +55,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress, 
   return (
     <Card style={styles.card} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
-    <Card.Image style={[styles.thumb, {backgroundColor: appearanceName == 'Light' ? 'white' : Colors.dmBlack}]} source= {imageProduct} />
+    <Card.Image style={[styles.thumb, {backgroundColor: appearanceName == 'Dark' ? Colors.dmBlack : 'white'}]} source= {imageProduct} />
       <ExpandableSection
         top={top}
         expanded={expanded}
