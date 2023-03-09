@@ -13,6 +13,7 @@ const ITEM_HEIGHT = 150;
 import firebase from '../services/firebase';
 import { ref, onChildAdded, query, limitToFirst, limitToLast, orderByChild, orderByValue, get, child, startAfter, orderByKey, QueryConstraint  } from "firebase/database";
 import database from '../services/firebase';
+import { useStores } from '../stores';
 
 const cardImage2 = require('../../assets/products/oleo.jpg');
 
@@ -27,6 +28,7 @@ export default function ProductsList({ navigation }) {
   const [countPage, setCountPage] = useState(0);
 
   const { nav } = useServices();
+  const { ui } = useStores();
   const { error, setError} = useContext(CartContext);
 
   const onRefresh = ()=> {
@@ -44,7 +46,7 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+    return <Product appearanceName={ui.appearanceName} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
   },[]);
 
   const keyExtractor = (item)=> item.id;

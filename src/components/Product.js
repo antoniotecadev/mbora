@@ -10,7 +10,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ isFavorite = false, removeFavorite, produto, onPress } ) {
+export function Product({ isFavorite = false, removeFavorite, produto, onPress, appearanceName } ) {
 
   const { addItemToCart, encomendar } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false)
@@ -55,7 +55,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
   return (
     <Card style={styles.card} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
-    <Card.Image style={styles.thumb} source= {imageProduct} />
+    <Card.Image style={[styles.thumb, {backgroundColor: appearanceName == 'Light' ? 'white' : Colors.dmBlack}]} source= {imageProduct} />
       <ExpandableSection
         top={top}
         expanded={expanded}
@@ -119,11 +119,10 @@ const HeaderElement = (nome, preco) => {
 const styles = StyleSheet.create({
   card: {
     width: '49%',
-    backgroundColor: Colors.getScheme() == 'light' ? 'white' : Colors.dmBlack,
     borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    shadowColor: Colors.getScheme() == 'light' ? 'black' : 'white',
+    shadowColor: 'black',
     shadowOffset: {
       height: 0,
       width: 0,
