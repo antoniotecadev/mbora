@@ -3,7 +3,6 @@ import {
   Text, 
   View, 
   ScrollView, 
-  SafeAreaView,
   TouchableOpacity, 
   StyleSheet,
   Alert,
@@ -78,7 +77,7 @@ export function ProductDetails({route}) {
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
-    <SafeAreaView bg-bgColor>
+    <View>
       <ToastMessage />
       <ScrollView>
         <View style={styles.section}>
@@ -118,7 +117,7 @@ export function ProductDetails({route}) {
           <Text style={[styles.colorGrey, { marginTop: 8 }]}>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
