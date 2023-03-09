@@ -136,19 +136,6 @@ const IconButton = ({iconNames, text, size, onPress}) =>{
 }
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    shadowColor: 'black',
-    shadowOffset: {
-      height: 0,
-      width: 0,
-    },
-    elevation: 1,
-    marginVertical: 20,
-  },
   image: {
     height: 300,
     width: '100%',
