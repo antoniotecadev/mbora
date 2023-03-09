@@ -5,13 +5,13 @@ import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
 import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
-import { Colors, Text as TextUILIB } from 'react-native-ui-lib';
+import { Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
 export default SignInForm = ()=> {
 
-    const {user} = useStores();
+    const { user } = useStores();
     const { nav } = useServices();
 
     let passwordInput = null;
@@ -72,8 +72,7 @@ export default SignInForm = ()=> {
     }
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <View style={styles.container}>
+        <ViewUILIB bg-bgColor style={styles.container}>
           <FormHeader title='Mbora' />
           <Formik
             initialValues={{email: '', password: '' }}
@@ -139,16 +138,14 @@ export default SignInForm = ()=> {
           <View style={styles.viewImage}>
               <Image style={styles.image} source={require('../../assets/logotipo-yoga-original-removebg.png')}/>
           </View>
-        </View>
-      </SafeAreaView>
+        </ViewUILIB>
     );
   }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.getScheme() == 'light' ? '#ecf0f1' : Colors.dmBlack,
-    padding: 16 ,
+    padding: 16,
   },
   input: {
     height: 50,
