@@ -53,9 +53,9 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress, 
   {/* <Card.Image style={styles.thumb} source={{ uri: urlImage }} /> */}
   {/* <Card.Image style={styles.thumb} source= {imageProduct} /> */}
   return (
-    <Card style={styles.card} center onPress={onPress}>
+    <Card bg-bgColor style={[styles.card, {backgroundColor: appearanceName == 'Dark' ? Colors.dmBlack : 'white', shadowColor: appearanceName == 'Dark' ? 'white' : Colors.dmBlack}]} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
-    <Card.Image style={[styles.thumb, {backgroundColor: appearanceName == 'Dark' ? Colors.dmBlack : 'white'}]} source= {imageProduct} />
+    <Card.Image style={styles.thumb} source= {imageProduct} />
       <ExpandableSection
         top={top}
         expanded={expanded}
@@ -122,7 +122,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    shadowColor: 'black',
     shadowOffset: {
       height: 0,
       width: 0,
