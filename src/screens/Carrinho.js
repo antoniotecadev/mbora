@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, TextInput, TouchableOpacity, Text, View } from 'r
 import { Card, Colors, Typography, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
-import { currency } from '../utils/utilitario';
+import { currency, getAppearenceColor } from '../utils/utilitario';
 
 const cardImage = require('../../assets/products/feijao1.jpg');
 const removeIcon = require('../../assets/icons/excluir.png');
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
     },
     itemsList: {
-        backgroundColor: Colors.getScheme() == 'light' ? '#eeeeee' : 'black',
+        backgroundColor: getAppearenceColor(),
     },
     itemsListContainer: {
         paddingVertical: 8,
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
         paddingVertical: 5
     },
     card: {
-        backgroundColor: Colors.getScheme() == 'light' ? 'white' : Colors.dmBlack,
+        backgroundColor: getAppearenceColor(),
         shadowColor: Colors.getScheme() == 'light' ? Colors.dmBlack : 'white',
     }
 });
