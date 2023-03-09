@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
 import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB } from 'react-native-ui-lib';
-import { currency } from '../utils/utilitario';
+import { currency, getAppearenceColor } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
 
@@ -53,7 +53,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress, 
   {/* <Card.Image style={styles.thumb} source={{ uri: urlImage }} /> */}
   {/* <Card.Image style={styles.thumb} source= {imageProduct} /> */}
   return (
-    <Card bg-bgColor style={[styles.card, {backgroundColor: appearanceName == 'Dark' ? Colors.dmBlack : 'white', shadowColor: appearanceName == 'Dark' ? 'white' : Colors.dmBlack}]} center onPress={onPress}>
+    <Card bg-bgColor style={[styles.card, {backgroundColor: getAppearenceColor(), shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
     <Card.Image style={styles.thumb} source= {imageProduct} />
       <ExpandableSection
