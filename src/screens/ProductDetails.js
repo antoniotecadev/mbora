@@ -14,7 +14,7 @@ import { CartContext } from '../CartContext';
 import { currency, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
-import { Avatar, Colors, Text as TextUILIB } from 'react-native-ui-lib';
+import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
@@ -77,7 +77,7 @@ export function ProductDetails({route}) {
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
-    <View>
+    <ViewUILIB bg-bgColor>
       <ToastMessage />
       <ScrollView>
         <View style={styles.section}>
@@ -117,7 +117,7 @@ export function ProductDetails({route}) {
           <Text style={[styles.colorGrey, { marginTop: 8 }]}>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
         </View>
       </ScrollView>
-    </View>
+    </ViewUILIB>
   );
 }
 

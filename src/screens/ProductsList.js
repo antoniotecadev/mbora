@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshCont
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
 import { Product } from '../components/Product.js';
-import { Card } from 'react-native-ui-lib';
+import { Card, View as ViewUILIB } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import ErrorMessage from '../components/ErrorMessage';
 import { CartContext } from '../CartContext';
@@ -28,7 +28,6 @@ export default function ProductsList({ navigation }) {
   const [countPage, setCountPage] = useState(0);
 
   const { nav } = useServices();
-  const { ui } = useStores();
   const { error, setError} = useContext(CartContext);
 
   const onRefresh = ()=> {
@@ -46,7 +45,7 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product appearanceName={ui.appearanceName} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+    return <Product produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
   },[]);
 
   const keyExtractor = (item)=> item.id;
@@ -174,7 +173,7 @@ export default function ProductsList({ navigation }) {
   }, []);
 
   return (
-    <>
+    <ViewUILIB flex bg-bgColor>
       <ToastMessage />
       { error == null ? 
       <FlatList
@@ -192,7 +191,7 @@ export default function ProductsList({ navigation }) {
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
         : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />}
-    </>
+    </ViewUILIB>
   );
 }
 

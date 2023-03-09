@@ -10,7 +10,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ isFavorite = false, removeFavorite, produto, onPress, appearanceName } ) {
+export function Product({ isFavorite = false, removeFavorite, produto, onPress } ) {
 
   const { addItemToCart, encomendar } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false)
