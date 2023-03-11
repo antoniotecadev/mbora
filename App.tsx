@@ -24,8 +24,11 @@ export default (): JSX.Element => {
     await hydrateStores();
     await initServices();
     configureDesignSystem();
-    await checkUserAuthenticated();
-
+    if (getValueItemAsync('token') === null){
+      user.setAuth(false);
+    } else {
+      await checkUserAuthenticated();
+    }
   }, []);
 
   const checkUserAuthenticated = async () => {

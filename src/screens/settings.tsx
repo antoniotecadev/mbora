@@ -1,8 +1,9 @@
 import React, {useMemo, useEffect, useState} from 'react';
-import {Alert, Linking, ScrollView, ActivityIndicator} from 'react-native';
+import {Alert, Linking, ScrollView} from 'react-native';
 import {View, ActionSheet, Text} from 'react-native-ui-lib';
 import {observer, useLocalObservable} from 'mobx-react';
 import appInfo from '../../app.json';
+import { deleteItemAsync } from 'expo-secure-store';
 
 import {useConstants} from '../utils/constants';
 import {useStores} from '../stores';
@@ -147,6 +148,7 @@ export const Settings: React.FC = observer(() => {
       });
         let rjd = await response.json();
         if(rjd.success) {
+          await deleteItemAsync('token');
           user.setAuth(false);
         } else {
           Alert.alert(rjd.message, rjd.data.message);
