@@ -71,7 +71,10 @@ export default SignInForm = ()=> {
          });
     }
 
+    // alert(StatusBar.currentHeight+'');
+
     return (
+      <SafeAreaView style={{flex:1}}>
         <ViewUILIB bg-bgColor style={styles.container}>
           <FormHeader title='Mbora' />
           <Formik
@@ -139,13 +142,14 @@ export default SignInForm = ()=> {
               <Image style={styles.image} source={require('../../assets/logotipo-yoga-original-removebg.png')}/>
           </View>
         </ViewUILIB>
+        </SafeAreaView>
     );
   }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
   input: {
     height: 50,

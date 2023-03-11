@@ -83,7 +83,8 @@ export default SignUpForm = ({navigation})=> {
     }
 
     return (
-      <ViewUILIB style={styles.container}>
+      <SafeAreaView style={{flex:1}}>
+      <ViewUILIB bg-bgColor style={styles.container}>
         <FormHeader title='Mbora' />
         <Formik
           initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
@@ -203,6 +204,7 @@ export default SignUpForm = ({navigation})=> {
           )}
         </Formik>
       </ViewUILIB>
+      </SafeAreaView>
     );
   }
 
