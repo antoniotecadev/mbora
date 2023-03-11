@@ -6,6 +6,7 @@ import { CartContext } from '../CartContext';
 import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
+import { useStores } from '../stores';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
 
@@ -70,6 +71,7 @@ export default function Perfil({ route }) {
 
 const Favoritos = ({produts, onRefresh, refreshing})=> {
 
+    const {ui} = useStores();
     const { nav } = useServices();
     const { setVisibleToast } = useContext(CartContext);
 
@@ -93,7 +95,7 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+        return <Product appearanceName={ui.appearanceName} isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(

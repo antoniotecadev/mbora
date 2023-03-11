@@ -10,7 +10,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ isFavorite = false, removeFavorite, produto, onPress } ) {
+export function Product({ appearanceName, isFavorite = false, removeFavorite, produto, onPress } ) {
 
   const { addItemToCart, encomendar } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false)
@@ -53,7 +53,7 @@ export function Product({ isFavorite = false, removeFavorite, produto, onPress }
   {/* <Card.Image style={styles.thumb} source={{ uri: urlImage }} /> */}
   {/* <Card.Image style={styles.thumb} source= {imageProduct} /> */}
   return (
-    <Card bg-bgColor style={[styles.card, {backgroundColor: getAppearenceColor(), shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={onPress}>
+    <Card style={[styles.card, {backgroundColor: getAppearenceColor(appearanceName), shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
     <Card.Image style={styles.thumb} source= {imageProduct} />
       <ExpandableSection

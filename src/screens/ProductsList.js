@@ -27,6 +27,7 @@ export default function ProductsList({ navigation }) {
   const [lastVisible, setLastVisible] = useState(null);
   const [countPage, setCountPage] = useState(0);
 
+  const {ui} = useStores();
   const { nav } = useServices();
   const { error, setError} = useContext(CartContext);
 
@@ -45,7 +46,7 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+    return <Product appearanceName={ui.appearanceName} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
   },[]);
 
   const keyExtractor = (item)=> item.id;
