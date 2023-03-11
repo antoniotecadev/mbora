@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardA
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage, FormHeader } from '../components/Form';
-import { Colors, View as ViewUILIB } from 'react-native-ui-lib';
+import { Colors} from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
-import { saveTokenId } from '../utils/utilitario';
+import { getAppearenceColor, saveTokenId } from '../utils/utilitario';
 import { useStores } from '../stores';
 
 export default SignUpForm = ({navigation})=> {
@@ -83,8 +83,8 @@ export default SignUpForm = ({navigation})=> {
     }
 
     return (
-      <SafeAreaView style={{flex:1}}>
-      <ViewUILIB bg-bgColor style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={{paddingHorizontal: 16, flex: 1}}>
         <FormHeader title='Mbora' />
         <Formik
           initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
@@ -203,7 +203,7 @@ export default SignUpForm = ({navigation})=> {
             </KeyboardAvoidingView>
           )}
         </Formik>
-      </ViewUILIB>
+        </View>
       </SafeAreaView>
     );
   }
@@ -211,7 +211,7 @@ export default SignUpForm = ({navigation})=> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    backgroundColor: getAppearenceColor()
   },
   input: {
     height: 50,

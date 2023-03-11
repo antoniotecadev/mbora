@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
-import { getValueItemAsync, saveTokenId } from '../utils/utilitario';
+import { getAppearenceColor, getValueItemAsync, saveTokenId } from '../utils/utilitario';
 import { Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
 import { useStores } from '../stores';
@@ -74,8 +74,8 @@ export default SignInForm = ()=> {
     // alert(StatusBar.currentHeight+'');
 
     return (
-      <SafeAreaView style={{flex:1}}>
-        <ViewUILIB bg-bgColor style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <View style={{paddingHorizontal: 16}}>
           <FormHeader title='Mbora' />
           <Formik
             initialValues={{email: '', password: '' }}
@@ -141,7 +141,7 @@ export default SignInForm = ()=> {
           <View style={styles.viewImage}>
               <Image style={styles.image} source={require('../../assets/logotipo-yoga-original-removebg.png')}/>
           </View>
-        </ViewUILIB>
+        </View>
         </SafeAreaView>
     );
   }
@@ -149,7 +149,7 @@ export default SignInForm = ()=> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 16,
+    backgroundColor: getAppearenceColor()
   },
   input: {
     height: 50,
