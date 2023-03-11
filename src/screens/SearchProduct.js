@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Alert,
 } from "react-native";
+import { View as ViewUILIB } from "react-native-ui-lib";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
 
@@ -39,6 +40,7 @@ const SearchProduct = () => {
   }, [searchPhrase]);
 
   return (
+    <ViewUILIB bg-bgColor>
     <SafeAreaView style={[styles.root, {marginTop: clicked ? 20 : 0}]}>
       {!clicked && <Text style={styles.title}></Text>}
       <SearchBar
@@ -56,6 +58,7 @@ const SearchProduct = () => {
           />
       )}
     </SafeAreaView>
+    </ViewUILIB>
   );
 };
 
