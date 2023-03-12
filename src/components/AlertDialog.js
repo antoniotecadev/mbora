@@ -1,9 +1,10 @@
 import React from 'react';
-import {StyleSheet, TextInput, ScrollView, View} from 'react-native';
+import {StyleSheet, TextInput, ScrollView} from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Button as ButtonUILIB, Constants, Dialog, Text as TextUILIB, View as ViewUILIB, Colors } from 'react-native-ui-lib';
 import { ErroMessage } from './Form';
+import { getAppearenceColor } from '../utils/utilitario';
 
 export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, onPress})=> {
 
@@ -15,7 +16,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
         return (
           <ViewUILIB>
             <ViewUILIB margin-15 >
-              <TextUILIB $textDefault text65>{title}</TextUILIB>
+              <TextUILIB text65 textColor>{title}</TextUILIB>
             </ViewUILIB>
             <ViewUILIB height={2} bg-grey70/>
           </ViewUILIB>
@@ -45,18 +46,17 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
       {props => (
         <Dialog
           panDirection='up'
-          containerStyle={styles.dialog}
+          containerStyle={[styles.dialog, {backgroundColor: getAppearenceColor()}]}
           visible={showDialog}
           onDismiss={()=> isEncomenda ? setShowDialog(false) : setShowDialog({visible: false})}
           renderPannableHeader={renderPannableHeader}
           pannableHeaderProps={{title: titulo}}
           supportedOrientations={['portrait', 'landscape']}>
           <ScrollView>
-          <View>
           <TextUILIB $textDefault margin-15 color = {cor}>{mensagem}</TextUILIB>
           {isEncomenda && 
           <>
-            <TextUILIB $textDefault marginH-20>*Telefone</TextUILIB>
+            <TextUILIB marginH-20 textColor>*Telefone</TextUILIB>
             <TextInput
               editable={!props.isSubmitting}
               keyboardType='phone-pad'
@@ -69,7 +69,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             <ViewUILIB marginL-12>
               <ErroMessage touched={props.touched.telephone} errors={props.errors.telephone}/>
             </ViewUILIB>
-            <TextUILIB $textDefault marginH-20>*Endereço</TextUILIB>
+            <TextUILIB textColor marginH-20>*Endereço</TextUILIB>
             <TextInput
               editable={!props.isSubmitting}
               onChangeText={props.handleChange('address')}
@@ -83,7 +83,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             <ViewUILIB marginL-12>
               <ErroMessage touched={props.touched.address} errors={props.errors.address}/>
             </ViewUILIB>
-            <TextUILIB $textDefault marginH-20>Informações adicionais</TextUILIB>
+            <TextUILIB textColor marginH-20>Informações adicionais</TextUILIB>
             <TextInput
               editable={!props.isSubmitting}
               placeholder="Mais detalhes..."
@@ -103,7 +103,6 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             :
             <ButtonUILIB label={'OK'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} onPress={()=> setShowDialog({visible: false})}/>}
           </ViewUILIB>
-          </View>
           </ScrollView>
       </Dialog>)}
     </Formik>
@@ -112,7 +111,6 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
 
 const styles = StyleSheet.create({
     dialog: {
-      backgroundColor: Colors.$backgroundDefault,
       marginBottom: Constants.isIphoneX ? 0 : 20,
       borderRadius: 12
     },
