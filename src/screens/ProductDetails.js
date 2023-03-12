@@ -17,16 +17,19 @@ import { Icon } from '../components/icon';
 import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { AlertDialog } from '../components/AlertDialog';
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 export function ProductDetails({route}) {
-  const { produto } = route.params;
-  const { addItemToCart, setVisibleToast, encomendar } = useContext(CartContext);
   const [view, setView] = useState(0);
   const [value, setValue] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showDialogLocal, setShowDialogLocal] = useState(false);
+
+  const { produto } = route.params;
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
+  const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
   const isFavorite = async () => {
     setValue(await getItem());
@@ -58,11 +61,12 @@ export function ProductDetails({route}) {
     setView(responseJsonData.view);
     }, [produto.id]);
 
-  const encomendarProduct = ()=> {
-    Alert.alert('Encomenda', 'Encomendar ' + produto.nome, [
-      { text: 'Cancelar', undefined, style: 'cancel'},
-      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, produto.id, produto.nome).then(()=> setLoading(false))},
-    ]);
+  const encomendarProduct = async(clientData)=> {
+    await encomendar(setLoading, produto.imei, produto.id, produto.nome, clientData)
+    .then(()=> {
+      setLoading(false)
+      setShowDialogLocal(false);
+    });
   }
   
   useEffect(() => {
@@ -78,6 +82,16 @@ export function ProductDetails({route}) {
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
     <ViewUILIB bg-bgColor>
+    {showDialogLocal &&
+    <AlertDialog 
+      showDialog={showDialogLocal} 
+      setShowDialog={setShowDialogLocal} 
+      titulo='Encomenda' 
+      mensagem={'Destino: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
+      cor='green' 
+      onPress={encomendarProduct}
+      isEncomenda={true}/>}
+      {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
       <ScrollView>
         <View style={styles.section}>
@@ -101,7 +115,7 @@ export function ProductDetails({route}) {
                 justifyContent: 'space-between',
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
-                {loading ? <ActivityIndicator/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> encomendarProduct()}/>}
+                {loading ? <ActivityIndicator/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
                 <IconButton text={'Favorito'} iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
                 {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
