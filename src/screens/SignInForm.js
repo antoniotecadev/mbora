@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
 import { modelName as device_name } from 'expo-device';
 import { getAppearenceColor, getValueItemAsync, saveTokenId } from '../utils/utilitario';
-import { Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
+import { Colors, Text as TextUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
@@ -71,8 +71,6 @@ export default SignInForm = ()=> {
          });
     }
 
-    // alert(StatusBar.currentHeight+'');
-
     return (
       <SafeAreaView style={styles.container}>
         <View style={{paddingHorizontal: 16}}>
@@ -103,7 +101,6 @@ export default SignInForm = ()=> {
                     onSubmitEditing={() => {
                       passwordInput.focus()
                     }}
-                    ref={el => emailInput = el}
                   />
                   <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                   <ErroMessage touched={true} errors={error.email} />
