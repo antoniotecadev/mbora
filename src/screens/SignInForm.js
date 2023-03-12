@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, Alert, Button, ScrollView, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet, TextInput, Button, ScrollView, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
@@ -8,11 +8,14 @@ import { getAppearenceColor, getValueItemAsync, saveTokenId } from '../utils/uti
 import { Colors, Text as TextUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
 import { useStores } from '../stores';
+import { AlertDialog } from '../components/AlertDialog';
+import { CartContext } from '../CartContext';
 
 export default SignInForm = ()=> {
 
     const { user } = useStores();
     const { nav } = useServices();
+    const { showDialog, setShowDialog } = useContext(CartContext);
 
     let passwordInput = null;
 
@@ -30,7 +33,7 @@ export default SignInForm = ()=> {
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
                     },
                 body: JSON.stringify(credential),
             });
@@ -38,7 +41,7 @@ export default SignInForm = ()=> {
             if(rjd.success) {
                 saveTokenId('token', rjd.data.token, rjd.data.user_id)
                 .then(()=> user.setAuth(true))
-                .catch((error)=> Alert.alert('Erro ao salvar token', error.message));
+                .catch((error)=> setShowDialog({visible: true, title: 'Erro ao salvar token', message: error.message, color: 'orangered'}));
             } else {
                 if(rjd.message == 'Erro de validação') {
                     let messageError;
@@ -58,7 +61,7 @@ export default SignInForm = ()=> {
             // Alert.alert('Result', JSON.stringify(rjd)); // For test
             // console.log(JSON.stringify(rjd)); // For test
         } catch (error) {
-            Alert.alert('Erro', error.message);
+          setShowDialog({visible: true, title: 'Erro Entrar Conta', message: error.message, color: 'orangered'})
         }
     } 
 
@@ -73,6 +76,7 @@ export default SignInForm = ()=> {
 
     return (
       <SafeAreaView style={styles.container}>
+        {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
         <View style={{paddingHorizontal: 16}}>
           <FormHeader title='Mbora' />
           <Formik

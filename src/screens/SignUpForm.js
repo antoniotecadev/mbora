@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Alert, Button, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, Text, StyleSheet, TextInput, Button, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage, FormHeader } from '../components/Form';
@@ -7,10 +7,13 @@ import { Colors} from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
 import { getAppearenceColor, saveTokenId } from '../utils/utilitario';
 import { useStores } from '../stores';
+import { AlertDialog } from '../components/AlertDialog';
+import { CartContext } from '../CartContext';
 
 export default SignUpForm = ({navigation})=> {
 
   const {user} = useStores();
+  const { showDialog, setShowDialog } = useContext(CartContext);
 
   let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
 
@@ -41,7 +44,7 @@ export default SignUpForm = ({navigation})=> {
         if(rjd.success) {
           saveTokenId('token', rjd.data.token, rjd.data.user_id)
           .then(()=> user.setAuth(true))
-          .catch((error)=> Alert.alert('Erro ao salvar token', error.message));
+          .catch((error)=> setShowDialog({visible: true, title: 'Erro ao salvar token', message: error.message, color: 'orangered'}));
         } else {
           if (rjd.message == 'Erro de validação') {
             let messageError;
@@ -73,7 +76,7 @@ export default SignUpForm = ({navigation})=> {
         // Alert.alert('Result', JSON.stringify(rjd)); // Test
         // console.log(JSON.stringify(rjd)); // Test
       } catch (error) {
-        Alert.alert('Erro', error.message);
+        setShowDialog({visible: true, title: 'Erro Criar Conta', message: error.message, color: 'orangered'})
       }
     }
 
@@ -115,6 +118,7 @@ export default SignUpForm = ({navigation})=> {
           }}>
           {props => (
             <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
+            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <ScrollView>
                 <TextInput
                   onChangeText={props.handleChange('first_name')}
