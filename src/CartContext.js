@@ -71,7 +71,7 @@ export function CartProvider(props) {
     setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
   }
 
-  const encomendar = async (setLoading, imei, productId, productName)=> {
+  const encomendar = async (setLoading, imei, productId, productName, clientData)=> {
     setLoading(true);
     try {
       let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/encomenda',
@@ -83,6 +83,9 @@ export function CartProvider(props) {
           'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
         },
         body: JSON.stringify({
+          client_phone: clientData.telephone,
+          client_address: clientData.address,
+          client_info_ad: clientData.information,
           imei_contacts: imei,
           id_users_mbora: await getValueItemAsync('user_id').catch((error)=> Alert.alert('Identificador de usuário', error.message)),
           id_produtos_mbora: productId,

@@ -4,6 +4,7 @@ import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB 
 import { currency, getAppearenceColor } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
+import { AlertDialog } from './AlertDialog';
 
 const featureIcon = require('../../assets/icons/star.png');
 const shareIcon = require('../../assets/icons/share.png');
@@ -11,7 +12,8 @@ const shareIcon = require('../../assets/icons/share.png');
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 export function Product({ appearanceName, isFavorite = false, removeFavorite, produto, onPress } ) {
-
+  
+  const [showDialog, setShowDialog] = useState(false);
   const { addItemToCart, encomendar } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -41,11 +43,12 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
     }
   };
 
-  const encomendarProduct = ()=> {
-    Alert.alert('Encomenda', 'Encomendar ' + produto.nome, [
-      { text: 'Cancelar', undefined, style: 'cancel'},
-      { text: 'OK', onPress: async ()=> await encomendar(setLoading, produto.imei, produto.id, produto.nome).then(()=> setLoading(false))},
-    ]);
+  const encomendarProduct = async (clientData)=> {
+    await encomendar(setLoading, produto.imei, produto.id, produto.nome, clientData)
+    .then(()=> {
+      setLoading(false)
+      setShowDialog(false);
+    });
   }
 
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
@@ -53,6 +56,16 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
   {/* <Card.Image style={styles.thumb} source={{ uri: urlImage }} /> */}
   {/* <Card.Image style={styles.thumb} source= {imageProduct} /> */}
   return (
+    <>
+    {showDialog &&
+    <AlertDialog 
+      showDialog={showDialog} 
+      setShowDialog={setShowDialog} 
+      titulo='Encomenda' 
+      mensagem={'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
+      cor='green' 
+      onPress={encomendarProduct}
+      isEncomenda={true}/>}
     <Card style={[styles.card, {backgroundColor: getAppearenceColor(appearanceName), shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
     <Card.Image style={styles.thumb} source= {imageProduct} />
@@ -73,7 +86,7 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
             {loading ? <ActivityIndicator /> :
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: 'green' }]} 
-              onPress={()=> encomendarProduct()}>
+              onPress={()=> setShowDialog(true)}>
               <Text style={styles.textButton}>Encomendar Agora</Text>
             </TouchableOpacity>}
 
@@ -100,6 +113,7 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
         </View>
       </ExpandableSection>
     </Card>
+    </>
   );
 }
 
