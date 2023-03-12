@@ -74,7 +74,7 @@ export function ProductDetails({route}) {
       isFavorite();
       getViewNumberProduct();
     } catch (error) {
-      Alert.alert('Erro', error.message);     
+      setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'red'});     
     }
   },[]);
   
