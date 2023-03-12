@@ -92,7 +92,7 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
 
             {isFavorite && 
             <TouchableOpacity 
-              style={[styles.button, { backgroundColor: 'red' }]} 
+              style={[styles.button, { backgroundColor: 'orangered' }]} 
               onPress={removeFavorite}>
               <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
