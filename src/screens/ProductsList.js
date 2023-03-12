@@ -109,7 +109,7 @@ export default function ProductsList({ navigation }) {
       let responseJsonData = await response.json();
       setCategorias(responseJsonData);
     } catch (error) {
-      Alert.alert('Erro ao carregar categorias', error.message + '');
+      setShowDialog({visible: true, title: 'Erro Categorias', message: error.message, color: 'orangered'});
     }
   }, [])
 

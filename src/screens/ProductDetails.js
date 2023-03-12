@@ -5,7 +5,6 @@ import {
   ScrollView, 
   TouchableOpacity, 
   StyleSheet,
-  Alert,
   ActivityIndicator,
   Image as Img
   } from 'react-native';

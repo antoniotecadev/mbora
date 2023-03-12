@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useCallback, useContext } from 'react';
-import { StyleSheet, Alert, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar, TabController, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
+import { AlertDialog } from '../components/AlertDialog';
 import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
@@ -14,6 +15,8 @@ export default function Perfil({ route }) {
 
     const [produts, setProduts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+
+    const { showDialog, setShowDialog } = useContext(CartContext);
 
     const getProducts = useCallback(async ()=> {
         let keys = [];
@@ -28,7 +31,7 @@ export default function Perfil({ route }) {
             });
         } catch (error) {
             setRefreshing(false);
-            Alert.alert('Erro', error.message);
+            setShowDialog({visible: true, title: 'Erro Perfil', message: error.message, color: 'orangered'});
         }
     }, [produts]);
 
@@ -42,6 +45,7 @@ export default function Perfil({ route }) {
     
     return (
         <>
+            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
                 <Avatar source={preview} size={100} animate={false} />
                 <Text style={{ color: 'gray', marginHorizontal: 6 }}>António Teca</Text>
@@ -75,13 +79,11 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
     const { nav } = useServices();
     const { setVisibleToast } = useContext(CartContext);
 
-    
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
           produto: product,
         });
     }
-
     const removeFavorite = useCallback(async (product)=> {
         try {     
             await AsyncStorage.removeItem('p-' +  product.id);
