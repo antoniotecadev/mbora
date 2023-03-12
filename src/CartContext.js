@@ -108,18 +108,18 @@ export function CartProvider(props) {
             } else {
               messageError = rjd.data.message.id_produtos_mbora;
             }
-            setShowDialog({visible: true, title: rjd.message, message: messageError[0], color: 'red'});
+            setShowDialog({visible: true, title: rjd.message, message: messageError[0], color: 'orangered'});
             // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
             // Alert.alert(rjd.message, messageError[0]);
           } else {
-            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'red'});
+            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orangered'});
             // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
             // Alert.alert(rjd.message, rjd.data.message);
           }
       }
     } catch (error) {
       setLoading(false);
-      setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'red'});
+      setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'});
       // Alert.alert('Erro', error.message);
     }
   }
