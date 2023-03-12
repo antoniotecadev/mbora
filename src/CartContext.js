@@ -1,5 +1,4 @@
-import React, {createContext, useState, useEffect} from 'react';
-import { Alert } from 'react-native';
+import React, {createContext, useState} from 'react';
 import { getValueItemAsync } from './utils/utilitario';
 
 import { getProduct } from './services/ProductsService.js';
@@ -81,14 +80,14 @@ export function CartProvider(props) {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Token', error.message)),
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
         },
         body: JSON.stringify({
           client_phone: clientData.telephone,
           client_address: clientData.address,
           client_info_ad: clientData.information,
           imei_contacts: imei,
-          id_users_mbora: await getValueItemAsync('user_id').catch((error)=> Alert.alert('Identificador de usuário', error.message)),
+          id_users_mbora: await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'})),
           id_produtos_mbora: productId,
         }),
       }
