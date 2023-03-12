@@ -9,6 +9,7 @@ export const CartContext = createContext();
 export function CartProvider(props) {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
+  const [showDialog, setShowDialog] = useState({visible: false, title: null, message: null, color: null});
   const [visibleToast, setVisibleToast] = useState({visible: false, message: null, backgroundColor: null});
   
   function addItemToCart(produto, msg, bckClr) {
@@ -94,8 +95,9 @@ export function CartProvider(props) {
       );
         let rjd = await response.json();
         if(rjd.success) {
-          setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
-          Alert.alert('Sucesso', productName + ' ' + rjd.data.message);
+          setShowDialog({visible: true, title: 'Encomenda', message: productName + ' ' + rjd.data.message, color: 'green'});
+          // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
+          // Alert.alert('Sucesso', productName + ' ' + rjd.data.message);
         } else {
           if(rjd.message == 'Erro de validação') {
             let messageError;
@@ -106,22 +108,25 @@ export function CartProvider(props) {
             } else {
               messageError = rjd.data.message.id_produtos_mbora;
             }
-            setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
-            Alert.alert(rjd.message, messageError[0]);
+            setShowDialog({visible: true, title: rjd.message, message: messageError[0], color: 'red'});
+            // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
+            // Alert.alert(rjd.message, messageError[0]);
           } else {
-            setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
-            Alert.alert(rjd.message, rjd.data.message);
+            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'red'});
+            // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'red'});
+            // Alert.alert(rjd.message, rjd.data.message);
           }
       }
     } catch (error) {
       setLoading(false);
-      Alert.alert('Erro', error.message);
+      setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'red'});
+      // Alert.alert('Erro', error.message);
     }
   }
   
   return (
     <CartContext.Provider 
-      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast, error, setError, encomendar}}>
+      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast, error, setError, showDialog, setShowDialog, encomendar}}>
       {props.children}
     </CartContext.Provider>
   );

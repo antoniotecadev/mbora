@@ -14,6 +14,7 @@ import firebase from '../services/firebase';
 import { ref, onChildAdded, query, limitToFirst, limitToLast, orderByChild, orderByValue, get, child, startAfter, orderByKey, QueryConstraint  } from "firebase/database";
 import database from '../services/firebase';
 import { useStores } from '../stores';
+import { AlertDialog } from '../components/AlertDialog';
 
 const cardImage2 = require('../../assets/products/oleo.jpg');
 
@@ -29,7 +30,7 @@ export default function ProductsList({ navigation }) {
 
   const {ui} = useStores();
   const { nav } = useServices();
-  const { error, setError} = useContext(CartContext);
+  const { error, setError, showDialog, setShowDialog} = useContext(CartContext);
 
   const onRefresh = ()=> {
     setRefreshing(true);
@@ -175,6 +176,7 @@ export default function ProductsList({ navigation }) {
 
   return (
     <ViewUILIB flex bg-bgColor>
+      {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
       { error == null ? 
       <FlatList

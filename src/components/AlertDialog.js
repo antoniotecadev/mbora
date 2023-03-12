@@ -47,7 +47,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
           panDirection='up'
           containerStyle={styles.dialog}
           visible={showDialog}
-          onDismiss={()=> setShowDialog(false)}
+          onDismiss={()=> isEncomenda ? setShowDialog(false) : setShowDialog({visible: false})}
           renderPannableHeader={renderPannableHeader}
           pannableHeaderProps={{title: titulo}}
           supportedOrientations={['portrait', 'landscape']}>
@@ -101,7 +101,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             {isEncomenda ?
             <ButtonUILIB label={props.isSubmitting ? 'A encomendar...' : 'Encomendar'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} disabled={props.isSubmitting} onPress={props.handleSubmit}/>
             :
-            <ButtonUILIB label={'OK'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} onPress={()=> setShowDialog(false)}/>}
+            <ButtonUILIB label={'OK'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} onPress={()=> setShowDialog({visible: false})}/>}
           </ViewUILIB>
           </View>
           </ScrollView>
