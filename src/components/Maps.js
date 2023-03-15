@@ -88,7 +88,7 @@ const [drag, setDrag] = useState(false);
                     animateRegionAndMarker(e.nativeEvent.coordinate);
                 }}>
                     {drag ? <Text style={{color: 'green', fontSize: 10}}>Arrastando...</Text>:
-                    <Text style={{color: 'orange', fontSize: 10}}>Cliente Mbora</Text>}
+                    <Text style={{color: 'green', fontSize: 10, fontWeight: 'bold'}}>Cliente Mbora 🙋‍♂️</Text>}
                     <Text style={{color: 'orange', fontWeight: 'bold'}}>António Teca</Text>
                     <Image source={require('../../assets/icon-location-client-mbora.png')} style={{height: 50, width:50, resizeMode:"contain" }} />
                     <Callout tooltip={true} style={{
@@ -97,7 +97,8 @@ const [drag, setDrag] = useState(false);
                             padding: 5,
                             zIndex: 10
                         }}>
-                        <Text style={{color: 'white'}}>Pressione o marcador e arraste para a localização onde irá receber o produto.</Text>
+                        <Text style={{color: 'green', fontWeight: 'bold'}}>Dica:</Text>
+                        <Text style={{color: 'white'}}>Click ou arraste o marcador em uma região para marcar a localização onde irá receber o produto.</Text>
                     </Callout>
             </Marker>
         </MapView>
