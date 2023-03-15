@@ -1,9 +1,11 @@
+import { isNull } from 'lodash';
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import Maps from './Maps';
 
 const ModalMaps = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [coordinate, setCoordinate] = useState({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}})
   return (
     <View style={styles.centeredView}>
       <Modal
@@ -14,7 +16,7 @@ const ModalMaps = () => {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-        <Maps/>
+        <Maps setCoordinate={setCoordinate}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Pressable
@@ -28,8 +30,27 @@ const ModalMaps = () => {
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}>
-        <Text style={styles.textStyle}>Adicionar</Text>
+        <Text style={styles.textStyle}>{coordinate.latlng.latitude == 0 ? 'Adicionar Localização' : 'Alterar Localização'}</Text>
       </Pressable>
+      {coordinate.latlng.latitude != 0 && <><Pressable
+        style={[styles.button, {backgroundColor: 'green'}]}
+        onPress={() => {
+            let str = "", locationData = {};
+            locationData = {...coordinate['latlng'], ...coordinate['locationGeocode']};
+            Object.keys(locationData).forEach(k => {
+                if  (!isNull(locationData[k]))  {
+                    str += k + ": " + locationData[k] + "\n";
+                }
+            });
+            Alert.alert('Localização Adicionada', str);
+        }}>
+            <Text style={styles.textStyle}>Ver Localização</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.button, {backgroundColor: 'red'}]}
+        onPress={() => setCoordinate({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}})}>
+            <Text style={styles.textStyle}>Remover Localização</Text>
+      </Pressable></>}
     </View>
   );
 };

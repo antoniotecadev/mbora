@@ -5,7 +5,7 @@ import * as Location from 'expo-location';
 import { isEmpty } from 'lodash';
 import { RadioButton, RadioGroup } from 'react-native-ui-lib';
 
-export default function Maps() {
+export default function Maps(props) {
 
 let mapView = null;
 
@@ -28,6 +28,7 @@ const [drag, setDrag] = useState(false);
             let locationGeocode = await Location.reverseGeocodeAsync({latitude: location.coords.latitude, longitude: location.coords.longitude, altitude: location.coords.altitude, accuracy: location.coords.accuracy});
             setLocation(locationGeocode);
             setCoordinate({latitude: location.coords.latitude, longitude: location.coords.longitude});
+            props.setCoordinate({latlng: {latitude: location.coords.latitude, longitude: location.coords.longitude}, locationGeocode: locationGeocode[0]});
         } catch (error) {
             Alert.alert('Erro', error.message);
         }
@@ -42,14 +43,20 @@ const [drag, setDrag] = useState(false);
         text = JSON.stringify(location, null, 2);
     }
 
+    const getLocationGeocode = async (latlng)=> {
+        return await Location.reverseGeocodeAsync(latlng);
+    }
+
     const onRegionChange = (region) => {
         setRegion(region);
     }
 
-    const animateRegionAndMarker = (latlng)=> {
+    const animateRegionAndMarker = async (latlng)=> {
+        let lctGc = await getLocationGeocode(latlng);
         mapView.animateToRegion(regionContainingPoints([latlng]), 1000);
         setTimeout(() => {
             setCoordinate(latlng);
+            props.setCoordinate({latlng: latlng, locationGeocode: lctGc[0]});
         }, 1000);
     }
 
