@@ -60,7 +60,7 @@ const [drag, setDrag] = useState(false);
             provider='google' //Android & IOS: usar somente o mapa do Google
             mapType={mapType}
             region={regionContainingPoints([coordinate])} //Ltd, Lgd, LtdD, LgdD
-            onRegionChangeComplete={onRegionChange} // chamado uma vez quando a região é alterada, como quando o usuário termina de mover o mapa.
+            // onRegionChangeComplete={onRegionChange} // chamado uma vez quando a região é alterada, como quando o usuário termina de mover o mapa.
             zoomControlEnabled // Only: Android
             showsUserLocation // Mostrar a localização do usuário no mapa
             showsMyLocationButton // Button para mover o mapa até a localização do usuário
