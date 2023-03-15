@@ -52,8 +52,8 @@ const [drag, setDrag] = useState(false);
     }
 
     const animateRegionAndMarker = async (latlng)=> {
-        let lctGc = await getLocationGeocode(latlng);
         mapView.animateToRegion(regionContainingPoints([latlng]), 1000);
+        let lctGc = await getLocationGeocode(latlng);
         setTimeout(() => {
             setCoordinate(latlng);
             props.setCoordinate({latlng: latlng, locationGeocode: lctGc[0]});
