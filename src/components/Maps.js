@@ -96,10 +96,10 @@ const [drag, setDrag] = useState(false);
         </MapView>
         <View style={{position: "absolute", bottom: 50, backgroundColor: 'white'}}>
         <RadioGroup padding-10 initialValue='standard' onValueChange={value => setMapType(value)}>
-            <RadioButton marginB-10 color='orange' value='standard' label='Padrão' labelStyle={{color: 'orange'}}/>
-            <RadioButton marginB-10 color='green' value='sattelite' label='Satélite' labelStyle={{color: 'green'}}/>
-            <RadioButton marginB-10 color='blue' value='hybrid' label='Híbrido' labelStyle={{color: 'blue'}}/>
-            <RadioButton color='black' value='terrain' label='Terreno' labelStyle={{color: 'black'}}/>
+            <RadioButton size={20} marginB-10 color='orange' value='standard' label='Padrão' labelStyle={{color: 'orange'}}/>
+            <RadioButton size={20} marginB-10 color='green' value='sattelite' label='Satélite' labelStyle={{color: 'green'}}/>
+            <RadioButton size={20} marginB-10 color='blue' value='hybrid' label='Híbrido' labelStyle={{color: 'blue'}}/>
+            <RadioButton size={20} color='black' value='terrain' label='Terreno' labelStyle={{color: 'black'}}/>
         </RadioGroup>
             {/*<Text style={styles.text}>{text}</Text>
             <Text style={styles.text}>{JSON.stringify(coordinate, null, 3)}</Text>
