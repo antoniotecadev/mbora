@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MapView, { Marker, Callout } from 'react-native-maps';
+import MapView, { Marker, Callout, UrlTile } from 'react-native-maps';
 import { StyleSheet, View, Image, Alert, Text } from 'react-native';
 import * as Location from 'expo-location';
 import { isEmpty } from 'lodash';
@@ -76,6 +76,11 @@ const [drag, setDrag] = useState(false);
             loadingEnabled // Indicador de carregamento do mapa
             onPress={(e)=> animateRegionAndMarker(e.nativeEvent.coordinate)}
             >
+            <UrlTile
+                urlTemplate={"http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"}
+                maximumZ={19}
+                flipY={false}
+            />
             <Marker
                 key={1}
                 draggable
