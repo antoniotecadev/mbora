@@ -87,7 +87,7 @@ const [drag, setDrag] = useState(false);
                     setDrag(false);
                     animateRegionAndMarker(e.nativeEvent.coordinate);
                 }}>
-                    {drag ? <Text style={{color: 'green', fontSize: 10}}>Arrastando...</Text>:
+                    {drag ? <Text style={{color: 'green', fontSize: 10}}>Arrastando...🚶‍♂️</Text>:
                     <Text style={{color: 'green', fontSize: 10, fontWeight: 'bold'}}>Cliente Mbora 🙋‍♂️</Text>}
                     <Text style={{color: 'orange', fontWeight: 'bold'}}>António Teca</Text>
                     <Image source={require('../../assets/icon-location-client-mbora.png')} style={{height: 50, width:50, resizeMode:"contain" }} />
