@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {StyleSheet, TextInput, ScrollView} from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -14,7 +14,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
 
     const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0});
 
-    const renderPannableHeader = props => {
+    const renderPannableHeader = useCallback((props) => {
         const {title} = props;
         return (
           <ViewUILIB>
@@ -24,7 +24,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             <ViewUILIB height={2} bg-grey70/>
           </ViewUILIB>
         )
-    }
+    }, [titulo]);
 
     return (
     <Formik
