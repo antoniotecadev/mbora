@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TextInput, ScrollView} from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -11,6 +11,8 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
 
     let addressInput = null, informationInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
+
+    const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0});
 
     const renderPannableHeader = props => {
         const {title} = props;
@@ -26,7 +28,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
 
     return (
     <Formik
-      initialValues={{address: '', telephone: '', information: '' }}
+      initialValues={{address: '', telephone: '', information: ''}}
       validationSchema={Yup.object({
         address: Yup.string()
             .max(50,'No máximo 50 caracteres')
@@ -41,7 +43,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
       onSubmit={(values, formikActions) => {
         setTimeout(() => {
           // formikActions.setSubmitting(false);
-          onPress(values);
+          onPress({...values,...coordinate});
         }, 500);
       }}>
       {props => (
@@ -85,7 +87,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
               <ErroMessage touched={props.touched.address} errors={props.errors.address}/>
             </ViewUILIB>
             <TextUILIB textColor marginH-20>Localização no Mapa</TextUILIB>
-            <ModalMaps/>
+            <ModalMaps setCoordinate={setCoordinate}/>
             <TextUILIB textColor marginH-20>Informações adicionais</TextUILIB>
             <TextInput
               editable={!props.isSubmitting}

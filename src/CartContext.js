@@ -87,6 +87,7 @@ export function CartProvider(props) {
           client_address: clientData.address,
           client_info_ad: clientData.information,
           imei_contacts: imei,
+          client_coordinate: clientData.coorLoc,
           id_users_mbora: await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'})),
           id_produtos_mbora: productId,
         }),

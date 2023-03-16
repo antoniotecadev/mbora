@@ -1,11 +1,16 @@
 import { isNull } from 'lodash';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import Maps from './Maps';
 
-const ModalMaps = () => {
+const ModalMaps = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [coordinate, setCoordinate] = useState({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}})
+
+  useEffect(() => {
+    props.setCoordinate({coorLoc: coordinate});
+  }, [coordinate])
+  
   return (
     <View style={styles.centeredView}>
       <Modal
