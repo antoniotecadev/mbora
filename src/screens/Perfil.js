@@ -1,22 +1,49 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useCallback, useContext } from 'react';
+import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar, TabController, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
+import Encomenda from '../components/Encomenda';
 import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
 import { useStores } from '../stores';
+import { getValueItemAsync } from '../utils/utilitario';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
 
 export default function Perfil({ route }) {
 
+    const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
     const { showDialog, setShowDialog } = useContext(CartContext);
+
+    const fetchEncomendas = useCallback(async () => {
+        try {
+            const id_users_mbora = await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'}));
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/' + id_users_mbora,
+            {
+                    headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                }
+            });
+            let rjd = await response.json();
+            if  (!rjd.success && rjd.message == 'Autenticação') {
+                setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orangered'});
+            } else {
+                alert(JSON.stringify(rjd, null, 2))
+                setEncomendas(rjd);
+            }
+        } catch (error) {
+            setRefreshing(false);
+            setShowDialog({visible: true, title: 'Erro Encomendas', message: error.message, color: 'orangered'});
+        }
+    }, []);
 
     const getProducts = useCallback(async ()=> {
         let keys = [];
@@ -35,12 +62,45 @@ export default function Perfil({ route }) {
         }
     }, [produts]);
 
-    const onRefresh = async ()=> {
+    const onRefresh = async (index)=> {
         setRefreshing(true);
-        setProduts([]);
-        getProducts().then(()=> setRefreshing(false));
+        switch (index) {
+            case 0:
+                fetchEncomendas().then(()=> setRefreshing(false));
+                break;
+            case 1:
+                setProduts([]);
+                getProducts().then(()=> setRefreshing(false));
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
     }
 
+    const onChangeIndex = (index)=> {
+        switch (index) {
+            case 0:
+                setProduts([]);
+                fetchEncomendas();
+                break;
+            case 1:
+                getProducts();
+                break;
+            case 2:
+                setProduts([]);
+                break;
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        setRefreshing(true);
+        fetchEncomendas().then(()=> setRefreshing(false));
+    }, [])
+    
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
@@ -53,7 +113,7 @@ export default function Perfil({ route }) {
                 <TouchableOpacity style={styles.buttonEditProfile}>
                     <Text style={{color: 'white', textAlign: 'center'}} >Editar perfil</Text>
                 </TouchableOpacity>
-                <TabController onChangeIndex={(index)=> index == 1 ? getProducts() : setProduts([])} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
+                <TabController initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar 
                     enableShadows 
                     indicatorStyle={{backgroundColor: 'orange', height: 3}} 
@@ -61,7 +121,7 @@ export default function Perfil({ route }) {
                     selectedLabelColor={'orange'}/>
                 <ViewUILIB flex>
                     <TabController.TabPage index={0}>
-                        <Text>Chilala</Text>
+                        <Encomenda encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
                         <Favoritos produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
@@ -87,7 +147,7 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
     const removeFavorite = useCallback(async (product)=> {
         try {     
             await AsyncStorage.removeItem('p-' +  product.id);
-            onRefresh();
+            onRefresh(1);
             setVisibleToast({visible: true, message: product.nome + ' removido dos favoritos.', backgroundColor: 'red'});
         } catch (error) {
             setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
@@ -114,7 +174,7 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
                 data={produts}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
          </>
         )
 }

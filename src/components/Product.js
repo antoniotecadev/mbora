@@ -11,7 +11,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ appearanceName, isFavorite = false, removeFavorite, produto, onPress } ) {
+export function Product({ appearanceName, isEncomenda = false, isFavorite = false, removeFavorite, produto, onPress } ) {
   
   const [showDialog, setShowDialog] = useState(false);
   const { addItemToCart, encomendar } = useContext(CartContext);
@@ -77,7 +77,7 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
       >
         <View maxWidth={180}>
           <View center>
-            <TouchableOpacity 
+            {isEncomenda ? null : <><TouchableOpacity 
               style={[styles.button, { backgroundColor: 'orange' }]} 
               onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}>
               <Text style={styles.textButton}>Adicionar ao Carrinho</Text>
@@ -88,7 +88,7 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
               style={[styles.button, { backgroundColor: 'green' }]} 
               onPress={()=> setShowDialog(true)}>
               <Text style={styles.textButton}>Encomendar Agora</Text>
-            </TouchableOpacity>}
+            </TouchableOpacity>}</>}
 
             {isFavorite && 
             <TouchableOpacity 
@@ -96,7 +96,11 @@ export function Product({ appearanceName, isFavorite = false, removeFavorite, pr
               onPress={removeFavorite}>
               <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
-
+            {isEncomenda && 
+            <View style={styles.section}>
+              <TextUILIB textColor style={{fontSize: 10 }}>Data:</TextUILIB>
+              <TextUILIB textColor style={{color: Colors.grey40, fontSize: 10 }}>{' '}{produto.created_at}</TextUILIB>
+            </View>}
             <View style={styles.section}>
               <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
