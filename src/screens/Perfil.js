@@ -36,7 +36,6 @@ export default function Perfil({ route }) {
             if  (!rjd.success && rjd.message == 'Autenticação') {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orangered'});
             } else {
-                alert(JSON.stringify(rjd, null, 2))
                 setEncomendas(rjd);
             }
         } catch (error) {
