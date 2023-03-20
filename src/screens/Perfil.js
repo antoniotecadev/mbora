@@ -22,6 +22,7 @@ export default function Perfil({ route }) {
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
 
+    const {ui} = useStores();
     const { showDialog, setShowDialog } = useContext(CartContext);
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
@@ -136,10 +137,10 @@ export default function Perfil({ route }) {
                     selectedLabelColor={'orange'}/>
                 <ViewUILIB flex>
                     <TabController.TabPage index={0}>
-                        <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
+                        <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
+                        <Favoritos appearanceName={ui.appearanceName} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </ViewUILIB>
@@ -148,9 +149,8 @@ export default function Perfil({ route }) {
     );
 }
 
-const Favoritos = ({produts, onRefresh, refreshing})=> {
+const Favoritos = ({ appearanceName, produts, onRefresh, refreshing })=> {
 
-    const {ui} = useStores();
     const { nav } = useServices();
     const { setVisibleToast } = useContext(CartContext);
 
@@ -172,7 +172,7 @@ const Favoritos = ({produts, onRefresh, refreshing})=> {
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product appearanceName={ui.appearanceName} isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+        return <Product appearanceName={appearanceName} isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(

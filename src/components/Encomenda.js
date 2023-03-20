@@ -2,18 +2,15 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, FlatList, Text, RefreshControl, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Product } from './Product';
 import ToastMessage from './ToastMessage';
-import { useStores } from '../stores';
 
-export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
-
-    const {ui} = useStores();
+export default function Encomenda({ appearanceName, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
 
     const [loading, setLoading] = useState(false);
 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product appearanceName={ui.appearanceName} produto={product} isEncomenda={true} key={product.id} />
+        return <Product appearanceName={appearanceName} produto={product} isEncomenda={true} key={product.id} />
     }, []);
 
     return(
