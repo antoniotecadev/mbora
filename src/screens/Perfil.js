@@ -10,7 +10,7 @@ import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
 import { useStores } from '../stores';
-import { getValueItemAsync } from '../utils/utilitario';
+import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
 
@@ -130,8 +130,9 @@ export default function Perfil({ route }) {
                 <TouchableOpacity style={styles.buttonEditProfile}>
                     <Text style={{color: 'white', textAlign: 'center'}} >Editar perfil</Text>
                 </TouchableOpacity>
-                <TabController initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
+            <TabController initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar 
+                    backgroundColor={getAppearenceColor(ui.appearanceName)}
                     enableShadows 
                     indicatorStyle={{backgroundColor: 'orange', height: 3}} 
                     labelColor={'green'}
