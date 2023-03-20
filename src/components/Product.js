@@ -72,7 +72,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(produto.nome, produto.preco)}
+        sectionHeader={HeaderElement(produto.nome, produto.preco, isEncomenda, produto.created_at)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -96,11 +96,6 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
               onPress={removeFavorite}>
               <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
-            {isEncomenda && 
-            <View style={styles.section}>
-              <TextUILIB textColor style={{fontSize: 10 }}>Data:</TextUILIB>
-              <TextUILIB textColor style={{color: Colors.grey40, fontSize: 10 }}>{' '}{produto.created_at}</TextUILIB>
-            </View>}
             <View style={styles.section}>
               <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
@@ -121,7 +116,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
   );
 }
 
-const HeaderElement = (nome, preco) => {
+const HeaderElement = (nome, preco, isEncomenda, data_cria) => {
   return (
     <View spread row maxWidth={180}>
       <TextUILIB textColor>
@@ -130,6 +125,7 @@ const HeaderElement = (nome, preco) => {
       <Text style={{ color: Colors.green10, marginBottom: 4 }}>
         {currency(String(preco))}
       </Text>
+      {isEncomenda && <TextUILIB textColor style={{color: Colors.grey30, marginBottom: 4}}>{data_cria}</TextUILIB>}
     </View>
   );
 } 
@@ -170,7 +166,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginTop:8
+    marginVertical:8
   },
   icon: {
     alignSelf: 'center'
