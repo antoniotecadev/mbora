@@ -125,7 +125,7 @@ const HeaderElement = (nome, preco, isEncomenda, data_cria) => {
       <Text style={{ color: Colors.green10, marginBottom: 4 }}>
         {currency(String(preco))}
       </Text>
-      {isEncomenda && <TextUILIB textColor style={{color: Colors.grey30, marginBottom: 4}}>{data_cria}</TextUILIB>}
+      {isEncomenda && <TextUILIB textColor style={{color: 'orange', marginBottom: 4, fontSize: 12}}>{data_cria}</TextUILIB>}
     </View>
   );
 } 
