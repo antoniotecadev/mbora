@@ -100,7 +100,7 @@ export default function Perfil({ route }) {
         switch (index) {
             case 0:
                 setProduts([]);
-                fetchEncomendas();
+                fetchEncomendas(false);
                 break;
             case 1:
                 getProducts();
