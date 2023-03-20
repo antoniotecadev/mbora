@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar, TabController, View as ViewUILIB } from 'react-native-ui-lib';
@@ -18,13 +19,15 @@ export default function Perfil({ route }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
+    const [lastVisible, setLastVisible] = useState(0);
+    const [empty, setEmpty] = useState(false);
 
     const { showDialog, setShowDialog } = useContext(CartContext);
 
-    const fetchEncomendas = useCallback(async () => {
+    const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
             const id_users_mbora = await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'}));
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/' + id_users_mbora,
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/' + id_users_mbora + '/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -35,14 +38,27 @@ export default function Perfil({ route }) {
             let rjd = await response.json();
             if  (!rjd.success && rjd.message == 'Autenticação') {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orangered'});
+            } else  if (!isEmpty(rjd)) {
+                setEmpty(false);
+                if (isMoreView) {
+                    pagination(rjd);
+                    setEncomendas((prevState) => [...prevState, ...rjd]);
+                } else {
+                    pagination(rjd);
+                    setEncomendas(rjd);
+                }
             } else {
-                setEncomendas(rjd);
+                setEmpty(true);
             }
         } catch (error) {
             setRefreshing(false);
             setShowDialog({visible: true, title: 'Erro Encomendas', message: error.message, color: 'orangered'});
         }
-    }, []);
+    }, [lastVisible]);
+
+    function pagination(rjd) {
+        setLastVisible(Math.max(... rjd.map(e => e.id)));
+    }
 
     const getProducts = useCallback(async ()=> {
         let keys = [];
@@ -65,7 +81,7 @@ export default function Perfil({ route }) {
         setRefreshing(true);
         switch (index) {
             case 0:
-                fetchEncomendas().then(()=> setRefreshing(false));
+                fetchEncomendas(false).then(()=> setRefreshing(false));
                 break;
             case 1:
                 setProduts([]);
@@ -97,7 +113,7 @@ export default function Perfil({ route }) {
 
     useEffect(() => {
         setRefreshing(true);
-        fetchEncomendas().then(()=> setRefreshing(false));
+        fetchEncomendas(false).then(()=> setRefreshing(false));
     }, [])
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
@@ -120,7 +136,7 @@ export default function Perfil({ route }) {
                     selectedLabelColor={'orange'}/>
                 <ViewUILIB flex>
                     <TabController.TabPage index={0}>
-                        <Encomenda encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing}/>
+                        <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
                         <Favoritos produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
