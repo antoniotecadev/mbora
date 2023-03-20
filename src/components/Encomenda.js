@@ -24,7 +24,7 @@ export default function Encomenda({ appearanceName, fetchEncomendas, encomendas,
                 contentContainerStyle={styles.productsListContainer}
                 keyExtractor={keyExtractor}
                 renderItem={renderItemProduct}
-                ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchEncomendas={fetchEncomendas}/>}
+                ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchEncomendas={fetchEncomendas}/>}
                 data={encomendas}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem encomendas</Text>}
