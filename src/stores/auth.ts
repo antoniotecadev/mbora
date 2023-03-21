@@ -3,9 +3,19 @@ import {hydrateStore, makePersistable} from 'mobx-persist-store';
 
 export class UserAuth implements IStore {
   auth = false;
+  userName = null;
+  userEmail = null;
 
   setAuth = (v: boolean): void => {
     this.auth = v;
+  };
+
+  setUserName = (v: string): void => {
+    this.userName = v;
+  };
+
+  setUserEmail = (v: string): void => {
+    this.userEmail = v;
   };
 
   constructor() {
@@ -13,7 +23,7 @@ export class UserAuth implements IStore {
 
     makePersistable(this, {
       name: UserAuth.name,
-      properties: ['auth'],
+      properties: ['auth', 'userName', 'userEmail'],
     });
   }
 

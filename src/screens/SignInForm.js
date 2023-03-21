@@ -40,7 +40,11 @@ export default SignInForm = ()=> {
             let rjd = await response.json();
             if(rjd.success) {
                 saveTokenId('token', rjd.data.token, rjd.data.user_id)
-                .then(()=> user.setAuth(true))
+                .then(()=>{
+                    user.setUserName(rjd.data.name);
+                    user.setUserEmail(rjd.data.email);
+                    user.setAuth(true);
+                  })
                 .catch((error)=> setShowDialog({visible: true, title: 'Erro ao salvar token', message: error.message, color: 'orangered'}));
             } else {
                 if(rjd.message == 'Erro de validação') {

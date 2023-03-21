@@ -129,7 +129,7 @@ export default function Perfil({ route }) {
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
                 <Avatar source={preview} size={100} animate={false} />
-                <Text style={{ color: 'gray', marginHorizontal: 6 }}>António Teca</Text>
+                <Text style={{ color: 'gray', marginHorizontal: 6 }}>{user.userName}</Text>
             </View>
                 <TouchableOpacity style={styles.buttonEditProfile}>
                     <Text style={{color: 'white', textAlign: 'center'}} >Editar perfil</Text>
