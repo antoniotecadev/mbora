@@ -1,8 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
-import { Avatar, TabController, View as ViewUILIB } from 'react-native-ui-lib';
+import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { Avatar, TabController } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -131,14 +131,14 @@ export default function Perfil({ route }) {
                 <TouchableOpacity style={styles.buttonEditProfile}>
                     <Text style={{color: 'white', textAlign: 'center'}} >Editar perfil</Text>
                 </TouchableOpacity>
-            <TabController initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
-                <TabController.TabBar 
+            <TabController asCarousel={true} initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
+                <TabController.TabBar
                     backgroundColor={getAppearenceColor(ui.appearanceName)}
                     enableShadows 
                     indicatorStyle={{backgroundColor: 'orange', height: 3}} 
                     labelColor={'green'}
                     selectedLabelColor={'orange'}/>
-                <ViewUILIB flex>
+                <TabController.PageCarousel>
                     <TabController.TabPage index={0}>
                         <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
                     </TabController.TabPage>
@@ -146,7 +146,7 @@ export default function Perfil({ route }) {
                         <Favoritos appearanceName={ui.appearanceName} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
-                </ViewUILIB>
+                </TabController.PageCarousel>
             </TabController>
         </>
     );
