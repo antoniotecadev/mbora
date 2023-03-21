@@ -133,8 +133,7 @@ export default function Perfil({ route }) {
                 </TouchableOpacity>
             <TabController asCarousel={true} initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar
-                    backgroundColor={getAppearenceColor(ui.appearanceName)}
-                    enableShadows 
+                    backgroundColor={getAppearenceColor(ui.appearanceName)} 
                     indicatorStyle={{backgroundColor: 'orange', height: 3}} 
                     labelColor={'green'}
                     selectedLabelColor={'orange'}/>
