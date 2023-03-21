@@ -150,6 +150,9 @@ export const Settings: React.FC = observer(() => {
         if (rjd.success) {
           await deleteItemAsync('token');
           user.setAuth(false);
+        } else if (rjd.message == 'Autenticação') {
+          await deleteItemAsync('token');
+          user.setAuth(false);
         } else {
           Alert.alert(rjd.message, rjd.data.message);
         }
