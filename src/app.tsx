@@ -19,7 +19,7 @@ export const AppNavigator = observer(({user}): JSX.Element => {
   return (
     <>
       <StatusBar barStyle={getThemeStatusBarStyle()} backgroundColor={getThemeStatusBarBGColor()} />
-      <CartProvider>
+      <CartProvider user={user}>
         <NavigationContainer
           ref={nav.n}
           onReady={nav.onReady}

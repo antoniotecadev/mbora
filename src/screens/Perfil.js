@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
 import { Avatar, TabController } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
@@ -22,7 +23,7 @@ export default function Perfil({ route }) {
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
 
-    const {ui} = useStores();
+    const {ui, user} = useStores();
     const { showDialog, setShowDialog } = useContext(CartContext);
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
@@ -38,7 +39,9 @@ export default function Perfil({ route }) {
             });
             let rjd = await response.json();
             if  (!rjd.success && rjd.message == 'Autenticação') {
-                setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orangered'});
+                setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
+                await deleteItemAsync('token');
+                user.setAuth(false);
             } else  if (!isEmpty(rjd)) {
                 setEmpty(false);
                 if (isMoreView) {

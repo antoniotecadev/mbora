@@ -147,7 +147,7 @@ export const Settings: React.FC = observer(() => {
         },
       });
         let rjd = await response.json();
-        if(rjd.success) {
+        if (rjd.success) {
           await deleteItemAsync('token');
           user.setAuth(false);
         } else {
