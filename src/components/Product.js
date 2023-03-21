@@ -72,7 +72,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(produto.nome, produto.preco, isEncomenda, produto.created_at)}
+        sectionHeader={HeaderElement(produto.nome, produto.preco, isEncomenda, produto.estado, produto.created_at)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -116,7 +116,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
   );
 }
 
-const HeaderElement = (nome, preco, isEncomenda, data_cria) => {
+const HeaderElement = (nome, preco, isEncomenda, estado, data_cria) => {
   return (
     <View spread row maxWidth={180}>
       <TextUILIB textColor>
@@ -125,7 +125,17 @@ const HeaderElement = (nome, preco, isEncomenda, data_cria) => {
       <Text style={{ color: Colors.green10, marginBottom: 4 }}>
         {currency(String(preco))}
       </Text>
-      {isEncomenda && <TextUILIB textColor style={{color: 'orange', marginBottom: 4, fontSize: 12}}>{data_cria}</TextUILIB>}
+      {isEncomenda && 
+      <>
+        <View style={styles.section}>
+          <TextUILIB textColor>Estado:</TextUILIB>
+          {estado == true ? 
+          <TextUILIB color='green'> visualizado</TextUILIB> 
+          :
+          <TextUILIB color='orangered'> não visualizado</TextUILIB>}
+        </View>
+        <TextUILIB color='orange' marginB-4 f style={{ fontSize: 12 }}>{data_cria}</TextUILIB>
+      </>}
     </View>
   );
 } 
