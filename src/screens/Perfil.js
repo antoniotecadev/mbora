@@ -63,16 +63,20 @@ export default function Perfil({ route }) {
     }
 
     const getProducts = useCallback(async ()=> {
-        let keys = [];
+        let keys = [], produtcs = [];
         try {
             keys = await AsyncStorage.getAllKeys();
             keys.map(async (key)=> {
                 let jsonValue = await AsyncStorage.getItem(key);
                 let value =  jsonValue != null ? JSON.parse(jsonValue) : null;
                 if(value.id != null) {
-                    setProduts((prevState) => [...prevState, ...[value]]);
+                    produtcs.push(value);
                 }
             });
+            setTimeout(() => {
+                setRefreshing(false);
+                setProduts(produtcs);
+            }, keys.length * 1000);
         } catch (error) {
             setRefreshing(false);
             setShowDialog({visible: true, title: 'Erro Perfil', message: error.message, color: 'orangered'});
@@ -86,8 +90,7 @@ export default function Perfil({ route }) {
                 fetchEncomendas(false).then(()=> setRefreshing(false));
                 break;
             case 1:
-                setProduts([]);
-                getProducts().then(()=> setRefreshing(false));
+                getProducts();
                 break;
             case 2:
                 break;
@@ -99,13 +102,10 @@ export default function Perfil({ route }) {
     const onChangeIndex = (index)=> {
         switch (index) {
             case 0:
-                setProduts([]);
                 break;
             case 1:
-                getProducts();
                 break;
             case 2:
-                setProduts([]);
                 break;
             default:
                 break;
@@ -115,6 +115,7 @@ export default function Perfil({ route }) {
     useEffect(() => {
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
+        getProducts();
     }, [])
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
