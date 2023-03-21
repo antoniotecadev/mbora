@@ -10,9 +10,6 @@ import { CartContext } from '../CartContext';
 
 const ITEM_HEIGHT = 150;
 
-import firebase from '../services/firebase';
-import { ref, onChildAdded, query, limitToFirst, limitToLast, orderByChild, orderByValue, get, child, startAfter, orderByKey, QueryConstraint  } from "firebase/database";
-import database from '../services/firebase';
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 
@@ -127,47 +124,6 @@ export default function ProductsList({ navigation }) {
       setError(error.message);
     }
   }, []);
-
-  const getData = () => {
-    // let imei = [];
-    // setLoading(true);
-    // const pds = query(ref(firebase, 'produtos'), limitToLast(2));
-    //   onChildAdded(pds, (snapshot) => {
-    //     get(query(child(ref(firebase), `produtos/${snapshot.key}`), limitToLast(2))).then((snap) => {
-    //       snap.forEach((childSnapshot) => {
-    //         setProdutos((p) => [...p, childSnapshot.val()]);
-    //       });
-    //     });
-      // imei.push(snapshot.key)
-
-      // snapshot.forEach((childSnapshot) => {
-      //   const c = childSnapshot.child('categoria').key;
-      //   const childKey = childSnapshot.key;
-      //   const childData = childSnapshot.val();
-      //   // setProdutos((p) => [...p, childData]);
-      //   // console.log(c)
-      //   // setLoading(false);
-      // });
-    // }); 
-    // setLastVisible(imei[imei.length - 1])
-  }
-
-  const getMoreData = () => {
-    // let imei = [];
-    // setRefreshing(true);
-    // const pds = query(ref(firebase, 'produtos'), limitToLast(limit));
-    //   onChildAdded(pds, (snapshot) => {
-    //   imei.push(snapshot.key)
-    //   snapshot.forEach((childSnapshot) => {
-    //     const childKey = childSnapshot.key;
-    //     const childData = childSnapshot.val();
-    //     setProdutos((p) => [...p, childData]);
-    //     // console.log(childData)
-    //     setRefreshing(false);
-    //   });
-    // }); 
-    // setLastVisible(imei[imei.length - 1])
-  }
 
   useEffect(() => {
     fetchCategorys();
