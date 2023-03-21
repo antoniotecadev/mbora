@@ -134,6 +134,11 @@ export const Settings: React.FC = observer(() => {
     [],
   );
 
+  async function toLoginScreen() {
+    await deleteItemAsync('token');
+    user.setAuth(false);
+  }
+
   const logout = async ()=> {
     setLoading(true);
     try {
@@ -148,11 +153,9 @@ export const Settings: React.FC = observer(() => {
       });
         let rjd = await response.json();
         if (rjd.success) {
-          await deleteItemAsync('token');
-          user.setAuth(false);
+          toLoginScreen();
         } else if (rjd.message == 'Autenticação') {
-          await deleteItemAsync('token');
-          user.setAuth(false);
+          toLoginScreen();
         } else {
           Alert.alert(rjd.message, rjd.data.message);
         }
