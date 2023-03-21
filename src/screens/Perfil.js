@@ -66,6 +66,7 @@ export default function Perfil({ route }) {
         let keys = [], produtcs = [];
         try {
             keys = await AsyncStorage.getAllKeys();
+            keys.reverse();
             keys.map(async (key)=> {
                 let jsonValue = await AsyncStorage.getItem(key);
                 let value =  jsonValue != null ? JSON.parse(jsonValue) : null;
