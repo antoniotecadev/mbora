@@ -22,7 +22,7 @@ export default function Perfil({ route }) {
     const [refreshing, setRefreshing] = useState(false);
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
-    const [count, setCount] = useState({ encomenda: 0, favorito: 0, aseguir: 0 });
+    const [countEncomenda, setCountEncomenda] = useState(0);
     const [countFavorito, setCountFavorito] = useState(0);
 
     const {ui, user} = useStores();
@@ -79,7 +79,7 @@ export default function Perfil({ route }) {
                 }
             });
             let rjd = await response.json();
-            setCount({ encomenda: rjd });
+            setCountEncomenda(rjd);
         } catch (error) {
             setShowDialog({visible: true, title: 'Erro Contar Encomendas', message: error.message, color: 'orangered'});
         }
@@ -154,7 +154,7 @@ export default function Perfil({ route }) {
                 <Avatar source={preview} size={85} animate={false} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
-                    <Numeros text='Encomendas' numero={count.encomenda}/>
+                    <Numeros text='Encomendas' numero={countEncomenda}/>
                     <Numeros text='Favoritos' numero={countFavorito}/>
                     <Numeros text='A seguir' numero={32}/>
                 </View>
