@@ -23,6 +23,7 @@ export default function Perfil({ route }) {
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
     const [count, setCount] = useState({ encomenda: 0, favorito: 0, aseguir: 0 });
+    const [countFavorito, setCountFavorito] = useState(0);
 
     const {ui, user} = useStores();
     const { showDialog, setShowDialog } = useContext(CartContext);
@@ -99,6 +100,7 @@ export default function Perfil({ route }) {
             setTimeout(() => {
                 setRefreshing(false);
                 setProduts(produtcs);
+                setCountFavorito(produtcs.length);
             }, keys.length * 1000);
         } catch (error) {
             setRefreshing(false);
@@ -153,7 +155,7 @@ export default function Perfil({ route }) {
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
                     <Numeros text='Encomendas' numero={count.encomenda}/>
-                    <Numeros text='Favoritos' numero={32}/>
+                    <Numeros text='Favoritos' numero={countFavorito}/>
                     <Numeros text='A seguir' numero={32}/>
                 </View>
                 <TouchableOpacity style={styles.buttonEditProfile}>
