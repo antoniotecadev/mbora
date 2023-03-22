@@ -22,6 +22,7 @@ export default function Perfil({ route }) {
     const [refreshing, setRefreshing] = useState(false);
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
+    const [count, setCount] = useState({ encomenda: 0, favorito: 0, aseguir: 0 });
 
     const {ui, user} = useStores();
     const { showDialog, setShowDialog } = useContext(CartContext);
@@ -65,6 +66,24 @@ export default function Perfil({ route }) {
         setLastVisible(Math.min(... rjd.map(e => e.id)));
     }
 
+    const getCountEncomenda = useCallback(async()=> {
+        try {
+            const id_users_mbora = await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'}));
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/count/' + id_users_mbora,
+            {
+                    headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                }
+            });
+            let rjd = await response.json();
+            setCount({ encomenda: rjd });
+        } catch (error) {
+            setShowDialog({visible: true, title: 'Erro Contar Encomendas', message: error.message, color: 'orangered'});
+        }
+    }, []);
+
     const getProducts = useCallback(async ()=> {
         let keys = [], produtcs = [];
         try {
@@ -92,6 +111,7 @@ export default function Perfil({ route }) {
         switch (index) {
             case 0:
                 fetchEncomendas(false).then(()=> setRefreshing(false));
+                getCountEncomenda();
                 break;
             case 1:
                 getProducts();
@@ -120,6 +140,7 @@ export default function Perfil({ route }) {
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         getProducts();
+        getCountEncomenda();
     }, [])
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
@@ -131,7 +152,7 @@ export default function Perfil({ route }) {
                 <Avatar source={preview} size={85} animate={false} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
-                    <Numeros text='Encomendas' numero={32}/>
+                    <Numeros text='Encomendas' numero={count.encomenda}/>
                     <Numeros text='Favoritos' numero={32}/>
                     <Numeros text='A seguir' numero={32}/>
                 </View>
