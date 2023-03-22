@@ -3,7 +3,7 @@ import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
-import { Avatar, TabController } from 'react-native-ui-lib';
+import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -125,15 +125,20 @@ export default function Perfil({ route }) {
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
-        <>
+        <ViewUILIB bg-bgColor>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
-                <Avatar source={preview} size={100} animate={false} />
-                <Text style={{ color: 'gray', marginHorizontal: 6 }}>{user.userName}</Text>
-            </View>
+                <Avatar source={preview} size={85} animate={false} />
+                <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
+                <View style={styles.section}>
+                    <Numeros text='Encomendas' numero={32}/>
+                    <Numeros text='Favoritos' numero={32}/>
+                    <Numeros text='A seguir' numero={32}/>
+                </View>
                 <TouchableOpacity style={styles.buttonEditProfile}>
-                    <Text style={{color: 'white', textAlign: 'center'}} >Editar perfil</Text>
+                    <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Editar perfil</Text>
                 </TouchableOpacity>
+            </View>
             <TabController asCarousel={true} initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar
                     backgroundColor={getAppearenceColor(ui.appearanceName)} 
@@ -150,8 +155,15 @@ export default function Perfil({ route }) {
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
             </TabController>
-        </>
+        </ViewUILIB>
     );
+}
+
+const Numeros = ({text, numero}) => {
+    return <TouchableOpacity style={{ alignItems: 'center', margin: 8 }}>
+                <TextUILIB textColor style={{ fontSize: 12, fontWeight: 'bold' }}>{numero}</TextUILIB>
+                <TextUILIB textColor color='gray' style={{ fontSize: 12 }}>{text}</TextUILIB>
+            </TouchableOpacity>
 }
 
 const Favoritos = ({ appearanceName, produts, onRefresh, refreshing })=> {
@@ -201,8 +213,7 @@ const Favoritos = ({ appearanceName, produts, onRefresh, refreshing })=> {
 
 const styles = StyleSheet.create({
     infoContainer: {
-        padding: 14,
-        flexDirection: 'row',
+        padding: 8,
         alignItems: 'center',
     },
     productsListContainer: {
@@ -215,10 +226,14 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     buttonEditProfile: {
-        marginHorizontal: 14, 
-        marginBottom: 8, 
+        width: '30%',
+        paddingVertical: 10,
+        marginVertical: 8, 
         borderRadius: 5, 
-        backgroundColor: 'green', 
-        paddingVertical: 5
+        backgroundColor: 'green',
+    },
+    section: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     }
 });
