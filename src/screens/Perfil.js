@@ -147,7 +147,7 @@ export default function Perfil({ route }) {
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
-        <ViewUILIB bg-bgColor>
+        <>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
                 <Avatar source={preview} size={85} animate={false} />
@@ -177,7 +177,7 @@ export default function Perfil({ route }) {
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
             </TabController>
-        </ViewUILIB>
+        </>
     );
 }
 
