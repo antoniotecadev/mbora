@@ -25,6 +25,7 @@ export default function Perfil({ route }) {
     const [countEncomenda, setCountEncomenda] = useState(0);
     const [countFavorito, setCountFavorito] = useState(0);
 
+    const { nav } = useServices();
     const {ui, user} = useStores();
     const { showDialog, setShowDialog } = useContext(CartContext);
 
@@ -158,7 +159,7 @@ export default function Perfil({ route }) {
                     <Numeros text='Favoritos' numero={countFavorito}/>
                     <Numeros text='A seguir' numero={32}/>
                 </View>
-                <TouchableOpacity style={styles.buttonEditProfile}>
+                <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> nav.show('ProfileEdit')}>
                     <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Editar perfil</Text>
                 </TouchableOpacity>
             </View>
@@ -173,7 +174,7 @@ export default function Perfil({ route }) {
                         <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos appearanceName={ui.appearanceName} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
+                        <Favoritos nav={nav} appearanceName={ui.appearanceName} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
@@ -189,9 +190,8 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const Favoritos = ({ appearanceName, produts, onRefresh, refreshing })=> {
+const Favoritos = ({ nav, appearanceName, produts, onRefresh, refreshing })=> {
 
-    const { nav } = useServices();
     const { setVisibleToast } = useContext(CartContext);
 
     const showProductDetails = (product)=> {

@@ -13,11 +13,12 @@ import { genRootNavigator, genStackNavigator, genTabNavigator } from '../service
 import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
+import ProfileEdit from './ProfileEdit';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Cantinas';
 export type Modal = 'ExampleModal';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Example' | 'Profile'|'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Example' | 'Profile'| 'ProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -73,6 +74,15 @@ const screens: ScreenLayouts = {
     options: () => ({
       title: 'Perfil',
       ...screenDefaultOptions(),
+    }),
+  },
+  ProfileEdit: {
+    name: 'ProfileEdit',
+    component: ProfileEdit,
+    options: () => ({
+      title: 'Editar Perfil',
+      headerTintColor: 'orange',
+      headerShown: true
     }),
   },
   Settings: {
@@ -132,7 +142,7 @@ const SettingsStack = () => genStackNavigator([screens.Settings]);
 const ExampleModalStack = () => genStackNavigator([screens.Settings, screens.Example]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CantinasStack = () => genStackNavigator([screens.ListaCantinas, screens.PerfilCantina]);
-const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails]);
+const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit]);
 
 // Tabs
 const tabs: TabScreenLayouts = {
