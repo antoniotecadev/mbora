@@ -20,7 +20,7 @@ import { AlertDialog } from '../components/AlertDialog';
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function ProductDetails({route}) {
+export function ProductDetails({route, navigation}) {
   const [view, setView] = useState(0);
   const [value, setValue] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -76,6 +76,17 @@ export function ProductDetails({route}) {
       setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'});     
     }
   },[]);
+
+  useEffect(useCallback(()=> {
+    navigation.getParent()?.setOptions({
+        tabBarStyle: {
+            display: "none"
+        }
+    });
+    return () => navigation.getParent()?.setOptions({
+        tabBarStyle: 'flex'
+    });
+  }, []), [navigation]);
   
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
