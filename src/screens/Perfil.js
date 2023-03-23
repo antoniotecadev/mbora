@@ -31,8 +31,7 @@ export default function Perfil({ route }) {
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            const id_users_mbora = await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'}));
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/' + id_users_mbora + '/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -70,8 +69,7 @@ export default function Perfil({ route }) {
 
     const getCountEncomenda = useCallback(async()=> {
         try {
-            const id_users_mbora = await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'}));
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/count/' + id_users_mbora,
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/count',
             {
                     headers: {
                     Accept: 'application/json',

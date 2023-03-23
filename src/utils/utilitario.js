@@ -12,10 +12,9 @@ export const removeSpaceLowerCase  = function(txt) {
     return txt.replace(/\s/g, "");
 }
 
-export async function saveTokenId(key, token, user_id) {
+export async function saveTokenId(key, token) {
     await setItemAsync(key, token);
-    await setItemAsync('user_id', user_id);
-  }
+}
 
 export async function getValueItemAsync(key) {
     let result = await getItemAsync(key);

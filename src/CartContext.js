@@ -88,7 +88,6 @@ export function CartProvider(props) {
           client_info_ad: clientData.information,
           imei_contacts: imei,
           client_coordinate: clientData.coorLoc,
-          id_users_mbora: await getValueItemAsync('user_id').catch((error)=> setShowDialog({visible: true, title: 'Identificador de usuário', message: error.message, color: 'orangered'})),
           id_produtos_mbora: productId,
         }),
       }
@@ -103,8 +102,6 @@ export function CartProvider(props) {
               let messageError;
               if (rjd.data.message.imei_contacts != undefined){
                 messageError = rjd.data.message.imei_contacts;
-              } else if (rjd.data.message.id_users_mbora != undefined) {
-                messageError = rjd.data.message.id_users_mbora;
               } else {
                 messageError = rjd.data.message.id_produtos_mbora;
               }
@@ -120,7 +117,6 @@ export function CartProvider(props) {
     } catch (error) {
       setLoading(false);
       setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'});
-      // Alert.alert('Erro', error.message);
     }
   }
   

@@ -39,7 +39,7 @@ export default SignInForm = ()=> {
             });
             let rjd = await response.json();
             if(rjd.success) {
-                saveTokenId('token', rjd.data.token, rjd.data.user_id)
+                saveTokenId('token', rjd.data.token)
                 .then(()=>{
                     user.setUserName(rjd.data.name);
                     user.setUserEmail(rjd.data.email);
