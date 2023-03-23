@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -81,7 +81,7 @@ export default ProfileEdit = ({navigation})=> {
       }
     }
 
-    useEffect(() => {
+    useEffect(useCallback(() => {
         navigation.getParent()?.setOptions({
             tabBarStyle: {
                 display: "none"
@@ -90,7 +90,7 @@ export default ProfileEdit = ({navigation})=> {
         return () => navigation.getParent()?.setOptions({
             tabBarStyle: 'flex'
         });
-    }, [navigation]);
+    }, [navigation]), []);
 
     return (
     <SafeAreaView style={styles.container}>
