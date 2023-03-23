@@ -2,7 +2,7 @@ import React, {useState, useCallback} from 'react';
 import {StyleSheet, TextInput, ScrollView} from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Button as ButtonUILIB, Constants, Dialog, Text as TextUILIB, View as ViewUILIB, Colors } from 'react-native-ui-lib';
+import { Button as ButtonUILIB, Constants, Dialog, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { ErroMessage } from './Form';
 import { getAppearenceColor } from '../utils/utilitario';
 import ModalMaps from './Modal';
