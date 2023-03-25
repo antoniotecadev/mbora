@@ -19,11 +19,8 @@ export default function ProductsList({ navigation }) {
 
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
-  const [limit, setLimit] = useState(1);
   const [loading, setLoading] = useState({ctg: false, pdt: false});
   const [refreshing, setRefreshing] = useState(false);
-  const [lastVisible, setLastVisible] = useState(null);
-  const [countPage, setCountPage] = useState(0);
 
   const {ui} = useStores();
   const { nav } = useServices();
