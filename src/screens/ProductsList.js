@@ -128,7 +128,7 @@ export default function ProductsList({ navigation }) {
   }, []);
 
   return (
-    <ViewUILIB flex bg-bgColor>
+    <>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
       { error == null ? 
@@ -147,7 +147,7 @@ export default function ProductsList({ navigation }) {
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
         : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />}
-    </ViewUILIB>
+    </>
   );
 }
 
