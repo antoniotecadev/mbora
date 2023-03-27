@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { FlatList, StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
 import { Card, Colors, Typography, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
+import { AlertDialog } from '../components/AlertDialog';
 import ToastMessage from '../components/ToastMessage';
 import { currency, getAppearenceColor } from '../utils/utilitario';
 
@@ -9,9 +10,23 @@ const cardImage = require('../../assets/products/feijao1.jpg');
 const removeIcon = require('../../assets/icons/excluir.png');
 const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
-export function Carrinho({ navigation }) {
+export function Carrinho() {
+
+    const [id, setId] = useState([])
+    const [imei, setImei] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [showDialogLocal, setShowDialogLocal] = useState(false);
     
-    const { items, getTotalPrice, getItemsCount, quantity, removeItemToCart } = useContext(CartContext);
+    const { items, getTotalPrice, getItemsCount, quantity, removeItemToCart, encomendar, showDialog, setShowDialog } = useContext(CartContext);
+
+    const encomendarProduct = async (clientData)=> {
+        let array = getIdImeiNameQty(items);
+        await encomendar(setLoading, array[1], array[0], array[2], array[3], clientData)
+        .then(()=> {
+            setLoading(false)
+            setShowDialogLocal(false);
+        });
+    }
 
     const renderItem = ({ item }) => {
         return (
@@ -42,8 +57,37 @@ export function Carrinho({ navigation }) {
         );
     }
 
+    function getIdImeiNameQty(array) {
+        let product_id = [], contact_imei = [], name_product = [], quant_prod = [];
+        for (let index = 0; index < array.length; index++) {
+            product_id.push(array[index]['id']);
+            contact_imei.push(array[index]['product']['imei']);
+            name_product.push(array[index]['product']['nome']);
+            quant_prod.push(array[index]['qty']);
+        }
+        return [product_id, contact_imei, name_product, quant_prod];
+    }
+
+    function getValueInArray(array) {
+        let element = '';
+        for (let index = 0; index < array.length; index++) {
+            element += array[index]['product']['empresa'] + ' - ' + array[index]['qty'] + ' - ' + array[index]['product']['nome'] + ' - ' + currency(String(array[index]['product']['preco'])) + '\n';
+        }
+        return element + '\nQuantidade: ' + getItemsCount() + '\nTotal: ' + currency(String(getTotalPrice()));
+    }
+
     return (
         <View>
+            {showDialogLocal &&
+            <AlertDialog 
+            showDialog={showDialogLocal} 
+            setShowDialog={setShowDialogLocal} 
+            titulo='Encomenda' 
+            mensagem={getValueInArray(items)} 
+            cor='green' 
+            onPress={encomendarProduct}
+            isEncomenda={true}/>}
+            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <ToastMessage />
             <FlatList
                 style={styles.itemsList}
@@ -52,7 +96,7 @@ export function Carrinho({ navigation }) {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => item.id}
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Carrinho vazio</Text>}
-                ListFooterComponent={items.length == 0 ? null : <Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart}/>}
+                ListFooterComponent={items.length == 0 ? null : <Totals price={getTotalPrice()} totalQty={getItemsCount()} distincQty={items.length} removeItemToCart={removeItemToCart} setShowDialogLocal={setShowDialogLocal}/>}
             />
         </View>
     );
@@ -87,7 +131,7 @@ const Footer = ({ qtd, id, quantity, removeItemToCart, nomeProduto }) => {
     </View>
 }
 
-const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
+const Totals = ({ price, totalQty, distincQty, removeItemToCart, setShowDialogLocal})=> {
     return (
         <>
             <TouchableOpacity onPress={()=> removeItemToCart(null, 'Produtos removidos.', 'red', {isAll: true})} style={{backgroundColor: 'orange', borderRadius: 5, paddingVertical: 10, marginBottom: 5}}>
@@ -105,7 +149,7 @@ const Totals = ({ price, totalQty, distincQty, removeItemToCart})=> {
                 <TextUILIB textColor style={[styles.lineLeft]}>Total</TextUILIB>
                 <TextUILIB textColor style={styles.lineRight}>{currency(String(price))}</TextUILIB>
             </View>
-            <TouchableOpacity style={{backgroundColor: 'green', borderRadius: 5, paddingVertical: 10}}>
+            <TouchableOpacity style={{backgroundColor: 'green', borderRadius: 5, paddingVertical: 10}} onPress={()=> setShowDialogLocal(true)}>
                 <Text style={{color: 'white', textAlign: 'center'}}>Encomendar</Text>
             </TouchableOpacity>
         </>

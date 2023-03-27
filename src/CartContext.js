@@ -71,7 +71,7 @@ export function CartProvider(props) {
     setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
   }
 
-  const encomendar = async (setLoading, imei, productId, productName, clientData)=> {
+  const encomendar = async (setLoading, imei, productId, productName, productQuantity, clientData)=> {
     setLoading(true);
     try {
       let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/encomenda',
@@ -88,7 +88,8 @@ export function CartProvider(props) {
           client_info_ad: clientData.information,
           imei_contacts: imei,
           client_coordinate: clientData.coorLoc,
-          id_produtos_mbora: productId,
+          id_produts_mbora: productId,
+          prod_quant: productQuantity,
         }),
       }
       );
@@ -103,7 +104,7 @@ export function CartProvider(props) {
               if (rjd.data.message.imei_contacts != undefined){
                 messageError = rjd.data.message.imei_contacts;
               } else {
-                messageError = rjd.data.message.id_produtos_mbora;
+                messageError = rjd.data.message.id_produts_mbora;
               }
               setShowDialog({visible: true, title: rjd.message, message: messageError[0], color: 'orangered'});
           } else if (rjd.message == 'Autenticação') {
