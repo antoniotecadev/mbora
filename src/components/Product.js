@@ -134,7 +134,7 @@ const HeaderElement = (nome, preco, isEncomenda, estado, data_cria) => {
           :
           <TextUILIB color='orangered'> não visualizada</TextUILIB>}
         </View>
-        <TextUILIB color='orange' marginB-4 f style={{ fontSize: 12 }}>{data_cria}</TextUILIB>
+        <TextUILIB color='gray' marginB-4 f style={{ fontSize: 12 }}>{data_cria}</TextUILIB>
       </>}
     </View>
   );
