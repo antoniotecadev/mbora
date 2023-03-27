@@ -44,7 +44,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
   };
 
   const encomendarProduct = async (clientData)=> {
-    await encomendar(setLoading, produto.imei, produto.id, produto.nome, clientData)
+    await encomendar(setLoading, [produto.imei], [produto.id], produto.nome, [1], clientData)
     .then(()=> {
       setLoading(false)
       setShowDialog(false);
