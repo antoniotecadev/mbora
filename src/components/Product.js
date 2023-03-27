@@ -72,7 +72,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(produto.nome, produto.preco, isEncomenda, produto.estado, produto.created_at)}
+        sectionHeader={HeaderElement(produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.created_at)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -96,7 +96,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
               onPress={removeFavorite}>
               <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
-            <View style={styles.section}>
+            <View style={[styles.section, {marginVertical: 8}]}>
               <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
               <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
                 size={20}
@@ -116,7 +116,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
   );
 }
 
-const HeaderElement = (nome, preco, isEncomenda, estado, data_cria) => {
+const HeaderElement = (nome, preco, isEncomenda, prod_quant, estado, data_cria) => {
   return (
     <View spread row maxWidth={180}>
       <TextUILIB textColor>
@@ -127,6 +127,10 @@ const HeaderElement = (nome, preco, isEncomenda, estado, data_cria) => {
       </Text>
       {isEncomenda && 
       <>
+        <View style={styles.section}>
+          <TextUILIB textColor>Quantidade: </TextUILIB>
+          <TextUILIB color='gray'>{prod_quant}</TextUILIB>
+        </View>
         <View style={styles.section}>
           <TextUILIB textColor>Estado:</TextUILIB>
           {estado == true ? 
@@ -176,7 +180,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical:8
   },
   icon: {
     alignSelf: 'center'
