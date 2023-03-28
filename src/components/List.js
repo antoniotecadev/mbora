@@ -6,7 +6,8 @@ import {
   FlatList,
   SafeAreaView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
 import { currency } from "../utils/utilitario";
 import { useNavigation } from "@react-navigation/native";
@@ -34,7 +35,7 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
       </TouchableOpacity>
 };
 
-const List = ({ searchPhrase, setClicked, data }) => {
+const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, setClicked, data }) => {
   const renderItem = ({ item }) => {
     return <Item item={item} />;
     // if (searchPhrase === "") {
@@ -59,12 +60,34 @@ const List = ({ searchPhrase, setClicked, data }) => {
           data={data}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto não encontrado</Text>}
+          ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto(s) não encontrado(s)</Text>}
+          ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} searchProduct={searchProduct} searchPhrase={searchPhrase}/>}
         />
       </View>
     </SafeAreaView>
   );
 };
+
+const FooterComponente = (props) => {
+  return (
+    <View style={styles.footer}>
+      <TouchableOpacity
+        onPress={()=> {
+            props.setLoading(true);
+            props.searchProduct(props.searchPhrase, true).then(()=> props.setLoading(false));
+        }
+      }
+        style={styles.loadMoreBtn}>
+        <Text style={styles.btnText}>{props.loading ? 'A carregar produtos' : 'Mais produtos'}</Text>
+        {props.loading ? (
+          <ActivityIndicator
+            color="white"
+            style={{marginLeft: 8}} />
+        ) : null}
+      </TouchableOpacity>
+    </View>
+  )
+}
 
 export default List;
 
@@ -89,5 +112,24 @@ const styles = StyleSheet.create({
     color: 'gray',
     paddingTop: 200,
     textAlign: 'center',
-  }
+  },
+  footer: {
+    padding: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  loadMoreBtn: {
+    padding: 10,
+    backgroundColor: 'orange',
+    borderRadius: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  btnText: {
+    color: 'white',
+    fontSize: 15,
+    textAlign: 'center',
+  },
 });
