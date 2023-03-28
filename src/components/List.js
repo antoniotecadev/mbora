@@ -25,10 +25,11 @@ const showProductDetails = (item)=> {
 return <TouchableOpacity onPress={()=> showProductDetails(item)}>
         <View style={styles.item}>
           <View style={styles.section}>
-            <TextUILIB textColor style={styles.title}>{item.nome}</TextUILIB>
-            <Image style={{width: 50, height: 50, borderRadius: 25}} source= {imageProduct} />
+            <TextUILIB textColor style={{maxWidth: '50%'}}>{item.nome}</TextUILIB>
+            <TextUILIB textColor text90 style={{maxWidth: '30%'}}>{currency(String(item.preco))}</TextUILIB>
+            <Image style={{width: 45, height: 45, borderRadius: 25}} source= {imageProduct} />
           </View>
-          <Text style={{color: 'green'}}>{currency(String(item.preco))}</Text>
+          <TextUILIB color="gray" text90>{item.empresa}</TextUILIB>
         </View>
       </TouchableOpacity>
 };
@@ -79,9 +80,6 @@ const styles = StyleSheet.create({
     marginTop: 25,
     borderBottomWidth: 1,
     borderBottomColor: "lightgrey"
-  },
-  title: {
-    fontSize: 18,
   },
   section: {
     flexDirection: 'row',
