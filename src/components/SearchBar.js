@@ -25,7 +25,7 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
           <TextInput
             autoFocus
             style={styles.input}
-            placeholder="Pesquisa: produto, empresa"
+            placeholder="Pesquisa: produto"
             value={searchPhrase}
             onChangeText={setSearchPhrase}
             onFocus={() => {
