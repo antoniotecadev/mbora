@@ -128,17 +128,17 @@ const HeaderElement = (nome, preco, isEncomenda, prod_quant, estado, data_cria) 
       {isEncomenda && 
       <>
         <View style={styles.section}>
-          <TextUILIB textColor>Quantidade: </TextUILIB>
-          <TextUILIB color='gray'>{prod_quant}</TextUILIB>
+          <TextUILIB textColor text100M>Quantidade: </TextUILIB>
+          <TextUILIB color='gray' text100M>{prod_quant}</TextUILIB>
         </View>
         <View style={styles.section}>
-          <TextUILIB textColor>Estado:</TextUILIB>
+          <TextUILIB textColor text100M>Estado:</TextUILIB>
           {estado == true ? 
-          <TextUILIB color='green'> visualizada</TextUILIB> 
+          <TextUILIB color='green' text100M> visualizada</TextUILIB> 
           :
-          <TextUILIB color='orangered'> não visualizada</TextUILIB>}
+          <TextUILIB color='orangered' text100M> não visualizada</TextUILIB>}
         </View>
-        <TextUILIB color='gray' marginB-4 f style={{ fontSize: 12 }}>{data_cria}</TextUILIB>
+        <TextUILIB color='gray' marginB-4 f text100M>{data_cria}</TextUILIB>
       </>}
     </View>
   );
