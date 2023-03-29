@@ -15,7 +15,7 @@ import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
 
-export default function Perfil({ route }) {
+export default function Profile({ route }) {
 
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);

@@ -70,7 +70,7 @@ const getIconName = (routeName: string, focused: boolean): string => {
   if (routeName === 'MainNavigator') {
     return focused ? 'home-sharp' : 'home-outline';
   }
-  if (routeName === 'PerfilNavigator') {
+  if (routeName === 'ProfileNavigator') {
     return focused ? 'person' : 'person-outline';
   }
   if (routeName === 'CartNavigator') {

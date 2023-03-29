@@ -1,6 +1,6 @@
 import { ModalScreenLayouts, ScreenLayouts, TabScreenLayouts } from '../services/navigation/types';
 
-import Perfil from './Perfil';
+import Profile from './Profile';
 import CompanyProfile from './CompanyProfile';
 import ProductsList from './ProductsList';
 import CompanyList from './CompanyList';
@@ -61,8 +61,8 @@ const screens: ScreenLayouts = {
     }),
   },
   Profile: {
-    name: 'Perfil',
-    component: Perfil,
+    name: 'Profile',
+    component: Profile,
     options: () => ({
       title: 'Perfil',
       ...screenDefaultOptions(),
@@ -146,11 +146,11 @@ const tabs: TabScreenLayouts = {
     }),
   },
   Profile: {
-    name: 'PerfilNavigator',
+    name: 'ProfileNavigator',
     component: ProfileStack,
     options: () => ({
       title: 'Perfil',
-      ...tabBarDefaultOptions('PerfilNavigator'),
+      ...tabBarDefaultOptions('ProfileNavigator'),
     }),
   },
   Cart: {
