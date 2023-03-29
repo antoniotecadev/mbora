@@ -28,18 +28,18 @@ export const Settings: React.FC = observer(() => {
   const {links} = useConstants();
   const [loading, setLoading] = useState(false);
 
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: "none"
-      }
-    });
-    return () => navigation.getParent()?.setOptions({
-      tabBarStyle: 'flex'
-    });
-  }, [navigation]);
+  // OCULTAR NavigationBottom
+  // const navigation = useNavigation();
+  // useEffect(() => {
+  //   navigation.getParent()?.setOptions({
+  //     tabBarStyle: {
+  //       display: "none"
+  //     }
+  //   });
+  //   return () => navigation.getParent()?.setOptions({
+  //     tabBarStyle: 'flex'
+  //   });
+  // }, [navigation]);
 
   const pickers: PickersState = useLocalObservable(() => ({
     appearance: false,
