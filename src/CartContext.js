@@ -90,6 +90,7 @@ export function CartProvider(props) {
           client_coordinate: clientData.coorLoc,
           id_produts_mbora: productId,
           prod_quant: productQuantity,
+          product_name: productName,
         }),
       }
       );

@@ -61,7 +61,7 @@ export function ProductDetails({route, navigation}) {
     }, [produto.id]);
 
   const encomendarProduct = async(clientData)=> {
-    await encomendar(setLoading, [produto.imei], [produto.id], produto.nome, [1], clientData)
+    await encomendar(setLoading, [produto.imei], [produto.id], [produto.nome], [1], clientData)
     .then(()=> {
       setLoading(false)
       setShowDialogLocal(false);
