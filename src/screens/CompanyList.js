@@ -4,25 +4,17 @@ import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 
-import { CantinaCard } from '../components/CantinaCard.js';
+import { CompanyCard } from '../components/CompanyCard.js';
 import { getProducts } from '../services/ProductsService.js';
 import { Text, View, Card } from 'react-native-ui-lib';
 
-export default function ListaCantinas({ navigation }) {
+export default function CompanyList({ navigation }) {
 
   const { nav, t, api } = useServices();
   const { counter, ui } = useStores();
 
   function renderProduct({ item: product }) {
-    return (
-      <CantinaCard {...product}
-        onPress={() => {
-          nav.show('ProductDetails', {
-            productId: product.id,
-          });
-        }}
-      />
-    );
+    return <CompanyCard {...product}/>
   }
   // function renderCategory({ item: product }) {
   //   return (

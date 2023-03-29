@@ -12,7 +12,7 @@ import { Button, TabController, Colors } from 'react-native-ui-lib';
 
 const perfilImage = require('../../assets/products/cantina1.jpg');
 
-export default function PerfilCantina({ route }) {
+export default function CompanyProfile({ route }) {
 
   return (
     <SafeAreaView>

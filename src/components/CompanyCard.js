@@ -14,7 +14,7 @@ const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
 const cardImage = require('../../assets/products/cantina2.jpg');
 
-export function CantinaCard({ name, price, image, onPress }) {
+export function CompanyCard({ name, price, image, onPress }) {
 
     const { nav, t, api } = useServices();
 
@@ -40,7 +40,7 @@ export function CantinaCard({ name, price, image, onPress }) {
 
     return (
         <Card style={styles.card} center onPress={() => {
-            nav.show('PerfilCantina');
+            nav.show('CompanyProfile');
         }}>
             <Card.Image style={styles.thumb} source={cardImage} />
             <View maxWidth={180}>

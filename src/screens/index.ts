@@ -1,14 +1,13 @@
 import { ModalScreenLayouts, ScreenLayouts, TabScreenLayouts } from '../services/navigation/types';
 
 import Perfil from './Perfil';
-import PerfilCantina from './PerfilCantina';
+import CompanyProfile from './CompanyProfile';
 import ProductsList from './ProductsList';
-import ListaCantinas from './ListaCantinas';
+import CompanyList from './CompanyList';
 import SearchProduct from './SearchProduct';
 import { ProductDetails } from './ProductDetails.js';
 import { Carrinho } from './Carrinho.js';
 import { Settings } from './settings';
-import { Example } from './screen-sample';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
 import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
 import SignInForm from './SignInForm';
@@ -16,9 +15,9 @@ import SignUpForm from './SignUpForm';
 import ProfileEdit from './ProfileEdit';
 
 // Describe your screens here
-export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Cantinas';
+export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = 'SettingsModal';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Profile'| 'ProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'ListaCantinas'|'PerfilCantina' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Profile'| 'ProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -102,19 +101,19 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
-  ListaCantinas: {
-    name: 'ListaCantinas',
-    component: ListaCantinas,
+  CompanyList: {
+    name: 'CompanyList',
+    component: CompanyList,
     options: () => ({
-      title: 'Cantinas',
+      title: 'Empresas',
       ...screenDefaultOptions(),
     }),
   },
-  PerfilCantina: {
-    name: 'PerfilCantina',
-    component: PerfilCantina,
+  CompanyProfile: {
+    name: 'CompanyProfile',
+    component: CompanyProfile,
     options: () => ({
-      title: 'Perfil cantina',
+      title: '',
       ...screenDefaultOptions(),
     }),
   },
@@ -132,7 +131,7 @@ const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpFo
 const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProduct]);
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
-const CantinasStack = () => genStackNavigator([screens.ListaCantinas, screens.PerfilCantina]);
+const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.CompanyProfile]);
 const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit]);
 
 // Tabs
@@ -170,16 +169,16 @@ const tabs: TabScreenLayouts = {
       ...tabBarDefaultOptions('NotificationNavigator'),
     }),
   },
-  Cantinas: {
-    name: 'CantinasNavigator',
-    component: CantinasStack,
+  Company: {
+    name: 'Company',
+    component: CompanyStack,
     options: () => ({
-      title: 'Cantinas',
-      ...tabBarDefaultOptions('CantinasNavigator'),
+      title: 'Empresa',
+      ...tabBarDefaultOptions('CompanyNavigator'),
     }),
   },
 };
-const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Profile, tabs.Cart, tabs.Notification, tabs.Cantinas]);
+const TabNavigator = () => genTabNavigator([tabs.Main, tabs.Profile, tabs.Cart, tabs.Notification, tabs.Company]);
 
 // Modals
 const modals: ModalScreenLayouts = {

@@ -79,7 +79,7 @@ const getIconName = (routeName: string, focused: boolean): string => {
   if (routeName === 'NotificationNavigator') {
     return focused ? 'notifications-sharp' : 'notifications-outline';
   }
-  if (routeName === 'CantinasNavigator') {
+  if (routeName === 'CompanyNavigator') {
     return focused ? 'grid-sharp' : 'grid-outline';
   }
 
