@@ -10,7 +10,7 @@ import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
 
-export default ProfileEdit = ({navigation})=> {
+export default ProfileEdit = ()=> {
 
   const {user} = useStores();
   const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -80,17 +80,6 @@ export default ProfileEdit = ({navigation})=> {
             setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'})
       }
     }
-
-    useEffect(useCallback(() => {
-        navigation.getParent()?.setOptions({
-            tabBarStyle: {
-                display: "none"
-            }
-        });
-        return () => navigation.getParent()?.setOptions({
-            tabBarStyle: 'flex'
-        });
-    }, [navigation]), []);
 
     return (
     <SafeAreaView style={styles.container}>

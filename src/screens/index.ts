@@ -16,7 +16,7 @@ import ProfileEdit from './ProfileEdit';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
-export type Modal = 'SettingsModal';
+export type Modal = 'SettingsModal' | 'ProfileEditModal';
 export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Profile'| 'ProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
 
 export type ModalProps = {
@@ -132,7 +132,8 @@ const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screen
 const SettingsStack = () => genStackNavigator([screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.CompanyProfile]);
-const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit]);
+const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails]);
+const ProfileEditStack = () => genStackNavigator([screens.ProfileEdit]);
 
 // Tabs
 const tabs: TabScreenLayouts = {
@@ -190,7 +191,15 @@ const modals: ModalScreenLayouts = {
       headerTintColor: 'orange',
     }),
   },
+  ProfileEditModal: {
+    name: 'ProfileEditModal',
+    component: ProfileEditStack,
+    options: () => ({
+      title: 'Editar Perfil',
+      headerTintColor: 'orange',
+    }),
+  },
 };
 
 // Root Navigator
-export const RootNavigator = ({auth}): JSX.Element => genRootNavigator(auth ? TabNavigator : SigInStack, [modals.SettingsModal]);
+export const RootNavigator = ({auth}): JSX.Element => genRootNavigator(auth ? TabNavigator : SigInStack, [modals.SettingsModal, modals.ProfileEditModal]);
