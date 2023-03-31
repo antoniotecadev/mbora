@@ -98,7 +98,7 @@ export function CartProvider(props) {
         if(rjd.success) {
           setShowDialog({visible: true, title: 'Encomenda', message: productName + ' ' + rjd.data.message, color: 'green'});
           // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
-          // Alert.alert('Sucesso', productName + ' ' + rjd.data.message);
+          // alert(JSON.stringify(rjd.data.message, null, 2));
         } else {
           if (rjd.message == 'Erro de validação') {
               let messageError;
