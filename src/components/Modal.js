@@ -1,7 +1,9 @@
 import { isNull } from 'lodash';
 import React, {useState, useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+import { Button as ButtonUILIB } from 'react-native-ui-lib';
 import Maps from './Maps';
+
 
 const ModalMaps = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,13 +34,17 @@ const ModalMaps = (props) => {
             </View>
         </View> 
       </Modal>
-      <Pressable
-        style={[styles.button, styles.buttonOpen]}
+      <ButtonUILIB
+        disabled={props.isSubmitting}
+        backgroundColor='orange'
+        style={[styles.button]}
         onPress={() => setModalVisible(true)}>
         <Text style={styles.textStyle}>{coordinate.latlng.latitude == 0 ? 'Adicionar Localização' : 'Alterar Localização'}</Text>
-      </Pressable>
-      {coordinate.latlng.latitude != 0 && <><Pressable
-        style={[styles.button, {backgroundColor: 'green'}]}
+      </ButtonUILIB>
+      {coordinate.latlng.latitude != 0 && <><ButtonUILIB
+        disabled={props.isSubmitting}
+        backgroundColor='green'
+        style={[styles.button]}
         onPress={() => {
             let str = "", locationData = {};
             locationData = {...coordinate['latlng'], ...coordinate['locationGeocode']};
@@ -50,12 +56,14 @@ const ModalMaps = (props) => {
             Alert.alert('Localização Adicionada', str);
         }}>
             <Text style={styles.textStyle}>Ver Localização</Text>
-      </Pressable>
-      <Pressable
-        style={[styles.button, {backgroundColor: 'red'}]}
+      </ButtonUILIB>
+      <ButtonUILIB
+        disabled={props.isSubmitting}
+        backgroundColor='red'
+        style={[styles.button]}
         onPress={() => setCoordinate({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}})}>
             <Text style={styles.textStyle}>Remover Localização</Text>
-      </Pressable></>}
+      </ButtonUILIB></>}
     </View>
   );
 };
@@ -85,9 +93,6 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 2,
     margin:10
-  },
-  buttonOpen: {
-    backgroundColor: 'orange',
   },
   buttonClose: {
     backgroundColor: 'orange',

@@ -61,6 +61,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
           <>
             <TextUILIB marginH-20 textColor>*Telefone</TextUILIB>
             <TextInput
+              color={props.isSubmitting ? 'gray' : 'black'}
               editable={!props.isSubmitting}
               keyboardType='phone-pad'
               onChangeText={props.handleChange('telephone')}
@@ -74,6 +75,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             </ViewUILIB>
             <TextUILIB textColor marginH-20>*Endereço</TextUILIB>
             <TextInput
+              color={props.isSubmitting ? 'gray' : 'black'}
               editable={!props.isSubmitting}
               onChangeText={props.handleChange('address')}
               onBlur={props.handleBlur('address')}
@@ -87,9 +89,10 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
               <ErroMessage touched={props.touched.address} errors={props.errors.address}/>
             </ViewUILIB>
             <TextUILIB textColor marginH-20>Localização no Mapa</TextUILIB>
-            <ModalMaps setCoordinate={setCoordinate}/>
+            <ModalMaps setCoordinate={setCoordinate} isSubmitting={props.isSubmitting}/>
             <TextUILIB textColor marginH-20>Informações adicionais</TextUILIB>
             <TextInput
+              color={props.isSubmitting ? 'gray' : 'black'}
               editable={!props.isSubmitting}
               placeholder="Mais detalhes..."
               style={styles.input}
