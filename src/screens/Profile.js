@@ -2,8 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
-import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
+import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -22,8 +22,8 @@ export default function Profile({ route }) {
     const [refreshing, setRefreshing] = useState(false);
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
-    const [countEncomenda, setCountEncomenda] = useState(0);
-    const [countFavorito, setCountFavorito] = useState(0);
+    const [countEncomenda, setCountEncomenda] = useState("-");
+    const [countFavorito, setCountFavorito] = useState("-");
 
     const { nav } = useServices();
     const {ui, user} = useStores();
@@ -153,8 +153,8 @@ export default function Profile({ route }) {
                 <Avatar source={preview} size={85} animate={false} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
-                    <Numeros text='Encomendas' numero={countEncomenda}/>
-                    <Numeros text='Favoritos' numero={countFavorito}/>
+                    {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
+                    {countFavorito == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Favoritos' numero={countFavorito}/>}
                     <Numeros text='A seguir' numero={32}/>
                 </View>
                 <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> nav.show('ProfileEditModal')}>
@@ -182,7 +182,7 @@ export default function Profile({ route }) {
 }
 
 const Numeros = ({text, numero}) => {
-    return <TouchableOpacity style={{ alignItems: 'center', margin: 8 }}>
+    return <TouchableOpacity style={styles.count}>
                 <TextUILIB textColor style={{ fontSize: 12, fontWeight: 'bold' }}>{numero}</TextUILIB>
                 <TextUILIB textColor color='gray' style={{ fontSize: 12 }}>{text}</TextUILIB>
             </TouchableOpacity>
@@ -256,5 +256,8 @@ const styles = StyleSheet.create({
     section: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-    }
+    },
+    count: { 
+        alignItems: 'center', 
+        margin: 8 }
 });
