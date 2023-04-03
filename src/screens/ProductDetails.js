@@ -125,7 +125,7 @@ export function ProductDetails({route, navigation}) {
                 justifyContent: 'space-between',
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
-                {loading ? <ActivityIndicator/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
+                {loading ? <ActivityIndicator color='white'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
                 <IconButton text={'Favorito'} iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
                 {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
