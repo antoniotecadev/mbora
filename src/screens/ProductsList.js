@@ -21,6 +21,7 @@ export default function ProductsList({ navigation }) {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState({ctg: false, pdt: false});
   const [refreshing, setRefreshing] = useState(false);
+  const [categoryError, setCategoryError] = useState(null);
 
   const {ui} = useStores();
   const { nav } = useServices();
@@ -87,6 +88,8 @@ export default function ProductsList({ navigation }) {
 
   const FlatListHeaderComponent = () =>  {
     return (
+      <>
+        {categoryError == null ?
         <FlatList
         contentContainerStyle={styles.productsListContainer}
         keyExtractor={keyExtractor}
@@ -94,6 +97,13 @@ export default function ProductsList({ navigation }) {
         horizontal={true}
         renderItem={renderItemCategory}
         getItemLayout={getItemLayout}/>
+        :
+        <TouchableOpacity 
+          style={{padding: 10, backgroundColor: 'orangered'}} 
+          onPress={()=> { setLoading({ ctg: true}); fetchCategorys().then(()=> setLoading({ ctg: false}))}}>
+          {loading.ctg ? <ActivityIndicator color='white'/> : <Text style={{textAlign: 'center', color: 'white'}}>{categoryError}</Text>}
+        </TouchableOpacity>}
+      </>
     );
   }
 
@@ -102,8 +112,9 @@ export default function ProductsList({ navigation }) {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/categorias/mbora');
       let responseJsonData = await response.json();
       setCategorias(responseJsonData);
+      setCategoryError(null);
     } catch (error) {
-      setShowDialog({visible: true, title: 'Erro Categorias', message: error.message, color: 'orangered'});
+      setCategoryError(error.message);
     }
   }, [])
 
