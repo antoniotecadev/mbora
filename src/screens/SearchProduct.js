@@ -1,13 +1,14 @@
 import { isEmpty } from "lodash";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   StyleSheet,
   Text,
   SafeAreaView,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { View as ViewUILIB } from "react-native-ui-lib";
+import { CartContext } from "../CartContext";
+import { AlertDialog } from "../components/AlertDialog";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
 
@@ -18,6 +19,8 @@ const SearchProduct = () => {
   const [loading, setLoading] = useState(false);
   const [empty, setEmpty] = useState(false);
   const [leastViewed, setLeastViewed] = useState(0);
+
+  const { showDialog, setShowDialog } = useContext(CartContext);
 
   const searchProduct = async (produto, isMoreProduct) => {
     await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(produto) + '/isMoreProduct/' + isMoreProduct + '/leastViewed/' + leastViewed, isMoreProduct);
@@ -41,7 +44,7 @@ const SearchProduct = () => {
           setEmpty(true);
       }
     } catch (error) {
-        Alert.alert('Erro', error.message);
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
     }
   };
 
@@ -60,6 +63,7 @@ const SearchProduct = () => {
   return (
     <ViewUILIB bg-bgColor>
     <SafeAreaView style={[styles.root]}>
+      {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       {!clicked && <Text style={styles.title}></Text>}
       <SearchBar
         searchPhrase={searchPhrase}
