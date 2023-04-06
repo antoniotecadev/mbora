@@ -4,7 +4,8 @@ import { Feather, Entypo, Ionicons } from "@expo/vector-icons";
 
 const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked, backHome}) => {
     return (
-      <View style={[styles.container, {marginTop: clicked ? (Platform.OS === 'ios' ? undefined : 35) : undefined}]}>
+      // <View style={[styles.container, {marginTop: clicked ? (Platform.OS === 'ios' ? undefined : 35) : undefined}]}>
+      <View style={styles.container}>
         <Ionicons
             name="chevron-back"
             size={30}
@@ -60,7 +61,6 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-start",
     flexDirection: "row",
-    marginRight: 5
   },
   searchBar__unclicked: {
     padding: 5,
