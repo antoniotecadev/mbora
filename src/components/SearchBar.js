@@ -1,18 +1,18 @@
 import React from "react";
 import { StyleSheet, TextInput, View, Keyboard, TouchableOpacity, Text, KeyboardAvoidingView, Platform} from "react-native";
-import { Feather, Entypo } from "@expo/vector-icons";
-import { Colors } from "react-native-ui-lib";
+import { Feather, Entypo, Ionicons } from "@expo/vector-icons";
 
-const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
+const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked, backHome}) => {
     return (
-      <View style={styles.container}>
-        <View
-          style={
-              clicked
-              ? styles.searchBar__clicked
-              : styles.searchBar__unclicked
-          }
-          >
+      <View style={[styles.container, {marginTop: clicked ? (Platform.OS === 'ios' ? 0 : 35) : 0}]}>
+        <Ionicons
+            name="chevron-back"
+            size={30}
+            color="orange"
+            style={{paddingRight: 10}}
+            onPress={()=> backHome()}
+          />
+        <View style={styles.searchBar__unclicked}>
           {/* search Icon */}
           <Feather
             name="search"
@@ -21,35 +21,35 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked}) => {
             style={{ marginLeft: 1 }}
           />
           {/* Input field */}
-          <TextInput
-            autoFocus
-            style={styles.input}
-            placeholder="Pesquisa: produto"
-            value={searchPhrase}
-            onChangeText={setSearchPhrase}
-            onFocus={() => {
-              setClicked(true);
-            }}
-          />
+            <TextInput
+              autoFocus
+              style={styles.input}
+              placeholder="Pesquisa: produto"
+              value={searchPhrase}
+              onChangeText={setSearchPhrase}
+              onFocus={() => {
+                setClicked(true);
+              }}
+            />
           {/* cross Icon, depending on whether the search bar is clicked or not */}
           {clicked && (
-              <Entypo name="cross" size={20} color="black" style={{ padding: 1 }} onPress={() => {
-                setSearchPhrase("")
-              }}/>
-          )}
+            <Entypo name="cross" size={25} color="black" onPress={() => {
+              setSearchPhrase("")
+            }}/>
+            )}
         </View>
         {/* cancel button, depending on whether the search bar is clicked or not */}
-        {clicked && (
+        {/* {clicked && (
           <View>
-            <TouchableOpacity style={{marginHorizontal: 5, padding: 10, marginTop: Platform.OS === 'ios' ? 0 : 40}}
-              onPress={() => {
-                Keyboard.dismiss();
-                setClicked(false);
-              }}>
-              <Text style={{color: Colors.blue10}}>Cancelar</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={{padding: 10, marginTop: Platform.OS === 'ios' ? 0 : 40}}
+          onPress={() => {
+            Keyboard.dismiss();
+            setClicked(false);
+          }}>
+          <Text style={{color: Colors.blue10}}>Cancelar</Text>
+          </TouchableOpacity>
           </View>
-        )}
+        )} */}
       </View>
   );
 };
@@ -57,34 +57,30 @@ export default SearchBar;
 
 const styles = StyleSheet.create({
   container: {
-    margin: 15,
     justifyContent: "flex-start",
-    alignItems: "center",
     flexDirection: "row",
-    width: "90%",
-
+    marginRight: 5
   },
   searchBar__unclicked: {
-    padding: 10,
+    padding: 5,
     flexDirection: "row",
-    width: "95%",
+    width: "85%",
     backgroundColor: "#d9dbda",
-    borderRadius: 15,
+    borderRadius: 5,
     alignItems: "center",
   },
   searchBar__clicked: {
     marginTop: Platform.OS === 'ios' ? 0 : 40,
-    padding: 10,
+    padding: 5,
     flexDirection: "row",
     width: "80%",
     backgroundColor: "#d9dbda",
-    borderRadius: 15,
+    borderRadius: 5,
     alignItems: "center",
     justifyContent: "space-evenly",
   },
   input: {
-    fontSize: 14,
-    marginLeft: 10,
-    width: "90%",
+    width: "85%",
+    marginRight: 5
   },
 });

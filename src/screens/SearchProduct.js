@@ -12,7 +12,7 @@ import { AlertDialog } from "../components/AlertDialog";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
 
-const SearchProduct = () => {
+const SearchProduct = ({navigation}) => {
   const [searchPhrase, setSearchPhrase] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [data, setData] = useState();
@@ -52,6 +52,10 @@ const SearchProduct = () => {
     setLeastViewed(Math.min(... rjd.map(e => e.id)));
   }
 
+  function backHome() {
+    navigation.goBack();
+  }
+
   useEffect(() => {
     if(searchPhrase) {
         searchProduct(searchPhrase, false).then(()=> setLoading(false));
@@ -64,12 +68,13 @@ const SearchProduct = () => {
     <ViewUILIB bg-bgColor>
     <SafeAreaView style={[styles.root]}>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-      {!clicked && <Text style={styles.title}></Text>}
+      {/* {!clicked && <Text style={styles.title}></Text>} */}
       <SearchBar
         searchPhrase={searchPhrase}
         setSearchPhrase={setSearchPhrase}
         clicked={clicked}
         setClicked={setClicked}
+        backHome={backHome}
       />
       <ActivityIndicator animating={loading} />
       {(
