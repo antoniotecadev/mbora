@@ -24,7 +24,8 @@ const SearchBar = ({clicked, searchPhrase, setSearchPhrase, setClicked, backHome
             <TextInput
               autoFocus
               style={styles.input}
-              placeholder="Pesquisa: produto"
+              placeholder="Pesquisa no Mbora"
+              placeholderTextColor='gray'
               value={searchPhrase}
               onChangeText={setSearchPhrase}
               onFocus={() => {
@@ -81,6 +82,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: "85%",
+    fontSize: 16,
     marginRight: 5
   },
 });
