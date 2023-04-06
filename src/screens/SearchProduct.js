@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   StyleSheet,
   Text,
@@ -63,6 +63,17 @@ const SearchProduct = ({navigation}) => {
       setEmpty(true);
     } 
   }, [searchPhrase]);
+
+  useEffect(useCallback(()=> {
+    navigation.getParent()?.setOptions({
+        tabBarStyle: {
+            display: "none"
+        }
+    });
+    return () => navigation.getParent()?.setOptions({
+        tabBarStyle: 'flex'
+    });
+  }, [navigation]), []);
 
   return (
     <ViewUILIB bg-bgColor>
