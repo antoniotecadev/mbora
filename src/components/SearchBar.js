@@ -59,7 +59,6 @@ export default SearchBar;
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "flex-start",
     flexDirection: "row",
   },
   searchBar__unclicked: {
