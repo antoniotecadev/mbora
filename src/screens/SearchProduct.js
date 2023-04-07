@@ -143,7 +143,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(100, 100, 100, 0.6)',
+    backgroundColor: 'rgba(100, 100, 100, 0.1)',
   },
   indicatorText: {
     fontSize: 18,
