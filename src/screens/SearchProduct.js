@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash";
-import React, { useState, useEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import {
   StyleSheet,
   ActivityIndicator,
@@ -14,6 +14,9 @@ import SearchBar from "../components/SearchBar";
 import { Entypo } from "@expo/vector-icons";
 
 const SearchProduct = ({navigation}) => {
+
+  const inputRef = useRef();
+
   const [searchPhrase, setSearchPhrase] = useState(null);
   const [clicked, setClicked] = useState(false);
   const [data, setData] = useState();
@@ -62,18 +65,14 @@ const SearchProduct = ({navigation}) => {
     } 
   }, [searchPhrase])
   
-
-  useEffect(() => {
+  useEffect(()=> {
     navigation.setOptions({
-      headerTitle: () => (
-          <SearchBar
-            searchPhrase={searchPhrase}
-            setSearchPhrase={setSearchPhrase}
-            setClicked={setClicked}
-          />
-      ),
       headerRight: () => (
-        clicked && <TouchableOpacity style={{padding: 10}} onPress={() => setSearchPhrase("")}>
+        clicked && <TouchableOpacity style={{padding: 10}} 
+          onPress={() => {
+            setSearchPhrase("");
+            inputRef.current.clear();
+          }}>
           <Entypo name="cross" size={20} color="orange"/>        
         </TouchableOpacity>
       ),
@@ -81,6 +80,16 @@ const SearchProduct = ({navigation}) => {
   }, [clicked]);
 
   useEffect(()=> {
+    navigation.setOptions({
+      headerTitle: () => (
+          <SearchBar
+            searchPhrase={searchPhrase}
+            setSearchPhrase={setSearchPhrase}
+            setClicked={setClicked}
+            inputRef={inputRef}
+          />
+      )
+    });
     navigation.getParent()?.setOptions({
         tabBarStyle: {
             display: "none"

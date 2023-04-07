@@ -1,16 +1,14 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, TextInput } from "react-native";
 import { Colors } from "react-native-ui-lib";
 
-const SearchBar = ({searchPhrase, setSearchPhrase, setClicked}) => {
-  const inputRef = useRef();
+const SearchBar = ({searchPhrase, setSearchPhrase, setClicked, inputRef}) => {
     useEffect(() => {
-      setTimeout(() => inputRef.current.focus(), 500)
+      setTimeout(() => inputRef.current.focus(), 500);
     }, [])
     return (
       <TextInput
         ref={inputRef}
-        // onLayout={()=> inputRef.current.focus()} // ANDROID
         style={styles.input}
         keyboardType='web-search'
         placeholder="Pesquisa no Mbora"
@@ -19,6 +17,7 @@ const SearchBar = ({searchPhrase, setSearchPhrase, setClicked}) => {
         onChangeText={setSearchPhrase}
         onFocus={()=> setClicked(true)}
         onBlur={()=> setClicked(false)}
+        // clearButtonMode="always" // IOS
       />
   );
 };
