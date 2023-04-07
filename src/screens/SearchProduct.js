@@ -63,6 +63,16 @@ const SearchProduct = ({navigation}) => {
       setEmpty(true);
       setData([]);
     } 
+    navigation.setOptions({
+      headerTitle: () => (
+          <SearchBar
+            searchPhrase={searchPhrase}
+            setSearchPhrase={setSearchPhrase}
+            setClicked={setClicked}
+            inputRef={inputRef}
+          />
+      )
+    });
   }, [searchPhrase])
   
   useEffect(()=> {
@@ -80,16 +90,6 @@ const SearchProduct = ({navigation}) => {
   }, [clicked]);
 
   useEffect(()=> {
-    navigation.setOptions({
-      headerTitle: () => (
-          <SearchBar
-            searchPhrase={searchPhrase}
-            setSearchPhrase={setSearchPhrase}
-            setClicked={setClicked}
-            inputRef={inputRef}
-          />
-      )
-    });
     navigation.getParent()?.setOptions({
         tabBarStyle: {
             display: "none"
