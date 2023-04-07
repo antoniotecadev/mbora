@@ -60,6 +60,7 @@ const SearchProduct = ({navigation}) => {
         searchProduct(searchPhrase, false).then(()=> setLoading(false));
     } else {
       setEmpty(true);
+      setData([]);
     } 
 
     navigation.setOptions({
