@@ -123,7 +123,6 @@ const screens: ScreenLayouts = {
     options: () => ({
       title: 'Pesquisa',
       headerTintColor: 'orange',
-      headerShown: false
     }),
   },
 };

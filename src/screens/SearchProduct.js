@@ -2,15 +2,18 @@ import { isEmpty } from "lodash";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   StyleSheet,
-  Text,
   SafeAreaView,
   ActivityIndicator,
+  TouchableOpacity, 
+  Text,
+  View
 } from "react-native";
 import { View as ViewUILIB } from "react-native-ui-lib";
 import { CartContext } from "../CartContext";
 import { AlertDialog } from "../components/AlertDialog";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
+import { Entypo } from "@expo/vector-icons";
 
 const SearchProduct = ({navigation}) => {
   const [searchPhrase, setSearchPhrase] = useState(null);
@@ -52,17 +55,29 @@ const SearchProduct = ({navigation}) => {
     setLeastViewed(Math.min(... rjd.map(e => e.id)));
   }
 
-  function backHome() {
-    navigation.goBack();
-  }
-
   useEffect(() => {
     if(searchPhrase) {
         searchProduct(searchPhrase, false).then(()=> setLoading(false));
     } else {
       setEmpty(true);
     } 
-  }, [searchPhrase]);
+
+    navigation.setOptions({
+      headerTitle: () => (
+          <SearchBar
+            searchPhrase={searchPhrase}
+            setSearchPhrase={setSearchPhrase}
+            setClicked={setClicked}
+          />
+      ),
+      headerRight: () => (
+        clicked && <TouchableOpacity style={{padding: 10}} onPress={() => setSearchPhrase("")}>
+          <Entypo name="cross" size={20} color="orange"/>        
+        </TouchableOpacity>
+      ),
+    });
+
+  }, [searchPhrase, clicked]);
 
   useEffect(useCallback(()=> {
     navigation.getParent()?.setOptions({
@@ -79,15 +94,6 @@ const SearchProduct = ({navigation}) => {
     <ViewUILIB bg-bgColor>
     <SafeAreaView style={[styles.root]}>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-      {/* {!clicked && <Text style={styles.title}></Text>} */}
-      <SearchBar
-        searchPhrase={searchPhrase}
-        setSearchPhrase={setSearchPhrase}
-        clicked={clicked}
-        setClicked={setClicked}
-        backHome={backHome}
-      />
-      <ActivityIndicator animating={loading} />
       {(
           <List
             empty={empty}
@@ -99,10 +105,20 @@ const SearchProduct = ({navigation}) => {
             setClicked={setClicked}
           />
       )}
+    { loading && <LoadingAnimation/> }
     </SafeAreaView>
     </ViewUILIB>
   );
 };
+
+function LoadingAnimation() {
+  return (
+    <View style={styles.indicatorWrapper}>
+      <ActivityIndicator size={'large'} color={'orange'}/>
+      <Text style={styles.indicatorText}>Loading...</Text>
+    </View>
+  );
+}
 
 export default SearchProduct;
 
@@ -118,5 +134,19 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginLeft: "10%",
   },
+  indicatorWrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(100, 100, 100, 0.6)',
+  },
+  indicatorText: {
+    fontSize: 18,
+    marginTop: 12,
+    color: 'orange'
+  },
 });
-// "https://my-json-server.typicode.com/kevintomas1995/logRocket_searchBar/languages"

@@ -93,8 +93,6 @@ export default List;
 
 const styles = StyleSheet.create({
   list__container: {
-    margin: 10,
-    height: "85%",
     width: "100%",
   },
   item: {
