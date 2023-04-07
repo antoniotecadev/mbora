@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
   },
   emptyListStyle: {
     color: 'gray',
-    paddingTop: 200,
     textAlign: 'center',
+    marginVertical: 250
   },
   footer: {
     padding: 10,
