@@ -3,10 +3,11 @@ import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshCont
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
 import { Product } from '../components/Product.js';
-import { Card, View as ViewUILIB } from 'react-native-ui-lib';
+import { Card } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import ErrorMessage from '../components/ErrorMessage';
 import { CartContext } from '../CartContext';
+import { useFocusEffect  } from '@react-navigation/native';
 
 const ITEM_HEIGHT = 150;
 
@@ -137,6 +138,13 @@ export default function ProductsList({ navigation }) {
     fetchCategorys();
     fetchProducts(true).then(()=> { setLoading({pdt: false}) });
   }, []);
+
+  useFocusEffect(useCallback(() => {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: 'flex'
+      });
+    }, [navigation])
+  );
 
   return (
     <>

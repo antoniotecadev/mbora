@@ -4,7 +4,6 @@ import {
   Text,
   View,
   FlatList,
-  SafeAreaView,
   Image,
   TouchableOpacity,
   ActivityIndicator
@@ -50,12 +49,6 @@ const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, setClic
   };
 
   return (
-    <SafeAreaView style={styles.list__container}>
-      <View
-        onStartShouldSetResponder={() => {
-          setClicked(false);
-        }}
-      >
         <FlatList
           data={data}
           renderItem={renderItem}
@@ -63,8 +56,6 @@ const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, setClic
           ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto(s) não encontrado(s)</Text>}
           ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} searchProduct={searchProduct} searchPhrase={searchPhrase}/>}
         />
-      </View>
-    </SafeAreaView>
   );
 };
 
@@ -92,9 +83,6 @@ const FooterComponente = (props) => {
 export default List;
 
 const styles = StyleSheet.create({
-  list__container: {
-    width: "100%",
-  },
   item: {
     marginRight: 25,
     marginLeft: 25,

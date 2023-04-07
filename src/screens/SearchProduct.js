@@ -2,7 +2,6 @@ import { isEmpty } from "lodash";
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import {
   StyleSheet,
-  SafeAreaView,
   ActivityIndicator,
   TouchableOpacity, 
   Text,
@@ -82,20 +81,16 @@ const SearchProduct = ({navigation}) => {
     });
   }, [clicked]);
 
-  useEffect(useCallback(()=> {
+  useEffect(()=> {
     navigation.getParent()?.setOptions({
         tabBarStyle: {
             display: "none"
         }
     });
-    return () => navigation.getParent()?.setOptions({
-        tabBarStyle: 'flex'
-    });
-  }, [navigation]), []);
+  }, []);
 
   return (
     <ViewUILIB bg-bgColor>
-    <SafeAreaView style={[styles.root]}>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       {(
           <List
@@ -109,7 +104,6 @@ const SearchProduct = ({navigation}) => {
           />
       )}
     { loading && <LoadingAnimation/> }
-    </SafeAreaView>
     </ViewUILIB>
   );
 };
@@ -126,10 +120,6 @@ function LoadingAnimation() {
 export default SearchProduct;
 
 const styles = StyleSheet.create({
-  root: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
   title: {
     width: "100%",
     marginTop: 20,
