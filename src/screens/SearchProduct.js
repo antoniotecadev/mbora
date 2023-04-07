@@ -7,7 +7,6 @@ import {
   Text,
   View
 } from "react-native";
-import { View as ViewUILIB } from "react-native-ui-lib";
 import { CartContext } from "../CartContext";
 import { AlertDialog } from "../components/AlertDialog";
 import List from "../components/List";
@@ -90,7 +89,7 @@ const SearchProduct = ({navigation}) => {
   }, []);
 
   return (
-    <ViewUILIB bg-bgColor>
+      <>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       {(
           <List
@@ -104,7 +103,7 @@ const SearchProduct = ({navigation}) => {
           />
       )}
     { loading && <LoadingAnimation/> }
-    </ViewUILIB>
+    </>
   );
 };
 

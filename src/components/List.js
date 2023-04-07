@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { currency } from "../utils/utilitario";
 import { useNavigation } from "@react-navigation/native";
-import { Text as TextUILIB } from "react-native-ui-lib";
+import { Text as TextUILIB, View as ViewUILIB } from "react-native-ui-lib";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
@@ -49,13 +49,15 @@ const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, setClic
   };
 
   return (
-        <FlatList
-          data={data}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto(s) não encontrado(s)</Text>}
-          ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} searchProduct={searchProduct} searchPhrase={searchPhrase}/>}
-        />
+    <ViewUILIB bg-bgColor>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto(s) não encontrado(s)</Text>}
+        ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} searchProduct={searchProduct} searchPhrase={searchPhrase}/>}
+      />
+    </ViewUILIB>
   );
 };
 
