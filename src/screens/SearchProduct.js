@@ -62,7 +62,10 @@ const SearchProduct = ({navigation}) => {
       setEmpty(true);
       setData([]);
     } 
+  }, [searchPhrase])
+  
 
+  useEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
           <SearchBar
@@ -77,8 +80,7 @@ const SearchProduct = ({navigation}) => {
         </TouchableOpacity>
       ),
     });
-
-  }, [searchPhrase, clicked]);
+  }, [clicked]);
 
   useEffect(useCallback(()=> {
     navigation.getParent()?.setOptions({
