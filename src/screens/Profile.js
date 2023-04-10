@@ -227,7 +227,7 @@ const Favoritos = ({ nav, appearanceName, produts, onRefresh, refreshing })=> {
                 data={produts}
                 showsVerticalScrollIndicator={false}
                 ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
-                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
+                refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
          </>
         )
 }

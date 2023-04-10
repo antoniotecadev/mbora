@@ -164,7 +164,7 @@ export default function ProductsList({ navigation }) {
         ListFooterComponent={FooterComponente}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>} />
+        refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>} />
         : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />}
     </>
   );
