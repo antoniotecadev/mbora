@@ -113,6 +113,7 @@ export default ProfileEdit = ()=> {
                   onBlur={props.handleBlur('first_name')}
                   value={props.values.first_name}
                   placeholder="Nome"
+                  placeholderTextColor='gray'
                   style={styles.input}
                   onSubmitEditing={() => {
                     sobrenomeInput.focus()
@@ -125,6 +126,7 @@ export default ProfileEdit = ()=> {
                   onBlur={props.handleBlur('last_name')}
                   value={props.values.last_name}
                   placeholder="Sobrenome"
+                  placeholderTextColor='gray'
                   style={styles.input}
                   ref={el => sobrenomeInput = el}
                 />
@@ -137,6 +139,7 @@ export default ProfileEdit = ()=> {
                     keyboardType='email-address'
                     value={user.userEmail}
                     placeholder="E-mail"
+                    placeholderTextColor='gray'
                     style={styles.input}
                 />
                 <View style={styles.divisor}/>

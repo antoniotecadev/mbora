@@ -105,6 +105,7 @@ export default SignInForm = ()=> {
                     onBlur={props.handleBlur('email')}
                     value={props.values.email}
                     placeholder="E-mail"
+                    placeholderTextColor='gray'
                     style={styles.input}
                     onSubmitEditing={() => {
                       passwordInput.focus()
@@ -118,6 +119,7 @@ export default SignInForm = ()=> {
                     onBlur={props.handleBlur('password')}
                     value={props.values.password}
                     placeholder="Palavra - passe"
+                    placeholderTextColor='gray'
                     style={styles.input}
                     secureTextEntry={true}
                     ref={el => passwordInput = el}
