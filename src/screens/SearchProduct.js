@@ -11,7 +11,7 @@ import { CartContext } from "../CartContext";
 import { AlertDialog } from "../components/AlertDialog";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, Feather } from "@expo/vector-icons";
 
 const SearchProduct = ({navigation}) => {
 
@@ -78,12 +78,19 @@ const SearchProduct = ({navigation}) => {
   useEffect(()=> {
     navigation.setOptions({
       headerRight: () => (
-        clicked && <TouchableOpacity style={{padding: 10}} 
+        clicked ? <TouchableOpacity style={{padding: 10}} 
           onPress={() => {
             setSearchPhrase("");
             inputRef.current.clear();
           }}>
           <Entypo name="cross" size={20} color="orange"/>        
+        </TouchableOpacity>
+        :
+        <TouchableOpacity style={{padding: 10}} 
+          onPress={() => {
+            inputRef.current.focus();
+          }}>
+          <Feather name="search" size={20} color="orange"/>        
         </TouchableOpacity>
       ),
     });
