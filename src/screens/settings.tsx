@@ -1,6 +1,6 @@
 import React, {useMemo, useEffect, useState} from 'react';
 import {Alert, Linking, ScrollView} from 'react-native';
-import {View, ActionSheet, Text} from 'react-native-ui-lib';
+import {View, ActionSheet, Text, TouchableOpacity} from 'react-native-ui-lib';
 import {observer, useLocalObservable} from 'mobx-react';
 import appInfo from '../../app.json';
 import { deleteItemAsync } from 'expo-secure-store';
@@ -28,18 +28,16 @@ export const Settings: React.FC = observer(() => {
   const {links} = useConstants();
   const [loading, setLoading] = useState(false);
 
-  // OCULTAR NavigationBottom
-  // const navigation = useNavigation();
-  // useEffect(() => {
-  //   navigation.getParent()?.setOptions({
-  //     tabBarStyle: {
-  //       display: "none"
-  //     }
-  //   });
-  //   return () => navigation.getParent()?.setOptions({
-  //     tabBarStyle: 'flex'
-  //   });
-  // }, [navigation]);
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
+          <Text style={{color: 'orange', fontWeight: 'bold'}}>OK</Text>
+        </TouchableOpacity>
+      ),
+    });
+  }, [])
 
   const pickers: PickersState = useLocalObservable(() => ({
     appearance: false,

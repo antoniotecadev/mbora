@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect, useCallback } from 'react';
-import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import React, { useState, useContext, useEffect } from 'react';
+import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity, Text } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
@@ -10,7 +10,7 @@ import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
 
-export default ProfileEdit = ()=> {
+export default ProfileEdit = ({navigation})=> {
 
   const {user} = useStores();
   const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -80,6 +80,16 @@ export default ProfileEdit = ()=> {
             setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'})
       }
     }
+
+    useEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
+            <Text style={{color: 'orange', fontWeight: 'bold'}}>OK</Text>
+          </TouchableOpacity>
+        ),
+      });
+    }, [])
 
     return (
     <SafeAreaView style={styles.container}>
