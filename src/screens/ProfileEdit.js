@@ -82,13 +82,23 @@ export default ProfileEdit = ({navigation})=> {
     }
 
     useEffect(() => {
-      navigation.setOptions({
-        headerRight: () => (
-          <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
-            <Text style={{color: 'orange', fontWeight: 'bold'}}>OK</Text>
-          </TouchableOpacity>
-        ),
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+            display: "none"
+        }
       });
+      return ()=> {
+        navigation.getParent()?.setOptions({
+          tabBarStyle: 'flex'
+        });
+      }
+      // navigation.setOptions({
+      //   headerRight: () => (
+      //     <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
+      //       <Text style={{color: 'orange', fontWeight: 'bold'}}>OK</Text>
+      //     </TouchableOpacity>
+      //   ),
+      // });
     }, [])
 
     return (

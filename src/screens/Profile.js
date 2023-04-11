@@ -157,7 +157,7 @@ export default function Profile({ route }) {
                     {countFavorito == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Favoritos' numero={countFavorito}/>}
                     <Numeros text='A seguir' numero={32}/>
                 </View>
-                <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> nav.show('ProfileEditModal')}>
+                <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> nav.show('ProfileEdit')}>
                     <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Editar perfil</Text>
                 </TouchableOpacity>
             </View>

@@ -30,13 +30,16 @@ export const Settings: React.FC = observer(() => {
 
   const navigation = useNavigation();
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity style={{ padding: 10 }} onPress={() => navigation.goBack()}>
-          <Text style={{color: 'orange', fontWeight: 'bold'}}>OK</Text>
-        </TouchableOpacity>
-      ),
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+          display: "none"
+      }
     });
+    return ()=> {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: 'flex'
+      });
+    }
   }, [])
 
   const pickers: PickersState = useLocalObservable(() => ({
