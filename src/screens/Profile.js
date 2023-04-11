@@ -96,11 +96,12 @@ export default function Profile({ route }) {
                     produtcs.push(value);
                 }
             });
+            const regExpLiteral = /p-/gi;
             setTimeout(() => {
                 setRefreshing(false);
                 setProduts(produtcs);
                 setCountFavorito(produtcs.length);
-            }, keys.length * 1000);
+            }, String(keys).match(regExpLiteral).length * 1000);
         } catch (error) {
             setRefreshing(false);
             setShowDialog({visible: true, title: 'Erro Perfil', message: error.message, color: 'orangered'});
