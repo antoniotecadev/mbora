@@ -13,11 +13,12 @@ import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../s
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ProfileEdit from './ProfileEdit';
+import PreviewProfilePhoto from './PreviewProfilePhoto';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = '';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Profile'| 'ProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -77,6 +78,14 @@ const screens: ScreenLayouts = {
       headerShown: true
     }),
   },
+  PreviewProfilePhoto: {
+    name: 'PreviewProfilePhoto',
+    component: PreviewProfilePhoto,
+    options: () => ({
+      title: 'Alterar foto de perfil',
+      headerTintColor: 'orange',
+    }),
+  },
   Settings: {
     name: 'Settings',
     component: Settings,
@@ -131,7 +140,7 @@ const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpFo
 const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProduct, screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.CompanyProfile]);
-const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit]);
+const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto]);
 
 // Tabs
 const tabs: TabScreenLayouts = {

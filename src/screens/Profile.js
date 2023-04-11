@@ -3,7 +3,7 @@ import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { Avatar, TabController, Text as TextUILIB, Colors } from 'react-native-ui-lib';
+import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -12,6 +12,7 @@ import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
+import * as ImagePicker from 'expo-image-picker';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
 const profileIcon = require('../../assets/icons-profile-camera-100.png');
@@ -145,6 +146,19 @@ export default function Profile({ route }) {
         getProducts();
         getCountEncomenda();
     }, [])
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        
+        if (!result.canceled) {
+            nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri});
+        }
+    };
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
@@ -156,7 +170,7 @@ export default function Profile({ route }) {
                     source={preview} 
                     size={85} animate={false} 
                     badgePosition={'BOTTOM_RIGHT'} 
-                    badgeProps={{icon: profileIcon, size: 24, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> alert()}} />
+                    badgeProps={{icon: profileIcon, size: 24, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
                     {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
