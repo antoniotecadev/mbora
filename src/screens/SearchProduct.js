@@ -13,11 +13,13 @@ import { AlertDialog } from "../components/AlertDialog";
 import List from "../components/List";
 import SearchBar from "../components/SearchBar";
 import { Entypo, Feather } from "@expo/vector-icons";
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const SearchProduct = ({navigation}) => {
 
   const inputRef = useRef();
-  const { height } = Dimensions.get('window');
+  const headerHeight = useHeaderHeight();
+  const { width, height } = Dimensions.get('window');
 
   const [searchPhrase, setSearchPhrase] = useState(null);
   const [clicked, setClicked] = useState(false);
@@ -72,6 +74,8 @@ const SearchProduct = ({navigation}) => {
             setSearchPhrase={setSearchPhrase}
             setClicked={setClicked}
             inputRef={inputRef}
+            windowWidth={width}
+            headerHeight={headerHeight}
           />
       )
     });
