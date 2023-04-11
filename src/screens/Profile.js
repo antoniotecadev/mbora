@@ -3,7 +3,7 @@ import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
-import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
+import { Avatar, TabController, Text as TextUILIB, Colors } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -14,6 +14,7 @@ import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 
 const perfilImage = require('../../assets/products/car-101.jpg');
+const profileIcon = require('../../assets/icons-profile-camera-100.png');
 
 export default function Profile({ route }) {
 
@@ -151,7 +152,11 @@ export default function Profile({ route }) {
         <>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
-                <Avatar source={preview} size={85} animate={false} />
+                <Avatar 
+                    source={preview} 
+                    size={85} animate={false} 
+                    badgePosition={'BOTTOM_RIGHT'} 
+                    badgeProps={{icon: profileIcon, size: 24, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> alert()}} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
                     {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
