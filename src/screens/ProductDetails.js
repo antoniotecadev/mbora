@@ -83,6 +83,11 @@ export function ProductDetails({route, navigation}) {
             display: "none"
         }
     });
+    return ()=> {
+      navigation.getParent()?.setOptions({
+        tabBarStyle: 'flex'
+      });
+    }
   }, []);
   
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
