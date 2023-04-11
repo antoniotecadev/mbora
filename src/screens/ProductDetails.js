@@ -6,7 +6,8 @@ import {
   TouchableOpacity, 
   StyleSheet,
   ActivityIndicator,
-  Image as Img
+  Image as Img,
+  Dimensions
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
@@ -21,6 +22,7 @@ import { AlertDialog } from '../components/AlertDialog';
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 export function ProductDetails({route, navigation}) {
+  const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
   const [value, setValue] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -93,7 +95,7 @@ export function ProductDetails({route, navigation}) {
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
-    <ViewUILIB bg-bgColor>
+    <ViewUILIB style={{height: height}} bg-bgColor>
     {showDialogLocal &&
     <AlertDialog 
       showDialog={showDialogLocal} 

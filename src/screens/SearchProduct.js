@@ -5,7 +5,8 @@ import {
   ActivityIndicator,
   TouchableOpacity, 
   Text,
-  View
+  View,
+  Dimensions
 } from "react-native";
 import { CartContext } from "../CartContext";
 import { AlertDialog } from "../components/AlertDialog";
@@ -16,6 +17,7 @@ import { Entypo, Feather } from "@expo/vector-icons";
 const SearchProduct = ({navigation}) => {
 
   const inputRef = useRef();
+  const { height } = Dimensions.get('window');
 
   const [searchPhrase, setSearchPhrase] = useState(null);
   const [clicked, setClicked] = useState(false);
@@ -115,7 +117,7 @@ const SearchProduct = ({navigation}) => {
             setLoading={setLoading}
             searchPhrase={searchPhrase}
             data={data}
-            setClicked={setClicked}
+            windowHeight={height}
           />
       )}
     { loading && <LoadingAnimation/> }

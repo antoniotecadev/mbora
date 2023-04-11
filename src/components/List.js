@@ -34,7 +34,7 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
       </TouchableOpacity>
 };
 
-const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, setClicked, data }) => {
+const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, data, windowHeight }) => {
   const renderItem = ({ item }) => {
     return <Item item={item} />;
     // if (searchPhrase === "") {
@@ -49,7 +49,7 @@ const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, setClic
   };
 
   return (
-    <ViewUILIB bg-bgColor>
+    <ViewUILIB style={{height: windowHeight}} bg-bgColor>
       <FlatList
         data={data}
         renderItem={renderItem}
