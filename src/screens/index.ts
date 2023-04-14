@@ -66,7 +66,7 @@ const screens: ScreenLayouts = {
     component: Profile,
     options: () => ({
       title: 'Perfil',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   ProfileEdit: {
