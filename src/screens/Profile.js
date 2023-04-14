@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
@@ -13,14 +13,16 @@ import { useServices } from '../services';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as ImagePicker from 'expo-image-picker';
+import { AntDesign } from "@expo/vector-icons";
 
-export default function Profile({ route }) {
+export default function Profile({ route, navigation }) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
+    const [viewHeader, setViewHeader] = useState(true);
     const [image, setImage] = useState(null);
     const [countEncomenda, setCountEncomenda] = useState("-");
     const [countFavorito, setCountFavorito] = useState("-");
@@ -168,6 +170,40 @@ export default function Profile({ route }) {
         }
     };
 
+    const UserPhoto = useCallback(()=> {
+        return (
+            <Avatar 
+                source={image ? {uri: image} : preview} 
+                size={150} 
+                animate={true} 
+                badgePosition={'BOTTOM_RIGHT'} 
+                badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
+        )
+    }, [image])
+
+    const CountInfo = useCallback(()=> {
+        return (
+            <View style={styles.section}>
+                {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
+                {countFavorito == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Favoritos' numero={countFavorito}/>}
+                <Numeros text='A seguir' numero={32}/>
+            </View>
+        )
+    }, [countEncomenda, countFavorito])
+
+    const Buttons = useCallback(()=> {
+        return (
+                <>
+                    <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> nav.show('ProfileEdit')}>
+                        <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Editar perfil</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10}]} onPress={()=> setViewHeader(false)}>
+                        <AntDesign name='up' size={20} color='green'/>
+                    </TouchableOpacity>
+                </>
+        )
+    }, [])
+
     useEffect(() => {
         getURLProfilePhoto();
         getCountEncomenda();
@@ -182,28 +218,34 @@ export default function Profile({ route }) {
             setVisibleToast({visible: true, message: 'Foto de perfil alterada', backgroundColor: 'green'});
         }
     }, [route.params?.photoURL]);
+
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: viewHeader
+        });
+        navigation.getParent()?.setOptions({
+            tabBarStyle: {
+                display: viewHeader ? "flex" : "none"
+            }
+        });
+    }, [viewHeader]);
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
-        <>
+        <SafeAreaView>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
-                <Avatar 
-                    source={image ? {uri: image} : preview} 
-                    size={150} 
-                    animate={true} 
-                    badgePosition={'BOTTOM_RIGHT'} 
-                    badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
+            {viewHeader ?
+            <>
+                <UserPhoto/>
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
-                <View style={styles.section}>
-                    {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
-                    {countFavorito == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Favoritos' numero={countFavorito}/>}
-                    <Numeros text='A seguir' numero={32}/>
-                </View>
-                <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> nav.show('ProfileEdit')}>
-                    <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Editar perfil</Text>
-                </TouchableOpacity>
+                <CountInfo/>
+                <Buttons/>
+            </> :
+                <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
+                    <AntDesign name='down' size={20} color='green'/>
+                </TouchableOpacity>}
             </View>
             <TabController asCarousel={true} initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar
@@ -221,7 +263,7 @@ export default function Profile({ route }) {
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
             </TabController>
-        </>
+        </SafeAreaView>
     );
 }
 
@@ -303,5 +345,13 @@ const styles = StyleSheet.create({
     },
     count: { 
         alignItems: 'center', 
-        margin: 8 }
+        margin: 8 
+    },
+    touchableOpacityStyle: {
+        width: 50,
+        height: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
+        right: 10,
+    }
 });
