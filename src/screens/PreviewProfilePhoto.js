@@ -125,6 +125,19 @@ export default function PreviewProfilePhoto({route, navigation}) {
           useNativeDriver: true,
         }).start();
     }, [fadeAnim]);
+
+    useEffect(()=> {
+        navigation.getParent()?.setOptions({
+            tabBarStyle: {
+                display: "none"
+            }
+        });
+        return ()=> {
+            navigation.getParent()?.setOptions({
+                tabBarStyle: 'flex'
+            });
+        }
+    }, []);
     
     return (
         <ViewUILIB bg-bgColor style={styles.container}>
