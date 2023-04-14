@@ -65,7 +65,7 @@ export default SignInForm = ()=> {
             // Alert.alert('Result', JSON.stringify(rjd)); // For test
             // console.log(JSON.stringify(rjd)); // For test
         } catch (error) {
-          setShowDialog({visible: true, title: 'Erro Entrar Conta', message: error.message, color: 'orangered'})
+          setShowDialog({visible: true, title: 'Entrar Conta', message: error.message, color: 'orangered'})
         }
     } 
 
