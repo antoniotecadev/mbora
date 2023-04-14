@@ -194,6 +194,7 @@ export default ProfileEdit = ({navigation})=> {
                   onFocus={()=> setError({old_password: null})}
                   value={props.values.old_password}
                   placeholder="Palavra - passe"
+                  placeholderTextColor='gray'
                   style={styles.input}
                   secureTextEntry={true}
                   onSubmitEditing={() => {
@@ -208,6 +209,7 @@ export default ProfileEdit = ({navigation})=> {
                   onBlur={props.handleBlur('password')}
                   value={props.values.password}
                   placeholder="Nova palavra - passe"
+                  placeholderTextColor='gray'
                   style={styles.input}
                   secureTextEntry={true}
                   onSubmitEditing={() => {
@@ -223,6 +225,7 @@ export default ProfileEdit = ({navigation})=> {
                   onBlur={props.handleBlur('password_confirmation')}
                   value={props.values.password_confirmation}
                   placeholder="Confirmar nova palavra - passe"
+                  placeholderTextColor='gray'
                   style={styles.input}
                   secureTextEntry={true}
                   ref={el => comfirmPasswordInput = el}
