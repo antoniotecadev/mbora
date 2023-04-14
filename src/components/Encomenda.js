@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, FlatList, Text, RefreshControl, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Product } from './Product';
-import ToastMessage from './ToastMessage';
 
 export default function Encomenda({ appearanceName, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
 
@@ -14,22 +13,19 @@ export default function Encomenda({ appearanceName, fetchEncomendas, encomendas,
     }, []);
 
     return(
-        <>
-            <ToastMessage />
-            <FlatList
-                columnWrapperStyle={{
-                    justifyContent: "space-between",
-                }}
-                numColumns={2}
-                contentContainerStyle={styles.productsListContainer}
-                keyExtractor={keyExtractor}
-                renderItem={renderItemProduct}
-                ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchEncomendas={fetchEncomendas}/>}
-                data={encomendas}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem encomendas</Text>}
-                refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(0)}/>}/>
-         </>
+        <FlatList
+            columnWrapperStyle={{
+                justifyContent: "space-between",
+            }}
+            numColumns={2}
+            contentContainerStyle={styles.productsListContainer}
+            keyExtractor={keyExtractor}
+            renderItem={renderItemProduct}
+            ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchEncomendas={fetchEncomendas}/>}
+            data={encomendas}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem encomendas</Text>}
+            refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(0)}/>}/>
         )
 }
 

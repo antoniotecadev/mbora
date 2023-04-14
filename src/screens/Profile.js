@@ -234,6 +234,7 @@ export default function Profile({ route, navigation }) {
     
     return (
         <SafeAreaView>
+            <ToastMessage />
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
             {viewHeader ?
@@ -300,21 +301,18 @@ const Favoritos = ({ nav, appearanceName, produts, onRefresh, refreshing })=> {
     }, []);
 
     return(
-        <>
-            <ToastMessage />
-            <FlatList
-                columnWrapperStyle={{
-                justifyContent: "space-between",
-                }}
-                numColumns={2}
-                contentContainerStyle={styles.productsListContainer}
-                keyExtractor={keyExtractor}
-                renderItem={renderItemProduct}
-                data={produts}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
-                refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
-         </>
+        <FlatList
+            columnWrapperStyle={{
+            justifyContent: "space-between",
+            }}
+            numColumns={2}
+            contentContainerStyle={styles.productsListContainer}
+            keyExtractor={keyExtractor}
+            renderItem={renderItemProduct}
+            data={produts}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
+            refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
         )
 }
 
