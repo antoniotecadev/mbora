@@ -191,10 +191,10 @@ export default function Profile({ route }) {
             <View style={styles.infoContainer}>
                 <Avatar 
                     source={image ? {uri: image} : preview} 
-                    size={85} 
+                    size={150} 
                     animate={true} 
                     badgePosition={'BOTTOM_RIGHT'} 
-                    badgeProps={{icon: cameraIcon, size: 24, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
+                    badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
                     {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
