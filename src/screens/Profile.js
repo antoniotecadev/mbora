@@ -14,22 +14,20 @@ import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as ImagePicker from 'expo-image-picker';
 
-const perfilImage = require('../../assets/products/car-101.jpg');
-const profileIcon = require('../../assets/icons-profile-camera-100.png');
-
 export default function Profile({ route }) {
-
+    const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
+    const [image, setImage] = useState(null);
     const [countEncomenda, setCountEncomenda] = useState("-");
     const [countFavorito, setCountFavorito] = useState("-");
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const { showDialog, setShowDialog } = useContext(CartContext);
+    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
@@ -106,7 +104,7 @@ export default function Profile({ route }) {
             }, String(keys).match(regExpLiteral).length * 1000);
         } catch (error) {
             setRefreshing(false);
-            setShowDialog({visible: true, title: 'Erro Perfil', message: error.message, color: 'orangered'});
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [produts]);
 
@@ -140,13 +138,6 @@ export default function Profile({ route }) {
         }
     }
 
-    useEffect(() => {
-        setRefreshing(true);
-        fetchEncomendas(false).then(()=> setRefreshing(false));
-        getProducts();
-        getCountEncomenda();
-    }, [])
-
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -159,6 +150,38 @@ export default function Profile({ route }) {
             nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri});
         }
     };
+
+    const getURLProfilePhoto = async()=> {
+        try {
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/profilephoto/user/url',
+            {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                }
+            });
+            let rjd = await response.json();
+            setImage(rjd.photo_url);
+        } catch (error) {
+            setShowDialog({visible: true, title: 'Erro Foto de Perfil', message: error.message, color: 'orangered'});
+        }
+    };
+
+    useEffect(() => {
+        getURLProfilePhoto();
+        getCountEncomenda();
+        setRefreshing(true);
+        fetchEncomendas(false).then(()=> setRefreshing(false));
+        getProducts();
+    }, []);
+
+    useEffect(() => {
+        if (route.params?.photoURL) {
+            setImage(route.params.photoURL);
+            setVisibleToast({visible: true, message: 'Foto de perfil alterada', backgroundColor: 'green'});
+        }
+    }, [route.params?.photoURL]);
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
@@ -167,10 +190,11 @@ export default function Profile({ route }) {
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <View style={styles.infoContainer}>
                 <Avatar 
-                    source={preview} 
-                    size={85} animate={false} 
+                    source={image ? {uri: image} : preview} 
+                    size={85} 
+                    animate={true} 
                     badgePosition={'BOTTOM_RIGHT'} 
-                    badgeProps={{icon: profileIcon, size: 24, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
+                    badgeProps={{icon: cameraIcon, size: 24, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <View style={styles.section}>
                     {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
