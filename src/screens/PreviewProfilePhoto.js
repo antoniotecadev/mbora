@@ -13,7 +13,7 @@ const { width, height } = Dimensions.get('window');
 
 export default function PreviewProfilePhoto({route, navigation}) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
-    const { imageUri } = route.params;
+    const { imageUri, userId } = route.params;
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false)
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
@@ -77,12 +77,17 @@ export default function PreviewProfilePhoto({route, navigation}) {
     }
 
     useEffect(()=> {
+        let uploadTask;
         const storage = getStorage(app);
         navigation.setOptions({
             headerRight: () => (
                 uploading ? <ActivityIndicator color={'orange'}/> :
                 <TouchableOpacity style={{padding: 10}} onPress={async() => {
                     try {
+                        if(userId == null) {
+                            setShowDialog({visible: true, title: 'Ocorreu um erro', message: 'Identificador de usuário não encontrado.', color: 'orangered'});
+                            return;
+                        }
                         setUploading(true);
                         const newImage = await manipulateAsync(uri, [], {
                             compress: 0.1,
@@ -91,8 +96,8 @@ export default function PreviewProfilePhoto({route, navigation}) {
                         const metadata = { contentType: 'image/jpeg' };
                         let imageFile = await fetch(newImage.uri);
                         let imageBlob = await imageFile.blob()
-                        const storageRef = ref(storage, 'usuarios/perfil/imagem/' + Date.now());
-                        const uploadTask = uploadBytesResumable(storageRef, imageBlob, metadata);
+                        const storageRef = ref(storage, 'usuarios/perfil/foto/foto_perfil_' + userId);
+                        uploadTask = uploadBytesResumable(storageRef, imageBlob, metadata);
                         uploadTask.on('state_changed',
                         () => {
                             setUploading(true);
@@ -116,6 +121,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
                 </TouchableOpacity>
             ),
         });
+        return ()=> uploadTask && uploadTask.cancel();
     }, [uploading]);
 
     useEffect(() => {

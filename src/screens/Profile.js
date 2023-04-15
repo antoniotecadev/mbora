@@ -24,6 +24,7 @@ export default function Profile({ route, navigation }) {
     const [empty, setEmpty] = useState(false);
     const [viewHeader, setViewHeader] = useState(true);
     const [image, setImage] = useState(null);
+    const [userId, setUserId] = useState(null);
     const [countEncomenda, setCountEncomenda] = useState("-");
     const [countFavorito, setCountFavorito] = useState("-");
 
@@ -149,7 +150,7 @@ export default function Profile({ route, navigation }) {
         });
         
         if (!result.canceled) {
-            nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri});
+            nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri, userId: userId});
         }
     };
 
@@ -165,6 +166,7 @@ export default function Profile({ route, navigation }) {
             });
             let rjd = await response.json();
             setImage(rjd.photo_url);
+            setUserId(rjd.user_id); // Este id será usado nome da foto de perfil, para evitir ter mais de duma foto de usuario no firebase storage
         } catch (error) {
             setShowDialog({visible: true, title: 'Erro Foto de Perfil', message: error.message, color: 'orangered'});
         }
