@@ -2,7 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, TouchableOpacity, View, ActivityIndicator, SafeAreaView } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, SafeAreaView, Dimensions } from 'react-native';
 import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
@@ -15,6 +15,7 @@ import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign } from "@expo/vector-icons";
 
+const { width } = Dimensions.get('window');
 export default function Profile({ route, navigation }) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
@@ -23,6 +24,7 @@ export default function Profile({ route, navigation }) {
     const [lastVisible, setLastVisible] = useState(0);
     const [empty, setEmpty] = useState(false);
     const [viewHeader, setViewHeader] = useState(true);
+    const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
     const [userId, setUserId] = useState(null);
     const [countEncomenda, setCountEncomenda] = useState("-");
@@ -172,9 +174,10 @@ export default function Profile({ route, navigation }) {
         }
     };
 
-    const UserPhoto = useCallback(()=> {
+    const UserPhoto = useCallback(({setViewFullPhoto})=> {
         return (
             <Avatar 
+                onPress={()=> setViewFullPhoto(true)}
                 source={image ? {uri: image} : preview} 
                 size={150} 
                 animate={true} 
@@ -238,10 +241,11 @@ export default function Profile({ route, navigation }) {
         <SafeAreaView>
             <ToastMessage />
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
+            {viewFullPhoto ? <ViewFullPhoto photoURI={image} setViewFullPhoto={setViewFullPhoto} /> :
             <View style={styles.infoContainer}>
             {viewHeader ?
             <>
-                <UserPhoto/>
+                <UserPhoto setViewFullPhoto={setViewFullPhoto}/>
                 <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
                 <CountInfo/>
                 <Buttons/>
@@ -249,7 +253,7 @@ export default function Profile({ route, navigation }) {
                 <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
                     <AntDesign name='down' size={20} color='green'/>
                 </TouchableOpacity>}
-            </View>
+            </View>}
             <TabController asCarousel={true} initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar
                     backgroundColor={getAppearenceColor(ui.appearanceName)} 
@@ -318,6 +322,15 @@ const Favoritos = ({ nav, appearanceName, produts, onRefresh, refreshing })=> {
         )
 }
 
+const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
+    return (
+        <TouchableOpacity style={styles.fullphoto} onPress={()=> setViewFullPhoto(false)}>
+            <Image source={{ uri: photoURI }} style={styles.fullphoto}/>
+            <TextUILIB $textDefault style={{textAlign: 'center', bottom: 40}}>Toque a foto para voltar</TextUILIB>
+        </TouchableOpacity>
+    )
+}
+
 const styles = StyleSheet.create({
     infoContainer: {
         padding: 8,
@@ -353,5 +366,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         right: 10,
+    },
+    fullphoto : {
+        width: '100%', 
+        height: width,
+        resizeMode: 'contain',
     }
 });
