@@ -130,7 +130,8 @@ export default function ProductsList({ navigation }) {
         setProdutos((prevState) => [...prevState, ...responseJsonData]);
       }
     } catch (error) {
-      setError(error.message);
+      // setError(error.message); // Renderizar um component com mensagem de erro
+      setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
     }
   }, []);
 
@@ -150,7 +151,7 @@ export default function ProductsList({ navigation }) {
     <>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
-      { error == null ? 
+      {/* { error == null ?  */}
       <FlatList
         columnWrapperStyle={{
           justifyContent: "space-between",
@@ -165,7 +166,7 @@ export default function ProductsList({ navigation }) {
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>} />
-        : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />}
+        {/* : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />} */}
     </>
   );
 }
