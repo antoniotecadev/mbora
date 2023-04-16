@@ -162,6 +162,14 @@ export default ProfileEdit = ({navigation})=> {
                     placeholderTextColor='gray'
                     style={styles.input}
                 />
+                <TextInput
+                    editable={false}
+                    keyboardType='phone-pad'
+                    value={user.userTelephone}
+                    placeholder="Telefone"
+                    placeholderTextColor='gray'
+                    style={styles.input}
+                />
                 <View style={styles.divisor}/>
             </>
           )}

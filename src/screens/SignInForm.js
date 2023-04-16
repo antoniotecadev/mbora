@@ -42,6 +42,7 @@ export default SignInForm = ()=> {
                 saveTokenId('token', rjd.data.token)
                 .then(()=>{
                     user.setUserName(rjd.data.name);
+                    user.setUserTelephone(rjd.data.telephone);
                     user.setUserEmail(rjd.data.email);
                     user.setAuth(true);
                   })
