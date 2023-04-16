@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TextInput, Button, ScrollView, KeyboardAvoiding
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage, FormHeader } from '../components/Form';
-import { Colors} from 'react-native-ui-lib';
+import { Colors } from 'react-native-ui-lib';
 import { modelName as device_name } from 'expo-device';
 import { getAppearenceColor, saveTokenId } from '../utils/utilitario';
 import { useStores } from '../stores';
@@ -152,6 +152,7 @@ export default SignUpForm = ({navigation})=> {
                 <ErroMessage touched={props.touched.last_name} errors={props.errors.last_name} />
                 <ErroMessage touched={true} errors={error.last_name} />
                 <View style={styles.divisor}></View>
+                <Text style={{color: 'gray'}}>Usar e-mail válido para receber informações relacionada as suas actividades na App.</Text>
                 <TextInput
                   keyboardType='email-address'
                   onChangeText={props.handleChange('email')}
