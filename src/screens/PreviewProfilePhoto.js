@@ -8,6 +8,7 @@ import { AlertDialog } from "../components/AlertDialog";
 import { getValueItemAsync } from "../utils/utilitario";
 import { View as ViewUILIB, Text as TextUILIB } from "react-native-ui-lib";
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+import { Feather } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,7 +28,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [4, 4],
             quality: 0.2,
         });
     
@@ -152,7 +153,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
                 {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <Animated.View style={{opacity: fadeAnim}}>
                     <TouchableOpacity disabled={uploading} onPress={()=> setViewFullPhoto(true)}>
-                        <Image source={{ uri: uri }} style={[styles.image, {opacity: 1}]}/> 
+                        <Image source={{ uri: uri }} style={styles.image}/> 
                     </TouchableOpacity>
                 </Animated.View>
                 {uploading ?
@@ -172,7 +173,7 @@ const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
     return (
         <TouchableOpacity style={styles.fullphoto} onPress={()=> setViewFullPhoto(false)}>
             <Image source={{ uri: photoURI }} style={styles.fullphoto}/>
-            <TextUILIB style={{paddingVertical: 10, textAlign: 'center', color: 'orangered'}}>Toque a foto para voltar</TextUILIB>
+            <Feather name='minimize-2' size={30} color='orange' style={{alignSelf: 'center', bottom: 40}} />
         </TouchableOpacity>
     )
 }
@@ -189,6 +190,8 @@ const styles = StyleSheet.create({
         borderRadius: 100, 
         borderColor: 'orange', 
         borderWidth: 2, 
+        resizeMode: 'contain',
+
     },
     button: {
         padding: 5,
@@ -206,6 +209,7 @@ const styles = StyleSheet.create({
     },
     fullphoto : {
         width: '100%', 
-        height: width
+        height: width,
+        resizeMode: 'contain',
     },
 });

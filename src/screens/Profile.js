@@ -13,7 +13,7 @@ import { useServices } from '../services';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as ImagePicker from 'expo-image-picker';
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
 const { width } = Dimensions.get('window');
 export default function Profile({ route, navigation }) {
@@ -147,8 +147,8 @@ export default function Profile({ route, navigation }) {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+            aspect: [4, 4],
+            quality: 0.2,
         });
         
         if (!result.canceled) {
@@ -326,7 +326,7 @@ const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
     return (
         <TouchableOpacity style={styles.fullphoto} onPress={()=> setViewFullPhoto(false)}>
             <Image source={{ uri: photoURI }} style={styles.fullphoto}/>
-            <TextUILIB $textDefault style={{textAlign: 'center', bottom: 40}}>Toque a foto para voltar</TextUILIB>
+            <Feather name='minimize-2' size={30} color='orange' style={{alignSelf: 'center', bottom: 40}} />
         </TouchableOpacity>
     )
 }
