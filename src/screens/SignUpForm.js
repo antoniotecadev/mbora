@@ -15,13 +15,15 @@ export default SignUpForm = ({navigation})=> {
   const {user} = useStores();
   const { showDialog, setShowDialog } = useContext(CartContext);
 
-  let sobrenomeInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
+  let sobrenomeInput = null, telefoneInput = null, emailInput = null, passwordInput = null, comfirmPasswordInput = null;
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
   const initialValues = { 
     device_name: null,
     first_name: null,
     last_name: null,
     email: null,
+    telephone: null,
     password: null,
     password_confirmation: null,
   }
@@ -64,6 +66,9 @@ export default SignUpForm = ({navigation})=> {
             } else if (rjd.data.message.email != undefined) {
               messageError = rjd.data.message.email;
               setError({ email: messageError[0] });
+            } else if (rjd.data.message.telephone != undefined) {
+              messageError = rjd.data.message.telephone;
+              setError({ telephone: messageError[0] });
             } else if (rjd.data.message.password != undefined) {
               messageError = rjd.data.message.password;
               setError({ password: messageError[0] });
@@ -94,7 +99,7 @@ export default SignUpForm = ({navigation})=> {
         <View style={{paddingHorizontal: 16, flex: 1}}>
         <FormHeader title='Mbora' />
         <Formik
-          initialValues={{first_name: '', last_name: '', email: '', password: '', password_confirmation: '' }}
+          initialValues={{first_name: '', last_name: '', telephone: '', email: '', password: '', password_confirmation: '' }}
           validationSchema={Yup.object({
             first_name: Yup.string()
                 .min(4, 'O nome tem que ter no mínimo 4 caracteres')
@@ -104,16 +109,20 @@ export default SignUpForm = ({navigation})=> {
                 .min(4, 'O sobrenome tem que ter no mínimo 4 caracteres')
                 .max(20, 'O sobrenome tem que ter no máximo 20 caracteres')
                 .required('Digite seu sobrenome'),
+            telephone: Yup.string()
+                .matches(phoneRegExp, 'Número de telefone não é válido')
+                .min(9,'No mínimo 9 dígitos')
+                .required('Digite seu número de telefone'), 
             email: Yup.string()
                 .email('Email não é válido')              
-                .required('Digite o email'),
+                .required('Digite seu email'),
             password: Yup.string()
                 .min(8, 'A palavra - passe tem que ter no mínimo 8 caracteres')
-                .required('Digite a palavra - passe'),
+                .required('Digite sua palavra - passe'),
             password_confirmation: Yup.string()
                 .oneOf([Yup.ref('password')], 'Palavra - passe não coincide')
                 .min(8, 'A palavra - passe tem que ter no mínimo 8 caracteres')
-                .required('Confirme a palavra - passe'),
+                .required('Confirme sua palavra - passe'),
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
@@ -162,12 +171,27 @@ export default SignUpForm = ({navigation})=> {
                   placeholderTextColor='gray'
                   style={styles.input}
                   onSubmitEditing={() => {
-                    passwordInput.focus()
+                    telefoneInput.focus()
                   }}
                   ref={el => emailInput = el}
                 />
                 <ErroMessage touched={props.touched.email} errors={props.errors.email} />
                 <ErroMessage touched={true} errors={error.email} />
+                <TextInput
+                  keyboardType='phone-pad'
+                  onChangeText={props.handleChange('telephone')}
+                  onBlur={props.handleBlur('telephone')}
+                  value={props.values.telephone}
+                  placeholder="Telefone"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  onSubmitEditing={() => {
+                    passwordInput.focus()
+                  }}
+                  ref={el => telefoneInput = el}
+                />
+                <ErroMessage touched={props.touched.telephone} errors={props.errors.telephone} />
+                <ErroMessage touched={true} errors={error.telephone} />
                 <View style={styles.divisor}></View>
                 <TextInput
                   keyboardType='visible-password'
