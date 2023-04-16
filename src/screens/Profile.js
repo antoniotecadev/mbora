@@ -189,8 +189,8 @@ export default function Profile({ route, navigation }) {
     const CountInfo = useCallback(()=> {
         return (
             <View style={styles.section}>
-                {countEncomenda == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Encomendas' numero={countEncomenda}/>}
-                {countFavorito == 0 ? <ActivityIndicator color='white' style={styles.count}/> : <Numeros text='Favoritos' numero={countFavorito}/>}
+                <Numeros text='Encomendas' numero={countEncomenda}/>
+                <Numeros text='Favoritos' numero={countFavorito}/>
                 <Numeros text='A seguir' numero={32}/>
             </View>
         )
