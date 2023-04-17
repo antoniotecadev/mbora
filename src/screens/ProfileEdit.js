@@ -15,25 +15,28 @@ export default ProfileEdit = ({navigation})=> {
   const {user} = useStores();
   const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
-  let sobrenomeInput = null, passwordInput = null, comfirmPasswordInput = null;
+  let sobrenomeInput = null, passwordEmailInput=null, passwordInput = null, comfirmPasswordInput = null;
 
   const initialValues = { 
     first_name: null,
     last_name: null,
+    email: null,
     old_password: null,
     password: null,
     password_confirmation: null,
   }
 
-  const [focus, setFocus] = useState({name: false, password: false})
+  const [focus, setFocus] = useState({name: false, email: false, password: false})
   const [error, setError] = useState(initialValues);
 
-  const userUpdate = async (us, isName, resetForm)=> {
+  const userUpdate = async (us, action, resetForm)=> {
       try {
         let URL = null;
-        if (isName) {
+        if (action == 0) {
             URL = 'http://192.168.18.3/mborasystem-admin/public/api/mbora/update/user';
-        } else {
+        } else if(action == 1) {
+            URL = 'http://192.168.18.3/mborasystem-admin/public/api/mbora/update/email/user';
+        } else if(action == 3) {
             URL = 'http://192.168.18.3/mborasystem-admin/public/api/mbora/update/password/user';
         }
         let response = await fetch(URL,
@@ -49,10 +52,12 @@ export default ProfileEdit = ({navigation})=> {
 
         let rjd = await response.json();
         if(rjd.success) {
-            if (isName) {
+            if (action == 0) {
               navigation.setOptions({title: us.first_name + ' ' + us.last_name})
               user.setUserFirstName(rjd.data.first_name);
               user.setUserLastName(rjd.data.last_name);
+            } else if(action == 1) {
+              user.setUserEmail(us.email);
             }
             resetForm();
             setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
@@ -123,7 +128,7 @@ export default ProfileEdit = ({navigation})=> {
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
-              userUpdate(values, true, formikActions.resetForm).then(()=> { 
+              userUpdate(values, 0, formikActions.resetForm).then(()=> { 
                 formikActions.setSubmitting(false)
                 formikActions.setValues({first_name: values.first_name, last_name: values.last_name})
             });
@@ -170,24 +175,67 @@ export default ProfileEdit = ({navigation})=> {
                 <ErroMessage touched={props.touched.last_name} errors={props.errors.last_name} />
                 <ErroMessage touched={true} errors={error.last_name} />
                 {focus.name && <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>}
-                <View style={styles.divisor}/>
+            </>
+          )}
+        </Formik>
+        <Formik
+          initialValues={{email: user.userEmail || '', password: ''}}
+          validationSchema={Yup.object({
+            email: Yup.string()
+              .email('Email não é válido')              
+              .required('Digite seu email'),
+            password: Yup.string()
+              .required('Digite a sua palavra - passe'),
+          })}
+          onSubmit={(values, formikActions) => {
+            setTimeout(() => {
+              userUpdate(values, 1, formikActions.resetForm).then(()=> {
+                formikActions.setSubmitting(false)
+                formikActions.setValues({email: values.email})
+              });
+            }, 500);
+          }}>
+          {props => (
+            <>
+            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
+                <TextUILIB marginT-20 textColor>*Alterar e-mail</TextUILIB>
+                <TextUILIB style={{color: 'gray', fontSize: 10}}>Usar e-mail válido para receber informações relacionada as suas actividades na App.</TextUILIB>
                 <TextInput
-                    editable={false}
-                    keyboardType='email-address'
-                    value={user.userEmail}
-                    placeholder="E-mail"
-                    placeholderTextColor='gray'
-                    style={styles.input}
-                />
+                  onFocus={()=> setFocus({email: true})}
+                  keyboardType='email-address'
+                  onChangeText={props.handleChange('email')}
+                  onBlur={()=> {
+                    if(user.userEmail == props.values.email) {
+                      setFocus({email: false})
+                    }
+                    props.handleBlur('email')
+                  }}
+                  value={props.values.email}
+                  placeholder="E-mail"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  onSubmitEditing={() => {
+                    passwordEmailInput.focus()
+                  }}
+                  />
+                <ErroMessage touched={props.touched.email} errors={props.errors.email} />
+                <ErroMessage touched={true} errors={error.email} />
+                {focus.email && <>
                 <TextInput
-                    editable={false}
-                    keyboardType='phone-pad'
-                    value={user.userTelephone}
-                    placeholder="Telefone"
-                    placeholderTextColor='gray'
-                    style={styles.input}
+                  keyboardType='visible-password'
+                  onChangeText={props.handleChange('password')}
+                  onBlur={props.handleBlur('password')}
+                  onFocus={()=> setError({password: null})}
+                  value={props.values.password}
+                  placeholder="Palavra - passe"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  secureTextEntry={true}
+                  ref={el => passwordEmailInput = el}
                 />
-                <View style={styles.divisor}/>
+                <ErroMessage touched={props.touched.password} errors={props.errors.password} />
+                <ErroMessage touched={true} errors={error.password} />
+                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/></>}
             </>
           )}
         </Formik>
@@ -205,7 +253,7 @@ export default ProfileEdit = ({navigation})=> {
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
-              userUpdate(values, false, formikActions.resetForm).then(()=> formikActions.setSubmitting(false));
+              userUpdate(values, 3, formikActions.resetForm).then(()=> formikActions.setSubmitting(false));
             }, 500);
           }}>
           {props => (
