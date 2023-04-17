@@ -25,9 +25,10 @@ export default ProfileEdit = ({navigation})=> {
     password_confirmation: null,
   }
 
-    const [error, setError] = useState(initialValues);
+  const [focus, setFocus] = useState({name: false, password: false})
+  const [error, setError] = useState(initialValues);
 
-    const userUpdate = async (us, isName, resetForm)=> {
+  const userUpdate = async (us, isName, resetForm)=> {
       try {
         let URL = null;
         if (isName) {
@@ -134,8 +135,14 @@ export default ProfileEdit = ({navigation})=> {
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB marginT-20 textColor>*Alterar Nome e Sobrenome</TextUILIB>
                 <TextInput
+                  onFocus={()=> setFocus({name: true})}
                   onChangeText={props.handleChange('first_name')}
-                  onBlur={props.handleBlur('first_name')}
+                  onBlur={()=> {
+                    if(user.userFirstName == props.values.first_name) {
+                      setFocus({name: false})
+                    }
+                    props.handleBlur('first_name')
+                  }}
                   value={props.values.first_name}
                   placeholder="Nome"
                   placeholderTextColor='gray'
@@ -147,8 +154,14 @@ export default ProfileEdit = ({navigation})=> {
                 <ErroMessage touched={props.touched.first_name} errors={props.errors.first_name} />
                 <ErroMessage touched={true} errors={error.first_name} />
                 <TextInput
+                  onFocus={()=> setFocus({name: true})}
                   onChangeText={props.handleChange('last_name')}
-                  onBlur={props.handleBlur('last_name')}
+                  onBlur={()=> {
+                    if(user.userLastName == props.values.last_name) {
+                      setFocus({name: false})
+                    }
+                    props.handleBlur('last_name')
+                  }}
                   value={props.values.last_name}
                   placeholder="Sobrenome"
                   placeholderTextColor='gray'
@@ -157,7 +170,7 @@ export default ProfileEdit = ({navigation})=> {
                 />
                 <ErroMessage touched={props.touched.last_name} errors={props.errors.last_name} />
                 <ErroMessage touched={true} errors={error.last_name} />
-                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>
+                {focus.name && <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>}
                 <View style={styles.divisor}/>
                 <TextInput
                     editable={false}
@@ -233,9 +246,13 @@ export default ProfileEdit = ({navigation})=> {
                 <ErroMessage touched={props.touched.password} errors={props.errors.password} />
                 <ErroMessage touched={true} errors={error.password} />
                 <TextInput
+                  onFocus={()=> setFocus({password: true})}
                   keyboardType='visible-password'
                   onChangeText={props.handleChange('password_confirmation' )}
-                  onBlur={props.handleBlur('password_confirmation')}
+                  onBlur={()=> {
+                    setFocus({password: false})
+                    props.handleBlur('password_confirmation')
+                  }}
                   value={props.values.password_confirmation}
                   placeholder="Confirmar nova palavra - passe"
                   placeholderTextColor='gray'
@@ -245,7 +262,7 @@ export default ProfileEdit = ({navigation})=> {
                 />
                 <ErroMessage touched={props.touched.password_confirmation} errors={props.errors.password_confirmation} />
                 <ErroMessage touched={true} errors={error.password_confirmation} />
-                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>
+                {focus.password && <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>}
             </>
           )}
         </Formik>
