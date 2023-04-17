@@ -121,7 +121,7 @@ export default ProfileEdit = ({navigation})=> {
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 16, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
         <ToastMessage />
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
           initialValues={{first_name: user.userFirstName || '', last_name: user.userLastName || ''}}
           validationSchema={Yup.object({

@@ -100,7 +100,7 @@ export default SignInForm = ()=> {
               }, 500);
             }}>
             {props => (
-              <ScrollView>
+              <ScrollView showsVerticalScrollIndicator={false}>
                 <TextInput
                     keyboardType='email-address'
                     onChangeText={props.handleChange('email')}

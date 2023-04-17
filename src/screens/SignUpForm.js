@@ -134,7 +134,7 @@ export default SignUpForm = ({navigation})=> {
           {props => (
             <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <TextInput
                   onChangeText={props.handleChange('first_name')}
                   onBlur={props.handleBlur('first_name')}
