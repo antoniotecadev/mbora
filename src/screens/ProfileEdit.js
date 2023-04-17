@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity, Text } from 'react-native';
+import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
@@ -107,9 +107,8 @@ export default ProfileEdit = ({navigation})=> {
 
     return (
     <SafeAreaView style={styles.container}>
+        <View style={{paddingHorizontal: 16, flex: 1}}>
         <ToastMessage />
-        <ScrollView style={{paddingHorizontal: 16}}>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Formik
           initialValues={{first_name: user.userFirstName || '', last_name: user.userLastName || ''}}
           validationSchema={Yup.object({
@@ -210,8 +209,9 @@ export default ProfileEdit = ({navigation})=> {
             }, 500);
           }}>
           {props => (
-            <>
+            <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
+              <ScrollView>
                 <TextUILIB marginT-20 textColor>*Alterar Palavra - passe</TextUILIB>
                 <TextInput
                   keyboardType='visible-password'
@@ -263,11 +263,11 @@ export default ProfileEdit = ({navigation})=> {
                 <ErroMessage touched={props.touched.password_confirmation} errors={props.errors.password_confirmation} />
                 <ErroMessage touched={true} errors={error.password_confirmation} />
                 {focus.password && <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>}
-            </>
+                </ScrollView>
+            </KeyboardAvoidingView>
           )}
         </Formik>
-        </KeyboardAvoidingView>
-        </ScrollView>
+        </View>
       </SafeAreaView>
     );
   }
