@@ -305,7 +305,9 @@ export default ProfileEdit = ({navigation})=> {
                   keyboardType='visible-password'
                   onChangeText={props.handleChange('password_confirmation' )}
                   onBlur={()=> {
-                    setFocus({password: false})
+                    if(props.values.password_confirmation == ''){
+                      setFocus({password: false})
+                    }
                     props.handleBlur('password_confirmation')
                   }}
                   value={props.values.password_confirmation}
