@@ -46,6 +46,7 @@ export default (): JSX.Element => {
       if (rjd.success) {
         user.setUserFirstName(rjd.data.first_name);
         user.setUserLastName(rjd.data.last_name);
+        user.setUserTelephone(rjd.data.telephone);
         user.setUserEmail(rjd.data.email);
         user.setAuth(true);
         await SplashScreen.hideAsync();
