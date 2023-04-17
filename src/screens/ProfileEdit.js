@@ -15,7 +15,7 @@ export default ProfileEdit = ({navigation})=> {
   const {user} = useStores();
   const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
-  let sobrenomeInput = null, passwordEmailInput=null, passwordInput = null, comfirmPasswordInput = null;
+  let nomeInput = null, sobrenomeInput = null, passwordEmailInput=null, passwordInput = null, comfirmPasswordInput = null;
 
   const initialValues = { 
     first_name: null,
@@ -151,7 +151,9 @@ export default ProfileEdit = ({navigation})=> {
                   onChangeText={props.handleChange('first_name')}
                   onBlur={()=> {
                     if(user.userFirstName == props.values.first_name) {
-                      setFocus({name: false})
+                      if(!sobrenomeInput.isFocused()) {
+                        setFocus({name: false})
+                      }
                     }
                     props.handleBlur('first_name')
                   }}
@@ -162,6 +164,7 @@ export default ProfileEdit = ({navigation})=> {
                   onSubmitEditing={() => {
                     sobrenomeInput.focus()
                   }}
+                  ref={el => nomeInput = el}
                 />
                 <ErroMessage touched={props.touched.first_name} errors={props.errors.first_name} />
                 <ErroMessage touched={true} errors={error.first_name} />
@@ -170,9 +173,10 @@ export default ProfileEdit = ({navigation})=> {
                   onChangeText={props.handleChange('last_name')}
                   onBlur={()=> {
                     if(user.userLastName == props.values.last_name) {
-                      setFocus({name: false})
-                    }
-                    props.handleBlur('last_name')
+                      if(!nomeInput.isFocused()) {
+                        setFocus({name: false})
+                      }                    }
+                      props.handleBlur('last_name')
                   }}
                   value={props.values.last_name}
                   placeholder="Sobrenome"
