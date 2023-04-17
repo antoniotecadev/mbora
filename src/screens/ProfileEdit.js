@@ -88,11 +88,11 @@ export default ProfileEdit = ({navigation})=> {
                     setError({ password_confirmation: messageError });
                 }
             } else {
-                setShowDialog({visible: true, title: 'Erro', message: rjd.data.message, color: 'orangered'})
+                setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
             }
         }
       } catch (error) {
-            setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'})
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
       }
     }
 
