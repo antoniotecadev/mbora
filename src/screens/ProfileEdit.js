@@ -144,7 +144,7 @@ export default ProfileEdit = ({navigation})=> {
           {props => (
             <>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-                <TextUILIB marginT-20 textColor>*Alterar Nome e Sobrenome</TextUILIB>
+                <TextUILIB marginT-20 textColor>Alterar Nome e Sobrenome</TextUILIB>
                 <TextInput
                   onFocus={()=> setFocus({name: true})}
                   onChangeText={props.handleChange('first_name')}
@@ -205,7 +205,7 @@ export default ProfileEdit = ({navigation})=> {
           {props => (
             <>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-                <TextUILIB marginT-20 textColor>*Alterar e-mail</TextUILIB>
+                <TextUILIB marginT-20 textColor>Alterar e-mail</TextUILIB>
                 <TextUILIB style={{color: 'gray', fontSize: 10}}>Usar e-mail válido para receber informações relacionada as suas actividades na App.</TextUILIB>
                 <TextInput
                   onFocus={()=> setFocus({email: true})}
@@ -267,7 +267,7 @@ export default ProfileEdit = ({navigation})=> {
             <KeyboardAvoidingView style={{ flex: 1, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
               <ScrollView>
-                <TextUILIB marginT-20 textColor>*Alterar Palavra - passe</TextUILIB>
+                <TextUILIB marginT-20 textColor>Alterar Palavra - passe</TextUILIB>
                 <TextInput
                   keyboardType='visible-password'
                   onChangeText={props.handleChange('old_password')}
