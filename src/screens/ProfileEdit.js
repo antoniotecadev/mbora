@@ -121,7 +121,10 @@ export default ProfileEdit = ({navigation})=> {
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
-              userUpdate(values, true, formikActions.resetForm).then(()=> formikActions.setSubmitting(false));
+              userUpdate(values, true, formikActions.resetForm).then(()=> { 
+                formikActions.setSubmitting(false)
+                formikActions.setValues({first_name: values.first_name, last_name: values.last_name})
+            });
             }, 500);
           }}>
           {props => (
