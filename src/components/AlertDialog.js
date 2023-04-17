@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {StyleSheet, TextInput, ScrollView} from 'react-native';
+import {StyleSheet, TextInput, ScrollView, KeyboardAvoidingView} from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { Button as ButtonUILIB, Constants, Dialog, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
@@ -8,7 +8,6 @@ import { getAppearenceColor } from '../utils/utilitario';
 import ModalMaps from './Modal';
 
 export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, onPress})=> {
-
     let addressInput = null, informationInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -55,10 +54,12 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
           renderPannableHeader={renderPannableHeader}
           pannableHeaderProps={{title: titulo}}
           supportedOrientations={['portrait', 'landscape']}>
+        <KeyboardAvoidingView style={{flexDirection: 'column', justifyContent: 'center' }}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
           <ScrollView>
           <TextUILIB $textDefault margin-15 color = {cor}>{mensagem}</TextUILIB>
           {isEncomenda && 
           <>
+            {props.values.information && Platform.OS === 'ios' && <TextUILIB marginB-20 marginH-15 style={{color: 'gray'}}>Informação: {props.values.information}</TextUILIB>}
             <TextUILIB marginH-20 textColor>*Telefone</TextUILIB>
             <TextInput
               color={props.isSubmitting ? 'gray' : 'black'}
@@ -112,6 +113,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             <ButtonUILIB label={'OK'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} onPress={()=> setShowDialog({visible: false})}/>}
           </ViewUILIB>
           </ScrollView>
+          </KeyboardAvoidingView>
       </Dialog>)}
     </Formik>
     );
