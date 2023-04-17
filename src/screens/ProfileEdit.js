@@ -49,6 +49,7 @@ export default ProfileEdit = ({navigation})=> {
         let rjd = await response.json();
         if(rjd.success) {
             if (isName) {
+              navigation.setOptions({title: us.first_name + ' ' + us.last_name})
               user.setUserFirstName(rjd.data.first_name);
               user.setUserLastName(rjd.data.last_name);
             }
@@ -83,6 +84,7 @@ export default ProfileEdit = ({navigation})=> {
     }
 
     useEffect(() => {
+      navigation.setOptions({title: user.userFirstName + ' ' + user.userLastName})
       navigation.getParent()?.setOptions({
         tabBarStyle: {
             display: "none"
@@ -130,7 +132,6 @@ export default ProfileEdit = ({navigation})=> {
           {props => (
             <>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-                <TextUILIB marginT-10 textColor text50>{user.userFirstName + ' ' + user.userLastName}</TextUILIB>
                 <TextUILIB marginT-20 textColor>*Alterar Nome e Sobrenome</TextUILIB>
                 <TextInput
                   onChangeText={props.handleChange('first_name')}
