@@ -21,6 +21,7 @@ export default ProfileEdit = ({navigation})=> {
     first_name: null,
     last_name: null,
     email: null,
+    password_verify_email: null,
     old_password: null,
     password: null,
     password_confirmation: null,
@@ -70,13 +71,19 @@ export default ProfileEdit = ({navigation})=> {
                 } else if (rjd.data.message.last_name != undefined) {
                     messageError = rjd.data.message.last_name;
                     setError({ last_name: messageError[0] });
+                } else if (rjd.data.message.email != undefined) {
+                    messageError = rjd.data.message.email;
+                    setError({ email: messageError[0] });
+                } else if (rjd.data.message.password_verify_email != undefined) {
+                    messageError = rjd.data.message.password_verify_email;
+                    setError({ password_verify_email: messageError[0] });
                 } else if (rjd.data.message.password != undefined) {
                     messageError = rjd.data.message.password;
                     setError({ password: messageError[0] });
                 } else if (rjd.data.message.old_password != undefined) {
                     messageError = rjd.data.message.old_password;
                     setError({ old_password: messageError });
-                } else {
+                } else if(rjd.data.message.password_confirmation != undefined) {
                     messageError = rjd.data.message.password_confirmation;
                     setError({ password_confirmation: messageError[0] });
                 }
@@ -179,12 +186,12 @@ export default ProfileEdit = ({navigation})=> {
           )}
         </Formik>
         <Formik
-          initialValues={{email: user.userEmail || '', password: ''}}
+          initialValues={{email: user.userEmail || '', password_verify_email: ''}}
           validationSchema={Yup.object({
             email: Yup.string()
               .email('Email não é válido')              
               .required('Digite seu email'),
-            password: Yup.string()
+            password_verify_email: Yup.string()
               .required('Digite a sua palavra - passe'),
           })}
           onSubmit={(values, formikActions) => {
@@ -223,18 +230,18 @@ export default ProfileEdit = ({navigation})=> {
                 {focus.email && <>
                 <TextInput
                   keyboardType='visible-password'
-                  onChangeText={props.handleChange('password')}
-                  onBlur={props.handleBlur('password')}
-                  onFocus={()=> setError({password: null})}
-                  value={props.values.password}
+                  onChangeText={props.handleChange('password_verify_email')}
+                  onBlur={props.handleBlur('password_verify_email')}
+                  onFocus={()=> setError({password_verify_email: null})}
+                  value={props.values.password_verify_email}
                   placeholder="Palavra - passe"
                   placeholderTextColor='gray'
                   style={styles.input}
                   secureTextEntry={true}
                   ref={el => passwordEmailInput = el}
                 />
-                <ErroMessage touched={props.touched.password} errors={props.errors.password} />
-                <ErroMessage touched={true} errors={error.password} />
+                <ErroMessage touched={props.touched.password_verify_email} errors={props.errors.password_verify_email} />
+                <ErroMessage touched={true} errors={error.password_verify_email} />
                 <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/></>}
             </>
           )}
