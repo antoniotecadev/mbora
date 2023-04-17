@@ -76,7 +76,7 @@ export default ProfileEdit = ({navigation})=> {
                     setError({ email: messageError[0] });
                 } else if (rjd.data.message.password_verify_email != undefined) {
                     messageError = rjd.data.message.password_verify_email;
-                    setError({ password_verify_email: messageError[0] });
+                    setError({ password_verify_email: messageError });
                 } else if (rjd.data.message.password != undefined) {
                     messageError = rjd.data.message.password;
                     setError({ password: messageError[0] });
