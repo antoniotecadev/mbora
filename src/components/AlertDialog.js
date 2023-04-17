@@ -7,7 +7,7 @@ import { ErroMessage } from './Form';
 import { getAppearenceColor } from '../utils/utilitario';
 import ModalMaps from './Modal';
 
-export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, onPress})=> {
+export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, userTelephone = null, onPress})=> {
     let addressInput = null, informationInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -27,7 +27,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
 
     return (
     <Formik
-      initialValues={{address: '', telephone: '', information: ''}}
+      initialValues={{address: '', telephone: userTelephone || '', information: ''}}
       validationSchema={Yup.object({
         address: Yup.string()
             .max(50,'No máximo 50 caracteres')

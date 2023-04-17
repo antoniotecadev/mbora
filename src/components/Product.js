@@ -11,7 +11,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ appearanceName, isEncomenda = false, isFavorite = false, removeFavorite, produto, onPress } ) {
+export function Product({ appearanceName, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress } ) {
   
   const [showDialog, setShowDialog] = useState(false);
   const { addItemToCart, encomendar } = useContext(CartContext);
@@ -64,8 +64,10 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
       titulo='Encomenda' 
       mensagem={'Destino: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
       cor='green' 
+      isEncomenda={true}
+      userTelephone={userTelephone}
       onPress={encomendarProduct}
-      isEncomenda={true}/>}
+      />}
     <Card style={[styles.card, {backgroundColor: getAppearenceColor(appearanceName), shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={onPress}>
     {/* <Image style={styles.thumb} {...{preview, uri}} /> */}
     <Card.Image style={styles.thumb} source= {imageProduct} />

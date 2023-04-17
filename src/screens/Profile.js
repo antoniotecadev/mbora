@@ -265,7 +265,7 @@ export default function Profile({ route, navigation }) {
                         <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos nav={nav} appearanceName={ui.appearanceName} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
+                        <Favoritos nav={nav} appearanceName={ui.appearanceName} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
@@ -281,13 +281,14 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const Favoritos = ({ nav, appearanceName, produts, onRefresh, refreshing })=> {
+const Favoritos = ({ nav, appearanceName, userTelephone, produts, onRefresh, refreshing })=> {
 
     const { setVisibleToast } = useContext(CartContext);
 
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
           produto: product,
+          userTelephone: userTelephone
         });
     }
     const removeFavorite = useCallback(async (product)=> {
@@ -303,7 +304,7 @@ const Favoritos = ({ nav, appearanceName, produts, onRefresh, refreshing })=> {
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product appearanceName={appearanceName} isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} onPress={()=> showProductDetails(product)}/>
+        return <Product appearanceName={appearanceName} isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(

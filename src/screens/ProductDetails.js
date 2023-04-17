@@ -28,7 +28,7 @@ export function ProductDetails({route, navigation}) {
   const [loading, setLoading] = useState(false);
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
-  const { produto } = route.params;
+  const { produto, userTelephone } = route.params;
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
   const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
@@ -103,8 +103,9 @@ export function ProductDetails({route, navigation}) {
       titulo='Encomenda' 
       mensagem={'Destino: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
       cor='green' 
+      isEncomenda={true}
       onPress={encomendarProduct}
-      isEncomenda={true}/>}
+      userTelephone={userTelephone}/>}
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
       <ScrollView>

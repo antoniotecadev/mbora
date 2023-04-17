@@ -14,9 +14,11 @@ import List from "../components/List";
 import SearchBar from "../components/SearchBar";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { useHeaderHeight } from '@react-navigation/elements';
+import { useStores } from "../stores";
 
 const SearchProduct = ({navigation}) => {
 
+  const {user} = useStores();
   const inputRef = useRef();
   const headerHeight = useHeaderHeight();
   const { width, height } = Dimensions.get('window');
@@ -122,6 +124,7 @@ const SearchProduct = ({navigation}) => {
             searchPhrase={searchPhrase}
             data={data}
             windowHeight={height}
+            userTelephone={user.userTelephone}
           />
       )}
     { loading && <LoadingAnimation/> }

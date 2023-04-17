@@ -14,12 +14,12 @@ import { Text as TextUILIB, View as ViewUILIB } from "react-native-ui-lib";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-const Item = ({ item }) => {
+const Item = ({ item, userTelephone }) => {
 
 const navigation = useNavigation();
 
 const showProductDetails = (item)=> {
-  navigation.navigate('ProductDetails', { produto: item });
+  navigation.navigate('ProductDetails', { produto: item, userTelephone: userTelephone });
 }
 
 return <TouchableOpacity onPress={()=> showProductDetails(item)}>
@@ -34,9 +34,9 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
       </TouchableOpacity>
 };
 
-const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, data, windowHeight }) => {
+const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
   const renderItem = ({ item }) => {
-    return <Item item={item} />;
+    return <Item item={item} userTelephone={userTelephone} />;
     // if (searchPhrase === "") {
       // return <Item item={item} />;
     // }
