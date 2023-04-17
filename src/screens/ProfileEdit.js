@@ -67,25 +67,25 @@ export default ProfileEdit = ({navigation})=> {
                 let messageError;
                 if (rjd.data.message.first_name != undefined) {
                     messageError = rjd.data.message.first_name;
-                    setError({ first_name: messageError[0] });
+                    setError({ first_name: messageError });
                 } else if (rjd.data.message.last_name != undefined) {
                     messageError = rjd.data.message.last_name;
-                    setError({ last_name: messageError[0] });
+                    setError({ last_name: messageError });
                 } else if (rjd.data.message.email != undefined) {
                     messageError = rjd.data.message.email;
-                    setError({ email: messageError[0] });
+                    setError({ email: messageError });
                 } else if (rjd.data.message.password_verify_email != undefined) {
                     messageError = rjd.data.message.password_verify_email;
                     setError({ password_verify_email: messageError });
                 } else if (rjd.data.message.password != undefined) {
                     messageError = rjd.data.message.password;
-                    setError({ password: messageError[0] });
+                    setError({ password: messageError });
                 } else if (rjd.data.message.old_password != undefined) {
                     messageError = rjd.data.message.old_password;
                     setError({ old_password: messageError });
                 } else if(rjd.data.message.password_confirmation != undefined) {
                     messageError = rjd.data.message.password_confirmation;
-                    setError({ password_confirmation: messageError[0] });
+                    setError({ password_confirmation: messageError });
                 }
             } else {
                 setShowDialog({visible: true, title: 'Erro', message: rjd.data.message, color: 'orangered'})
