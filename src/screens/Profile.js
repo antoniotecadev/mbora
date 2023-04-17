@@ -246,7 +246,7 @@ export default function Profile({ route, navigation }) {
             {viewHeader ?
             <>
                 <UserPhoto setViewFullPhoto={setViewFullPhoto}/>
-                <TextUILIB textColor marginT-8 text70>{user.userName}</TextUILIB>
+                <TextUILIB textColor marginT-8 text70>{user.userFirstName + ' ' + user.userLastName}</TextUILIB>
                 <CountInfo/>
                 <Buttons/>
             </> :

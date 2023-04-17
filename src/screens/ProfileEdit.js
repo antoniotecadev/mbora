@@ -49,7 +49,8 @@ export default ProfileEdit = ({navigation})=> {
         let rjd = await response.json();
         if(rjd.success) {
             if (isName) {
-                user.setUserName(rjd.data.name);
+              user.setUserFirstName(rjd.data.first_name);
+              user.setUserLastName(rjd.data.last_name);
             }
             resetForm();
             setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
@@ -107,7 +108,7 @@ export default ProfileEdit = ({navigation})=> {
         <ScrollView style={{paddingHorizontal: 16}}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         <Formik
-          initialValues={{first_name: '', last_name: ''}}
+          initialValues={{first_name: user.userFirstName || '', last_name: user.userLastName || ''}}
           validationSchema={Yup.object({
             first_name: Yup.string()
                 .min(4, 'O nome tem que ter no mínimo 4 caracteres')
@@ -126,7 +127,7 @@ export default ProfileEdit = ({navigation})=> {
           {props => (
             <>
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-                <TextUILIB marginT-10 textColor text50>{user.userName}</TextUILIB>
+                <TextUILIB marginT-10 textColor text50>{user.userFirstName + ' ' + user.userLastName}</TextUILIB>
                 <TextUILIB marginT-20 textColor>*Alterar Nome e Sobrenome</TextUILIB>
                 <TextInput
                   onChangeText={props.handleChange('first_name')}

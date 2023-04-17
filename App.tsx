@@ -44,7 +44,8 @@ export default (): JSX.Element => {
       });
       let rjd = await response.json();
       if (rjd.success) {
-        user.setUserName(rjd.data.name);
+        user.setUserFirstName(rjd.data.first_name);
+        user.setUserLastName(rjd.data.last_name);
         user.setUserEmail(rjd.data.email);
         user.setAuth(true);
         await SplashScreen.hideAsync();
