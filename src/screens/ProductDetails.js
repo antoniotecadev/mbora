@@ -63,9 +63,13 @@ export function ProductDetails({route, navigation}) {
   }
 
   const isFavorite = async () => {
-    let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produto/mbora/isfavorito/' + produto.id);
+    let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produto/mbora/isfavorito/' + produto.id, {
+      headers: {
+        'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+      }
+    });
     let responseJsonData = await response.json();
-    setValue(isEmpty(responseJsonData));;
+    setValue(isEmpty(responseJsonData));
   }
   // VERIFICAR PRODUTO AOS FAVORITOS LOCALMENTE
   // const isFavorite = async () => {
