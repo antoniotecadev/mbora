@@ -7,7 +7,8 @@ import {
   StyleSheet,
   ActivityIndicator,
   Image as Img,
-  Dimensions
+  Dimensions,
+  Platform
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
@@ -205,7 +206,7 @@ export function ProductDetails({route, navigation}) {
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
-                {loading.favorito ? <ActivityIndicator color='orange'/> : <IconButton text={'Favorito'} iconNames={isfavorito ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> isfavorito ? addProductFavorite().then(()=> setLoading({favorito: false})) : removeProductFavorite().then(()=> setLoading({favorito: false}))}/>}
+                {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : <IconButton text={'Favorito'} iconNames={isfavorito ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> isfavorito ? addProductFavorite().then(()=> setLoading({favorito: false})) : removeProductFavorite().then(()=> setLoading({favorito: false}))}/>}
                 {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
