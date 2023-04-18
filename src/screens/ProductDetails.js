@@ -48,6 +48,7 @@ export function ProductDetails({route, navigation}) {
       });
       let rjd = await response.json();
       if(rjd.success) {
+        setValue(isEmpty(rjd.data.favorito));
         setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
       } else {
         if (rjd.message == 'Erro de validação') {
@@ -114,6 +115,7 @@ export function ProductDetails({route, navigation}) {
       });
       let rjd = await response.json();
       if(rjd.success) {
+        setValue(isEmpty(rjd.data.favorito));
         setVisibleToast({visible: true, message: produto.nome + ' removido dos favoritos.', backgroundColor: 'red'});
       } else {
         if (rjd.message == 'Erro de validação') {
