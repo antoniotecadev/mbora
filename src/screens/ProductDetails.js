@@ -25,7 +25,7 @@ const imageProduct = require('../../assets/products/oleo.jpg');
 export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
-  const [value, setValue] = useState([]);
+  const [isfavorito, setIsFavorito] = useState([]);
   const [loading, setLoading] = useState({encomenda: false, favorito: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
@@ -48,7 +48,7 @@ export function ProductDetails({route, navigation}) {
       });
       let rjd = await response.json();
       if(rjd.success) {
-        setValue(isEmpty(rjd.data.favorito));
+        setIsFavorito(isEmpty(rjd.data.favorito));
         setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
       } else {
         if (rjd.message == 'Erro de validação') {
@@ -70,11 +70,11 @@ export function ProductDetails({route, navigation}) {
       }
     });
     let responseJsonData = await response.json();
-    setValue(isEmpty(responseJsonData));
+    setIsFavorito(isEmpty(responseJsonData));
   }
   // VERIFICAR PRODUTO AOS FAVORITOS LOCALMENTE
   // const isFavorite = async () => {
-  //   setValue(await getItem());
+  //   setIsFavorito(await getItem());
   // }
 
   // ADICIONAR PRODUTO AOS FAVORITOS LOCALMENTE
@@ -115,7 +115,7 @@ export function ProductDetails({route, navigation}) {
       });
       let rjd = await response.json();
       if(rjd.success) {
-        setValue(isEmpty(rjd.data.favorito));
+        setIsFavorito(isEmpty(rjd.data.favorito));
         setVisibleToast({visible: true, message: produto.nome + ' removido dos favoritos.', backgroundColor: 'red'});
       } else {
         if (rjd.message == 'Erro de validação') {
@@ -205,7 +205,7 @@ export function ProductDetails({route, navigation}) {
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
-                {loading.favorito ? <ActivityIndicator color='orange'/> : <IconButton text={'Favorito'} iconNames={value ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value ? addProductFavorite().then(()=> setLoading({favorito: false})) : removeProductFavorite().then(()=> setLoading({favorito: false}))}/>}
+                {loading.favorito ? <ActivityIndicator color='orange'/> : <IconButton text={'Favorito'} iconNames={isfavorito ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> isfavorito ? addProductFavorite().then(()=> setLoading({favorito: false})) : removeProductFavorite().then(()=> setLoading({favorito: false}))}/>}
                 {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
