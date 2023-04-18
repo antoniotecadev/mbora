@@ -72,7 +72,7 @@ export function CartProvider(props) {
   }
 
   const encomendar = async (setLoading, imei, productId, productName, productQuantity, clientData)=> {
-    setLoading(true);
+    setLoading({encomenda: true});
     try {
       let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/encomenda',
       {
@@ -117,7 +117,7 @@ export function CartProvider(props) {
           }
       }
     } catch (error) {
-      setLoading(false);
+      setLoading({encomenda: false});
       setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'});
     }
   }

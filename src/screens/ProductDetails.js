@@ -11,7 +11,7 @@ import {
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
-import { currency, removeSpaceLowerCase } from '../utils/utilitario';
+import { currency, getValueItemAsync, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
 import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
@@ -25,26 +25,57 @@ export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
   const [value, setValue] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState({encomenda: false, favorito: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
   const { produto, userTelephone } = route.params;
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
   const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
+  const addProductFavorite = async ()=> {
+    setLoading({favorito: true}); 
+    try {
+      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/adicionar/produtos/mbora/favorito',
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+        },
+        body: JSON.stringify({ id_products_mbora: produto.id })
+      });
+      let rjd = await response.json();
+      if(rjd.success) {
+        setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
+      } else {
+        if (rjd.message == 'Erro de validação') {
+          setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message.id_products_mbora, color: 'orangered'});
+        } else {
+          setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
+        }
+      }
+    } catch (error) {
+      setLoading({favorito: false}); 
+      setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
+    }
+  }
+
   const isFavorite = async () => {
     setValue(await getItem());
   }
 
-  const addProductFavorite = async ()=> { 
-    try {
-      await setItem(JSON.stringify(produto));
-      isFavorite();
-      setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
-    } catch (error) {
-      setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
-    }
-  }
+  // ADICIONAR PRODUTO AOS FAVORITOS LOCALMENTE
+  // const addProductFavorite = async ()=> { 
+  //   try {
+  //     await setItem(JSON.stringify(produto));
+  //     alert(JSON.stringify(produto, null, 2));
+  //     isFavorite();
+  //     setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
+  //   } catch (error) {
+  //     setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
+  //   }
+  // }
 
   const removeProductFavorite = async ()=> { 
     try {
@@ -65,7 +96,7 @@ export function ProductDetails({route, navigation}) {
   const encomendarProduct = async(clientData)=> {
     await encomendar(setLoading, [produto.imei], [produto.id], [produto.nome], [1], clientData)
     .then(()=> {
-      setLoading(false)
+      setLoading({encomenda: false})
       setShowDialogLocal(false);
     });
   }
@@ -75,7 +106,7 @@ export function ProductDetails({route, navigation}) {
       isFavorite();
       getViewNumberProduct();
     } catch (error) {
-      setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'});     
+      setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
     }
   },[]);
 
@@ -130,8 +161,8 @@ export function ProductDetails({route, navigation}) {
                 justifyContent: 'space-between',
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
-                {loading ? <ActivityIndicator color='white'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
-                <IconButton text={'Favorito'} iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite() : removeProductFavorite()}/>
+                {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
+                {loading.favorito ? <ActivityIndicator color='orange'/> : <IconButton text={'Favorito'} iconNames={value == null ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> value == null ? addProductFavorite().then(()=> setLoading({favorito: false})) : removeProductFavorite()}/>}
                 {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
