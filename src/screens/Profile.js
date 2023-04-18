@@ -21,8 +21,8 @@ export default function Profile({ route, navigation }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
-    const [lastVisible, setLastVisible] = useState(0);
-    const [empty, setEmpty] = useState(false);
+    const [lastVisible, setLastVisible] = useState({encomenda: 0, favorito: 0});
+    const [empty, setEmpty] = useState({encomenda: false, favorito: false});
     const [viewHeader, setViewHeader] = useState(true);
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
@@ -36,7 +36,7 @@ export default function Profile({ route, navigation }) {
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -50,26 +50,30 @@ export default function Profile({ route, navigation }) {
                 await deleteItemAsync('token');
                 user.setAuth(false);
             } else  if (!isEmpty(rjd)) {
-                setEmpty(false);
+                setEmpty({encomenda: false});
                 if (isMoreView) {
-                    pagination(rjd);
+                    pagination(rjd, true);
                     setEncomendas((prevState) => [...prevState, ...rjd]);
                 } else {
-                    pagination(rjd);
+                    pagination(rjd, true);
                     setEncomendas(rjd);
                 }
             } else {
-                setEmpty(true);
+                setEmpty({encomenda: true});
             }
         } catch (error) {
             setRefreshing(false);
-            setShowDialog({visible: true, title: 'Erro Encomendas', message: error.message, color: 'orangered'});
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
-    }, [lastVisible]);
+    }, [lastVisible.encomenda]);
 
-    function pagination(rjd) {
+    function pagination(rjd, isEncomenda) {
         // Usar Math.max quando a ordem for CRESCENTE
-        setLastVisible(Math.min(... rjd.map(e => e.id)));
+        if(isEncomenda) {
+            setLastVisible({encomenda: Math.min(... rjd.map(e => e.id))});
+        } else {
+            setLastVisible({favorito: Math.min(... rjd.map(e => e.id))});
+        }
     }
 
     const getCountEncomenda = useCallback(async()=> {
@@ -88,6 +92,39 @@ export default function Profile({ route, navigation }) {
             setShowDialog({visible: true, title: 'Erro Contar Encomendas', message: error.message, color: 'orangered'});
         }
     }, []);
+
+    const fetchFavoritos = useCallback(async(isMoreView)=> {
+        try {
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/favorito/mbora/lastVisible/' + lastVisible.favorito + '/isMoreView/' + isMoreView,
+            {
+                    headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                }
+            });
+            let rjd = await response.json();
+            if  (!rjd.success && rjd.message == 'Autenticação') {
+                setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
+                await deleteItemAsync('token');
+                user.setAuth(false);
+            } else  if (!isEmpty(rjd)) {
+                setEmpty({favorito: false});
+                if (isMoreView) {
+                    pagination(rjd, false);
+                    setProduts((prevState) => [...prevState, ...rjd]);
+                } else {
+                    pagination(rjd, false);
+                    setProduts(rjd);
+                }
+            } else {
+                setEmpty({favorito: true});
+            }
+        } catch (error) {
+            setRefreshing(false);
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
+        }
+    }, [lastVisible.favorito]);
 
     const getProducts = useCallback(async ()=> {
         let keys = [], produtcs = [];
@@ -121,7 +158,7 @@ export default function Profile({ route, navigation }) {
                 getCountEncomenda();
                 break;
             case 1:
-                getProducts();
+                fetchFavoritos(false).then(()=> setRefreshing(false));
                 break;
             case 2:
                 break;
@@ -214,7 +251,7 @@ export default function Profile({ route, navigation }) {
         getCountEncomenda();
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
-        getProducts();
+        fetchFavoritos(false).then(()=> setRefreshing(false));
     }, []);
 
     useEffect(() => {
@@ -262,10 +299,10 @@ export default function Profile({ route, navigation }) {
                     selectedLabelColor={'orange'}/>
                 <TabController.PageCarousel>
                     <TabController.TabPage index={0}>
-                        <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty}/>
+                        <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos nav={nav} appearanceName={ui.appearanceName} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing}/>
+                        <Favoritos nav={nav} appearanceName={ui.appearanceName} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
@@ -281,8 +318,9 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const Favoritos = ({ nav, appearanceName, userTelephone, produts, onRefresh, refreshing })=> {
+const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts, onRefresh, refreshing, empty })=> {
 
+    const [loading, setLoading] = useState(false);
     const { setVisibleToast } = useContext(CartContext);
 
     const showProductDetails = (product)=> {
@@ -318,7 +356,8 @@ const Favoritos = ({ nav, appearanceName, userTelephone, produts, onRefresh, ref
             renderItem={renderItemProduct}
             data={produts}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos favoritos</Text>}
+            ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchFavoritos={fetchFavoritos}/>}
+            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem favoritos</Text>}
             refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
         )
 }
@@ -329,6 +368,27 @@ const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
             <Image source={{ uri: photoURI }} style={styles.fullphoto}/>
             <Feather name='minimize-2' size={30} color='orange' style={{alignSelf: 'center', bottom: 40}} />
         </TouchableOpacity>
+    )
+}
+
+const FooterComponente = (props) => {
+    return (
+      <View style={styles.footer}>
+        <TouchableOpacity
+          onPress={()=> {
+                props.setLoading(true);
+                props.fetchFavoritos(true).then(()=> props.setLoading(false));
+          }
+        }
+          style={styles.loadMoreBtn}>
+          <Text style={styles.btnText}>{props.loading ? 'A carregar favoritos' : 'Mais favoritos'}</Text>
+          {props.loading ? (
+            <ActivityIndicator
+              color="white"
+              style={{marginLeft: 8}} />
+          ) : null}
+        </TouchableOpacity>
+      </View>
     )
 }
 
@@ -372,5 +432,24 @@ const styles = StyleSheet.create({
         width: '100%', 
         height: width,
         resizeMode: 'contain',
-    }
+    },
+    footer: {
+        padding: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+      },
+      loadMoreBtn: {
+        padding: 10,
+        backgroundColor: 'orange',
+        borderRadius: 4,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      btnText: {
+        color: 'white',
+        fontSize: 15,
+        textAlign: 'center',
+      }
 });
