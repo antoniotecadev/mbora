@@ -72,7 +72,7 @@ export default function Profile({ route, navigation }) {
         if(isEncomenda) {
             setLastVisible({encomenda: Math.min(... rjd.map(e => e.id))});
         } else {
-            setLastVisible({favorito: Math.min(... rjd.map(e => e.id))});
+            setLastVisible({favorito: Math.min(... rjd.map(e => e.idFavorito))});
         }
     }
 
