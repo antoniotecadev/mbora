@@ -125,30 +125,31 @@ export default function Profile({ route, navigation }) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.favorito]);
-
-    const getProducts = useCallback(async ()=> {
-        let keys = [], produtcs = [];
-        try {
-            keys = await AsyncStorage.getAllKeys();
-            keys.reverse();
-            keys.map(async (key)=> {
-                let jsonValue = await AsyncStorage.getItem(key);
-                let value =  jsonValue != null ? JSON.parse(jsonValue) : null;
-                if(value.id != null) {
-                    produtcs.push(value);
-                }
-            });
-            const regExpLiteral = /p-/gi;
-            setTimeout(() => {
-                setRefreshing(false);
-                setProduts(produtcs);
-                setCountFavorito(produtcs.length);
-            }, String(keys).match(regExpLiteral).length * 1000);
-        } catch (error) {
-            setRefreshing(false);
-            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
-        }
-    }, [produts]);
+    
+    //CONSULTAR PRODUTOS DE FAVORITOS LOCALMENTE
+    // const getProducts = useCallback(async ()=> {
+    //     let keys = [], produtcs = [];
+    //     try {
+    //         keys = await AsyncStorage.getAllKeys();
+    //         keys.reverse();
+    //         keys.map(async (key)=> {
+    //             let jsonValue = await AsyncStorage.getItem(key);
+    //             let value =  jsonValue != null ? JSON.parse(jsonValue) : null;
+    //             if(value.id != null) {
+    //                 produtcs.push(value);
+    //             }
+    //         });
+    //         const regExpLiteral = /p-/gi;
+    //         setTimeout(() => {
+    //             setRefreshing(false);
+    //             setProduts(produtcs);
+    //             setCountFavorito(produtcs.length);
+    //         }, String(keys).match(regExpLiteral).length * 1000);
+    //     } catch (error) {
+    //         setRefreshing(false);
+    //         setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
+    //     }
+    // }, [produts]);
 
     const onRefresh = async (index)=> {
         setRefreshing(true);
