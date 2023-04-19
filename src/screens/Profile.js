@@ -89,7 +89,7 @@ export default function Profile({ route, navigation }) {
             let rjd = await response.json();
             setCountEncomenda(rjd);
         } catch (error) {
-            setShowDialog({visible: true, title: 'Erro Contar Encomendas', message: error.message, color: 'orangered'});
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, []);
 
@@ -125,7 +125,24 @@ export default function Profile({ route, navigation }) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.favorito]);
-    
+
+    const getCountFavorito = useCallback(async()=> {
+        try {
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/count/favorito',
+            {
+                    headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                }
+            });
+            let rjd = await response.json();
+            setCountFavorito(rjd);
+        } catch (error) {
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
+        }
+    }, []);
+
     //CONSULTAR PRODUTOS DE FAVORITOS LOCALMENTE
     // const getProducts = useCallback(async ()=> {
     //     let keys = [], produtcs = [];
@@ -160,6 +177,7 @@ export default function Profile({ route, navigation }) {
                 break;
             case 1:
                 fetchFavoritos(false).then(()=> setRefreshing(false));
+                getCountFavorito();
                 break;
             case 2:
                 break;
@@ -250,6 +268,7 @@ export default function Profile({ route, navigation }) {
     useEffect(() => {
         getURLProfilePhoto();
         getCountEncomenda();
+        getCountFavorito();
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fetchFavoritos(false).then(()=> setRefreshing(false));
