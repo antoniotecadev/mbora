@@ -321,7 +321,7 @@ const Numeros = ({text, numero}) => {
 const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts, onRefresh, refreshing, empty })=> {
 
     const [loading, setLoading] = useState(false);
-    const { setVisibleToast } = useContext(CartContext);
+    const { setShowDialog, setVisibleToast } = useContext(CartContext);
 
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
@@ -329,20 +329,50 @@ const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts
           userTelephone: userTelephone
         });
     }
-    const removeFavorite = useCallback(async (product)=> {
-        try {     
-            await AsyncStorage.removeItem('p-' +  product.id);
-            onRefresh(1);
-            setVisibleToast({visible: true, message: product.nome + ' removido dos favoritos.', backgroundColor: 'red'});
-        } catch (error) {
-            setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
-        }    
-    }, []);
+
+    // REMOVER PRODUTO DOS FAVORITOS LOCALMENTE
+    // const removeProductFavorite = useCallback(async (product)=> {
+    //     try {     
+    //         await AsyncStorage.removeItem('p-' +  product.id);
+    //         onRefresh(1);
+    //         setVisibleToast({visible: true, message: product.nome + ' removido dos favoritos.', backgroundColor: 'red'});
+    //     } catch (error) {
+    //         setVisibleToast({visible: true, message: error.message, backgroundColor: 'red'});
+    //     }    
+    // }, []);
 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product appearanceName={appearanceName} isFavorite={true} removeFavorite={()=> removeFavorite(product)} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
+        
+        const removeProductFavorite = async()=> { 
+            try {
+              let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/eliminar/produto/mbora/favorito',
+              {
+                method: 'DELETE',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                },
+                body: JSON.stringify({ id_products_mbora: product.id })
+              });
+              let rjd = await response.json();
+              if(rjd.success) {
+                onRefresh(1);
+                setVisibleToast({visible: true, message: product.nome + ' removido dos favoritos.', backgroundColor: 'red'});
+              } else {
+                if (rjd.message == 'Erro de validação') {
+                  setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message.id_products_mbora, color: 'orangered'});
+                } else {
+                  setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
+                }      
+              }
+            } catch (error) {
+              setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
+            }
+        }
+        return <Product appearanceName={appearanceName} isFavorite={true} removeFavorite={()=> removeProductFavorite()} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(
