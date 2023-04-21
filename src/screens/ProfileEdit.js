@@ -119,6 +119,7 @@ export default ProfileEdit = ({navigation})=> {
 
     return (
     <SafeAreaView style={styles.container}>
+      {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <KeyboardAvoidingView style={{ flex: 1, paddingHorizontal: 16, flexDirection: 'column', justifyContent: 'center',}}  behavior={Platform.OS === 'ios' ? 'padding' : 'height'} enabled keyboardVerticalOffset={100}>
         <ToastMessage />
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -144,7 +145,6 @@ export default ProfileEdit = ({navigation})=> {
           }}>
           {props => (
             <>
-            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB marginT-20 textColor style={{fontWeight: 'bold'}}>Alterar Nome e Sobrenome</TextUILIB>
                 <TextInput
                   onFocus={()=> setFocus({name: true})}
@@ -209,7 +209,6 @@ export default ProfileEdit = ({navigation})=> {
           }}>
           {props => (
             <>
-            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB marginT-20 textColor style={{fontWeight: 'bold'}}>Alterar e-mail</TextUILIB>
                 <TextUILIB style={{color: 'gray', fontSize: 10}}>Usar e-mail válido para receber informações relacionada as suas actividades na App.</TextUILIB>
                 <TextInput
@@ -270,7 +269,6 @@ export default ProfileEdit = ({navigation})=> {
           }}>
           {props => (
             <>
-            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB marginT-20 textColor style={{fontWeight: 'bold'}}>Alterar Palavra - passe</TextUILIB>
                 <TextInput
                   keyboardType='visible-password'
