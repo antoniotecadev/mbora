@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import { View, StyleSheet, TextInput, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
@@ -20,7 +20,7 @@ export const FindAccount = ({navigation})=> {
             let rjd = await response.json();
             navigation.navigate('ListAccount', {account: rjd});
         } catch (error) {
-          setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
         }
     } 
     return (
@@ -87,7 +87,11 @@ export const ListAccount = ({route, navigation})=> {
 
 export const SendCode = ({route, navigation})=> {
     const {user} = route.params;
-    const UserPhoto = ()=> {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState({email: null});
+    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
+
+    const UserPhoto =  useCallback(()=> {
         return (
             <Avatar 
                 source={{uri: user.photo_path}} 
@@ -95,34 +99,61 @@ export const SendCode = ({route, navigation})=> {
                 animate={true} 
             />
         )
-    }
+    }, [user.photo_path]);
 
-    const enviarCodigo = ()=> {
-
+    const sendCode = async()=> {
+        setLoading(true);
+        try {
+            let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/send/code/reset/password',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    },
+                body: JSON.stringify({email: user.email}),
+            });
+            let rjd = await response.json();
+            if(rjd.success) {
+                navigation.navigate('ConfirmationAccount', {email: user.email});
+            } else {
+                if (rjd.message == 'Erro de validação') {
+                    if (rjd.data.message.email != undefined) {
+                        setError({email: rjd.data.message.email});
+                    }
+                } else {
+                    setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
+                }
+            }
+        } catch (error) {
+            setLoading(false);
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+        }
     }
 
     return (
             <ViewUILIB bg-bgColor flex padding-16 centerH>
+                {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <UserPhoto/>
                 <TextUILIB textColor marginT-8 text70 style={{fontWeight: 'bold'}}>{user.first_name + ' ' + user.last_name}</TextUILIB>
                 <TextUILIB textColor marginT-8 text80>Escolhe uma forma para iniciar sessão.</TextUILIB>
                 <ViewUILIB marginB-100 style={styles.item}>
                     <TextUILIB textColor text80 color='gray' center>{user.email}</TextUILIB>
                 </ViewUILIB>
-                <ButtonSubmit onPress={()=> navigation.navigate('ConfirmationAccount', {user: user})} loading={false} textButtonLoading='A ENVIAR...' textButton='ENVIAR CÓDIGO POR E-MAIL'/>
+                <ButtonSubmit onPress={()=> sendCode().then(()=> setLoading(false))} loading={loading} textButtonLoading='A ENVIAR...' textButton='ENVIAR CÓDIGO POR E-MAIL'/>
             </ViewUILIB> 
     )
 }
 
 export const ConfirmationAccount = ({route, navigation})=> {
-    const {user} = route.params;
+    const {email} = route.params;
     const [loading, setLoading] = useState(false);
     const [code, setCode] = useState(0);
     return (
             <ViewUILIB bg-bgColor flex padding-16>
                 <TextUILIB textColor text60>Confirma a tua conta</TextUILIB>
                 <TextUILIB textColor marginV-8 text80>
-                    Enviámos um código para o seu e-mail: {user.email}.{'\n'}
+                    Enviámos um código para o seu e-mail: {email}.{'\n'}
                     Insere esse código para confirmar a tua conta.
                 </TextUILIB>
                 <TextInput
