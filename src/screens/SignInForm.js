@@ -138,7 +138,7 @@ export default SignInForm = ()=> {
                     >
                   </Button>
                   <TouchableOpacity>
-                    <TextUILIB textColor style={{ textAlign: 'center', marginVertical: 16 }}>Esqueceu a palavra - passe ?</TextUILIB>
+                    <TextUILIB textColor style={{ textAlign: 'center', marginVertical: 16 }} onPress={()=> nav.show('FindAccount')} >Esqueceu a palavra - passe ?</TextUILIB>
                   </TouchableOpacity>
                   <View style={styles.divisor}></View>
                   <TouchableOpacity style={styles.buttonCreate} onPress={()=> nav.show('SignUpForm')}>

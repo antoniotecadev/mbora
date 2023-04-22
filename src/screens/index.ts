@@ -14,11 +14,12 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ProfileEdit from './ProfileEdit';
 import PreviewProfilePhoto from './PreviewProfilePhoto';
+import { FindAccount, ListAccount, SendCode, ConfirmationAccount, CreateNewPassword } from './FindAccount';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = '';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'Main' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -51,6 +52,46 @@ const screens: ScreenLayouts = {
       title: 'Criar conta',
       headerTintColor: 'orange',
       headerShown: false
+    }),
+  },
+  FindAccount: {
+    name: 'FindAccount',
+    component: FindAccount,
+    options: () => ({
+      title: '',
+      headerTintColor: 'green',
+    }),
+  },
+  ListAccount: {
+    name: 'ListAccount',
+    component: ListAccount,
+    options: () => ({
+      title: '',
+      headerTintColor: 'green',
+    }),
+  },
+  SendCode: {
+    name: 'SendCode',
+    component: SendCode,
+    options: () => ({
+      title: '',
+      headerTintColor: 'green',
+    }),
+  },
+  ConfirmationAccount: {
+    name: 'ConfirmationAccount',
+    component: ConfirmationAccount,
+    options: () => ({
+      title: '',
+      headerTintColor: 'green',
+    }),
+  },
+  CreateNewPassword: {
+    name: 'CreateNewPassword',
+    component: CreateNewPassword,
+    options: () => ({
+      title: '',
+      headerTintColor: 'green',
     }),
   },
   Main: {
@@ -136,7 +177,7 @@ const screens: ScreenLayouts = {
   },
 };
 
-const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm]);
+const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm, screens.FindAccount, screens.ListAccount, screens.SendCode, screens.ConfirmationAccount, screens.CreateNewPassword]);
 const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProduct, screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.CompanyProfile]);
