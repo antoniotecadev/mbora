@@ -7,6 +7,7 @@ import { getAppearenceColor } from '../utils/utilitario';
 import { Text as TextUILIB, View as ViewUILIB, Avatar } from 'react-native-ui-lib';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
+import { isEmpty } from 'lodash';
 
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
@@ -147,7 +148,7 @@ export const SendCode = ({route, navigation})=> {
 
 export const ConfirmationAccount = ({route, navigation})=> {
     const {email} = route.params;
-    const [code, setCode] = useState(0);
+    const [code, setCode] = useState("");
     const [error, setError] = useState({code: null});
     const [loading, setLoading] = useState(false);
     const { showDialog, setShowDialog } = useContext(CartContext);
@@ -201,7 +202,7 @@ export const ConfirmationAccount = ({route, navigation})=> {
                     placeholderTextColor='gray'
                     style={[styles.input, {marginTop: 8}]}/>
                 <ErroMessage touched={true} errors={error.code} />
-                <ButtonSubmit onPress={()=> codeCheck().then(()=> setLoading(false))} loading={loading} textButtonLoading='CONFIRMANDO...' textButton='CONFIRMAR'/>
+                <ButtonSubmit onPress={()=> isEmpty(code) ? setError({code: 'Insere o código'}) : codeCheck().then(()=> setLoading(false))} loading={loading} textButtonLoading='CONFIRMANDO...' textButton='CONFIRMAR'/>
                 {!loading && <TextUILIB marginT-5 onPress={()=> alert()} textColor text70BO center>Reenviar código</TextUILIB>}
             </ViewUILIB> 
     )
