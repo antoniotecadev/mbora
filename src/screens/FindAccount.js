@@ -172,6 +172,8 @@ export const ConfirmationAccount = ({route, navigation})=> {
                     if (rjd.data.message.code != undefined) {
                         setError({code: rjd.data.message.code});
                     }
+                } else if (rjd.message == 'Código expirado') {
+                    setError({code: rjd.data.message});
                 } else {
                     setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
                 }
