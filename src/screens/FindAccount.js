@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
 import { getAppearenceColor } from '../utils/utilitario';
-import { Colors, Text as TextUILIB, View as ViewUILIB, Avatar } from 'react-native-ui-lib';
+import { Text as TextUILIB, View as ViewUILIB, Avatar } from 'react-native-ui-lib';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 
@@ -89,7 +89,7 @@ export const SendCode = ({route, navigation})=> {
     const {user} = route.params;
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({email: null});
-    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
+    const { showDialog, setShowDialog } = useContext(CartContext);
 
     const UserPhoto =  useCallback(()=> {
         return (
@@ -147,10 +147,44 @@ export const SendCode = ({route, navigation})=> {
 
 export const ConfirmationAccount = ({route, navigation})=> {
     const {email} = route.params;
-    const [loading, setLoading] = useState(false);
     const [code, setCode] = useState(0);
+    const [error, setError] = useState({code: null});
+    const [loading, setLoading] = useState(false);
+    const { showDialog, setShowDialog } = useContext(CartContext);
+
+    const codeCheck = async()=> {
+        setLoading(true);
+        try {
+            let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/code/check/reset',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    },
+                body: JSON.stringify({code: code}),
+            });
+            let rjd = await response.json();
+            if(rjd.success) {
+                navigation.navigate('CreateNewPassword')            
+            } else {
+                if (rjd.message == 'Erro de validação') {
+                    if (rjd.data.message.code != undefined) {
+                        setError({code: rjd.data.message.code});
+                    }
+                } else {
+                    setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
+                }
+            }
+        } catch (error) {
+            setLoading(false);
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+        }
+    }
+
     return (
             <ViewUILIB bg-bgColor flex padding-16>
+                {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB textColor text60>Confirma a tua conta</TextUILIB>
                 <TextUILIB textColor marginV-8 text80>
                     Enviámos um código para o seu e-mail: {email}.{'\n'}
@@ -164,8 +198,9 @@ export const ConfirmationAccount = ({route, navigation})=> {
                     placeholder="Insere o código"
                     placeholderTextColor='gray'
                     style={[styles.input, {marginTop: 8}]}/>
-                <ButtonSubmit onPress={()=> navigation.navigate('CreateNewPassword')} loading={loading} textButtonLoading='CONFIRMANDO...' textButton='CONFIRMAR'/>
-                <TextUILIB marginT-5 onPress={()=> alert()} textColor text70BO center>Reenviar código</TextUILIB>
+                <ErroMessage touched={true} errors={error.code} />
+                <ButtonSubmit onPress={()=> codeCheck().then(()=> setLoading(false))} loading={loading} textButtonLoading='CONFIRMANDO...' textButton='CONFIRMAR'/>
+                {!loading && <TextUILIB marginT-5 onPress={()=> alert()} textColor text70BO center>Reenviar código</TextUILIB>}
             </ViewUILIB> 
     )
 }
