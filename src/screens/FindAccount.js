@@ -8,7 +8,6 @@ import { Text as TextUILIB, View as ViewUILIB, Avatar } from 'react-native-ui-li
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import { isEmpty, isInteger } from 'lodash';
-import ToastMessage from '../components/ToastMessage';
 
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
