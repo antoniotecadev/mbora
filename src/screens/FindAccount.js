@@ -214,10 +214,10 @@ export const CreateNewPassword = ({navigation})=> {
 
     const initialValues = { 
         password: null,
-        password_confirmation: null,
-      }
+        password_confirmed: null,
+    }
     
-      const [error, setError] = useState(initialValues);
+    const [error, setError] = useState(initialValues);
 
     return (
             <ViewUILIB bg-bgColor flex padding-16>
@@ -227,12 +227,12 @@ export const CreateNewPassword = ({navigation})=> {
                     Vais precisar desta palavra - passe para iniciar sessão na tua conta.
                 </TextUILIB>
                 <Formik
-                    initialValues={{password: '', password_confirmation: ''}}
+                    initialValues={{password: '', password_confirmed: ''}}
                     validationSchema={Yup.object({
                         password: Yup.string()
                             .min(8, 'A nova palavra - passe tem que ter no mínimo 8 caracteres')
                             .required('Digite a nova palavra - passe'),
-                        password_confirmation: Yup.string()
+                        password_confirmed: Yup.string()
                             .oneOf([Yup.ref('password')], 'Não coincide com a nova palavra - passe')
                             .required('Confirme a nova palavra - passe'),
                     })}
@@ -261,17 +261,17 @@ export const CreateNewPassword = ({navigation})=> {
                         <ErroMessage touched={true} errors={error.password} />
                         <TextInput
                             keyboardType='visible-password'
-                            onChangeText={props.handleChange('password_confirmation' )}
-                            onBlur={props.handleBlur('password_confirmation')}
-                            value={props.values.password_confirmation}
+                            onChangeText={props.handleChange('password_confirmed' )}
+                            onBlur={props.handleBlur('password_confirmed')}
+                            value={props.values.password_confirmed}
                             placeholder="Confirmar nova palavra - passe"
                             placeholderTextColor='gray'
                             style={styles.input}
                             secureTextEntry={true}
                             ref={el => comfirmPasswordInput = el}
                         />
-                        <ErroMessage touched={props.touched.password_confirmation} errors={props.errors.password_confirmation} />
-                        <ErroMessage touched={true} errors={error.password_confirmation} />
+                        <ErroMessage touched={props.touched.password_confirmed} errors={props.errors.password_confirmed} />
+                        <ErroMessage touched={true} errors={error.password_confirmed} />
                         <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='GUARDANDO...' textButton='GUARDAR'/>
                     </>
                 )}
