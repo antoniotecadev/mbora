@@ -10,6 +10,7 @@ import { useServices } from '../services';
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
+import ToastMessage from '../components/ToastMessage';
 
 export default SignInForm = ()=> {
 
@@ -82,6 +83,7 @@ export default SignInForm = ()=> {
 
     return (
       <SafeAreaView style={styles.container}>
+        <ToastMessage/> 
         {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
         <View style={{paddingHorizontal: 16}}>
           <FormHeader title='Mbora' />

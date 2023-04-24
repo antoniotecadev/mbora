@@ -7,7 +7,8 @@ import { getAppearenceColor } from '../utils/utilitario';
 import { Text as TextUILIB, View as ViewUILIB, Avatar } from 'react-native-ui-lib';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
-import { isEmpty, isInteger, isNaN, isNumber } from 'lodash';
+import { isEmpty, isInteger } from 'lodash';
+import ToastMessage from '../components/ToastMessage';
 
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
@@ -167,7 +168,7 @@ export const ConfirmationAccount = ({route, navigation})=> {
             });
             let rjd = await response.json();
             if(rjd.success) {
-                navigation.navigate('CreateNewPassword')            
+                navigation.navigate('CreateNewPassword', {email: email})            
             } else {
                 if (rjd.message == 'Erro de validação') {
                     if (rjd.data.message.code != undefined) {
@@ -208,38 +209,70 @@ export const ConfirmationAccount = ({route, navigation})=> {
     )
 }
 
-export const CreateNewPassword = ({navigation})=> {
+export const CreateNewPassword = ({route, navigation})=> {
     
     let comfirmPasswordInput = null;
-
     const initialValues = { 
         password: null,
-        password_confirmed: null,
+        password_confirmation: null,
     }
-    
+
+    const {email} = route.params;
     const [error, setError] = useState(initialValues);
+    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
+
+    const resetPassword = async (value)=> {
+        try {
+            let URL = 'http://192.168.18.3/mborasystem-admin/public/api/mbora/reset/password';
+            let response = await fetch(URL,
+            {
+                method: 'PUT',
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(value)
+            });
+    
+            let rjd = await response.json();
+            if(rjd.success) {
+                setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
+                navigation.navigate('SignInForm');
+            } else {
+                if (rjd.message == 'Erro de validação') {
+                    if (rjd.data.message.password != undefined) {
+                        setError({password: rjd.data.message.password});
+                    }
+                } else {
+                    setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
+                }
+            }
+        } catch (error) {
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+        }
+    }
 
     return (
             <ViewUILIB bg-bgColor flex padding-16>
+                {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB textColor text60>Criar uma palavra - passe nova</TextUILIB>
                 <TextUILIB textColor marginV-8 text80>
                     Criar uma palavra - passe com, pelo menos 8 caracteres.{'\n'}
                     Vais precisar desta palavra - passe para iniciar sessão na tua conta.
                 </TextUILIB>
                 <Formik
-                    initialValues={{password: '', password_confirmed: ''}}
+                    initialValues={{password: '', password_confirmation: ''}}
                     validationSchema={Yup.object({
                         password: Yup.string()
                             .min(8, 'A nova palavra - passe tem que ter no mínimo 8 caracteres')
                             .required('Digite a nova palavra - passe'),
-                        password_confirmed: Yup.string()
+                        password_confirmation: Yup.string()
                             .oneOf([Yup.ref('password')], 'Não coincide com a nova palavra - passe')
                             .required('Confirme a nova palavra - passe'),
                     })}
                     onSubmit={(values, formikActions) => {
                         setTimeout(() => {
-                            navigation.navigate('SignInForm')
-                        // userUpdate(values, 3, formikActions.resetForm).then(()=> formikActions.setSubmitting(false));
+                            resetPassword({...values, ...{email: email}}).then(()=> formikActions.setSubmitting(false));
                         }, 500);
                     }}>
                     {props => (
@@ -261,17 +294,16 @@ export const CreateNewPassword = ({navigation})=> {
                         <ErroMessage touched={true} errors={error.password} />
                         <TextInput
                             keyboardType='visible-password'
-                            onChangeText={props.handleChange('password_confirmed' )}
-                            onBlur={props.handleBlur('password_confirmed')}
-                            value={props.values.password_confirmed}
+                            onChangeText={props.handleChange('password_confirmation' )}
+                            onBlur={props.handleBlur('password_confirmation')}
+                            value={props.values.password_confirmation}
                             placeholder="Confirmar nova palavra - passe"
                             placeholderTextColor='gray'
                             style={styles.input}
                             secureTextEntry={true}
                             ref={el => comfirmPasswordInput = el}
                         />
-                        <ErroMessage touched={props.touched.password_confirmed} errors={props.errors.password_confirmed} />
-                        <ErroMessage touched={true} errors={error.password_confirmed} />
+                        <ErroMessage touched={props.touched.password_confirmation} errors={props.errors.password_confirmation} />
                         <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='GUARDANDO...' textButton='GUARDAR'/>
                     </>
                 )}
