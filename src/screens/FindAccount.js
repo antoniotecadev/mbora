@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { View, StyleSheet, TextInput, SafeAreaView, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, TextInput, SafeAreaView, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
@@ -98,7 +98,7 @@ export const SendCode = ({route, navigation})=> {
             <Avatar 
                 source={{uri: user.photo_path}} 
                 size={150} 
-                animate={true} 
+                animate={false} 
             />
         )
     }, [user.photo_path]);
@@ -284,6 +284,27 @@ export const CreateNewPassword = ({route, navigation})=> {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
         }
     }
+
+    const goBack = ()=> {
+        Alert.alert(
+            'Cancelar a recuperação da conta?',
+            'Tens certeza de que queres cancelar a recuperação de conta? Esta acção vai descartar as informações que inseriste até agora.',
+            [
+                {text: 'Sim, cancelar', style: 'destructive', onPress: ()=> navigation.goBack()},
+                {text: 'Não, voltar', style: 'cancel', onPress: ()=> {}},
+            ]
+        )
+    }
+
+    React.useEffect(()=>
+        navigation.setOptions({
+            headerLeft: () => (
+                <TouchableOpacity onPress={() => goBack()}>
+                    <TextUILIB style={{color: 'orangered', fontWeight: 'bold'}}>CANCELAR</TextUILIB>
+                </TouchableOpacity>
+            ),
+        })
+    , [navigation]);
 
     return (
             <ViewUILIB bg-bgColor flex padding-16>
