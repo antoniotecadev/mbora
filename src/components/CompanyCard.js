@@ -5,9 +5,10 @@ import { useServices } from '../services';
 
 const cardImage = require('../../assets/products/cantina2.jpg');
 
-export function CompanyCard({ name, price, image, onPress }) {
+export function CompanyCard(props) {
 
     const { nav } = useServices();
+    const {empresa, nomeProvincia, district, street} = props;
 
     return (
         <Card style={styles.card} center onPress={() => {
@@ -16,11 +17,10 @@ export function CompanyCard({ name, price, image, onPress }) {
             <Card.Image style={styles.thumb} source={cardImage} />
             <View maxWidth={180}>
                 <View row style={styles.section}>
-                    <Text $textDefault style={{ ...Typography.text90 }}>Maliana</Text>
+                    <Text $textDefault style={{ ...Typography.text90 }}>{empresa}</Text>
                 </View>
                 <Text marginV-8 color={Colors.grey30} style={{ fontSize: 10 }}>
-                    {/* {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`} */}
-                    Luanda, Belas, Morro Bento 2
+                    {`${nomeProvincia}, ${district} , ${street}`}
                 </Text>
                 <Text marginB-8 color={Colors.grey40} style={{ fontSize: 10 }}>
                     120 mil seguidores
