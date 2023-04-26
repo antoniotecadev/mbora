@@ -8,6 +8,7 @@ import { Text as TextUILIB, View as ViewUILIB, Avatar } from 'react-native-ui-li
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import { isEmpty, isInteger } from 'lodash';
+import ToastMessage from '../components/ToastMessage';
 
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
@@ -150,11 +151,11 @@ export const ConfirmationAccount = ({route, navigation})=> {
     const {email} = route.params;
     const [code, setCode] = useState("");
     const [error, setError] = useState({code: null});
-    const [loading, setLoading] = useState(false);
-    const { showDialog, setShowDialog } = useContext(CartContext);
+    const [loading, setLoading] = useState({codeCheck: false, sendCode: false});
+    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     const codeCheck = async()=> {
-        setLoading(true);
+        setLoading({codeCheck: true});
         try {
             let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/code/check/reset',
             {
@@ -180,13 +181,44 @@ export const ConfirmationAccount = ({route, navigation})=> {
                 }
             }
         } catch (error) {
-            setLoading(false);
+            setLoading({codeCheck: false});
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+        }
+    }
+
+    const sendCode = async()=> {
+        setLoading({sendCode: true});
+        try {
+            let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/send/code/reset/password',
+            {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    },
+                body: JSON.stringify({email: email}),
+            });
+            let rjd = await response.json();
+            if(rjd.success) {
+                setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
+            } else {
+                if (rjd.message == 'Erro de validação') {
+                    if (rjd.data.message.email != undefined) {
+                        setError({email: rjd.data.message.email});
+                    }
+                } else {
+                    setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
+                }
+            }
+        } catch (error) {
+            setLoading({sendCode: false});
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
         }
     }
 
     return (
             <ViewUILIB bg-bgColor flex padding-16>
+                <ToastMessage/> 
                 {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB textColor text60>Confirma a tua conta</TextUILIB>
                 <TextUILIB textColor marginV-8 text80>
@@ -202,8 +234,10 @@ export const ConfirmationAccount = ({route, navigation})=> {
                     placeholderTextColor='gray'
                     style={[styles.input, {marginTop: 8}]}/>
                 <ErroMessage touched={true} errors={error.code} />
-                <ButtonSubmit onPress={()=> isEmpty(code) ? setError({code: 'Insere o código'})  : (isInteger(Number(code)) ? codeCheck().then(()=> setLoading(false)) : setError({code: 'Código inserido não é válido.'})) } loading={loading} textButtonLoading='CONFIRMANDO...' textButton='CONFIRMAR'/>
-                {!loading && <TextUILIB marginT-5 onPress={()=> alert()} textColor text70BO center>Reenviar código</TextUILIB>}
+                <ButtonSubmit onPress={()=> isEmpty(code) ? setError({code: 'Insere o código'})  : (isInteger(Number(code)) ? codeCheck().then(()=> setLoading({codeCheck: false})) : setError({code: 'Código inserido não é válido.'})) } loading={loading.codeCheck} textButtonLoading='CONFIRMANDO...' textButton='CONFIRMAR'/>
+                {loading.sendCode ?
+                    <TextUILIB marginT-5 textColor text70BO center>Reenviando...</TextUILIB> :
+                    <TextUILIB marginT-5 onPress={()=> sendCode().then(()=> setLoading({sendCode: false}))} textColor text70BO center>Reenviar código</TextUILIB>}
             </ViewUILIB> 
     )
 }
