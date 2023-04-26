@@ -14,13 +14,17 @@ const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCA
 
 export const FindAccount = ({navigation})=> {
 
-    const { showDialog, setShowDialog } = useContext(CartContext);
+    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     const findAccount = async(email)=> {
         try {
             let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/find/account/user/' + email);
             let rjd = await response.json();
-            navigation.navigate('ListAccount', {account: rjd});
+            if(isEmpty(rjd)) {
+                setVisibleToast({visible: true, message: 'Conta não encontrada', backgroundColor: 'orangered'});
+            } else {
+                navigation.navigate('ListAccount', {account: rjd});
+            }
         } catch (error) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
         }
@@ -29,6 +33,7 @@ export const FindAccount = ({navigation})=> {
       <SafeAreaView style={styles.container}>
         {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
         <View style={{paddingHorizontal: 16}}>
+        <ToastMessage/> 
         <TextUILIB textColor text60 marginV-10>Encontra a tua conta</TextUILIB>
         <TextUILIB textColor marginB-20>Insira o seu endereço de e-mail</TextUILIB>
           <Formik
