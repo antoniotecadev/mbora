@@ -232,7 +232,7 @@ export const ConfirmationAccount = ({route, navigation})=> {
                 </TextUILIB>
                 <TextInput
                     autoFocus
-                    keyboardType='numeric'
+                    keyboardType='phone-pad'
                     onChangeText={text => setCode(text) }
                     value={code}
                     placeholder="Insere o código"
