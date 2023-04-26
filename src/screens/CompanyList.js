@@ -1,55 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet } from 'react-native';
-
-import { useServices } from '../services';
-import { useStores } from '../stores';
-
+import { FlatList, StyleSheet } from 'react-native';
 import { CompanyCard } from '../components/CompanyCard.js';
 import { getProducts } from '../services/ProductsService.js';
-import { Text, View, Card } from 'react-native-ui-lib';
 
-export default function CompanyList({ navigation }) {
-
-  const { nav, t, api } = useServices();
-  const { counter, ui } = useStores();
+export default function CompanyList() {
 
   function renderProduct({ item: product }) {
     return <CompanyCard {...product}/>
   }
-  // function renderCategory({ item: product }) {
-  //   return (
-  //     <Card
-  //       onPress={() => alert()}
-  //       height={150}
-  //       marginR-8
-  //       elevation={1}
-  //     >
-  //       <Card.Image style={styles.thumb} source={cardImage2} />
-  //       <Card.Section
-  //         padding-4
-  //         content={[{ text: 'Card', text80: true, grey10: true }]}
-  //       />
-  //     </Card>
-  //   );
-  // }
-
-  // function flatListHeader() {
-  //   return (
-  //     <FlatList
-  //       contentContainerStyle={styles.productsListContainer}
-  //       // keyExtractor={(item) => item.id.toString()}
-  //       data={products}
-  //       horizontal={true}
-  //       renderItem={renderCategory}
-  //     />
-  //   );
-  // }
 
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     setProducts(getProducts());
-  });
+  }, []);
 
   return (
     <>
@@ -58,27 +22,19 @@ export default function CompanyList({ navigation }) {
           justifyContent: "space-between",
         }}
         numColumns={2}
-        contentContainerStyle={styles.productsListContainer}
+        contentContainerStyle={styles.container}
         // keyExtractor={(item) => item.id.toString()}
         data={products}
         renderItem={renderProduct}
-        // ListHeaderComponent={flatListHeader}
       />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  productsList: {
-    backgroundColor: 'black',
-  },
-  productsListContainer: {
+  container: {
     paddingVertical: 8,
     marginHorizontal: 8,
   },
-  // thumb: {
-  //   height: '100%',
-  //   width: 100,
-  // },
 });
  
