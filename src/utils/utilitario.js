@@ -34,3 +34,21 @@ export const getAppearenceColor = (appearanceName)=> {
         return Colors.getScheme() === 'light' ? 'white' : Colors.dmBlack;
     }
 }
+
+export const numberFollowersFormat = (numFoll, style) => {
+    if(numFoll < 1000) {
+        return numFoll;
+    }
+    if(style == 'facebook') {
+        const numFormat = (numFoll / 1000).toFixed(1);
+        return numFormat + 'k';
+    }
+    if(style == 'youtube') {
+        const numFormat = numFoll.toLocaleString('en-US');
+        if(numFoll >= 1000000) {
+            return (numFoll / 1000000).toFixed(1).toString() + 'M';
+        }
+        return numFormat;
+    }
+    return numFoll.toString();
+}
