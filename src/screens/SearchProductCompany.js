@@ -16,8 +16,9 @@ import { Entypo, Feather } from "@expo/vector-icons";
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useStores } from "../stores";
 
-const SearchProductCompany = ({navigation}) => {
+const SearchProductCompany = ({route, navigation}) => {
 
+  const { isCompany } = route.params;
   const {user} = useStores();
   const inputRef = useRef();
   const headerHeight = useHeaderHeight();
@@ -32,8 +33,12 @@ const SearchProductCompany = ({navigation}) => {
 
   const { showDialog, setShowDialog } = useContext(CartContext);
 
-  const search = async (name, isMore) => {
-    await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(name) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
+  const search = async(name, isMore) => {
+    if(isCompany){
+      await getData("http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora/searchcompany/" + String(name) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
+    } else {
+      await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(name) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
+    }
   }
 
   const getData = async (url, isMore) => {
@@ -72,6 +77,7 @@ const SearchProductCompany = ({navigation}) => {
     navigation.setOptions({
       headerTitle: () => (
           <SearchBar
+            isCompany={isCompany}
             searchPhrase={searchPhrase}
             setSearchPhrase={setSearchPhrase}
             setClicked={setClicked}
@@ -117,6 +123,7 @@ const SearchProductCompany = ({navigation}) => {
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       {(
           <List
+            isCompany={isCompany}
             empty={empty}
             search={search}
             loading={loading}

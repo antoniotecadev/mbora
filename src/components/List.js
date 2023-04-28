@@ -14,7 +14,7 @@ import { Text as TextUILIB, View as ViewUILIB } from "react-native-ui-lib";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-const Item = ({ item, userTelephone }) => {
+const ItemProduct = ({ item, userTelephone }) => {
 
 const navigation = useNavigation();
 
@@ -34,9 +34,33 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
       </TouchableOpacity>
 };
 
-const List = ({ empty, search, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
+const ItemCompany = ({ item }) => {
+
+const navigation = useNavigation();
+
+const showCompanyProfile = (item)=> {
+  navigation.navigate('CompanyProfile', {item: company});
+}
+
+return <TouchableOpacity onPress={()=> showCompanyProfile(item)}>
+        <View style={styles.item}>
+          <View style={styles.section}>
+            <TextUILIB textColor style={{maxWidth: '50%'}}>{item.empresa}</TextUILIB>
+            {/* <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>-</TextUILIB> */}
+            <Image style={{width: 45, height: 45, borderRadius: 25}} source= {imageProduct} />
+          </View>
+          <TextUILIB color="gray" text90>{item.first_name + ' ' + item.last_name}</TextUILIB>
+        </View>
+      </TouchableOpacity>
+};
+
+const List = ({ isCompany, empty, search, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
   const renderItem = ({ item }) => {
-    return <Item item={item} userTelephone={userTelephone} />;
+    if(isCompany) {
+      return <ItemCompany item={item} />;
+    } else {
+      return <ItemProduct item={item} userTelephone={userTelephone} />;
+    }
     // if (searchPhrase === "") {
       // return <Item item={item} />;
     // }
@@ -53,9 +77,9 @@ const List = ({ empty, search, loading, setLoading, searchPhrase, data, windowHe
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto(s) não encontrado(s)</Text>}
-        ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} search={search} searchPhrase={searchPhrase}/>}
+        keyExtractor={(item) => item.id.toString()}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>{isCompany ? 'Empresas(s) não encontrada(s)' : 'Produto(s) não encontrado(s)'}</Text>}
+        ListFooterComponent={empty ? null : <FooterComponente isCompany={isCompany} loading={loading} setLoading={setLoading} search={search} searchPhrase={searchPhrase}/>}
       />
     </ViewUILIB>
   );
@@ -71,7 +95,7 @@ const FooterComponente = (props) => {
         }
       }
         style={styles.loadMoreBtn}>
-        <Text style={styles.btnText}>{props.loading ? 'A carregar produtos' : 'Mais produtos'}</Text>
+        <Text style={styles.btnText}>{props.loading ? `A carregar ${props.isCompany ? 'empresas' : 'produtos'}` : 'Ver mais'}</Text>
         {props.loading ? (
           <ActivityIndicator
             color="white"
