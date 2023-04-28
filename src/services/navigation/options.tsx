@@ -13,7 +13,7 @@ export const screenDefaultOptions = (): NativeStackNavigationOptions => ({
   headerTintColor: 'orange',
   headerRight: ()=> (
   <>
-    <IconHeader screen='SearchProduct' icon='search-circle-sharp' size={40}/>
+    <IconHeader screen='SearchProductCompany' icon='search-circle-sharp' size={40}/>
     <IconHeader screen='Settings' icon='settings-outline' size={32}/>
   </>),
 

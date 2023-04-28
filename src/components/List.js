@@ -34,7 +34,7 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
       </TouchableOpacity>
 };
 
-const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
+const List = ({ empty, search, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
   const renderItem = ({ item }) => {
     return <Item item={item} userTelephone={userTelephone} />;
     // if (searchPhrase === "") {
@@ -55,7 +55,7 @@ const List = ({ empty, searchProduct, loading, setLoading, searchPhrase, data, w
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={<Text style={styles.emptyListStyle}>Produto(s) não encontrado(s)</Text>}
-        ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} searchProduct={searchProduct} searchPhrase={searchPhrase}/>}
+        ListFooterComponent={empty ? null : <FooterComponente loading={loading} setLoading={setLoading} search={search} searchPhrase={searchPhrase}/>}
       />
     </ViewUILIB>
   );
@@ -67,7 +67,7 @@ const FooterComponente = (props) => {
       <TouchableOpacity
         onPress={()=> {
             props.setLoading(true);
-            props.searchProduct(props.searchPhrase, true).then(()=> props.setLoading(false));
+            props.search(props.searchPhrase, true).then(()=> props.setLoading(false));
         }
       }
         style={styles.loadMoreBtn}>

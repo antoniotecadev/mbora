@@ -16,7 +16,7 @@ import { Entypo, Feather } from "@expo/vector-icons";
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useStores } from "../stores";
 
-const SearchProduct = ({navigation}) => {
+const SearchProductCompany = ({navigation}) => {
 
   const {user} = useStores();
   const inputRef = useRef();
@@ -32,18 +32,18 @@ const SearchProduct = ({navigation}) => {
 
   const { showDialog, setShowDialog } = useContext(CartContext);
 
-  const searchProduct = async (produto, isMoreProduct) => {
-    await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(produto) + '/isMoreProduct/' + isMoreProduct + '/leastViewed/' + leastViewed, isMoreProduct);
+  const search = async (name, isMore) => {
+    await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(name) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
   }
 
-  const getData = async (url, isMoreProduct) => {
+  const getData = async (url, isMore) => {
     setLoading(true);
     try {
       const apiResponse = await fetch(url);
       const rjd = await apiResponse.json();
         if (!isEmpty(rjd)) {
           setEmpty(false);
-          if (isMoreProduct) {
+          if (isMore) {
               pagination(rjd);
               setData((prevState) => [...prevState, ...rjd]);
           } else {
@@ -64,7 +64,7 @@ const SearchProduct = ({navigation}) => {
 
   useEffect(() => {
     if(searchPhrase) {
-        searchProduct(searchPhrase, false).then(()=> setLoading(false));
+        search(searchPhrase, false).then(()=> setLoading(false));
     } else {
       setEmpty(true);
       setData([]);
@@ -118,7 +118,7 @@ const SearchProduct = ({navigation}) => {
       {(
           <List
             empty={empty}
-            searchProduct={searchProduct}
+            search={search}
             loading={loading}
             setLoading={setLoading}
             searchPhrase={searchPhrase}
@@ -141,7 +141,7 @@ function LoadingAnimation() {
   );
 }
 
-export default SearchProduct;
+export default SearchProductCompany;
 
 const styles = StyleSheet.create({
   title: {

@@ -4,7 +4,7 @@ import Profile from './Profile';
 import CompanyProfile from './CompanyProfile';
 import ProductsList from './ProductsList';
 import CompanyList from './CompanyList';
-import SearchProduct from './SearchProduct';
+import SearchProductCompany from './SearchProductCompany';
 import { ProductDetails } from './ProductDetails.js';
 import { Carrinho } from './Carrinho.js';
 import { Settings } from './settings';
@@ -19,11 +19,11 @@ import { FindAccount, ListAccount, SendCode, ConfirmationAccount, CreateNewPassw
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = '';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProduct';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
 
 export type ModalProps = {
   ExampleModal: undefined;
-  SearchProduct: undefined;
+  SearchProductCompany: undefined;
   SettingsModal: undefined;
   ExampleScreenProps: undefined;
 };
@@ -167,9 +167,9 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
-  SearchProduct: {
-    name: 'SearchProduct',
-    component: SearchProduct,
+  SearchProductCompany: {
+    name: 'SearchProductCompany',
+    component: SearchProductCompany,
     options: () => ({
       title: 'Pesquisa',
       headerTintColor: 'orange',
@@ -178,9 +178,9 @@ const screens: ScreenLayouts = {
 };
 
 const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm, screens.FindAccount, screens.ListAccount, screens.SendCode, screens.ConfirmationAccount, screens.CreateNewPassword]);
-const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProduct, screens.Settings]);
+const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
-const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.CompanyProfile]);
+const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile]);
 const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto]);
 
 // Tabs
