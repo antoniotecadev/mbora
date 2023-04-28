@@ -85,7 +85,7 @@ export default function CompanyList({navigation}) {
         }}
         numColumns={2}
         contentContainerStyle={styles.container}
-        // keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         data={company}
         renderItem={renderCompany}
         ListFooterComponent={FooterComponente}
