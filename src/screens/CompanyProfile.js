@@ -28,7 +28,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {empresa, imei} = route.params;
+    const {empresa, imei, first_name, last_name} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
@@ -210,6 +210,9 @@ export default function CompanyProfile({ route, navigation }) {
     }, [])
 
     useEffect(() => {
+        navigation.setOptions({
+          headerTitle: first_name + ' ' + last_name
+        })
         getURLProfilePhoto();
         getCountEncomenda();
         getCountProduto();
