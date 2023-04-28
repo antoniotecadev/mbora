@@ -22,7 +22,7 @@ export default function CompanyList({navigation}) {
     try {
       let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora');
       let responseJsonData = await response.json();
-      // alert(JSON.stringify(responseJsonData, null, 2))
+      
       if(isRefresh) {
         setCompany(responseJsonData);
       } else {
