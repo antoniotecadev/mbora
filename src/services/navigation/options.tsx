@@ -57,7 +57,7 @@ export const badgeCartCount = () => {
 const IconHeader = ({ screen, icon, size })=> {
   const { nav } = useServices();
   const onPressShow = ()=> {
-    nav.show(screen);
+    nav.show(screen, {isCompany: false});
   }
   return (
     <TouchableOpacity onPress={onPressShow}>

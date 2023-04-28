@@ -61,7 +61,7 @@ export default function CompanyList({navigation}) {
   useEffect(() => {
     navigation.setOptions({
       headerRight: ()=> (
-        <TouchableOpacity onPress={()=> navigation.navigate('SearchProductCompany')}>
+        <TouchableOpacity onPress={()=> navigation.navigate('SearchProductCompany', {isCompany: true})}>
           <Ionicons name={'search'} size={30} color="orange"/>
         </TouchableOpacity>
       )
