@@ -164,7 +164,7 @@ const screens: ScreenLayouts = {
     component: CompanyProfile,
     options: () => ({
       title: '',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   SearchProductCompany: {
