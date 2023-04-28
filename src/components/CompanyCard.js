@@ -13,7 +13,7 @@ export function CompanyCard(props) {
 
     return (
         <Card style={[styles.card, {backgroundColor: props.appearanceName, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
-            nav.show('CompanyProfile');
+            nav.show('CompanyProfile', {...props});
         }}>
             <Card.Image style={styles.thumb} source={cardImage} />
             <View maxWidth={180}>

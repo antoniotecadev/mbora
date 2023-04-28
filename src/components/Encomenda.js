@@ -25,7 +25,7 @@ export default function Encomenda({ appearanceName, fetchEncomendas, encomendas,
             data={encomendas}
             showsVerticalScrollIndicator={false}
             ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem encomendas</Text>}
-            refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(0)}/>}/>
+            refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>}/>
         )
 }
 
