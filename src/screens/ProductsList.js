@@ -13,6 +13,7 @@ const ITEM_HEIGHT = 150;
 
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
+import { getAppearenceColor } from '../utils/utilitario';
 
 const cardImage2 = require('../../assets/products/oleo.jpg');
 
@@ -26,6 +27,7 @@ export default function ProductsList({ navigation }) {
 
   const {ui, user} = useStores();
   const { nav } = useServices();
+  let color = getAppearenceColor(ui.appearanceName); 
   const { error, setError, showDialog, setShowDialog} = useContext(CartContext);
 
   const onRefresh = ()=> {
@@ -44,7 +46,7 @@ export default function ProductsList({ navigation }) {
   }
 
   const renderItemProduct = useCallback(({ item: product }) => { 
-    return <Product appearanceName={ui.appearanceName} produto={product} key={product.id} userTelephone={user.userTelephone} onPress={()=> showProductDetails(product)}/>
+    return <Product appearanceName={color} produto={product} key={product.id} userTelephone={user.userTelephone} onPress={()=> showProductDetails(product)}/>
   },[]);
 
   const keyExtractor = (item)=> item.id;
