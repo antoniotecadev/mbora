@@ -5,11 +5,16 @@ import { AlertDialog } from '../components/AlertDialog.js';
 import { CartContext } from '../CartContext.js';
 import {Ionicons} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
+import { useStores } from '../stores';
+import { getAppearenceColor } from '../utils/utilitario.js';
 
 export default function CompanyList({navigation}) {
 
+  const {ui} = useStores();
+  let color = getAppearenceColor(ui.appearanceName); 
+
   function renderCompany({ item: company }) {
-    return <CompanyCard {...company}/>
+    return <CompanyCard {...company} appearanceName={color}/>
   }
 
   const [company, setCompany] = useState([]);
