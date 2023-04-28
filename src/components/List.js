@@ -12,6 +12,7 @@ import { currency } from "../utils/utilitario";
 import { useNavigation } from "@react-navigation/native";
 import { Text as TextUILIB, View as ViewUILIB } from "react-native-ui-lib";
 
+const imageCompany = require('../../assets/products/cantina2.jpg');
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 const ItemProduct = ({ item, userTelephone }) => {
@@ -27,7 +28,7 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
           <View style={styles.section}>
             <TextUILIB textColor style={{maxWidth: '50%'}}>{item.nome}</TextUILIB>
             <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>{currency(String(item.preco))}</TextUILIB>
-            <Image style={{width: 45, height: 45, borderRadius: 25}} source= {imageProduct} />
+            <Image style={{width: 45, height: 45, borderRadius: 25}} source={imageProduct} />
           </View>
           <TextUILIB color="gray" text90>{item.empresa}</TextUILIB>
         </View>
@@ -47,7 +48,7 @@ return <TouchableOpacity onPress={()=> showCompanyProfile(item)}>
           <View style={styles.section}>
             <TextUILIB textColor style={{maxWidth: '50%'}}>{item.empresa}</TextUILIB>
             {/* <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>-</TextUILIB> */}
-            <Image style={{width: 45, height: 45, borderRadius: 25}} source= {imageProduct} />
+            <Image style={{width: 45, height: 45, borderRadius: 25}} source={imageCompany} />
           </View>
           <TextUILIB color="gray" text90>{item.first_name + ' ' + item.last_name}</TextUILIB>
         </View>
