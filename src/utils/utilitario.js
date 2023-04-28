@@ -1,6 +1,5 @@
 import 'intl';
 import 'intl/locale-data/jsonp/pt-AO';
-import { Alert } from "react-native";
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 import { Colors } from 'react-native-ui-lib';
 
