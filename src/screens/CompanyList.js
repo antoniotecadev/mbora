@@ -4,6 +4,7 @@ import { CompanyCard } from '../components/CompanyCard.js';
 import { AlertDialog } from '../components/AlertDialog.js';
 import { CartContext } from '../CartContext.js';
 import {Ionicons} from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 
 export default function CompanyList({navigation}) {
 
@@ -67,6 +68,13 @@ export default function CompanyList({navigation}) {
     })
     fetchCompanys(true).then(()=> setLoading({cpn: false}));
   }, []);
+
+  useFocusEffect(useCallback(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: 'flex'
+    });
+  }, [navigation])
+  );
 
   return (
     <>
