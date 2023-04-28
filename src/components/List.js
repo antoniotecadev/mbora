@@ -49,7 +49,7 @@ const List = ({ empty, search, loading, setLoading, searchPhrase, data, windowHe
   };
 
   return (
-    <ViewUILIB style={{height: windowHeight}} bg-bgColor>
+    <ViewUILIB flex style={{height: windowHeight}} bg-bgColor>
       <FlatList
         data={data}
         renderItem={renderItem}
