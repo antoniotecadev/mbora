@@ -35,7 +35,7 @@ export const getAppearenceColor = (appearanceName)=> {
     }
 }
 
-export const numberFollowersFormat = (numFoll, style) => {
+export const numberFollowersAndViewsFormat = (numFoll, style) => {
     if(numFoll < 1000) {
         return numFoll;
     }

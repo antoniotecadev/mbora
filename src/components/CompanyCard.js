@@ -2,14 +2,14 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Card, Text, Colors, Typography } from 'react-native-ui-lib';
 import { useServices } from '../services';
-import { numberFollowersFormat } from '../utils/utilitario';
+import { numberFollowersAndViewsFormat } from '../utils/utilitario';
 
 const cardImage = require('../../assets/products/cantina2.jpg');
 
 export function CompanyCard(props) {
 
     const { nav } = useServices();
-    const {empresa, nomeProvincia, district, street, followers_mbora} = props;
+    const {empresa, nomeProvincia, district, street, followers_mbora, views_mbora} = props;
 
     return (
         <Card style={styles.card} center onPress={() => {
@@ -24,10 +24,10 @@ export function CompanyCard(props) {
                     {`${nomeProvincia}, ${district} , ${street}`}
                 </Text>
                 <Text marginB-8 color={Colors.grey40} style={{ fontSize: 10 }}>
-                    {numberFollowersFormat(followers_mbora, 'youtube')} seguidores
+                    {numberFollowersAndViewsFormat(followers_mbora, 'youtube')} seguidores
                 </Text>
                 <Text marginB-8 color={Colors.grey40} style={{ fontSize: 10 }}>
-                    +12 Visitas
+                    {numberFollowersAndViewsFormat(views_mbora, 'youtube')} visitas
                 </Text>
             </View>
         </Card>
