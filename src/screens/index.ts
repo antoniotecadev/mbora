@@ -180,7 +180,7 @@ const screens: ScreenLayouts = {
 const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm, screens.FindAccount, screens.ListAccount, screens.SendCode, screens.ConfirmationAccount, screens.CreateNewPassword]);
 const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
-const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile]);
+const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile, screens.ProductDetails]);
 const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto]);
 
 // Tabs
