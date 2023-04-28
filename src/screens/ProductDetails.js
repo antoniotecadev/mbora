@@ -30,7 +30,7 @@ export function ProductDetails({route, navigation}) {
   const [loading, setLoading] = useState({encomenda: false, favorito: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
-  const { produto, userTelephone } = route.params;
+  const { produto, userTelephone, isSearch = false } = route.params;
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
   const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
@@ -161,9 +161,11 @@ export function ProductDetails({route, navigation}) {
         }
     });
     return ()=> {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: 'flex'
-      });
+      if(!isSearch){
+        navigation.getParent()?.setOptions({
+          tabBarStyle: 'flex'
+        });
+      }
     }
   }, []);
   

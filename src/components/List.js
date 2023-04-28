@@ -19,7 +19,7 @@ const Item = ({ item, userTelephone }) => {
 const navigation = useNavigation();
 
 const showProductDetails = (item)=> {
-  navigation.navigate('ProductDetails', { produto: item, userTelephone: userTelephone });
+  navigation.navigate('ProductDetails', { produto: item, userTelephone: userTelephone, isSearch: true });
 }
 
 return <TouchableOpacity onPress={()=> showProductDetails(item)}>
