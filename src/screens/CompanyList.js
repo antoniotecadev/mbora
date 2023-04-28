@@ -3,8 +3,9 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, RefreshControl, Act
 import { CompanyCard } from '../components/CompanyCard.js';
 import { AlertDialog } from '../components/AlertDialog.js';
 import { CartContext } from '../CartContext.js';
+import {Ionicons} from '@expo/vector-icons';
 
-export default function CompanyList() {
+export default function CompanyList({navigation}) {
 
   function renderCompany({ item: company }) {
     return <CompanyCard {...company}/>
@@ -57,6 +58,13 @@ export default function CompanyList() {
   }
 
   useEffect(() => {
+    navigation.setOptions({
+      headerRight: ()=> (
+        <TouchableOpacity onPress={()=> alert()}>
+          <Ionicons name={'search'} size={30} color="orange"/>
+        </TouchableOpacity>
+      )
+    })
     fetchCompanys(true).then(()=> setLoading({cpn: false}));
   }, []);
 

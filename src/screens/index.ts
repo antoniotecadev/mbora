@@ -156,7 +156,7 @@ const screens: ScreenLayouts = {
     component: CompanyList,
     options: () => ({
       title: 'Empresas',
-      ...screenDefaultOptions(),
+      headerTintColor: 'orange',
     }),
   },
   CompanyProfile: {
