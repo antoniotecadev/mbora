@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
 import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB } from 'react-native-ui-lib';
-import { currency, getAppearenceColor } from '../utils/utilitario';
+import { currency, getAppearenceColor, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import {Image, CacheManager} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from './AlertDialog';
@@ -109,7 +109,7 @@ export function Product({ appearanceName, isEncomenda = false, isFavorite = fals
             <Text style={{ marginBottom: 8, color: Colors.grey30, fontSize: 10 }}>
               {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
             </Text>
-            <Text style={{ marginBottom: 8, color: Colors.grey40, fontSize: 10 }}>{produto.visualizacao} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</Text>
+            <Text style={{ marginBottom: 8, color: Colors.grey40, fontSize: 10 }}>{numberFollowersAndViewsFormat(produto.visualizacao, 'youtube')} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</Text>
           </View>
         </View>
       </ExpandableSection>

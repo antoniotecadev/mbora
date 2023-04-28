@@ -11,7 +11,7 @@ import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
 import { useStores } from '../stores';
-import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
+import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Feather } from "@expo/vector-icons";
 
@@ -333,7 +333,7 @@ export default function Profile({ route, navigation }) {
 
 const Numeros = ({text, numero}) => {
     return <TouchableOpacity style={styles.count}>
-                <TextUILIB textColor style={{ fontSize: 12, fontWeight: 'bold' }}>{numero}</TextUILIB>
+                <TextUILIB textColor style={{ fontSize: 12, fontWeight: 'bold' }}>{numberFollowersAndViewsFormat(numero, 'youtube')}</TextUILIB>
                 <TextUILIB textColor color='gray' style={{ fontSize: 12 }}>{text}</TextUILIB>
             </TouchableOpacity>
 }

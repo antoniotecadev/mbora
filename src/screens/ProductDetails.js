@@ -12,7 +12,7 @@ import {
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
-import { currency, getValueItemAsync, removeSpaceLowerCase } from '../utils/utilitario';
+import { currency, getValueItemAsync, numberFollowersAndViewsFormat, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
 import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
@@ -220,7 +220,7 @@ export function ProductDetails({route, navigation}) {
           <View style={styles.divisor}></View>
           <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
           {produto.updated_at && <Text style={[styles.colorGrey, { marginTop: 8 }]}>Alterado {produto.updated_at}</Text>}
-          <Text style={[styles.colorGrey, { marginTop: 8 }]}>{view} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
+          <Text style={[styles.colorGrey, { marginTop: 8 }]}>{numberFollowersAndViewsFormat(view, 'youtube')} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
         </View>
       </ScrollView>
     </ViewUILIB>
