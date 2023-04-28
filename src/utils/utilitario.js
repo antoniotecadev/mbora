@@ -4,8 +4,11 @@ import { Alert } from "react-native";
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 import { Colors } from 'react-native-ui-lib';
 
-export const currency = function (number) {
-    return new Intl.NumberFormat('pt-AO', { style: 'currency', currency: 'AOA', minimumFractionDigits: 2 }).format(number.slice(0, -2));
+export const currency = function (price) {
+    let p1 = price.slice(0, -2); // Números antes dos 2 últimos
+    let p2 = price.slice(-2); // 2 últimos números
+    let priceFormat = p1 + '.' + p2;
+    return new Intl.NumberFormat('pt-AO', { style: 'currency', currency: 'AOA', minimumFractionDigits: 2 }).format(priceFormat);
 };
 
 export const removeSpaceLowerCase  = function(txt) {
