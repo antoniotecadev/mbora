@@ -35,7 +35,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/encomendas/mbora/imei/' + imei + '/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
