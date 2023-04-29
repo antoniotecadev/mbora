@@ -31,6 +31,8 @@ export default function CompanyProfile({ route, navigation }) {
     const {empresa, imei, first_name, last_name} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
+    let color = getAppearenceColor(ui.appearanceName);
+
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
             let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
@@ -260,16 +262,16 @@ export default function CompanyProfile({ route, navigation }) {
               </View>}
               <TabController asCarousel={true} initialIndex={0}  items={[{ label: 'Produtos | Serviços' }, { label: 'Encomendas' }, { label: 'Seguidores' }]}>
                   <TabController.TabBar
-                      backgroundColor={getAppearenceColor(ui.appearanceName)} 
+                      backgroundColor={color} 
                       indicatorStyle={{backgroundColor: 'orange', height: 3}} 
                       labelColor={'green'}
                       selectedLabelColor={'orange'}/>
                   <TabController.PageCarousel>
                       <TabController.TabPage index={0}>
-                          <ProdutosServicos nav={nav} appearanceName={ui.appearanceName} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
+                          <ProdutosServicos nav={nav} appearanceName={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
                       </TabController.TabPage>
                       <TabController.TabPage index={1} lazy>
-                          <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                          <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
                       </TabController.TabPage>
                       <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                   </TabController.PageCarousel>

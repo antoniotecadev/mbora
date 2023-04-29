@@ -34,6 +34,8 @@ export default function Profile({ route, navigation }) {
     const {ui, user} = useStores();
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
+    let color = getAppearenceColor(ui.appearanceName);
+
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
             let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
@@ -238,7 +240,7 @@ export default function Profile({ route, navigation }) {
                 size={150} 
                 animate={true} 
                 badgePosition={'BOTTOM_RIGHT'} 
-                badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: getAppearenceColor(), onPress:()=> pickImage()}} />
+                badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: color, onPress:()=> pickImage()}} />
         )
     }, [image])
 
@@ -313,16 +315,16 @@ export default function Profile({ route, navigation }) {
             </View>}
             <TabController asCarousel={true} initialIndex={0} onChangeIndex={(index)=> onChangeIndex(index)} items={[{ label: 'Encomendas' }, { label: 'Favoritos' }, { label: 'A seguir' }]}>
                 <TabController.TabBar
-                    backgroundColor={getAppearenceColor(ui.appearanceName)} 
+                    backgroundColor={color} 
                     indicatorStyle={{backgroundColor: 'orange', height: 3}} 
                     labelColor={'green'}
                     selectedLabelColor={'orange'}/>
                 <TabController.PageCarousel>
                     <TabController.TabPage index={0}>
-                        <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                        <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos nav={nav} appearanceName={ui.appearanceName} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
+                        <Favoritos nav={nav} appearanceName={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
                 </TabController.PageCarousel>
