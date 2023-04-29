@@ -1,7 +1,7 @@
 import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, Dimensions } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, Dimensions, SafeAreaView } from 'react-native';
 import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
@@ -244,6 +244,7 @@ export default function CompanyProfile({ route, navigation }) {
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
+          <SafeAreaView flex>
             <ViewUILIB flex bg-bgColor>
               <ToastMessage />
               {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
@@ -277,6 +278,7 @@ export default function CompanyProfile({ route, navigation }) {
                   </TabController.PageCarousel>
               </TabController>
             </ViewUILIB>
+          </SafeAreaView>
     );
 }
 
