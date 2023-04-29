@@ -37,9 +37,9 @@ export function CompanyCard(props) {
 const styles = StyleSheet.create({
     card: {
         width: '49%',
-        backgroundColor: 'white',
+        borderRadius: 16,
         shadowOpacity: 0.2,
-        shadowColor: 'black',
+        shadowRadius: 4,
         shadowOffset: {
             height: 0,
             width: 0,
