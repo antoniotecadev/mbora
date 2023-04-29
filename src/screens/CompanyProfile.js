@@ -77,7 +77,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const getCountEncomenda = useCallback(async()=> {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/count',
+            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/encomendas/mbora/count/imei/' + imei,
             {
                     headers: {
                     Accept: 'application/json',
