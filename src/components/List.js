@@ -40,7 +40,7 @@ const ItemCompany = ({ item }) => {
 const navigation = useNavigation();
 
 const showCompanyProfile = (item)=> {
-  navigation.navigate('CompanyProfile', {item: company});
+  navigation.navigate('CompanyProfile', {...item});
 }
 
 return <TouchableOpacity onPress={()=> showCompanyProfile(item)}>
