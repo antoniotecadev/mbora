@@ -1,8 +1,8 @@
 import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, SafeAreaView, Dimensions } from 'react-native';
-import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
+import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, Dimensions } from 'react-native';
+import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -242,39 +242,39 @@ export default function CompanyProfile({ route, navigation }) {
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
-        <SafeAreaView style={{flex: 1}}>
-            <ToastMessage />
-            {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-            {viewFullPhoto ? <ViewFullPhoto photoURI={image} setViewFullPhoto={setViewFullPhoto} /> :
-            <View style={styles.infoContainer}>
-            {viewHeader ?
-            <>
-                <UserPhoto setViewFullPhoto={setViewFullPhoto}/>
-                <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
-                <CountInfo/>
-                <Buttons/>
-            </> :
-                <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
-                    <AntDesign name='down' size={20} color='green'/>
-                </TouchableOpacity>}
-            </View>}
-            <TabController asCarousel={true} initialIndex={0}  items={[{ label: 'Produtos | Serviços' }, { label: 'Encomendas' }, { label: 'Seguidores' }]}>
-                <TabController.TabBar
-                    backgroundColor={getAppearenceColor(ui.appearanceName)} 
-                    indicatorStyle={{backgroundColor: 'orange', height: 3}} 
-                    labelColor={'green'}
-                    selectedLabelColor={'orange'}/>
-                <TabController.PageCarousel>
-                    <TabController.TabPage index={0}>
-                        <ProdutosServicos nav={nav} appearanceName={ui.appearanceName} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
-                    </TabController.TabPage>
-                    <TabController.TabPage index={1} lazy>
-                        <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
-                    </TabController.TabPage>
-                    <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
-                </TabController.PageCarousel>
-            </TabController>
-        </SafeAreaView>
+            <ViewUILIB flex bg-bgColor>
+              <ToastMessage />
+              {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
+              {viewFullPhoto ? <ViewFullPhoto photoURI={image} setViewFullPhoto={setViewFullPhoto} /> :
+              <View style={styles.infoContainer}>
+              {viewHeader ?
+              <>
+                  <UserPhoto setViewFullPhoto={setViewFullPhoto}/>
+                  <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
+                  <CountInfo/>
+                  <Buttons/>
+              </> :
+                  <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
+                      <AntDesign name='down' size={20} color='green'/>
+                  </TouchableOpacity>}
+              </View>}
+              <TabController asCarousel={true} initialIndex={0}  items={[{ label: 'Produtos | Serviços' }, { label: 'Encomendas' }, { label: 'Seguidores' }]}>
+                  <TabController.TabBar
+                      backgroundColor={getAppearenceColor(ui.appearanceName)} 
+                      indicatorStyle={{backgroundColor: 'orange', height: 3}} 
+                      labelColor={'green'}
+                      selectedLabelColor={'orange'}/>
+                  <TabController.PageCarousel>
+                      <TabController.TabPage index={0}>
+                          <ProdutosServicos nav={nav} appearanceName={ui.appearanceName} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
+                      </TabController.TabPage>
+                      <TabController.TabPage index={1} lazy>
+                          <Encomenda appearanceName={ui.appearanceName} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                      </TabController.TabPage>
+                      <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
+                  </TabController.PageCarousel>
+              </TabController>
+            </ViewUILIB>
     );
 }
 
