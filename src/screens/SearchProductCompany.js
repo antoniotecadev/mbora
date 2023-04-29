@@ -33,11 +33,11 @@ const SearchProductCompany = ({route, navigation}) => {
 
   const { showDialog, setShowDialog } = useContext(CartContext);
 
-  const search = async(name, isMore) => {
+  const search = async(nameImei, isMore) => {
     if(isCompany){
-      await getData("http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora/searchcompany/" + String(name) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
+      await getData("http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora/searchcompany/" + String(nameImei) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
     } else {
-      await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(name) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
+      await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(nameImei) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
     }
   }
 
