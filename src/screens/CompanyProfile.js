@@ -160,23 +160,6 @@ export default function CompanyProfile({ route, navigation }) {
         }
     }
 
-    const getURLProfilePhoto = async()=> {
-        try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/profilephoto/user/url',
-            {
-                headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
-                }
-            });
-            let rjd = await response.json();
-            setImage(rjd.photo_url);
-        } catch (error) {
-            setShowDialog({visible: true, title: 'Erro Foto de Perfil', message: error.message, color: 'orangered'});
-        }
-    };
-
     const UserPhoto = useCallback(({setViewFullPhoto})=> {
         return (
             <Avatar 
@@ -215,20 +198,12 @@ export default function CompanyProfile({ route, navigation }) {
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
-        getURLProfilePhoto();
         getCountEncomenda();
         getCountProduto();
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
     }, []);
-
-    useEffect(() => {
-        if (route.params?.photoURL) {
-            setImage(route.params.photoURL);
-            setVisibleToast({visible: true, message: 'Foto de perfil alterada', backgroundColor: 'green'});
-        }
-    }, [route.params?.photoURL]);
 
     useEffect(() => {
         navigation.setOptions({
