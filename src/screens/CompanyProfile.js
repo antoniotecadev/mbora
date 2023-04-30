@@ -122,8 +122,6 @@ export default function CompanyProfile({ route, navigation }) {
               url =  URL + 'number/encomendas/empresas/mbora/imei/' + imei;
             } else if (action == 2) {
               url =  URL + 'number/seguidores/empresas/mbora/imei/' + imei;
-            } else {
-
             }
             let response =  await fetch(url,
             {
@@ -140,8 +138,6 @@ export default function CompanyProfile({ route, navigation }) {
               setNumberEncomenda(rjd);
             } else if (action == 2) {
               setNumberSeguidor(rjd);
-            } else {
-
             }
         } catch (error) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
