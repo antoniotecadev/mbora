@@ -27,6 +27,7 @@ export default function CompanyProfile({ route, navigation }) {
     const [numberProduto, setNumerProduto] = useState('-');
     const [numberEncomenda, setNumerEncomenda] = useState('-');
     const [numberSeguidor, setNumerSeguidor] = useState('-');
+    const [numberVisita, setNumerVisita] = useState('-');
 
 
     const { nav } = useServices();
@@ -182,9 +183,10 @@ export default function CompanyProfile({ route, navigation }) {
                 <Numeros text='Prod | Serv' numero={numberProduto}/>
                 <Numeros text='Encomendas' numero={numberEncomenda}/>
                 <Numeros text='Seguidores' numero={numberSeguidor}/>
+                <Numeros text='Visitas' numero={numberVisita}/>
             </View>
         )
-    }, [numberProduto, numberEncomenda, numberSeguidor])
+    }, [numberProduto, numberEncomenda, numberSeguidor, numberVisita])
 
     const ButtonViewDetails = useCallback(()=> {
       return  <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10, left: 10}]} onPress={()=> setViewDetails(!viewDetails)}>
@@ -222,6 +224,7 @@ export default function CompanyProfile({ route, navigation }) {
         setNumerProduto(product_number);
         setNumerEncomenda(encomenda_number);
         setNumerSeguidor(followers_mbora);
+        setNumerVisita(views_mbora);
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
