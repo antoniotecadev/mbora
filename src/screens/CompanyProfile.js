@@ -33,6 +33,7 @@ export default function CompanyProfile({ route, navigation }) {
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
+    let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
@@ -76,23 +77,6 @@ export default function CompanyProfile({ route, navigation }) {
         }
     }
 
-    const getCountEncomenda = useCallback(async()=> {
-        try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/encomendas/mbora/count/imei/' + imei,
-            {
-                    headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
-                }
-            });
-            let rjd = await response.json();
-            setCountEncomenda(rjd);
-        } catch (error) {
-            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
-        }
-    }, []);
-
     const fecthProducts = useCallback(async(isMoreView)=> {
         try {
             let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/servicos/mbora/lastVisible/' + lastVisible.produto + '/isMoreView/' + isMoreView + '/imei/' + imei,
@@ -126,9 +110,20 @@ export default function CompanyProfile({ route, navigation }) {
         }
     }, [lastVisible.produto]);
 
-    const getCountProduto = useCallback(async()=> {
+    const getCount = useCallback(async(action)=> {
+        let url;
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/count/produtos/servicos/mbora/imei/' + imei,
+            if (action == 0) {
+              url =  URL + 'count/produtos/servicos/mbora/imei/' + imei;
+            } else if (action == 1) {
+              url =  URL + 'empresas/encomendas/mbora/count/imei/' + imei;
+            } else if (action == 2) {
+
+            } else {
+
+            }
+            let response =  await fetch(url,
+
             {
                     headers: {
                     Accept: 'application/json',
@@ -137,7 +132,15 @@ export default function CompanyProfile({ route, navigation }) {
                 }
             });
             let rjd = await response.json();
-            setCountProduto(rjd);
+            if (action == 0) {
+              setCountProduto(rjd);
+            } else if (action == 1) {
+              setCountEncomenda(rjd)
+            } else if (action == 2) {
+              
+            } else {
+
+            }
         } catch (error) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
@@ -148,11 +151,11 @@ export default function CompanyProfile({ route, navigation }) {
         switch (index) {
             case 0:
                 fecthProducts(false).then(()=> setRefreshing(false));
-                getCountProduto();
+                getCount(0);
                 break;
               case 1:
                 fetchEncomendas(false).then(()=> setRefreshing(false));
-                getCountEncomenda();
+                getCount(1);
                 break;
             case 2:
                 break;
@@ -215,8 +218,8 @@ export default function CompanyProfile({ route, navigation }) {
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
-        getCountEncomenda();
-        getCountProduto();
+        getCount(0);
+        getCount(1);
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
