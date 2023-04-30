@@ -24,8 +24,10 @@ export default function CompanyProfile({ route, navigation }) {
     const [viewDetails, setViewDetails] = useState(false);
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
-    const [countProduto, setCountProduto] = useState("-");
-    const [countEncomenda, setCountEncomenda] = useState("-");
+    const [numberProduto, setNumerProduto] = useState('-');
+    const [numberEncomenda, setNumerEncomenda] = useState('-');
+    const [numberSeguidor, setNumerSeguidor] = useState('-');
+
 
     const { nav } = useServices();
     const {ui, user} = useStores();
@@ -118,7 +120,7 @@ export default function CompanyProfile({ route, navigation }) {
             } else if (action == 1) {
               url =  URL + 'empresas/encomendas/mbora/count/imei/' + imei;
             } else if (action == 2) {
-
+              url =  URL + 'count/seguidores/empresas/mbora/imei/' + imei;
             } else {
 
             }
@@ -133,11 +135,11 @@ export default function CompanyProfile({ route, navigation }) {
             });
             let rjd = await response.json();
             if (action == 0) {
-              setCountProduto(rjd);
+              setNumerProduto(rjd);
             } else if (action == 1) {
-              setCountEncomenda(rjd)
+              setNumerEncomenda(rjd);
             } else if (action == 2) {
-              
+              setNumerSeguidor(rjd);
             } else {
 
             }
@@ -178,12 +180,12 @@ export default function CompanyProfile({ route, navigation }) {
     const CountInfo = useCallback(()=> {
         return (
             <View style={styles.section}>
-                <Numeros text='Prod | Serv' numero={countProduto}/>
-                <Numeros text='Encomendas' numero={countEncomenda}/>
-                <Numeros text='Seguidores' numero={32}/>
+                <Numeros text='Prod | Serv' numero={numberProduto}/>
+                <Numeros text='Encomendas' numero={numberEncomenda}/>
+                <Numeros text='Seguidores' numero={numberSeguidor}/>
             </View>
         )
-    }, [countEncomenda, countProduto])
+    }, [numberProduto, numberEncomenda, numberSeguidor])
 
     const ButtonViewDetails = useCallback(()=> {
       return  <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10, left: 10}]} onPress={()=> setViewDetails(!viewDetails)}>
@@ -220,6 +222,7 @@ export default function CompanyProfile({ route, navigation }) {
         })
         getCount(0);
         getCount(1);
+        getCount(2);
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
