@@ -118,7 +118,7 @@ export default function CompanyProfile({ route, navigation }) {
             if (action == 0) {
               url =  URL + 'count/produtos/servicos/mbora/imei/' + imei;
             } else if (action == 1) {
-              url =  URL + 'empresas/encomendas/mbora/count/imei/' + imei;
+              url =  URL + 'count/encomendas/empresas/mbora/imei/' + imei;
             } else if (action == 2) {
               url =  URL + 'count/seguidores/empresas/mbora/imei/' + imei;
             } else {
