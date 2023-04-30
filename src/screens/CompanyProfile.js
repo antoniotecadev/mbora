@@ -1,5 +1,5 @@
 import { deleteItemAsync } from 'expo-secure-store';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNumber } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, Dimensions, SafeAreaView } from 'react-native';
 import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
@@ -132,12 +132,14 @@ export default function CompanyProfile({ route, navigation }) {
                 }
             });
             let rjd = await response.json();
-            if (action == 0) {
-              setNumberProduto(rjd);
-            } else if (action == 1) {
-              setNumberEncomenda(rjd);
-            } else if (action == 2) {
-              setNumberSeguidor(rjd);
+            if (isNumber(rjd)) {
+              if (action == 0) {
+                setNumberProduto(rjd);
+              } else if (action == 1) {
+                setNumberEncomenda(rjd);
+              } else if (action == 2) {
+                setNumberSeguidor(rjd);
+              }
             }
         } catch (error) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
