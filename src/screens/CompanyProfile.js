@@ -112,15 +112,15 @@ export default function CompanyProfile({ route, navigation }) {
         }
     }, [lastVisible.produto]);
 
-    const getCount = useCallback(async(action)=> {
+    const getNumber = useCallback(async(action)=> {
         let url;
         try {
             if (action == 0) {
-              url =  URL + 'count/produtos/servicos/mbora/imei/' + imei;
+              url =  URL + 'number/produtos/servicos/mbora/imei/' + imei;
             } else if (action == 1) {
-              url =  URL + 'count/encomendas/empresas/mbora/imei/' + imei;
+              url =  URL + 'number/encomendas/empresas/mbora/imei/' + imei;
             } else if (action == 2) {
-              url =  URL + 'count/seguidores/empresas/mbora/imei/' + imei;
+              url =  URL + 'number/seguidores/empresas/mbora/imei/' + imei;
             } else {
 
             }
@@ -153,11 +153,11 @@ export default function CompanyProfile({ route, navigation }) {
         switch (index) {
             case 0:
                 fecthProducts(false).then(()=> setRefreshing(false));
-                getCount(0);
+                getNumber(0);
                 break;
               case 1:
                 fetchEncomendas(false).then(()=> setRefreshing(false));
-                getCount(1);
+                getNumber(1);
                 break;
             case 2:
                 break;
@@ -177,7 +177,7 @@ export default function CompanyProfile({ route, navigation }) {
         )
     }, [image])
 
-    const CountInfo = useCallback(()=> {
+    const NumberInformation = useCallback(()=> {
         return (
             <View style={styles.section}>
                 <Numeros text='Prod | Serv' numero={numberProduto}/>
@@ -220,9 +220,9 @@ export default function CompanyProfile({ route, navigation }) {
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
-        getCount(0);
-        getCount(1);
-        getCount(2);
+        getNumber(0);
+        getNumber(1);
+        getNumber(2);
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
@@ -252,7 +252,7 @@ export default function CompanyProfile({ route, navigation }) {
               <>
                 {viewDetails ? <Details /> : <UserPhoto setViewFullPhoto={setViewFullPhoto}/>}
                 <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
-                <CountInfo/>
+                <NumberInformation/>
                 <ButtonViewDetails/>
                 <ButtonsFollowerMaximise/>
               </> :
@@ -282,7 +282,7 @@ export default function CompanyProfile({ route, navigation }) {
 }
 
 const Numeros = ({text, numero}) => {
-    return <TouchableOpacity style={styles.count}>
+    return <TouchableOpacity style={styles.number}>
                 <TextUILIB textColor style={{ fontSize: 12, fontWeight: 'bold' }}>{numberFollowersAndViewsFormat(numero, 'youtube')}</TextUILIB>
                 <TextUILIB textColor color='gray' style={{ fontSize: 12 }}>{text}</TextUILIB>
             </TouchableOpacity>
@@ -378,7 +378,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
-    count: { 
+    number: { 
         alignItems: 'center', 
         margin: 8 
     },
