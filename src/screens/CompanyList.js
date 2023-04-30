@@ -6,7 +6,7 @@ import { CartContext } from '../CartContext.js';
 import {Ionicons} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
-import { getAppearenceColor } from '../utils/utilitario.js';
+import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 
 export default function CompanyList({navigation}) {
 
@@ -25,9 +25,14 @@ export default function CompanyList({navigation}) {
   const fetchCompanys = useCallback(async(isRefresh) => {
     setLoading({cpn: true});
     try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora');
+      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora', {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+        }
+      });
       let responseJsonData = await response.json();
-      
       if(isRefresh) {
         setCompany(responseJsonData);
       } else {

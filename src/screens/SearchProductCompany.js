@@ -15,6 +15,7 @@ import SearchBar from "../components/SearchBar";
 import { Entypo, Feather } from "@expo/vector-icons";
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useStores } from "../stores";
+import { getValueItemAsync } from "../utils/utilitario";
 
 const SearchProductCompany = ({route, navigation}) => {
 
@@ -44,7 +45,13 @@ const SearchProductCompany = ({route, navigation}) => {
   const getData = async (url, isMore) => {
     setLoading(true);
     try {
-      const apiResponse = await fetch(url);
+      const apiResponse = await fetch(url, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+      }
+    });
       const rjd = await apiResponse.json();
         if (!isEmpty(rjd)) {
           setEmpty(false);
