@@ -21,6 +21,7 @@ export default function CompanyProfile({ route, navigation }) {
     const [lastVisible, setLastVisible] = useState({encomenda: 0, produto: 0});
     const [empty, setEmpty] = useState({encomenda: false, produto: false});
     const [viewHeader, setViewHeader] = useState(true);
+    const [viewDetails, setViewDetails] = useState(false);
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
     const [countProduto, setCountProduto] = useState("-");
@@ -28,7 +29,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {empresa, imei, first_name, last_name} = route.params;
+    const {empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -181,17 +182,33 @@ export default function CompanyProfile({ route, navigation }) {
         )
     }, [countEncomenda, countProduto])
 
-    const Buttons = useCallback(()=> {
-        return (
-                <>
-                    <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> alert()}>
-                        <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Seguir</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10}]} onPress={()=> setViewHeader(false)}>
-                        <AntDesign name='up' size={20} color='green'/>
-                    </TouchableOpacity>
-                </>
-        )
+    const ButtonViewDetails = useCallback(()=> {
+      return  <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10, left: 10}]} onPress={()=> setViewDetails(!viewDetails)}>
+                  <AntDesign name={viewDetails ? 'down' : 'up'} size={20} color='orange'/>
+                  <TextUILIB textColor style={{fontSize: 8}}>{viewDetails ? '-' : '+'} Detalhes</TextUILIB>
+              </TouchableOpacity>
+    }, [viewDetails])
+
+    const Details = useCallback(()=> {
+      return <> 
+              <TextUILIB textColor text80>Beleza e Higiene</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Localização: {`${nomeProvincia}, ${district} , ${street}`}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Email: {email}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Telefone 1 : {phone}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Telefone 2 : {alternative_phone}</TextUILIB>
+            </>
+    }, [])
+
+    const ButtonsFollowerMaximise = useCallback(()=> {
+      return  <>
+                <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> alert()}>
+                    <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Seguir</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10, right: 10}]} onPress={()=> setViewHeader(false)}>
+                    <AntDesign name='up' size={20} color='green'/>
+                    <TextUILIB textColor style={{fontSize: 8}}>Maximizar</TextUILIB>
+                </TouchableOpacity> 
+              </>
     }, [])
 
     useEffect(() => {
@@ -227,10 +244,11 @@ export default function CompanyProfile({ route, navigation }) {
               <View style={styles.infoContainer}>
               {viewHeader ?
               <>
-                  <UserPhoto setViewFullPhoto={setViewFullPhoto}/>
-                  <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
-                  <CountInfo/>
-                  <Buttons/>
+                {viewDetails ? <Details /> : <UserPhoto setViewFullPhoto={setViewFullPhoto}/>}
+                <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
+                <CountInfo/>
+                <ButtonViewDetails/>
+                <ButtonsFollowerMaximise/>
               </> :
                   <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
                       <AntDesign name='down' size={20} color='green'/>
@@ -363,7 +381,6 @@ const styles = StyleSheet.create({
         height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        right: 10,
     },
     fullphoto : {
         width: '100%', 
