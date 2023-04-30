@@ -31,7 +31,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street} = route.params;
+    const {empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_mbora, views_mbora} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -125,7 +125,6 @@ export default function CompanyProfile({ route, navigation }) {
 
             }
             let response =  await fetch(url,
-
             {
                     headers: {
                     Accept: 'application/json',
@@ -220,9 +219,9 @@ export default function CompanyProfile({ route, navigation }) {
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
-        getNumber(0);
-        getNumber(1);
-        getNumber(2);
+        setNumerProduto(product_number);
+        setNumerEncomenda(encomenda_number);
+        setNumerSeguidor(followers_mbora);
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
