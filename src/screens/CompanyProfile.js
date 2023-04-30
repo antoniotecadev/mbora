@@ -24,10 +24,10 @@ export default function CompanyProfile({ route, navigation }) {
     const [viewDetails, setViewDetails] = useState(false);
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
-    const [numberProduto, setNumerProduto] = useState('-');
-    const [numberEncomenda, setNumerEncomenda] = useState('-');
-    const [numberSeguidor, setNumerSeguidor] = useState('-');
-    const [numberVisita, setNumerVisita] = useState('-');
+    const [numberProduto, setNumberProduto] = useState('-');
+    const [numberEncomenda, setNumberEncomenda] = useState('-');
+    const [numberSeguidor, setNumberSeguidor] = useState('-');
+    const [numberVisita, setNumberVisita] = useState('-');
 
 
     const { nav } = useServices();
@@ -135,11 +135,11 @@ export default function CompanyProfile({ route, navigation }) {
             });
             let rjd = await response.json();
             if (action == 0) {
-              setNumerProduto(rjd);
+              setNumberProduto(rjd);
             } else if (action == 1) {
-              setNumerEncomenda(rjd);
+              setNumberEncomenda(rjd);
             } else if (action == 2) {
-              setNumerSeguidor(rjd);
+              setNumberSeguidor(rjd);
             } else {
 
             }
@@ -221,10 +221,10 @@ export default function CompanyProfile({ route, navigation }) {
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
-        setNumerProduto(product_number);
-        setNumerEncomenda(encomenda_number);
-        setNumerSeguidor(followers_mbora);
-        setNumerVisita(views_mbora);
+        setNumberProduto(product_number);
+        setNumberEncomenda(encomenda_number);
+        setNumberSeguidor(followers_mbora);
+        setNumberVisita(views_mbora);
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
