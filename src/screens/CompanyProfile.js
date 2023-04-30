@@ -215,6 +215,12 @@ export default function CompanyProfile({ route, navigation }) {
               </>
     }, [])
 
+    const numberViewsCompany = useCallback(async ()=> {
+      let response = await fetch(URL + 'number/visitas/empresas/mbora/imei/' + imei);
+      let rjd = await response.json();
+      setNumberVisita(isNumber(rjd.views) ? rjd.views : views_mbora);
+    }, [imei]);
+
     useEffect(() => {
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
@@ -222,7 +228,7 @@ export default function CompanyProfile({ route, navigation }) {
         setNumberProduto(product_number);
         setNumberEncomenda(encomenda_number);
         setNumberSeguidor(followers_mbora);
-        setNumberVisita(views_mbora);
+        numberViewsCompany();
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fecthProducts(false).then(()=> setRefreshing(false));
