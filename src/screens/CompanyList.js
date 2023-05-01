@@ -8,7 +8,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 
-export default function CompanyList({navigation}) {
+export default function CompanyList({route, navigation}) {
 
   const {ui} = useStores();
   let color = getAppearenceColor(ui.appearanceName); 
@@ -83,8 +83,21 @@ export default function CompanyList({navigation}) {
     navigation.getParent()?.setOptions({
       tabBarStyle: 'flex'
     });
-  }, [navigation])
-  );
+  }, [navigation]));
+
+  useEffect(() => {
+    if (route.params?.id || route.params?.estado) {
+      setCompany((prevCompany) => {
+          return prevCompany.map((company) => {
+            if(company.id == route.params.id) {
+              company.estado = route.params.estado;
+              company.seguir = route.params.estado == 1 ? true : false;
+            }
+            return company;
+          });
+      });
+    }
+  }, [route.params?.id, route.params?.estado]);
 
   return (
     <>

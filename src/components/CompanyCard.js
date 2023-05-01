@@ -9,7 +9,7 @@ const cardImage = require('../../assets/products/cantina2.jpg');
 export function CompanyCard(props) {
 
     const { nav } = useServices();
-    const {empresa, nomeProvincia, district, street, followers_mbora, views_mbora} = props;
+    const {empresa, nomeProvincia, district, street, followers_mbora, views_mbora, estado, seguir = false} = props;
 
     return (
         <Card style={[styles.card, {backgroundColor: props.appearanceName, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
@@ -19,6 +19,7 @@ export function CompanyCard(props) {
             <View maxWidth={180}>
                 <View row style={styles.section}>
                     <Text textColor style={{ ...Typography.text90 }}>{empresa}</Text>
+                    {(seguir || estado == 1) && <Text color='white' style={{fontSize: 10, backgroundColor: 'green', padding: 5, marginTop: -2}}>A seguir</Text>}
                 </View>
                 <Text marginV-8 color={Colors.grey30} style={{ fontSize: 10 }}>
                     {`${nomeProvincia}, ${district} , ${street}`}

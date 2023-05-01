@@ -34,7 +34,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_mbora, views_mbora} = route.params;
+    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_mbora, views_mbora} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -271,45 +271,63 @@ export default function CompanyProfile({ route, navigation }) {
         });
     }, [viewHeader]);
 
-    const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
-    
-    return (
-          <SafeAreaView flex>
-            <ViewUILIB flex bg-bgColor>
-              <ToastMessage />
-              {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-              {viewFullPhoto ? <ViewFullPhoto photoURI={image} setViewFullPhoto={setViewFullPhoto} /> :
-              <View style={styles.infoContainer}>
-              {viewHeader ?
-              <>
-                {viewDetails ? <Details /> : <UserPhoto setViewFullPhoto={setViewFullPhoto}/>}
-                <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
-                <NumberInformation/>
-                <ButtonViewDetails/>
-                <ButtonsFollowerMaximise/>
-              </> :
-                  <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
-                      <AntDesign name='down' size={20} color='green'/>
-                  </TouchableOpacity>}
-              </View>}
-              <TabController asCarousel={true} initialIndex={0}  items={[{ label: 'Produtos | Serviços' }, { label: 'Encomendas' }, { label: 'Seguidores' }]}>
-                  <TabController.TabBar
-                      backgroundColor={color} 
-                      indicatorStyle={{backgroundColor: 'orange', height: 3}} 
-                      labelColor={'green'}
-                      selectedLabelColor={'orange'}/>
-                  <TabController.PageCarousel>
-                      <TabController.TabPage index={0}>
-                          <ProdutosServicos nav={nav} appearanceName={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
-                      </TabController.TabPage>
-                      <TabController.TabPage index={1} lazy>
-                          <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
-                      </TabController.TabPage>
-                      <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
-                  </TabController.PageCarousel>
-              </TabController>
-            </ViewUILIB>
-          </SafeAreaView>
+  const goBack = () => {
+    navigation.navigate({
+      name: 'CompanyList',
+      params: isFollower == estado || (isFollower == false && isFollower != 0) || (estado == null && isFollower == false) ? {} : { estado: isFollower ? 1 : 0, id: id},
+      merge: true,
+    });
+  }
+
+  useEffect(()=> {
+      navigation.setOptions({
+          headerLeft: () => (
+              <TouchableOpacity style={{left: 0, padding: 10}} onPress={() => goBack()}>
+                <AntDesign name='left' color={'orange'} size={24}/>
+              </TouchableOpacity>
+          ),
+      })
+  }, [id, estado, isFollower]);
+
+const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
+
+return (
+      <SafeAreaView flex>
+        <ViewUILIB flex bg-bgColor>
+          <ToastMessage />
+          {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
+          {viewFullPhoto ? <ViewFullPhoto photoURI={image} setViewFullPhoto={setViewFullPhoto} /> :
+          <View style={styles.infoContainer}>
+          {viewHeader ?
+          <>
+            {viewDetails ? <Details /> : <UserPhoto setViewFullPhoto={setViewFullPhoto}/>}
+            <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
+            <NumberInformation/>
+            <ButtonViewDetails/>
+            <ButtonsFollowerMaximise/>
+          </> :
+              <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
+                  <AntDesign name='down' size={20} color='green'/>
+              </TouchableOpacity>}
+          </View>}
+          <TabController asCarousel={true} initialIndex={0}  items={[{ label: 'Produtos | Serviços' }, { label: 'Encomendas' }, { label: 'Seguidores' }]}>
+              <TabController.TabBar
+                  backgroundColor={color} 
+                  indicatorStyle={{backgroundColor: 'orange', height: 3}} 
+                  labelColor={'green'}
+                  selectedLabelColor={'orange'}/>
+              <TabController.PageCarousel>
+                  <TabController.TabPage index={0}>
+                      <ProdutosServicos nav={nav} appearanceName={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
+                  </TabController.TabPage>
+                  <TabController.TabPage index={1} lazy>
+                      <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                  </TabController.TabPage>
+                  <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
+              </TabController.PageCarousel>
+          </TabController>
+        </ViewUILIB>
+      </SafeAreaView>
     );
 }
 
