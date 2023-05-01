@@ -31,10 +31,9 @@ export default function CompanyProfile({ route, navigation }) {
     const [isFollower, setIsFollower] = useState(false);
     const [loading, setLoading] = useState({seguir: false});
 
-
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_mbora, views_mbora} = route.params;
+    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -253,7 +252,7 @@ export default function CompanyProfile({ route, navigation }) {
         setIsFollower(estado == 1);
         setNumberProduto(product_number);
         setNumberEncomenda(encomenda_number);
-        setNumberSeguidor(followers_mbora);
+        setNumberSeguidor(followers_number);
         numberViewsCompany();
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));

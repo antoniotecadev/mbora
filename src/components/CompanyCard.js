@@ -9,7 +9,7 @@ const cardImage = require('../../assets/products/cantina2.jpg');
 export function CompanyCard(props) {
 
     const { nav } = useServices();
-    const {empresa, nomeProvincia, district, street, followers_mbora, views_mbora, estado, seguir = false} = props;
+    const {empresa, nomeProvincia, district, street, followers_number, views_mbora, estado, seguir = false} = props;
 
     return (
         <Card style={[styles.card, {backgroundColor: props.appearanceName, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
@@ -25,7 +25,7 @@ export function CompanyCard(props) {
                     {`${nomeProvincia}, ${district} , ${street}`}
                 </Text>
                 <Text marginB-8 color={Colors.grey40} style={{ fontSize: 10 }}>
-                    {numberFollowersAndViewsFormat(followers_mbora, 'youtube')} seguidores
+                    {numberFollowersAndViewsFormat(followers_number, 'youtube')} seguidores
                 </Text>
                 <Text marginB-8 color={Colors.grey40} style={{ fontSize: 10 }}>
                     {numberFollowersAndViewsFormat(views_mbora, 'youtube')} visitas
