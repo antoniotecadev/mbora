@@ -247,7 +247,6 @@ export default function CompanyProfile({ route, navigation }) {
     }
 
     useEffect(() => {
-        alert(isFollower)
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
@@ -271,7 +270,7 @@ export default function CompanyProfile({ route, navigation }) {
             }
         });
     }, [viewHeader]);
-    
+
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
     return (
