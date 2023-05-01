@@ -28,11 +28,13 @@ export default function CompanyProfile({ route, navigation }) {
     const [numberEncomenda, setNumberEncomenda] = useState('-');
     const [numberSeguidor, setNumberSeguidor] = useState('-');
     const [numberVisita, setNumberVisita] = useState('-');
+    const [isFollower, setIsFollower] = useState(false);
+    const [loading, setLoading] = useState({seguir: false});
 
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_mbora, views_mbora} = route.params;
+    const {estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_mbora, views_mbora} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -205,26 +207,51 @@ export default function CompanyProfile({ route, navigation }) {
 
     const ButtonsFollowerMaximise = useCallback(()=> {
       return  <>
-                <TouchableOpacity style={styles.buttonEditProfile} onPress={()=> alert()}>
-                    <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >Seguir</Text>
+                <TouchableOpacity style={[styles.buttonEditProfile, {backgroundColor: isFollower ? 'orangered' : 'green'}]} onPress={()=> followCompany()}>
+                    <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >{isFollower ? 'A seguir' : 'Seguir'}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10, right: 10}]} onPress={()=> setViewHeader(false)}>
                     <AntDesign name='up' size={20} color='green'/>
                     <TextUILIB textColor style={{fontSize: 8}}>Maximizar</TextUILIB>
                 </TouchableOpacity> 
               </>
-    }, [])
+    }, [isFollower])
 
-    const numberViewsCompany = useCallback(async ()=> {
+    const numberViewsCompany = async()=> {
       let response = await fetch(URL + 'number/visitas/empresas/mbora/imei/' + imei);
       let rjd = await response.json();
       setNumberVisita(isNumber(rjd.views) ? rjd.views : views_mbora);
-    }, [imei]);
+    };
+
+    const followCompany = async()=> {
+      setLoading({seguir: true}); 
+      try {
+        let response = await fetch(URL + 'seguir/empresas/mbora/imei/' + imei + '/isFollower/' + isFollower,
+        {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+          },
+        });
+        let rjd = await response.json();
+        if(rjd.success) {
+          setIsFollower(rjd.estado);
+        } else {
+          setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
+        }
+      } catch (error) {
+        setLoading({seguir: false}); 
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
+      }
+    }
 
     useEffect(() => {
+        alert(isFollower)
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
+        setIsFollower(estado == 1);
         setNumberProduto(product_number);
         setNumberEncomenda(encomenda_number);
         setNumberSeguidor(followers_mbora);
@@ -378,7 +405,6 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         marginVertical: 8, 
         borderRadius: 5, 
-        backgroundColor: 'green',
     },
     section: {
         flexDirection: 'row',
