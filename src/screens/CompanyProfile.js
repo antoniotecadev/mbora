@@ -236,6 +236,7 @@ export default function CompanyProfile({ route, navigation }) {
         let rjd = await response.json();
         if(rjd.success) {
           setIsFollower(rjd.estado);
+          setNumberSeguidor((seguidor) => rjd.estado == 1 ? seguidor + 1 : (seguidor > 0 ? seguidor - 1 : seguidor));
         } else {
           setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
         }
@@ -273,7 +274,11 @@ export default function CompanyProfile({ route, navigation }) {
   const goBack = () => {
     navigation.navigate({
       name: 'CompanyList',
-      params: isFollower == estado || (isFollower == false && isFollower != 0) || (estado == null && isFollower == false) ? {} : { estado: isFollower ? 1 : 0, id: id},
+      params: isFollower == estado || (isFollower == false && isFollower != 0) || (estado == null && isFollower == false) ?
+       {} : { 
+        estado: isFollower ? 1 : 0, id: id,
+        numberSeguidor: numberSeguidor
+      },
       merge: true,
     });
   }
@@ -286,7 +291,7 @@ export default function CompanyProfile({ route, navigation }) {
               </TouchableOpacity>
           ),
       })
-  }, [id, estado, isFollower]);
+  }, [id, estado, isFollower, numberSeguidor]);
 
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 

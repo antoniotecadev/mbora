@@ -91,6 +91,7 @@ export default function CompanyList({route, navigation}) {
           return prevCompany.map((company) => {
             if(company.id == route.params.id) {
               company.estado = route.params.estado;
+              company.followers_number = route.params.numberSeguidor;
             }
             return company;
           });
