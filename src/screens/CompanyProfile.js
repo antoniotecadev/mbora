@@ -281,7 +281,8 @@ export default function CompanyProfile({ route, navigation }) {
       name: 'CompanyList',
       params: isFollower == estado || (isFollower == false && isFollower != 0) || (estado == null && isFollower == false) ?
        {} : { 
-        estado: isFollower ? 1 : 0, id: id,
+        estado: isFollower ? 1 : 0, 
+        id: id,
         numberSeguidor: numberSeguidor
       },
       merge: true,
