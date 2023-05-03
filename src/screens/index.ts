@@ -139,16 +139,16 @@ const screens: ScreenLayouts = {
     name: 'ProductDetails',
     component: ProductDetails,
     options: () => ({
+      headerTintColor: 'orange',
       title: 'Detalhe de produto',
-      ...screenDefaultOptions(),
     }),
   },
   Cart: {
     name: 'Carrinho',
     component: Carrinho,
     options: () => ({
+      headerTintColor: 'orange',
       title: 'Carrinho de encomenda',
-      ...screenDefaultOptions(),
     }),
   },
   CompanyList: {
