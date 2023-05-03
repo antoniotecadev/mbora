@@ -19,7 +19,7 @@ export function CompanyCard(props) {
             {(estado == 1) && <Text color='white' style={styles.aseguir}>A seguir</Text>}
             <View maxWidth={180}>
                 <View row style={styles.section}>
-                    <Text textColor style={{ ...Typography.text90 }}>{empresa}ererererererrrtrt</Text>
+                    <Text textColor style={{ ...Typography.text90 }}>{empresa}</Text>
                 </View>
                 <Text marginV-8 color={Colors.grey30} style={{ fontSize: 10 }}>
                     {`${nomeProvincia}, ${district} , ${street}`}
