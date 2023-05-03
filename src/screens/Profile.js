@@ -27,8 +27,8 @@ export default function Profile({ route, navigation }) {
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
     const [userId, setUserId] = useState(null);
-    const [countEncomenda, setCountEncomenda] = useState("-");
-    const [countFavorito, setCountFavorito] = useState("-");
+    const [numberEncomenda, setNumberEncomenda] = useState("-");
+    const [numberFavorito, setNumberFavorito] = useState("-");
 
     const { nav } = useServices();
     const {ui, user} = useStores();
@@ -51,14 +51,15 @@ export default function Profile({ route, navigation }) {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
                 await deleteItemAsync('token');
                 user.setAuth(false);
-            } else  if (!isEmpty(rjd)) {
+            } else  if (!isEmpty(rjd.encomenda)) {
                 setEmpty({encomenda: false});
                 if (isMoreView) {
-                    pagination(rjd, true);
-                    setEncomendas((prevState) => [...prevState, ...rjd]);
+                    pagination(rjd.encomenda, true);
+                    setEncomendas((prevState) => [...prevState, ...rjd.encomenda]);
                 } else {
-                    pagination(rjd, true);
-                    setEncomendas(rjd);
+                    setNumberEncomenda(rjd.numeroEncomenda);
+                    pagination(rjd.encomenda, true);
+                    setEncomendas(rjd.encomenda);
                 }
             } else {
                 setEmpty({encomenda: true});
@@ -78,23 +79,6 @@ export default function Profile({ route, navigation }) {
         }
     }
 
-    const getCountEncomenda = useCallback(async()=> {
-        try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/count',
-            {
-                    headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
-                }
-            });
-            let rjd = await response.json();
-            setCountEncomenda(rjd);
-        } catch (error) {
-            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
-        }
-    }, []);
-
     const fetchFavoritos = useCallback(async(isMoreView)=> {
         try {
             let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/favorito/mbora/lastVisible/' + lastVisible.favorito + '/isMoreView/' + isMoreView,
@@ -110,14 +94,15 @@ export default function Profile({ route, navigation }) {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
                 await deleteItemAsync('token');
                 user.setAuth(false);
-            } else  if (!isEmpty(rjd)) {
+            } else  if (!isEmpty(rjd.favorito)) {
                 setEmpty({favorito: false});
                 if (isMoreView) {
-                    pagination(rjd, false);
-                    setProduts((prevState) => [...prevState, ...rjd]);
+                    pagination(rjd.favorito, false);
+                    setProduts((prevState) => [...prevState, ...rjd.favorito]);
                 } else {
-                    pagination(rjd, false);
-                    setProduts(rjd);
+                    setNumberFavorito(rjd.numeroFavorito)
+                    pagination(rjd.favorito, false);
+                    setProduts(rjd.favorito);
                 }
             } else {
                 setEmpty({favorito: true});
@@ -127,23 +112,6 @@ export default function Profile({ route, navigation }) {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.favorito]);
-
-    const getCountFavorito = useCallback(async()=> {
-        try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/count/favorito',
-            {
-                    headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
-                }
-            });
-            let rjd = await response.json();
-            setCountFavorito(rjd);
-        } catch (error) {
-            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
-        }
-    }, []);
 
     //CONSULTAR PRODUTOS DE FAVORITOS LOCALMENTE
     // const getProducts = useCallback(async ()=> {
@@ -175,11 +143,9 @@ export default function Profile({ route, navigation }) {
         switch (index) {
             case 0:
                 fetchEncomendas(false).then(()=> setRefreshing(false));
-                getCountEncomenda();
                 break;
             case 1:
                 fetchFavoritos(false).then(()=> setRefreshing(false));
-                getCountFavorito();
                 break;
             case 2:
                 break;
@@ -247,12 +213,12 @@ export default function Profile({ route, navigation }) {
     const CountInfo = useCallback(()=> {
         return (
             <View style={styles.section}>
-                <Numeros text='Encomendas' numero={countEncomenda}/>
-                <Numeros text='Favoritos' numero={countFavorito}/>
+                <Numeros text='Encomendas' numero={numberEncomenda}/>
+                <Numeros text='Favoritos' numero={numberFavorito}/>
                 <Numeros text='A seguir' numero={32}/>
             </View>
         )
-    }, [countEncomenda, countFavorito])
+    }, [numberEncomenda, numberFavorito])
 
     const Buttons = useCallback(()=> {
         return (
@@ -269,8 +235,6 @@ export default function Profile({ route, navigation }) {
 
     useEffect(() => {
         getURLProfilePhoto();
-        getCountEncomenda();
-        getCountFavorito();
         setRefreshing(true);
         fetchEncomendas(false).then(()=> setRefreshing(false));
         fetchFavoritos(false).then(()=> setRefreshing(false));
