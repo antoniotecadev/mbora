@@ -14,6 +14,7 @@ import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } 
 import { AntDesign, Feather } from "@expo/vector-icons";
 
 const { width } = Dimensions.get('window');
+let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
 export default function CompanyProfile({ route, navigation }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
@@ -37,11 +38,10 @@ export default function CompanyProfile({ route, navigation }) {
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
-    let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/encomendas/mbora/imei/' + imei + '/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
+            let response =  await fetch(URL + 'empresas/encomendas/mbora/imei/' + imei + '/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -83,7 +83,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const fecthProducts = useCallback(async(isMoreView)=> {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/servicos/mbora/lastVisible/' + lastVisible.produto + '/isMoreView/' + isMoreView + '/imei/' + imei,
+            let response =  await fetch(URL + 'produtos/servicos/mbora/lastVisible/' + lastVisible.produto + '/isMoreView/' + isMoreView + '/imei/' + imei,
             {
                     headers: {
                     Accept: 'application/json',
