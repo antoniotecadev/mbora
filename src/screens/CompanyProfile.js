@@ -206,15 +206,20 @@ export default function CompanyProfile({ route, navigation }) {
 
     const ButtonsFollowerMaximise = useCallback(()=> {
       return  <>
-                <TouchableOpacity style={[styles.buttonEditProfile, {backgroundColor: isFollower ? 'orangered' : 'green'}]} onPress={()=> followCompany()}>
+                <TouchableOpacity disabled={loading.seguir} style={[styles.buttonEditProfile, {backgroundColor: isFollower ? 'orangered' : 'green'}]} onPress={()=> followCompany().then(()=> setLoading({seguir: false}))}>
                     <Text style={{color: 'white', textAlign: 'center', fontWeight: 'bold'}} >{isFollower ? 'A seguir' : 'Seguir'}</Text>
+                    {loading.seguir ? 
+                      <ActivityIndicator 
+                        size={10}
+                        color="white" 
+                        style={{marginLeft: 8}} /> : null}
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.touchableOpacityStyle, {position: 'absolute', bottom: 10, right: 10}]} onPress={()=> setViewHeader(false)}>
                     <AntDesign name='up' size={20} color='green'/>
                     <TextUILIB textColor style={{fontSize: 8}}>Maximizar</TextUILIB>
                 </TouchableOpacity> 
               </>
-    }, [isFollower])
+    }, [isFollower, loading.seguir])
 
     const numberViewsCompany = async()=> {
       let response = await fetch(URL + 'number/visitas/empresas/mbora/imei/' + imei);
@@ -425,7 +430,10 @@ const styles = StyleSheet.create({
         width: '30%',
         paddingVertical: 10,
         marginVertical: 8, 
-        borderRadius: 5, 
+        borderRadius: 5,
+        flexDirection: "row", 
+        justifyContent: "center",
+        alignItems: "center",
     },
     section: {
         flexDirection: 'row',
