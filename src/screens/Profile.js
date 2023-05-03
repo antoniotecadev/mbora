@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Feather } from "@expo/vector-icons";
 
 const { width } = Dimensions.get('window');
+let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
 export default function Profile({ route, navigation }) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
@@ -38,7 +39,7 @@ export default function Profile({ route, navigation }) {
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
+            let response =  await fetch(URL + 'encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -81,7 +82,7 @@ export default function Profile({ route, navigation }) {
 
     const fetchFavoritos = useCallback(async(isMoreView)=> {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/favorito/mbora/lastVisible/' + lastVisible.favorito + '/isMoreView/' + isMoreView,
+            let response =  await fetch(URL + 'produtos/favorito/mbora/lastVisible/' + lastVisible.favorito + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -182,7 +183,7 @@ export default function Profile({ route, navigation }) {
 
     const getURLProfilePhoto = async()=> {
         try {
-            let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/profilephoto/user/url',
+            let response =  await fetch(URL + 'mbora/profilephoto/user/url',
             {
                 headers: {
                 Accept: 'application/json',
@@ -333,7 +334,7 @@ const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts
         
         const removeProductFavorite = async()=> { 
             try {
-              let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/eliminar/produto/mbora/favorito',
+              let response = await fetch(URL + 'eliminar/produto/mbora/favorito',
               {
                 method: 'DELETE',
                 headers: {
