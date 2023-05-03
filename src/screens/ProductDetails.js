@@ -19,14 +19,15 @@ import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-nati
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { AlertDialog } from '../components/AlertDialog';
-import { isEmpty } from 'lodash';
+import { isEmpty, isNumber } from 'lodash';
+import { AntDesign } from "@expo/vector-icons";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
-  const [isfavorito, setIsFavorito] = useState([]);
+  const [isFavorito, setIsFavorito] = useState(false);
   const [loading, setLoading] = useState({encomenda: false, favorito: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
@@ -49,7 +50,7 @@ export function ProductDetails({route, navigation}) {
       });
       let rjd = await response.json();
       if(rjd.success) {
-        setIsFavorito(isEmpty(rjd.data.favorito));
+        setIsFavorito(!isFavorito);
         setVisibleToast({visible: true, message: produto.nome + ' adicionado aos favoritos.', backgroundColor: 'green'});
       } else {
         if (rjd.message == 'Erro de validação') {
@@ -64,15 +65,6 @@ export function ProductDetails({route, navigation}) {
     }
   }
 
-  const isFavorite = async () => {
-    let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produto/mbora/isfavorito/' + produto.id, {
-      headers: {
-        'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
-      }
-    });
-    let responseJsonData = await response.json();
-    setIsFavorito(isEmpty(responseJsonData));
-  }
   // VERIFICAR PRODUTO AOS FAVORITOS LOCALMENTE
   // const isFavorite = async () => {
   //   setIsFavorito(await getItem());
@@ -116,7 +108,7 @@ export function ProductDetails({route, navigation}) {
       });
       let rjd = await response.json();
       if(rjd.success) {
-        setIsFavorito(isEmpty(rjd.data.favorito));
+        setIsFavorito(!isFavorito);
         setVisibleToast({visible: true, message: produto.nome + ' removido dos favoritos.', backgroundColor: 'red'});
       } else {
         if (rjd.message == 'Erro de validação') {
@@ -144,10 +136,22 @@ export function ProductDetails({route, navigation}) {
       setShowDialogLocal(false);
     });
   }
+
+  const goBack = () => {
+    navigation.navigate({
+      name: 'Main',
+      params: isFavorito == isNumber(produto.isFavorito) ? {} : 
+      { 
+        id: produto.id,
+        isFavorito: isFavorito ? produto.id : null,
+      },
+      merge: true,
+    });
+  }
   
   useEffect(() => {
     try {
-      isFavorite();
+      setIsFavorito(isNumber(produto.isFavorito));
       getViewNumberProduct();
     } catch (error) {
       setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
@@ -168,6 +172,16 @@ export function ProductDetails({route, navigation}) {
       }
     }
   }, []);
+
+  useEffect(()=> {
+    navigation.setOptions({
+        headerLeft: () => (
+            <TouchableOpacity style={{left: 0, padding: 10}} onPress={() => goBack()}>
+              <AntDesign name='left' color={'orange'} size={24}/>
+            </TouchableOpacity>
+        ),
+    })
+  }, [isFavorito, produto.isFavorito]);
   
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
@@ -208,7 +222,7 @@ export function ProductDetails({route, navigation}) {
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
-                {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : <IconButton text={'Favorito'} iconNames={isfavorito ? 'star-outline' : 'star-sharp'} size={25} onPress={()=> isfavorito ? addProductFavorite().then(()=> setLoading({favorito: false})) : removeProductFavorite().then(()=> setLoading({favorito: false}))}/>}
+                {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
                 {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>

@@ -13,11 +13,11 @@ const ITEM_HEIGHT = 150;
 
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
-import { getAppearenceColor } from '../utils/utilitario';
+import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 
 const cardImage2 = require('../../assets/products/oleo.jpg');
 
-export default function ProductsList({ navigation }) {
+export default function ProductsList({ route, navigation }) {
 
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
@@ -125,7 +125,13 @@ export default function ProductsList({ navigation }) {
   const fetchProducts = useCallback(async (isRefresh) => {
     setLoading({pdt: true});
     try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json');
+      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json', {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+        }
+      });
       let responseJsonData = await response.json();
       if(isRefresh) {
         setProdutos(responseJsonData);
@@ -149,6 +155,19 @@ export default function ProductsList({ navigation }) {
       });
     }, [navigation])
   );
+
+  useEffect(() => {
+    if (route.params?.id || route.params?.isFavorito) {
+      setProdutos((prevProduct) => {
+          return prevProduct.map((product) => {
+            if(product.id == route.params.id) {
+              product.isFavorito = route.params.isFavorito;
+            }
+            return product;
+          });
+      });
+    }
+  }, [route.params?.id, route.params?.isFavorito]);
 
   return (
     <>
