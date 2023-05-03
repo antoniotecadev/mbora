@@ -16,10 +16,10 @@ export function CompanyCard(props) {
             nav.show('CompanyProfile', {...props});
         }}>
             <Card.Image style={styles.thumb} source={cardImage} />
+            {(estado == 1) && <Text color='white' style={styles.aseguir}>A seguir</Text>}
             <View maxWidth={180}>
                 <View row style={styles.section}>
-                    <Text textColor style={{ ...Typography.text90 }}>{empresa}</Text>
-                    {(estado == 1) && <Text color='white' style={{fontSize: 10, backgroundColor: 'green', padding: 5, marginTop: -2}}>A seguir</Text>}
+                    <Text textColor style={{ ...Typography.text90 }}>{empresa}ererererererrrtrt</Text>
                 </View>
                 <Text marginV-8 color={Colors.grey30} style={{ fontSize: 10 }}>
                     {`${nomeProvincia}, ${district} , ${street}`}
@@ -60,4 +60,12 @@ const styles = StyleSheet.create({
         marginTop: 8,
         width: '100%'
     },
+    aseguir: {
+        fontSize: 8, 
+        fontWeight: 'bold', 
+        backgroundColor: 'green', 
+        padding: 5, 
+        position: 'absolute', 
+        top: 0
+    }
 });
