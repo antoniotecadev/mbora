@@ -34,7 +34,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora} = route.params;
+    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -196,7 +196,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const Details = useCallback(()=> {
       return <> 
-              <TextUILIB textColor text80>Beleza e Higiene</TextUILIB>
+              <TextUILIB textColor text80>{description}</TextUILIB>
               <TextUILIB marginT-5 color='gray'>Localização: {`${nomeProvincia}, ${district} , ${street}`}</TextUILIB>
               <TextUILIB marginT-5 color='gray'>Email: {email}</TextUILIB>
               <TextUILIB marginT-5 color='gray'>Telefone 1 : {phone}</TextUILIB>
