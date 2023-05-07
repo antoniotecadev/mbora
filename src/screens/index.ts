@@ -181,7 +181,7 @@ const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpFo
 const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile, screens.ProductDetails]);
-const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto]);
+const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto, screens.CompanyProfile]);
 
 // Tabs
 const tabs: TabScreenLayouts = {

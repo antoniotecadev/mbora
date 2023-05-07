@@ -14,6 +14,7 @@ import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Feather } from "@expo/vector-icons";
+import CompanyFollowers from '../components/CompanyFollowers';
 
 const { width } = Dimensions.get('window');
 let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
@@ -291,7 +292,9 @@ export default function Profile({ route, navigation }) {
                     <TabController.TabPage index={1} lazy>
                         <Favoritos nav={nav} appearanceName={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
                     </TabController.TabPage>
-                    <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
+                    <TabController.TabPage index={2} lazy>
+                        <CompanyFollowers route={route} navigation={navigation} user={user} URL={URL}/>
+                    </TabController.TabPage>
                 </TabController.PageCarousel>
             </TabController>
         </SafeAreaView>
@@ -373,7 +376,7 @@ const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts
             renderItem={renderItemProduct}
             data={produts}
             showsVerticalScrollIndicator={false}
-            ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchFavoritos={fetchFavoritos}/>}
+            ListFooterComponent={empty || refreshing ? null : <FooterComponent loading={loading} setLoading={setLoading} fetchFavoritos={fetchFavoritos}/>}
             ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem favoritos</Text>}
             refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
         )
@@ -388,7 +391,7 @@ const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
     )
 }
 
-const FooterComponente = (props) => {
+const FooterComponent = (props) => {
     return (
       <View style={styles.footer}>
         <TouchableOpacity

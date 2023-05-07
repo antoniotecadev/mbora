@@ -7,58 +7,83 @@ import {Ionicons} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
+import { isEmpty } from 'lodash';
+import { deleteItemAsync } from 'expo-secure-store';
 
-export default function CompanyList({route, navigation}) {
+export default function CompanyFollowers({route, navigation, user, URL}) {
 
   const {ui} = useStores();
   let color = getAppearenceColor(ui.appearanceName); 
 
   function renderCompany({ item: company }) {
-    return <CompanyCard {...company} appearanceName={color} isProfile={false}/>
+    return <CompanyCard {...company} appearanceName={color} isProfile={true}/>
   }
 
   const [company, setCompany] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState({cpn: false});
+  const [loading, setLoading] = useState(false);
   const { showDialog, setShowDialog} = useContext(CartContext);
+  const [empty, setEmpty] = useState(false);
+  const [lastVisible, setLastVisible] = useState(0);
 
-  const fetchCompanys = useCallback(async(isRefresh) => {
-    setLoading({cpn: true});
+  const fetchCompanys = useCallback(async (isMoreView) => {
+    setLoading(true);
     try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora', {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+        let response =  await fetch(URL + 'empresas/mbora/aseguir/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
+        {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+            }
+        });
+        let rjd = await response.json();
+        if  (!rjd.success && rjd.message == 'Autenticação') {
+            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
+            await deleteItemAsync('token');
+            user.setAuth(false);
+        } else  if (!isEmpty(rjd)) {
+            setEmpty(false);
+            if (isMoreView) {
+                pagination(rjd);
+                setCompany((prevState) => [...prevState, ...rjd]);
+            } else {
+                pagination(rjd);
+                setCompany(rjd);
+            }
+        } else {
+            setEmpty(true);
         }
-      });
-      let responseJsonData = await response.json();
-      if(isRefresh) {
-        setCompany(responseJsonData);
-      } else {
-        setCompany((prevState) => [...prevState, ...responseJsonData]);
-      }
     } catch (error) {
-      setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+        setRefreshing(false);
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
     }
-  }, []);
+}, [lastVisible]);
+
+function pagination(rjd) {
+    setLastVisible(Math.min(... rjd.map(c => c.id_table_followers)));
+}
 
   const onRefresh = ()=> {
     setRefreshing(true);
-    fetchCompanys(true).then(()=> {
-      setLoading({cpn: false});
+    fetchCompanys(false).then(()=> {
+      setLoading(false);
       setRefreshing(false);
     });
   };
 
-  const FooterComponente = () => {
+  const FooterComponent = (props) => {
     return (
       <View style={styles.footer}>
         <TouchableOpacity
-          onPress={()=> fetchCompanys(false).then(()=> { setLoading({cpn: false}) })}
+          onPress={()=> {
+                props.setLoading(true);
+                props.fetchCompanys(true).then(()=> props.setLoading(false));
+          }
+        }
           style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>{loading.cpn ? 'A carregar empresas': 'Ver mais'}</Text>
-          {loading.cpn ? (
+          <Text style={styles.btnText}>{props.loading ? 'A carregar empresas' : 'Ver mais'}</Text>
+          {props.loading ? (
             <ActivityIndicator
               color="white"
               style={{marginLeft: 8}} />
@@ -69,21 +94,8 @@ export default function CompanyList({route, navigation}) {
   }
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: ()=> (
-        <TouchableOpacity onPress={()=> navigation.navigate('SearchProductCompany', {isCompany: true})}>
-          <Ionicons name={'search'} size={30} color="orange"/>
-        </TouchableOpacity>
-      )
-    })
-    fetchCompanys(true).then(()=> setLoading({cpn: false}));
+    fetchCompanys(false).then(()=> setLoading(false));
   }, []);
-
-  useFocusEffect(useCallback(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: 'flex'
-    });
-  }, [navigation]));
 
   useEffect(() => {
     if (route.params?.id || route.params?.estado) {
@@ -111,9 +123,9 @@ export default function CompanyList({route, navigation}) {
         keyExtractor={(item) => item.id.toString()}
         data={company}
         renderItem={renderCompany}
-        ListFooterComponent={FooterComponente}
+        ListFooterComponent={empty || refreshing ? null : <FooterComponent loading={loading} setLoading={setLoading} fetchCompanys={fetchCompanys}/>}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem empresas</Text>}
+        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem empresas a seguir</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>}
       />
     </>

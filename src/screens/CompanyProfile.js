@@ -34,7 +34,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description} = route.params;
+    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, isProfile} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -278,7 +278,7 @@ export default function CompanyProfile({ route, navigation }) {
 
   const goBack = () => {
     navigation.navigate({
-      name: 'CompanyList',
+      name: isProfile ? 'Profile' : 'CompanyList',
       params: isFollower == estado || (isFollower == false && isFollower != 0) || (estado == null && isFollower == false) ?
        {} : { 
         estado: isFollower ? 1 : 0, 
@@ -297,7 +297,7 @@ export default function CompanyProfile({ route, navigation }) {
               </TouchableOpacity>
           ),
       })
-  }, [id, estado, isFollower, numberSeguidor]);
+  }, [id, estado, isFollower, numberSeguidor, isProfile]);
 
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
