@@ -31,6 +31,7 @@ export default function Profile({ route, navigation }) {
     const [userId, setUserId] = useState(null);
     const [numberEncomenda, setNumberEncomenda] = useState("-");
     const [numberFavorito, setNumberFavorito] = useState("-");
+    const [numberEmpresaAseguir, setNumberEmpresaAseguir] = useState("-");
 
     const { nav } = useServices();
     const {ui, user} = useStores();
@@ -60,6 +61,7 @@ export default function Profile({ route, navigation }) {
                     setEncomendas((prevState) => [...prevState, ...rjd.encomenda]);
                 } else {
                     setNumberEncomenda(rjd.numeroEncomenda);
+                    setNumberEmpresaAseguir(rjd.numeroEmpresasAseguir);
                     pagination(rjd.encomenda, true);
                     setEncomendas(rjd.encomenda);
                 }
@@ -217,10 +219,10 @@ export default function Profile({ route, navigation }) {
             <View style={styles.section}>
                 <Numeros text='Encomendas' numero={numberEncomenda}/>
                 <Numeros text='Favoritos' numero={numberFavorito}/>
-                <Numeros text='A seguir' numero={32}/>
+                <Numeros text='A seguir' numero={numberEmpresaAseguir}/>
             </View>
         )
-    }, [numberEncomenda, numberFavorito])
+    }, [numberEncomenda, numberFavorito, numberEmpresaAseguir])
 
     const Buttons = useCallback(()=> {
         return (
