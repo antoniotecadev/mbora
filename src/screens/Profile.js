@@ -212,7 +212,7 @@ export default function Profile({ route, navigation }) {
         )
     }, [image])
 
-    const CountInfo = useCallback(()=> {
+    const NumberInformation = useCallback(()=> {
         return (
             <View style={styles.section}>
                 <Numeros text='Encomendas' numero={numberEncomenda}/>
@@ -272,7 +272,7 @@ export default function Profile({ route, navigation }) {
             <>
                 <UserPhoto setViewFullPhoto={setViewFullPhoto}/>
                 <TextUILIB textColor marginT-8 text70>{user.userFirstName + ' ' + user.userLastName}</TextUILIB>
-                <CountInfo/>
+                <NumberInformation/>
                 <Buttons/>
             </> :
                 <TouchableOpacity style={styles.touchableOpacityStyle} onPress={()=> setViewHeader(true)}>
