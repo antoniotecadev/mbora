@@ -309,7 +309,7 @@ export default function Profile({ route, navigation }) {
                         <Favoritos nav={nav} appearanceName={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy>
-                        <CompanyFollowers route={route} navigation={navigation} user={user} URL={URL}/>
+                        <CompanyFollowers route={route} navigation={navigation} user={user} URL={URL} setNumberEmpresaAseguir={setNumberEmpresaAseguir}/>
                     </TabController.TabPage>
                 </TabController.PageCarousel>
             </TabController>

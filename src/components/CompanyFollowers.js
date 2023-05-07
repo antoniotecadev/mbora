@@ -10,7 +10,7 @@ import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
 import { deleteItemAsync } from 'expo-secure-store';
 
-export default function CompanyFollowers({route, navigation, user, URL}) {
+export default function CompanyFollowers({route, navigation, user, URL, setNumberEmpresaAseguir}) {
 
   const {ui} = useStores();
   let color = getAppearenceColor(ui.appearanceName); 
@@ -42,14 +42,15 @@ export default function CompanyFollowers({route, navigation, user, URL}) {
             setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
             await deleteItemAsync('token');
             user.setAuth(false);
-        } else  if (!isEmpty(rjd)) {
+        } else  if (!isEmpty(rjd.empresa)) {
             setEmpty(false);
             if (isMoreView) {
-                pagination(rjd);
-                setCompany((prevState) => [...prevState, ...rjd]);
+                pagination(rjd.empresa);
+                setCompany((prevState) => [...prevState, ...rjd.empresa]);
             } else {
-                pagination(rjd);
-                setCompany(rjd);
+                setNumberEmpresaAseguir(rjd.numeroEmpresasAseguir);
+                pagination(rjd.empresa);
+                setCompany(rjd.empresa);
             }
         } else {
             setEmpty(true);
