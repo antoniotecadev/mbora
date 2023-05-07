@@ -261,6 +261,20 @@ export default function Profile({ route, navigation }) {
             }
         });
     }, [viewHeader]);
+
+    useEffect(() => {
+        if (route.params?.id || route.params?.isFavorito) {
+          setProduts((prevProduct) => {
+              return prevProduct.map((product) => {
+                if(product.id == route.params.id) {
+                  product.isFavorito = route.params.isFavorito;
+                  alert()
+                }
+                return product;
+              });
+          });
+        }
+      }, [route.params?.id, route.params?.isFavorito]);
     
     const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
     
@@ -318,7 +332,8 @@ const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
           produto: product,
-          userTelephone: userTelephone
+          userTelephone: userTelephone,
+          screenBack: 'Profile'
         });
     }
 

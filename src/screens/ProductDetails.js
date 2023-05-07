@@ -31,7 +31,7 @@ export function ProductDetails({route, navigation}) {
   const [loading, setLoading] = useState({encomenda: false, favorito: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
-  const { produto, userTelephone, isSearch = false } = route.params;
+  const { produto, userTelephone, screenBack } = route.params;
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
   const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
@@ -139,7 +139,7 @@ export function ProductDetails({route, navigation}) {
 
   const goBack = () => {
     navigation.navigate({
-      name: 'Main',
+      name: screenBack,
       params: isFavorito == isNumber(produto.isFavorito) ? {} : 
       { 
         id: produto.id,
@@ -159,21 +159,6 @@ export function ProductDetails({route, navigation}) {
   },[]);
 
   useEffect(()=> {
-    navigation.getParent()?.setOptions({
-        tabBarStyle: {
-            display: "none"
-        }
-    });
-    return ()=> {
-      if(!isSearch){
-        navigation.getParent()?.setOptions({
-          tabBarStyle: 'flex'
-        });
-      }
-    }
-  }, []);
-
-  useEffect(()=> {
     navigation.setOptions({
         headerLeft: () => (
             <TouchableOpacity style={{left: 0, padding: 10}} onPress={() => goBack()}>
@@ -181,7 +166,7 @@ export function ProductDetails({route, navigation}) {
             </TouchableOpacity>
         ),
     })
-  }, [isFavorito, produto.isFavorito]);
+  }, [isFavorito, produto.isFavorito, screenBack]);
   
   const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  

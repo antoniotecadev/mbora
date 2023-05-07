@@ -117,6 +117,19 @@ const SearchProductCompany = ({route, navigation}) => {
     });
   }, [clicked]);
 
+  useEffect(() => {
+    if (route.params?.id || route.params?.isFavorito) {
+      setData((prevProduct) => {
+          return prevProduct.map((product) => {
+            if(product.id == route.params.id) {
+              product.isFavorito = route.params.isFavorito;
+            }
+            return product;
+          });
+      });
+    }
+  }, [route.params?.id, route.params?.isFavorito]);
+
   useEffect(()=> {
     navigation.getParent()?.setOptions({
         tabBarStyle: {

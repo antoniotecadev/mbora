@@ -299,6 +299,19 @@ export default function CompanyProfile({ route, navigation }) {
       })
   }, [id, estado, isFollower, numberSeguidor, isProfile]);
 
+  useEffect(() => {
+    if (route.params?.id || route.params?.isFavorito) {
+      setProduts((prevProduct) => {
+          return prevProduct.map((product) => {
+            if(product.id == route.params.id) {
+              product.isFavorito = route.params.isFavorito;
+            }
+            return product;
+          });
+      });
+    }
+  }, [route.params?.id, route.params?.isFavorito]);
+
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
 return (
@@ -356,7 +369,8 @@ const ProdutosServicos = ({ nav, appearanceName, fecthProducts, userTelephone, p
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
           produto: product,
-          userTelephone: userTelephone
+          userTelephone: userTelephone,
+          screenBack: 'CompanyProfile'
         });
     }
 

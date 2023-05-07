@@ -41,7 +41,8 @@ export default function ProductsList({ route, navigation }) {
   const showProductDetails = (product)=> {
     nav.show('ProductDetails', {
       produto: product,
-      userTelephone: user.userTelephone
+      userTelephone: user.userTelephone,
+      screenBack: 'Main'
     });
   }
 
