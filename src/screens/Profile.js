@@ -268,7 +268,6 @@ export default function Profile({ route, navigation }) {
               return prevProduct.map((product) => {
                 if(product.id == route.params.id) {
                   product.isFavorito = route.params.isFavorito;
-                  alert()
                 }
                 return product;
               });
