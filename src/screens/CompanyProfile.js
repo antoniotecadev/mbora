@@ -292,7 +292,7 @@ export default function CompanyProfile({ route, navigation }) {
   useEffect(()=> {
       navigation.setOptions({
           headerLeft: () => (
-              <TouchableOpacity style={{left: 0, padding: 10}} onPress={() => goBack()}>
+              <TouchableOpacity style={{right: 10, paddingRight: 10, paddingVertical: 10}} onPress={() => goBack()}>
                 <AntDesign name='left' color={'orange'} size={24}/>
               </TouchableOpacity>
           ),
