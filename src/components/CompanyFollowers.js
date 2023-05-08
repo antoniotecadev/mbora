@@ -3,8 +3,6 @@ import { FlatList, StyleSheet, Text, View, TouchableOpacity, RefreshControl, Act
 import { CompanyCard } from '../components/CompanyCard.js';
 import { AlertDialog } from '../components/AlertDialog.js';
 import { CartContext } from '../CartContext.js';
-import {Ionicons} from '@expo/vector-icons';
-import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
