@@ -16,7 +16,7 @@ export default function CompanyFollowers({route, navigation, user, URL, setNumbe
   let color = getAppearenceColor(ui.appearanceName); 
 
   function renderCompany({ item: company }) {
-    return <CompanyCard {...company} appearanceName={color} isProfile={true}/>
+    return <CompanyCard {...company} appearanceName={color} screenBack={'Profile'}/>
   }
 
   const [company, setCompany] = useState([]);
