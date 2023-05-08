@@ -267,7 +267,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginHorizontal: 16
+    marginHorizontal: 16,
+    marginTop: 10
   },
   divisor: {
     borderBottomWidth: 1, 
