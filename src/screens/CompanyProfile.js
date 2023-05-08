@@ -18,7 +18,7 @@ let URL = 'http://192.168.18.3/mborasystem-admin/public/api/';
 export default function CompanyProfile({ route, navigation }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState({encomenda: false, produto: false});
     const [lastVisible, setLastVisible] = useState({encomenda: 0, produto: 0});
     const [empty, setEmpty] = useState({encomenda: false, produto: false});
     const [viewHeader, setViewHeader] = useState(true);
@@ -67,7 +67,7 @@ export default function CompanyProfile({ route, navigation }) {
                 setEmpty({encomenda: true});
             }
         } catch (error) {
-            setRefreshing(false);
+            setRefreshing({encomenda: false});
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.encomenda]);
@@ -109,7 +109,7 @@ export default function CompanyProfile({ route, navigation }) {
                 setEmpty({produto: true});
             }
         } catch (error) {
-            setRefreshing(false);
+            setRefreshing({produto: false});
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.produto]);
@@ -148,20 +148,21 @@ export default function CompanyProfile({ route, navigation }) {
     }, []);
 
     const onRefresh = async (index)=> {
-        setRefreshing(true);
-        switch (index) {
-            case 0:
-                fecthProducts(false).then(()=> setRefreshing(false));
-                getNumber(0);
-                break;
-              case 1:
-                fetchEncomendas(false).then(()=> setRefreshing(false));
-                getNumber(1);
-                break;
-            case 2:
-                break;
-            default:
-                break;
+      switch (index) {
+        case 0:
+          setRefreshing({produto: true});
+          fecthProducts(false).then(()=> setRefreshing({produto: false}));
+          getNumber(0);
+          break;
+        case 1:
+          setRefreshing({encomenda: true});
+          fetchEncomendas(false).then(()=> setRefreshing({encomenda: false}));
+          getNumber(1);
+          break;
+        case 2:
+            break;
+        default:
+            break;
         }
     }
 
@@ -260,9 +261,8 @@ export default function CompanyProfile({ route, navigation }) {
         setNumberEncomenda(encomenda_number);
         setNumberSeguidor(followers_number);
         numberViewsCompany();
-        setRefreshing(true);
-        fetchEncomendas(false).then(()=> setRefreshing(false));
-        fecthProducts(false).then(()=> setRefreshing(false));
+        fetchEncomendas(false);
+        fecthProducts(false);
     }, []);
 
     useEffect(() => {
@@ -341,10 +341,10 @@ return (
                   selectedLabelColor={'orange'}/>
               <TabController.PageCarousel>
                   <TabController.TabPage index={0}>
-                      <ProdutosServicos nav={nav} appearanceName={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.produto}/>
+                      <ProdutosServicos nav={nav} appearanceName={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing.produto} empty={empty.produto}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
-                      <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                      <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing.encomenda} empty={empty.encomenda}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
               </TabController.PageCarousel>
