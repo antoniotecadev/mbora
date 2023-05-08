@@ -8,6 +8,8 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 
+let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+
 export default function CompanyList({route, navigation}) {
 
   const {ui} = useStores();
@@ -25,7 +27,7 @@ export default function CompanyList({route, navigation}) {
   const fetchCompanys = useCallback(async(isRefresh) => {
     setLoading({cpn: true});
     try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora', {
+      let response =  await fetch(URL + 'empresas/mbora', {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

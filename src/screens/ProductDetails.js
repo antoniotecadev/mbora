@@ -23,7 +23,7 @@ import { isEmpty, isNumber } from 'lodash';
 import { AntDesign } from "@expo/vector-icons";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
-
+let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
 export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
@@ -38,7 +38,7 @@ export function ProductDetails({route, navigation}) {
   const addProductFavorite = async ()=> {
     setLoading({favorito: true}); 
     try {
-      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/adicionar/produto/mbora/favorito',
+      let response = await fetch(URL + 'adicionar/produto/mbora/favorito',
       {
         method: 'POST',
         headers: {
@@ -96,7 +96,7 @@ export function ProductDetails({route, navigation}) {
   const removeProductFavorite = async ()=> { 
     setLoading({favorito: true}); 
     try {
-      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/eliminar/produto/mbora/favorito',
+      let response = await fetch(URL + 'eliminar/produto/mbora/favorito',
       {
         method: 'DELETE',
         headers: {
@@ -124,7 +124,7 @@ export function ProductDetails({route, navigation}) {
   }
 
   const getViewNumberProduct = useCallback(async ()=> {
-    let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/view/count/' + produto.id);
+    let response = await fetch(URL + 'produtos/mbora/view/count/' + produto.id);
     let responseJsonData = await response.json();
     setView(responseJsonData.view);
   }, [produto.id]);

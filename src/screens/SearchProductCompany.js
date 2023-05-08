@@ -17,6 +17,8 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useStores } from "../stores";
 import { getValueItemAsync } from "../utils/utilitario";
 
+let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+
 const SearchProductCompany = ({route, navigation}) => {
 
   const { isCompany } = route.params;
@@ -36,9 +38,9 @@ const SearchProductCompany = ({route, navigation}) => {
 
   const search = async(nameImei, isMore) => {
     if(isCompany){
-      await getData("http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora/searchcompany/" + String(nameImei) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
+      await getData(URL + "empresas/mbora/searchcompany/" + String(nameImei) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
     } else {
-      await getData("http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/searchproduct/" + String(nameImei) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
+      await getData(URL + "produtos/mbora/searchproduct/" + String(nameImei) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
     }
   }
 
