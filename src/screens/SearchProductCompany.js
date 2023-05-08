@@ -118,17 +118,22 @@ const SearchProductCompany = ({route, navigation}) => {
   }, [clicked]);
 
   useEffect(() => {
-    if (route.params?.id || route.params?.isFavorito) {
-      setData((prevProduct) => {
-          return prevProduct.map((product) => {
-            if(product.id == route.params.id) {
-              product.isFavorito = route.params.isFavorito;
+    if (route.params?.id || route.params?.isFavorito || route.params?.estado) {
+      setData((prevData) => {
+          return prevData.map((data) => {
+            if(data.id == route.params.id) {
+              if(isCompany) {
+                data.estado = route.params.estado;
+                data.followers_number = route.params.numberSeguidor;
+              } else {
+                data.isFavorito = route.params.isFavorito;
+              }
             }
-            return product;
+            return data;
           });
       });
     }
-  }, [route.params?.id, route.params?.isFavorito]);
+  }, [route.params?.id, route.params?.isFavorito, route.params?.estado]);
 
   useEffect(()=> {
     navigation.getParent()?.setOptions({
