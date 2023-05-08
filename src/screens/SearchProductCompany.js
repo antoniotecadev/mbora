@@ -137,14 +137,6 @@ const SearchProductCompany = ({route, navigation}) => {
     }
   }, [route.params?.id, route.params?.isFavorito, route.params?.estado]);
 
-  useEffect(()=> {
-    navigation.getParent()?.setOptions({
-        tabBarStyle: {
-            display: "none"
-        }
-    });
-  }, []);
-
   return (
       <>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
