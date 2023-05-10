@@ -302,10 +302,10 @@ export default function Profile({ route, navigation }) {
                     selectedLabelColor={'orange'}/>
                 <TabController.PageCarousel>
                     <TabController.TabPage index={0}>
-                        <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                        <Encomenda appearanceColor={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos nav={nav} appearanceName={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
+                        <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy>
                         <CompanyFollowers route={route} navigation={navigation} user={user} URL={URL} setNumberEmpresaAseguir={setNumberEmpresaAseguir}/>
@@ -323,7 +323,7 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts, onRefresh, refreshing, empty })=> {
+const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produts, onRefresh, refreshing, empty })=> {
 
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -378,7 +378,7 @@ const Favoritos = ({ nav, appearanceName, fetchFavoritos, userTelephone, produts
               setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
             }
         }
-        return <Product appearanceName={appearanceName} isFavorite={true} removeFavorite={()=> removeProductFavorite()} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
+        return <Product appearanceColor={appearanceColor} isFavorite={true} removeFavorite={()=> removeProductFavorite()} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(

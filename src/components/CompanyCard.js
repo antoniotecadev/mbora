@@ -12,7 +12,7 @@ export function CompanyCard(props) {
     const {empresa, followers_number, views_mbora, estado, description} = props;
 
     return (
-        <Card style={[styles.card, {backgroundColor: props.appearanceName, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
+        <Card style={[styles.card, {backgroundColor: props.appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
             nav.show('CompanyProfile', {...props});
         }}>
             <Card.Image style={styles.thumb} source={cardImage} />

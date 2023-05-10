@@ -2,14 +2,14 @@ import React, { useCallback, useState } from 'react';
 import { StyleSheet, FlatList, Text, RefreshControl, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Product } from './Product';
 
-export default function Encomenda({ appearanceName, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
+export default function Encomenda({ appearanceColor, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
 
     const [loading, setLoading] = useState(false);
 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product appearanceName={appearanceName} produto={product} isEncomenda={true} key={product.id} />
+        return <Product appearanceColor={appearanceColor} produto={product} isEncomenda={true} key={product.id} />
     }, []);
 
     return(

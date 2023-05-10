@@ -336,10 +336,10 @@ return (
                   selectedLabelColor={'orange'}/>
               <TabController.PageCarousel>
                   <TabController.TabPage index={0}>
-                      <ProdutosServicos nav={nav} appearanceName={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing.produto} empty={empty.produto}/>
+                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing.produto} empty={empty.produto}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
-                      <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing.encomenda} empty={empty.encomenda}/>
+                      <Encomenda appearanceColor={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing.encomenda} empty={empty.encomenda}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={2} lazy>
                     <ListFollowers user={user} imei={imei} URL={URL} setNumberSeguidor={setNumberSeguidor}/>
@@ -358,7 +358,7 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const ProdutosServicos = ({ nav, appearanceName, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty })=> {
+const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty })=> {
 
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -374,7 +374,7 @@ const ProdutosServicos = ({ nav, appearanceName, fecthProducts, userTelephone, p
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-      return <Product appearanceName={appearanceName} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
+      return <Product appearanceColor={appearanceColor} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(

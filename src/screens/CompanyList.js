@@ -16,7 +16,7 @@ export default function CompanyList({route, navigation}) {
   let color = getAppearenceColor(ui.appearanceName); 
 
   function renderCompany({ item: company }) {
-    return <CompanyCard {...company} appearanceName={color} screenBack={'CompanyList'}/>
+    return <CompanyCard {...company} appearanceColor={color} screenBack={'CompanyList'}/>
   }
 
   const [company, setCompany] = useState([]);
