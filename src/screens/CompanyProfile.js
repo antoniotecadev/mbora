@@ -12,6 +12,7 @@ import { useServices } from '../services';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import { AntDesign, Feather } from "@expo/vector-icons";
+import ListFollowers from '../components/ListFollowers';
 
 const { width } = Dimensions.get('window');
 let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
@@ -121,8 +122,6 @@ export default function CompanyProfile({ route, navigation }) {
               url =  URL + 'number/produtos/servicos/mbora/imei/' + imei;
             } else if (action == 1) {
               url =  URL + 'number/encomendas/empresas/mbora/imei/' + imei;
-            } else if (action == 2) {
-              url =  URL + 'number/seguidores/empresas/mbora/imei/' + imei;
             }
             let response =  await fetch(url,
             {
@@ -138,8 +137,6 @@ export default function CompanyProfile({ route, navigation }) {
                 setNumberProduto(rjd);
               } else if (action == 1) {
                 setNumberEncomenda(rjd);
-              } else if (action == 2) {
-                setNumberSeguidor(rjd);
               }
             }
         } catch (error) {
@@ -159,8 +156,6 @@ export default function CompanyProfile({ route, navigation }) {
           fetchEncomendas(false).then(()=> setRefreshing({encomenda: false}));
           getNumber(1);
           break;
-        case 2:
-            break;
         default:
             break;
         }
@@ -346,7 +341,9 @@ return (
                   <TabController.TabPage index={1} lazy>
                       <Encomenda appearanceName={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing.encomenda} empty={empty.encomenda}/>
                   </TabController.TabPage>
-                  <TabController.TabPage index={2} lazy><Text>llllll</Text></TabController.TabPage>
+                  <TabController.TabPage index={2} lazy>
+                    <ListFollowers user={user} imei={imei} URL={URL} setNumberSeguidor={setNumberSeguidor}/>
+                  </TabController.TabPage>
               </TabController.PageCarousel>
           </TabController>
         </ViewUILIB>
