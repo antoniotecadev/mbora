@@ -302,7 +302,7 @@ export default function Profile({ route, navigation }) {
                     selectedLabelColor={'orange'}/>
                 <TabController.PageCarousel>
                     <TabController.TabPage index={0}>
-                        <Encomenda appearanceColor={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={onRefresh} refreshing={refreshing} empty={empty.encomenda}/>
+                        <Encomenda appearanceColor={color} fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(0)} refreshing={refreshing} empty={empty.encomenda}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
                         <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
