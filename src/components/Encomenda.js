@@ -3,14 +3,14 @@ import { StyleSheet, FlatList, Text, RefreshControl, TouchableOpacity, ActivityI
 import { Product } from './Product';
 import { getRandomColor } from '../utils/utilitario';
 
-export default function Encomenda({ isUser, appearanceColor, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
+export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
 
     const [loading, setLoading] = useState(false);
 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => {
-        let color = isUser ? getRandomColor(product.code) : appearanceColor;
+        let color = getRandomColor(product.code);
         return <Product appearanceColor={color} produto={product} isEncomenda={true} key={product.id} />
     }, []);
 
