@@ -5,6 +5,7 @@ import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import ToastMessage from '../components/ToastMessage';
 import { currency, getAppearenceColor } from '../utils/utilitario';
+import { useStores } from '../stores';
 
 const cardImage = require('../../assets/products/feijao1.jpg');
 const removeIcon = require('../../assets/icons/excluir.png');
@@ -16,7 +17,8 @@ export function Carrinho() {
     const [imei, setImei] = useState([])
     const [loading, setLoading] = useState(false)
     const [showDialogLocal, setShowDialogLocal] = useState(false);
-    
+
+    const {user} = useStores();
     const { items, getTotalPrice, getItemsCount, quantity, removeItemToCart, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
     const encomendarProduct = async (clientData)=> {
@@ -86,7 +88,8 @@ export function Carrinho() {
             mensagem={getValueInArray(items)} 
             cor='green' 
             onPress={encomendarProduct}
-            isEncomenda={true}/>}
+            isEncomenda={true}
+            userTelephone={user.userTelephone}/>}
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <ToastMessage />
             <FlatList
