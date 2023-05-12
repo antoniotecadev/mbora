@@ -1,15 +1,17 @@
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, FlatList, Text, RefreshControl, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Product } from './Product';
+import { getRandomColor } from '../utils/utilitario';
 
-export default function Encomenda({ appearanceColor, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
+export default function Encomenda({ isUser, appearanceColor, fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
 
     const [loading, setLoading] = useState(false);
 
     const keyExtractor = (item)=> item.id;
 
-    const renderItemProduct = useCallback(({ item: product }) => { 
-        return <Product appearanceColor={appearanceColor} produto={product} isEncomenda={true} key={product.id} />
+    const renderItemProduct = useCallback(({ item: product }) => {
+        let color = isUser ? getRandomColor(product.code) : appearanceColor;
+        return <Product appearanceColor={color} produto={product} isEncomenda={true} key={product.id} />
     }, []);
 
     return(

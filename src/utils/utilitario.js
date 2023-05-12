@@ -54,3 +54,19 @@ export const numberFollowersAndViewsFormat = (numFoll, style) => {
     }
     return numFoll.toString();
 }
+
+let arrayColor = [];
+export const getRandomColor = (code)=> {
+    let color = ''; 
+    if (arrayColor[code] !== undefined) {
+        color = arrayColor[code];
+    } else {
+        const letters = '9ABCDE';
+        color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 5)];
+        }
+        arrayColor[code] = color;
+    }
+    return color;
+}

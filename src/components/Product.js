@@ -11,7 +11,7 @@ const shareIcon = require('../../assets/icons/share.png');
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-export function Product({ appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress } ) {
+export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress } ) {
   
   const [showDialog, setShowDialog] = useState(false);
   const { addItemToCart, encomendar } = useContext(CartContext);
@@ -74,7 +74,7 @@ export function Product({ appearanceColor, isEncomenda = false, isFavorite = fal
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.created_at)}
+        sectionHeader={HeaderElement(produto.code, produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.created_at)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -118,7 +118,7 @@ export function Product({ appearanceColor, isEncomenda = false, isFavorite = fal
   );
 }
 
-const HeaderElement = (nome, preco, isEncomenda, prod_quant, estado, data_cria) => {
+const HeaderElement = (code, nome, preco, isEncomenda, prod_quant, estado, data_cria) => {
   return (
     <View spread row maxWidth={180}>
       <TextUILIB textColor>
@@ -129,6 +129,10 @@ const HeaderElement = (nome, preco, isEncomenda, prod_quant, estado, data_cria) 
       </Text>
       {isEncomenda && 
       <>
+        <View style={styles.section}>
+          <TextUILIB textColor text100M>Código: </TextUILIB>
+          <TextUILIB color='gray' text100M>{code}</TextUILIB>
+        </View>
         <View style={styles.section}>
           <TextUILIB textColor text100M>Quantidade: </TextUILIB>
           <TextUILIB color='gray' text100M>{prod_quant}</TextUILIB>
