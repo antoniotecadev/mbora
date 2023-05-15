@@ -12,7 +12,7 @@ import {
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
-import { currency, getValueItemAsync, numberFollowersAndViewsFormat, removeSpaceLowerCase } from '../utils/utilitario';
+import { currency, getValueItemAsync, getCompany, numberFollowersAndViewsFormat, removeSpaceLowerCase } from '../utils/utilitario';
 import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
 import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
@@ -28,10 +28,10 @@ export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
   const [isFavorito, setIsFavorito] = useState(false);
-  const [loading, setLoading] = useState({encomenda: false, favorito: false});
+  const [loading, setLoading] = useState({encomenda: false, favorito: false, companyProfile: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
-  const { produto, userTelephone, screenBack } = route.params;
+  const { produto, userTelephone, screenBack, isProfileCompany } = route.params;
   const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
   const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
@@ -185,17 +185,25 @@ export function ProductDetails({route, navigation}) {
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
       <ScrollView>
-        <View style={styles.section}>
-          <TextUILIB $textDefault textColor>{produto.empresa}</TextUILIB>
-          <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
-            size={20}
-            animate={false}
-            badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
-          />
-        </View>
+        <TouchableOpacity onPress={()=> {
+            if(!isProfileCompany){
+              setLoading({companyProfile: true});
+              getCompany(produto.imei, navigation, 'ProductDetails', isProfileCompany).then(()=> setLoading({companyProfile: false}));
+            }
+          }}>
+          <View style={styles.section}>
+            <TextUILIB $textDefault textColor>{produto.empresa}</TextUILIB>
+            {loading.companyProfile ? <ActivityIndicator color={'orange'}/>: 
+            <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
+              size={20}
+              animate={false}
+              badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
+            />}
+          </View>
           <Text style={{ marginHorizontal: 16, marginBottom: 16, color: Colors.grey40 }}>
             {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
           </Text>
+        </TouchableOpacity>
         {/* <Image style={styles.image} {...{preview, uri}} /> */}
         <Img style={styles.image} source= {imageProduct} />
         <View style={styles.infoContainer}>

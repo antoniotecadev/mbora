@@ -2,6 +2,7 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-AO';
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 import { Colors } from 'react-native-ui-lib';
+import { Alert } from 'react-native';
 
 export const currency = function (price) {
     let p1 = price.slice(0, -2); // Números antes dos 2 últimos
@@ -37,22 +38,22 @@ export const getAppearenceColor = (appearanceName)=> {
     }
 }
 
-export const numberFollowersAndViewsFormat = (numFoll, style) => {
-    if(numFoll < 1000) {
-        return numFoll;
+export const numberFollowersAndViewsFormat = (number = 0, style) => {
+    if(number < 1000) {
+        return number;
     }
     if(style == 'facebook') {
-        const numFormat = (numFoll / 1000).toFixed(1);
+        const numFormat = (number / 1000).toFixed(1);
         return numFormat + 'k';
     }
     if(style == 'youtube') {
-        const numFormat = numFoll.toLocaleString('en-US');
-        if(numFoll >= 1000000) {
-            return (numFoll / 1000000).toFixed(1).toString() + 'M';
+        const numFormat = number.toLocaleString('en-US');
+        if(number >= 1000000) {
+            return (number / 1000000).toFixed(1).toString() + 'M';
         }
         return numFormat;
     }
-    return numFoll.toString();
+    return number.toString();
 }
 
 let arrayColor = [];
@@ -69,4 +70,20 @@ export const getRandomColor = (code)=> {
         arrayColor[code] = color;
     }
     return color;
+}
+
+export const getCompany = async(imei, navigation, screenBack, isProfileCompany)=> {
+    try {
+        let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora/imei/' + imei, {
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Ocorreu um erro', error.message)),
+            }
+        });
+        let responseJsonData = await response.json();
+        navigation.navigate('CompanyProfile', {...responseJsonData[0], screenBack: screenBack, isProfileCompany: isProfileCompany});
+    } catch (error) {
+        Alert.alert('Ocorreu um erro', error.message);
+    }
 }

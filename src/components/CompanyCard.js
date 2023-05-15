@@ -13,7 +13,7 @@ export function CompanyCard(props) {
 
     return (
         <Card style={[styles.card, {backgroundColor: props.appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
-            nav.show('CompanyProfile', {...props});
+            nav.show('CompanyProfile', {...props, isProfileCompany: true});
         }}>
             <Card.Image style={styles.thumb} source={cardImage} />
             {(estado == 1) && <Text color='white' style={styles.aseguir}>A seguir</Text>}

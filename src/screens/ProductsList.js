@@ -42,7 +42,8 @@ export default function ProductsList({ route, navigation }) {
     nav.show('ProductDetails', {
       produto: product,
       userTelephone: user.userTelephone,
-      screenBack: 'Main'
+      screenBack: 'Main',
+      isProfileCompany: false
     });
   }
 

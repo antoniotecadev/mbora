@@ -332,7 +332,8 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produt
         nav.show('ProductDetails', {
           produto: product,
           userTelephone: userTelephone,
-          screenBack: 'Profile'
+          screenBack: 'Profile',
+          isProfileCompany: false
         });
     }
 

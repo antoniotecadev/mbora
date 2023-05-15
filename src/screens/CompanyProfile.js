@@ -35,7 +35,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, screenBack} = route.params;
+    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, screenBack, isProfileCompany} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
@@ -336,7 +336,7 @@ return (
                   selectedLabelColor={'orange'}/>
               <TabController.PageCarousel>
                   <TabController.TabPage index={0}>
-                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing.produto} empty={empty.produto}/>
+                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing.produto} empty={empty.produto} isProfileCompany={isProfileCompany}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
                       <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshing.encomenda} empty={empty.encomenda}/>
@@ -358,17 +358,23 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty })=> {
+const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty, isProfileCompany })=> {
 
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
 
     const showProductDetails = (product)=> {
-        nav.show('ProductDetails', {
+        let data = {
           produto: product,
           userTelephone: userTelephone,
-          screenBack: 'CompanyProfile'
-        });
+          screenBack: 'CompanyProfile',
+          isProfileCompany: true
+        }
+        if(!isProfileCompany){
+          nav.push('ProductDetails', data);
+        } else {
+          nav.show('ProductDetails', data);
+        }
     }
 
     const keyExtractor = (item)=> item.id;
