@@ -122,9 +122,9 @@ function pagination(rjd) {
         keyExtractor={(item) => item.id.toString()}
         data={company}
         renderItem={renderCompany}
-        ListFooterComponent={empty || refreshing ? null : <FooterComponent loading={loading} setLoading={setLoading} fetchCompanys={fetchCompanys}/>}
+        ListFooterComponent={loading ? <ActivityIndicator style={styles.emptyListStyle} color={'orange'} animating={loading}/> : !empty && <FooterComponent loading={loading} setLoading={setLoading} fetchCompanys={fetchCompanys}/>}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem empresas a seguir</Text>}
+        ListEmptyComponent={!loading && <Text style={[styles.emptyListStyle, {color: 'gray'}]}>Sem empresas a seguir</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>}
       />
     </>
@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   emptyListStyle: {
-    color: 'gray',
     paddingTop: 150,
     textAlign: 'center',
   }

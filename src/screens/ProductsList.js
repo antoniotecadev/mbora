@@ -23,6 +23,7 @@ export default function ProductsList({ route, navigation }) {
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState({ctg: false, pdt: false});
   const [refreshing, setRefreshing] = useState(false);
+  const [emptyProduct, setEmptyProduct] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
   const {ui, user} = useStores();
@@ -74,7 +75,7 @@ export default function ProductsList({ route, navigation }) {
     );
   }, []);
 
-  const FooterComponente = () => {
+  const FooterComponent = () => {
     return (
       <View style={styles.footer}>
         <TouchableOpacity
@@ -135,10 +136,15 @@ export default function ProductsList({ route, navigation }) {
         }
       });
       let responseJsonData = await response.json();
-      if(isRefresh) {
-        setProdutos(responseJsonData);
+      if(!emptyProduct){
+        setEmptyProduct(false);
+        if(isRefresh) {
+          setProdutos(responseJsonData);
+        } else {
+          setProdutos((prevState) => [...prevState, ...responseJsonData]);
+        }
       } else {
-        setProdutos((prevState) => [...prevState, ...responseJsonData]);
+        setEmptyProduct(true);
       }
     } catch (error) {
       // setError(error.message); // Renderizar um component com mensagem de erro
@@ -148,7 +154,7 @@ export default function ProductsList({ route, navigation }) {
 
   useEffect(() => {
     fetchCategorys();
-    fetchProducts(true).then(()=> { setLoading({pdt: false}) });
+    fetchProducts(true).then(()=> setLoading({pdt: false}));
   }, []);
 
   useFocusEffect(useCallback(() => {
@@ -186,9 +192,9 @@ export default function ProductsList({ route, navigation }) {
         renderItem={renderItemProduct}
         data={produtos}
         ListHeaderComponent={FlatListHeaderComponent}
-        ListFooterComponent={FooterComponente}
+        ListFooterComponent={!emptyProduct && FooterComponent}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos</Text>}
+        ListEmptyComponent={!loading.pdt && <Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>} />
         {/* : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />} */}
     </>

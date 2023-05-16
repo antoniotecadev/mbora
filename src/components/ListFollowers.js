@@ -107,9 +107,9 @@ function pagination(rjd) {
         keyExtractor={(item) => item.id_table_followers.toString()}
         data={follower}
         renderItem={renderFollowers}
-        ListFooterComponent={empty || refreshing ? null : <FooterComponent loading={loading} setLoading={setLoading} fetchFollowers={fetchFollowers}/>}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem seguidores</Text>}
+        ListFooterComponent={loading ? <ActivityIndicator style={styles.emptyListStyle} color={'orange'} animating={loading}/> : !empty && <FooterComponent loading={loading} setLoading={setLoading} fetchFollowers={fetchFollowers}/>}
+        ListEmptyComponent={!loading && <Text style={[styles.emptyListStyle, {color: 'gray'}]}>Sem seguidores</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>}
       />
     </>
@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   emptyListStyle: {
-    color: 'gray',
     paddingTop: 150,
     textAlign: 'center',
   },

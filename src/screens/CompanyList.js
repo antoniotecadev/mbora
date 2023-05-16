@@ -7,6 +7,7 @@ import {Ionicons} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
+import { isEmpty } from 'lodash';
 
 let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
 
@@ -21,11 +22,12 @@ export default function CompanyList({route, navigation}) {
 
   const [company, setCompany] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState({cpn: false});
+  const [loading, setLoading] = useState(false);
+  const [emptyCompany, setEmptyCompany] = useState(false);
   const { showDialog, setShowDialog} = useContext(CartContext);
 
   const fetchCompanys = useCallback(async(isRefresh) => {
-    setLoading({cpn: true});
+    setLoading(true);
     try {
       let response =  await fetch(URL + 'empresas/mbora', {
           headers: {
@@ -35,10 +37,15 @@ export default function CompanyList({route, navigation}) {
         }
       });
       let responseJsonData = await response.json();
-      if(isRefresh) {
-        setCompany(responseJsonData);
+      if(!isEmpty(responseJsonData)){
+        setEmptyCompany(false);
+        if(isRefresh) {
+          setCompany(responseJsonData);
+        } else {
+          setCompany((prevState) => [...prevState, ...responseJsonData]);
+        }
       } else {
-        setCompany((prevState) => [...prevState, ...responseJsonData]);
+        setEmptyCompany(true);
       }
     } catch (error) {
       setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
@@ -48,7 +55,7 @@ export default function CompanyList({route, navigation}) {
   const onRefresh = ()=> {
     setRefreshing(true);
     fetchCompanys(true).then(()=> {
-      setLoading({cpn: false});
+      setLoading(false);
       setRefreshing(false);
     });
   };
@@ -57,10 +64,10 @@ export default function CompanyList({route, navigation}) {
     return (
       <View style={styles.footer}>
         <TouchableOpacity
-          onPress={()=> fetchCompanys(false).then(()=> { setLoading({cpn: false}) })}
+          onPress={()=> fetchCompanys(false).then(()=> setLoading(false))}
           style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>{loading.cpn ? 'A carregar empresas': 'Ver mais'}</Text>
-          {loading.cpn ? (
+          <Text style={styles.btnText}>{loading ? 'A carregar empresas': 'Ver mais'}</Text>
+          {loading ? (
             <ActivityIndicator
               color="white"
               style={{marginLeft: 8}} />
@@ -78,7 +85,7 @@ export default function CompanyList({route, navigation}) {
         </TouchableOpacity>
       )
     })
-    fetchCompanys(true).then(()=> setLoading({cpn: false}));
+    fetchCompanys(true).then(()=> setLoading(false));
   }, []);
 
   useFocusEffect(useCallback(() => {
@@ -113,9 +120,9 @@ export default function CompanyList({route, navigation}) {
         keyExtractor={(item) => item.id.toString()}
         data={company}
         renderItem={renderCompany}
-        ListFooterComponent={FooterComponente}
+        ListFooterComponent={!emptyCompany && FooterComponente}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem empresas</Text>}
+        ListEmptyComponent={!loading && <Text style={styles.emptyListStyle}>Sem empresas</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>}
       />
     </>
