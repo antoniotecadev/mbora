@@ -19,9 +19,11 @@ let URL = 'http://192.168.18.3/mborasystem-admin/public/api/';
 export default function CompanyProfile({ route, navigation }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
-    const [refreshing, setRefreshing] = useState({encomenda: false, produto: false});
+    const [refreshingProduto, setRefreshingProduto] = useState(false);
+    const [refreshingEncomenda, setRefreshingEncomenda] = useState(false);
     const [lastVisible, setLastVisible] = useState({encomenda: 0, produto: 0});
-    const [empty, setEmpty] = useState({encomenda: false, produto: false});
+    const [emptyEncomenda, setEmptyEncomenda] = useState(false); 
+    const [emptyProduto, setEmptyProduto] = useState(false); 
     const [viewHeader, setViewHeader] = useState(true);
     const [viewDetails, setViewDetails] = useState(false);
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
@@ -56,7 +58,7 @@ export default function CompanyProfile({ route, navigation }) {
                 await deleteItemAsync('token');
                 user.setAuth(false);
             } else  if (!isEmpty(rjd)) {
-                setEmpty({encomenda: false});
+                setEmptyEncomenda(false);
                 if (isMoreView) {
                     pagination(rjd, true);
                     setEncomendas((prevState) => [...prevState, ...rjd]);
@@ -65,10 +67,10 @@ export default function CompanyProfile({ route, navigation }) {
                     setEncomendas(rjd);
                 }
             } else {
-                setEmpty({encomenda: true});
+                setEmptyEncomenda(true);
             }
         } catch (error) {
-            setRefreshing({encomenda: false});
+            setRefreshingEncomenda(false);
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.encomenda]);
@@ -98,7 +100,7 @@ export default function CompanyProfile({ route, navigation }) {
                 await deleteItemAsync('token');
                 user.setAuth(false);
             } else  if (!isEmpty(rjd)) {
-                setEmpty({produto: false});
+                setEmptyProduto(false);
                 if (isMoreView) {
                     pagination(rjd, false);
                     setProduts((prevState) => [...prevState, ...rjd]);
@@ -107,10 +109,10 @@ export default function CompanyProfile({ route, navigation }) {
                     setProduts(rjd);
                 }
             } else {
-                setEmpty({produto: true});
+                setEmptyProduto(true);
             }
         } catch (error) {
-            setRefreshing({produto: false});
+            setRefreshingProduto(false);
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.produto]);
@@ -147,13 +149,13 @@ export default function CompanyProfile({ route, navigation }) {
     const onRefresh = async (index)=> {
       switch (index) {
         case 0:
-          setRefreshing({produto: true});
-          fecthProducts(false).then(()=> setRefreshing({produto: false}));
+          setRefreshingProduto(true);
+          fecthProducts(false).then(()=> setRefreshingProduto(false));
           getNumber(0);
           break;
         case 1:
-          setRefreshing({encomenda: true});
-          fetchEncomendas(false).then(()=> setRefreshing({encomenda: false}));
+          setRefreshingEncomenda(true);
+          fetchEncomendas(false).then(()=> setRefreshingEncomenda(false));
           getNumber(1);
           break;
         default:
@@ -248,6 +250,10 @@ export default function CompanyProfile({ route, navigation }) {
     }
 
     useEffect(() => {
+        setRefreshingProduto(true);
+        fecthProducts(false).then(()=> setRefreshingProduto(false));
+        setRefreshingEncomenda(true);
+        fetchEncomendas(false).then(()=> setRefreshingEncomenda(false))
         navigation.setOptions({
           headerTitle: first_name + ' ' + last_name
         })
@@ -256,8 +262,6 @@ export default function CompanyProfile({ route, navigation }) {
         setNumberEncomenda(encomenda_number);
         setNumberSeguidor(followers_number);
         numberViewsCompany();
-        fetchEncomendas(false);
-        fecthProducts(false);
     }, []);
 
     useEffect(() => {
@@ -336,10 +340,10 @@ return (
                   selectedLabelColor={'orange'}/>
               <TabController.PageCarousel>
                   <TabController.TabPage index={0}>
-                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing.produto} empty={empty.produto} isProfileCompany={isProfileCompany}/>
+                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingProduto} empty={emptyProduto} isProfileCompany={isProfileCompany}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
-                      <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshing.encomenda} empty={empty.encomenda}/>
+                      <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshingEncomenda} empty={emptyEncomenda}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={2} lazy>
                     <ListFollowers user={user} imei={imei} URL={URL} setNumberSeguidor={setNumberSeguidor}/>
@@ -386,7 +390,7 @@ const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, 
     return(
         <FlatList
             columnWrapperStyle={{
-            justifyContent: "space-between",
+              justifyContent: "space-between",
             }}
             numColumns={2}
             contentContainerStyle={styles.productsListContainer}
@@ -394,8 +398,8 @@ const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, 
             renderItem={renderItemProduct}
             data={produts}
             showsVerticalScrollIndicator={false}
-            ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fecthProducts={fecthProducts}/>}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem produtos e serviços</Text>}
+            ListFooterComponent={refreshing ? <ActivityIndicator style={styles.emptyListStyle} color={'orange'} animating={refreshing}/> : !empty && <FooterComponente loading={loading} setLoading={setLoading} fecthProducts={fecthProducts}/>}
+            ListEmptyComponent={!refreshing && <Text style={[styles.emptyListStyle, {color: 'gray'}]}>Sem produtos ou serviços</Text>}
             refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(0)}/>} />
         )
 }
@@ -440,7 +444,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     emptyListStyle: {
-        color: 'gray',
         paddingTop: 150,
         textAlign: 'center',
     },

@@ -23,10 +23,10 @@ export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refr
             contentContainerStyle={styles.productsListContainer}
             keyExtractor={keyExtractor}
             renderItem={renderItemProduct}
-            ListFooterComponent={empty || refreshing ? null : <FooterComponente loading={loading} setLoading={setLoading} fetchEncomendas={fetchEncomendas}/>}
             data={encomendas}
             showsVerticalScrollIndicator={false}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem encomendas</Text>}
+            ListFooterComponent={refreshing ? <ActivityIndicator style={styles.emptyListStyle} color={'orange'} animating={refreshing}/> : !empty && <FooterComponente loading={loading} setLoading={setLoading} fetchEncomendas={fetchEncomendas}/>}
+            ListEmptyComponent={!refreshing && <Text style={[styles.emptyListStyle, {color: 'gray'}]}>Sem encomendas</Text>}
             refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>}/>
         )
 }
@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     emptyListStyle: {
-        color: 'gray',
         paddingTop: 150,
         textAlign: 'center',
     },

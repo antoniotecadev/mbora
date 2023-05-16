@@ -22,9 +22,12 @@ export default function Profile({ route, navigation }) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
+    const [refreshingFavorito, setRefreshingFavorito] = useState(false);
+    const [refreshingEncomenda, setRefreshingEncomenda] = useState(false);
     const [lastVisible, setLastVisible] = useState({encomenda: 0, favorito: 0});
     const [empty, setEmpty] = useState({encomenda: false, favorito: false});
+    const [emptyEncomenda, setEmptyEncomenda] = useState(false); 
+    const [emptyFavorito, setEmptyFavorito] = useState(false);
     const [viewHeader, setViewHeader] = useState(true);
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
     const [image, setImage] = useState(null);
@@ -55,7 +58,7 @@ export default function Profile({ route, navigation }) {
                 await deleteItemAsync('token');
                 user.setAuth(false);
             } else  if (!isEmpty(rjd.encomenda)) {
-                setEmpty({encomenda: false});
+                setEmptyEncomenda(false);
                 if (isMoreView) {
                     pagination(rjd.encomenda, true);
                     setEncomendas((prevState) => [...prevState, ...rjd.encomenda]);
@@ -66,10 +69,10 @@ export default function Profile({ route, navigation }) {
                     setEncomendas(rjd.encomenda);
                 }
             } else {
-                setEmpty({encomenda: true});
+                setEmptyEncomenda(true);
             }
         } catch (error) {
-            setRefreshing(false);
+            setRefreshingEncomenda(false);
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.encomenda]);
@@ -99,7 +102,7 @@ export default function Profile({ route, navigation }) {
                 await deleteItemAsync('token');
                 user.setAuth(false);
             } else  if (!isEmpty(rjd.favorito)) {
-                setEmpty({favorito: false});
+                setEmptyFavorito(false);
                 if (isMoreView) {
                     pagination(rjd.favorito, false);
                     setProduts((prevState) => [...prevState, ...rjd.favorito]);
@@ -109,10 +112,10 @@ export default function Profile({ route, navigation }) {
                     setProduts(rjd.favorito);
                 }
             } else {
-                setEmpty({favorito: true});
+                setEmptyFavorito(true);
             }
         } catch (error) {
-            setRefreshing(false);
+            setRefreshingFavorito(false);
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
         }
     }, [lastVisible.favorito]);
@@ -143,13 +146,14 @@ export default function Profile({ route, navigation }) {
     // }, [produts]);
 
     const onRefresh = async (index)=> {
-        setRefreshing(true);
         switch (index) {
             case 0:
-                fetchEncomendas(false).then(()=> setRefreshing(false));
+                setRefreshingEncomenda(true);
+                fetchEncomendas(false).then(()=> setRefreshingEncomenda(false));
                 break;
-            case 1:
-                fetchFavoritos(false).then(()=> setRefreshing(false));
+                case 1:
+                setRefreshingFavorito(true);
+                fetchFavoritos(false).then(()=> setRefreshingFavorito(false));
                 break;
             case 2:
                 break;
@@ -239,9 +243,10 @@ export default function Profile({ route, navigation }) {
 
     useEffect(() => {
         getURLProfilePhoto();
-        setRefreshing(true);
-        fetchEncomendas(false).then(()=> setRefreshing(false));
-        fetchFavoritos(false).then(()=> setRefreshing(false));
+        setRefreshingEncomenda(true);
+        fetchEncomendas(false).then(()=> setRefreshingEncomenda(false));
+        setRefreshingFavorito(true);
+        fetchFavoritos(false).then(()=> setRefreshingFavorito(false));
     }, []);
 
     useEffect(() => {
@@ -302,10 +307,10 @@ export default function Profile({ route, navigation }) {
                     selectedLabelColor={'orange'}/>
                 <TabController.PageCarousel>
                     <TabController.TabPage index={0}>
-                        <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(0)} refreshing={refreshing} empty={empty.encomenda}/>
+                        <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(0)} refreshing={refreshingEncomenda} empty={emptyEncomenda}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshing} empty={empty.favorito}/>
+                        <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingFavorito} empty={emptyFavorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy>
                         <CompanyFollowers route={route} navigation={navigation} user={user} URL={URL} setNumberEmpresaAseguir={setNumberEmpresaAseguir}/>
@@ -393,8 +398,8 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produt
             renderItem={renderItemProduct}
             data={produts}
             showsVerticalScrollIndicator={false}
-            ListFooterComponent={empty || refreshing ? null : <FooterComponent loading={loading} setLoading={setLoading} fetchFavoritos={fetchFavoritos}/>}
-            ListEmptyComponent={<Text style={styles.emptyListStyle}>Sem favoritos</Text>}
+            ListFooterComponent={refreshing ? <ActivityIndicator style={styles.emptyListStyle} color={'orange'} animating={refreshing}/> : !empty && <FooterComponent loading={loading} setLoading={setLoading} fetchFavoritos={fetchFavoritos}/>}
+            ListEmptyComponent={!refreshing && <Text style={[styles.emptyListStyle, {color: 'gray'}]}>Sem favoritos</Text>}
             refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={()=> onRefresh(1)}/>} />
         )
 }
@@ -439,7 +444,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 8,
     },
     emptyListStyle: {
-        color: 'gray',
         paddingTop: 150,
         textAlign: 'center',
     },
