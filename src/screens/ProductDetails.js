@@ -23,7 +23,7 @@ import { isEmpty, isNumber } from 'lodash';
 import { AntDesign } from "@expo/vector-icons";
 
 const imageProduct = require('../../assets/products/oleo.jpg');
-let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);

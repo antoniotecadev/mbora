@@ -32,7 +32,7 @@ export default ProfileEdit = ({navigation})=> {
 
   const userUpdate = async (us, action, resetForm)=> {
       try {
-        let URL = 'http://192.168.18.3/mborasystem-admin/public/api/mbora/update/';
+        let URL = 'http://192.168.18.4/mborasystem-admin/public/api/mbora/update/';
         if (action == 0) {
             URL += 'name/user';
         } else if(action == 1) {

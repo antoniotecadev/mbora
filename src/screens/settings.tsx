@@ -143,7 +143,7 @@ export const Settings: React.FC = observer(() => {
   const logout = async ()=> {
     setLoading(true);
     try {
-      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/logout/user',
+      let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/mbora/logout/user',
       {
         method: 'POST',
         headers: {

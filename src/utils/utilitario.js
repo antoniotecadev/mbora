@@ -74,7 +74,7 @@ export const getRandomColor = (code)=> {
 
 export const getCompany = async(imei, navigation, screenBack, isProfileCompany)=> {
     try {
-        let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/empresas/mbora/imei/' + imei, {
+        let response =  await fetch('http://192.168.18.4/mborasystem-admin/public/api/empresas/mbora/imei/' + imei, {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',

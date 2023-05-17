@@ -9,7 +9,7 @@ import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
 
-let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 
 export default function CompanyList({route, navigation}) {
 

@@ -11,6 +11,7 @@ import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import { Feather } from "@expo/vector-icons";
 
 const { width, height } = Dimensions.get('window');
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 
 export default function PreviewProfilePhoto({route, navigation}) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
@@ -39,7 +40,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
 
     const updateProfilePhoto = async(photoURL)=> {
         try {
-            let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/mbora/update/profilephoto/user',
+            let response = await fetch(URL + 'mbora/update/profilephoto/user',
             {
                 method: 'PUT',
                 headers: {

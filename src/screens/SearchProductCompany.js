@@ -17,7 +17,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { useStores } from "../stores";
 import { getValueItemAsync } from "../utils/utilitario";
 
-let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 
 const SearchProductCompany = ({route, navigation}) => {
 

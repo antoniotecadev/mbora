@@ -74,7 +74,7 @@ export function CartProvider(props) {
   const encomendar = async (setLoading, imei, productId, productName, productQuantity, clientData)=> {
     setLoading({encomenda: true});
     try {
-      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/encomenda',
+      let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/produtos/mbora/encomenda',
       {
         method: 'POST',
         headers: {

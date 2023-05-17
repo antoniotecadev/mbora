@@ -15,7 +15,7 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import ListFollowers from '../components/ListFollowers';
 
 const { width } = Dimensions.get('window');
-let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 export default function CompanyProfile({ route, navigation }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);

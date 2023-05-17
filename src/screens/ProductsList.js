@@ -16,6 +16,7 @@ import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 
 const cardImage2 = require('../../assets/products/oleo.jpg');
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 
 export default function ProductsList({ route, navigation }) {
 
@@ -116,7 +117,7 @@ export default function ProductsList({ route, navigation }) {
 
   const fetchCategorys = useCallback(async () => {
     try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/categorias/mbora');
+      let response =  await fetch(URL + 'categorias/mbora');
       let responseJsonData = await response.json();
       setCategorias(responseJsonData);
       setCategoryError(null);
@@ -128,7 +129,7 @@ export default function ProductsList({ route, navigation }) {
   const fetchProducts = useCallback(async (isRefresh) => {
     setLoading({pdt: true});
     try {
-      let response =  await fetch('http://192.168.18.3/mborasystem-admin/public/api/produtos/mbora/index/json', {
+      let response =  await fetch(URL + 'produtos/mbora/index/json', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

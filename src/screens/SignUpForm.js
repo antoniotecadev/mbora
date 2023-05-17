@@ -32,7 +32,7 @@ export default SignUpForm = ({navigation})=> {
 
     const createUserAccount = async (us)=> {
       try {
-        let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/auth/register',
+        let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/auth/register',
         {
           method: 'POST',
           headers: {
