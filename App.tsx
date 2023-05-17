@@ -1,5 +1,5 @@
 import 'expo-dev-client';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useContext} from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import {LogBox, Alert} from 'react-native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -9,6 +9,7 @@ import {configureDesignSystem} from './src/utils/designSystem';
 import {hydrateStores, StoresProvider, useStores} from './src/stores';
 import {initServices, ServicesProvider} from './src/services';
 import { getValueItemAsync } from './src/utils/utilitario';
+import { CartContext } from './src/CartContext';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -18,6 +19,7 @@ let URL = 'http://192.168.18.4/mborasystem-admin/public/api/';
 export default (): JSX.Element => {
 
   const {user} = useStores();
+  const { setShowDialog } = useContext(CartContext);
   
   const startApp = useCallback(async () => {
 
@@ -55,7 +57,7 @@ export default (): JSX.Element => {
         await SplashScreen.hideAsync();
       }
     } catch (error) {
-      Alert.alert('Erro', error.message);
+      setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
     }
   }
 
