@@ -14,7 +14,7 @@ import { getValueItemAsync } from './src/utils/utilitario';
 SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs(['Require']);
-
+let URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 export default (): JSX.Element => {
 
   const {user} = useStores();
@@ -33,7 +33,7 @@ export default (): JSX.Element => {
 
   const checkUserAuthenticated = async () => {
     try {
-      let response = await fetch('http://192.168.18.3/mborasystem-admin/public/api/user/autenticated',
+      let response = await fetch(URL + 'user/autenticated',
       {
         method: 'POST',
         headers: {
