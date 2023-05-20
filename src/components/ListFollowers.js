@@ -46,12 +46,18 @@ const fetchFollowers = useCallback(async(isMoreView) => {
         } else  if (!isEmpty(rjd.seguidor)) {
             setEmpty(false);
             if (isMoreView) {
-                pagination(rjd.seguidor);
-                setFollower((prevState) => [...prevState, ...rjd.seguidor]);
+              pagination(rjd.seguidor);
+              setFollower((prevState) => [...prevState, ...rjd.seguidor]);
+              if(lastVisible == rjd.idSeguidor){
+                setEmpty(true);
+              }  
             } else {
-                setNumberSeguidor(rjd.numeroSeguidor);
-                pagination(rjd.seguidor);
-                setFollower(rjd.seguidor);
+              setNumberSeguidor(rjd.numeroSeguidor);
+              pagination(rjd.seguidor);
+              setFollower(rjd.seguidor);
+              if(rjd.numeroSeguidor <= 10){
+                setEmpty(true);
+              } 
             }
         } else {
             setEmpty(true);

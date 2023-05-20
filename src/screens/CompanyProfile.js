@@ -57,14 +57,20 @@ export default function CompanyProfile({ route, navigation }) {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
                 await deleteItemAsync('token');
                 user.setAuth(false);
-            } else  if (!isEmpty(rjd)) {
+            } else  if (!isEmpty(rjd.encomenda)) {
                 setEmptyEncomenda(false);
                 if (isMoreView) {
-                    pagination(rjd, true);
-                    setEncomendas((prevState) => [...prevState, ...rjd]);
+                  pagination(rjd.encomenda, true);
+                  setEncomendas((prevState) => [...prevState, ...rjd.encomenda]);
+                  if(lastVisible.encomenda == rjd.idEncomenda){
+                    setEmptyEncomenda(true);
+                  } 
                 } else {
-                    pagination(rjd, true);
-                    setEncomendas(rjd);
+                  pagination(rjd.encomenda, true);
+                  setEncomendas(rjd.encomenda);
+                  if(numberEncomenda <= 10){
+                    setEmptyEncomenda(true);
+                  } 
                 }
             } else {
                 setEmptyEncomenda(true);
@@ -99,14 +105,20 @@ export default function CompanyProfile({ route, navigation }) {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
                 await deleteItemAsync('token');
                 user.setAuth(false);
-            } else  if (!isEmpty(rjd)) {
+            } else  if (!isEmpty(rjd.produtoServico)) {
                 setEmptyProduto(false);
                 if (isMoreView) {
-                    pagination(rjd, false);
-                    setProduts((prevState) => [...prevState, ...rjd]);
+                  pagination(rjd.produtoServico, false);
+                  setProduts((prevState) => [...prevState, ...rjd.produtoServico]);
+                  if(lastVisible.produto == rjd.idProdutoServico){
+                      setEmptyProduto(true);
+                  } 
                 } else {
-                    pagination(rjd, false);
-                    setProduts(rjd);
+                  pagination(rjd.produtoServico, false);
+                  setProduts(rjd.produtoServico);
+                  if(numberProduto <= 10){
+                    setEmptyProduto(true);
+                  } 
                 }
             } else {
                 setEmptyProduto(true);

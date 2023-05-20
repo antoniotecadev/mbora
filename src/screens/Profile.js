@@ -17,7 +17,7 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 import CompanyFollowers from '../components/CompanyFollowers';
 
 const { width } = Dimensions.get('window');
-let URL = 'http://192.168.18.3/mborasystem-admin/public/api/'; 
+const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
 export default function Profile({ route, navigation }) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
@@ -62,11 +62,17 @@ export default function Profile({ route, navigation }) {
                 if (isMoreView) {
                     pagination(rjd.encomenda, true);
                     setEncomendas((prevState) => [...prevState, ...rjd.encomenda]);
+                    if(lastVisible.encomenda == rjd.idEncomendaPaginacao){
+                        setEmptyEncomenda(true);
+                    }  
                 } else {
                     setNumberEncomenda(rjd.numeroEncomenda);
                     setNumberEmpresaAseguir(rjd.numeroEmpresasAseguir);
                     pagination(rjd.encomenda, true);
                     setEncomendas(rjd.encomenda);
+                    if(rjd.numeroEncomenda <= 10){
+                        setEmptyEncomenda(true);
+                    } 
                 }
             } else {
                 setEmptyEncomenda(true);
@@ -106,10 +112,16 @@ export default function Profile({ route, navigation }) {
                 if (isMoreView) {
                     pagination(rjd.favorito, false);
                     setProduts((prevState) => [...prevState, ...rjd.favorito]);
+                    if(lastVisible.favorito == rjd.idFavoritoPaginacao){
+                        setEmptyFavorito(true);
+                    } 
                 } else {
                     setNumberFavorito(rjd.numeroFavorito)
                     pagination(rjd.favorito, false);
                     setProduts(rjd.favorito);
+                    if(rjd.numeroFavorito <= 10){
+                        setEmptyFavorito(true);
+                    } 
                 }
             } else {
                 setEmptyFavorito(true);

@@ -43,12 +43,18 @@ export default function CompanyFollowers({route, navigation, user, URL, setNumbe
         } else  if (!isEmpty(rjd.empresa)) {
             setEmpty(false);
             if (isMoreView) {
-                pagination(rjd.empresa);
-                setCompany((prevState) => [...prevState, ...rjd.empresa]);
+              pagination(rjd.empresa);
+              setCompany((prevState) => [...prevState, ...rjd.empresa]);
+              if(lastVisible == rjd.idEmpresaAseguirPaginacao){
+                setEmpty(true);
+              }  
             } else {
-                setNumberEmpresaAseguir(rjd.numeroEmpresasAseguir);
-                pagination(rjd.empresa);
-                setCompany(rjd.empresa);
+              setNumberEmpresaAseguir(rjd.numeroEmpresasAseguir);
+              pagination(rjd.empresa);
+              setCompany(rjd.empresa);
+              if(rjd.numeroEmpresasAseguir <= 10){
+                  setEmpty(true);
+              } 
             }
         } else {
             setEmpty(true);
