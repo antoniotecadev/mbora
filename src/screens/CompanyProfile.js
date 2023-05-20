@@ -1,4 +1,3 @@
-import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty, isNumber } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, Dimensions, SafeAreaView } from 'react-native';
@@ -38,7 +37,7 @@ export default function CompanyProfile({ route, navigation }) {
     const { nav } = useServices();
     const {ui, user} = useStores();
     const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, screenBack, isProfileCompany} = route.params;
-    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
+    const { showDialog, setShowDialog } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
 
@@ -54,9 +53,7 @@ export default function CompanyProfile({ route, navigation }) {
             });
             let rjd = await response.json();
             if  (!rjd.success && rjd.message == 'Autenticação') {
-                setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
-                await deleteItemAsync('token');
-                user.setAuth(false);
+              setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
             } else  if (!isEmpty(rjd.encomenda)) {
                 setEmptyEncomenda(false);
                 if (isMoreView) {
@@ -102,9 +99,7 @@ export default function CompanyProfile({ route, navigation }) {
             });
             let rjd = await response.json();
             if  (!rjd.success && rjd.message == 'Autenticação') {
-                setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
-                await deleteItemAsync('token');
-                user.setAuth(false);
+              setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
             } else  if (!isEmpty(rjd.produtoServico)) {
                 setEmptyProduto(false);
                 if (isMoreView) {

@@ -4,7 +4,6 @@ import { AlertDialog } from '../components/AlertDialog.js';
 import { CartContext } from '../CartContext.js';
 import { getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
-import { deleteItemAsync } from 'expo-secure-store';
 import { Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 
 export default function ListFollowers({user, imei, URL, setNumberSeguidor}) {
@@ -40,9 +39,7 @@ const fetchFollowers = useCallback(async(isMoreView) => {
         });
         let rjd = await response.json();
         if  (!rjd.success && rjd.message == 'Autenticação') {
-            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
-            await deleteItemAsync('token');
-            user.setAuth(false);
+          setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
         } else  if (!isEmpty(rjd.seguidor)) {
             setEmpty(false);
             if (isMoreView) {

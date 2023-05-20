@@ -1,5 +1,4 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { deleteItemAsync } from 'expo-secure-store';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, SafeAreaView, Dimensions } from 'react-native';
@@ -25,7 +24,6 @@ export default function Profile({ route, navigation }) {
     const [refreshingFavorito, setRefreshingFavorito] = useState(false);
     const [refreshingEncomenda, setRefreshingEncomenda] = useState(false);
     const [lastVisible, setLastVisible] = useState({encomenda: 0, favorito: 0});
-    const [empty, setEmpty] = useState({encomenda: false, favorito: false});
     const [emptyEncomenda, setEmptyEncomenda] = useState(false); 
     const [emptyFavorito, setEmptyFavorito] = useState(false);
     const [viewHeader, setViewHeader] = useState(true);
@@ -55,8 +53,6 @@ export default function Profile({ route, navigation }) {
             let rjd = await response.json();
             if  (!rjd.success && rjd.message == 'Autenticação') {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
-                await deleteItemAsync('token');
-                user.setAuth(false);
             } else  if (!isEmpty(rjd.encomenda)) {
                 setEmptyEncomenda(false);
                 if (isMoreView) {
@@ -105,8 +101,6 @@ export default function Profile({ route, navigation }) {
             let rjd = await response.json();
             if  (!rjd.success && rjd.message == 'Autenticação') {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
-                await deleteItemAsync('token');
-                user.setAuth(false);
             } else  if (!isEmpty(rjd.favorito)) {
                 setEmptyFavorito(false);
                 if (isMoreView) {

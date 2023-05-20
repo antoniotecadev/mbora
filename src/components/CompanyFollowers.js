@@ -6,7 +6,6 @@ import { CartContext } from '../CartContext.js';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
-import { deleteItemAsync } from 'expo-secure-store';
 
 export default function CompanyFollowers({route, navigation, user, URL, setNumberEmpresaAseguir}) {
 
@@ -37,9 +36,7 @@ export default function CompanyFollowers({route, navigation, user, URL, setNumbe
         });
         let rjd = await response.json();
         if  (!rjd.success && rjd.message == 'Autenticação') {
-            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
-            await deleteItemAsync('token');
-            user.setAuth(false);
+          setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
         } else  if (!isEmpty(rjd.empresa)) {
             setEmpty(false);
             if (isMoreView) {
