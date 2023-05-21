@@ -28,7 +28,7 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
             <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>{currency(String(item.preco))}</TextUILIB>
             <Image style={{width: 45, height: 45, borderRadius: 25}} source={imageProduct} />
           </View>
-          <TextUILIB color="gray" text90>{item.empresa}</TextUILIB>
+          <TextUILIB color="gray" text100L>{item.empresa}</TextUILIB>
         </View>
       </TouchableOpacity>
 };
