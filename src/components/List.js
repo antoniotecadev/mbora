@@ -62,15 +62,6 @@ const List = ({ isCompany, empty, search, loading, setLoading, searchPhrase, dat
     } else {
       return <ItemProduct item={item} userTelephone={userTelephone} />;
     }
-    // if (searchPhrase === "") {
-      // return <Item item={item} />;
-    // }
-    // if (item.nome.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
-    //   return <Item item={item} />;
-    // }
-    // if (item.empresa.toUpperCase().includes(searchPhrase.toUpperCase().trim().replace(/\s/g, ""))) {
-    //   return <Item item={item}/>;
-    // }
   };
 
   return (
