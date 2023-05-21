@@ -65,7 +65,7 @@ export default function CompanyProfile({ route, navigation }) {
                 } else {
                   pagination(rjd.encomenda, true);
                   setEncomendas(rjd.encomenda);
-                  if(numberEncomenda <= 10){
+                  if(encomenda_number <= 10){
                     setEmptyEncomenda(true);
                   } 
                 }
@@ -111,7 +111,7 @@ export default function CompanyProfile({ route, navigation }) {
                 } else {
                   pagination(rjd.produtoServico, false);
                   setProduts(rjd.produtoServico);
-                  if(numberProduto <= 10){
+                  if(product_number <= 10){
                     setEmptyProduto(true);
                   } 
                 }
