@@ -11,18 +11,16 @@ import {
 import { currency } from "../utils/utilitario";
 import { useNavigation } from "@react-navigation/native";
 import { Text as TextUILIB, View as ViewUILIB } from "react-native-ui-lib";
+import { Feather, AntDesign } from "@expo/vector-icons";
 
 const imageCompany = require('../../assets/products/cantina2.jpg');
 const imageProduct = require('../../assets/products/oleo.jpg');
 
 const ItemProduct = ({ item, userTelephone }) => {
-
 const navigation = useNavigation();
-
 const showProductDetails = (item)=> {
   navigation.navigate('ProductDetails', { produto: item, userTelephone: userTelephone, screenBack: 'SearchProductCompany' });
 }
-
 return <TouchableOpacity onPress={()=> showProductDetails(item)}>
         <View style={styles.item}>
           <View style={styles.section}>
@@ -35,30 +33,48 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
       </TouchableOpacity>
 };
 
-const ItemCompany = ({ item }) => {
-
+const ItemCompany = ({ item, searchPhrase }) => {
 const navigation = useNavigation();
-
-const showCompanyProfile = (item)=> {
-  navigation.navigate('CompanyProfile', {...item, screenBack: 'SearchProductCompany', isProfileCompany: true});
+const showCompanyList = ()=> {
+  navigation.navigate({name: 'CompanyList', params: {searchPhrase: searchPhrase}, merge: true});
 }
-
-return <TouchableOpacity onPress={()=> showCompanyProfile(item)}>
+return <TouchableOpacity onPress={()=> showCompanyList()}>
         <View style={styles.item}>
           <View style={styles.section}>
-            <TextUILIB textColor style={{maxWidth: '50%'}}>{item.empresa}</TextUILIB>
-            {/* <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>-</TextUILIB> */}
-            <Image style={{width: 45, height: 45, borderRadius: 25}} source={imageCompany} />
+            <View style={styles.section}>
+              <Feather name="search" size={15} color={'gray'}/>        
+              <TextUILIB marginL-5 textColor>{item.empresa}</TextUILIB>
+            </View>
+            <AntDesign name="right" color={'gray'} size={15}/>
           </View>
-          <TextUILIB color="gray" text90>{item.first_name + ' ' + item.last_name}</TextUILIB>
+          <TextUILIB marginL-20 color={'gray'} text100L>{item.imei}</TextUILIB>
         </View>
       </TouchableOpacity>
 };
+// const ItemCompany = ({ item }) => {
+
+// const navigation = useNavigation();
+
+// const showCompanyProfile = (item)=> {
+//   navigation.navigate('CompanyProfile', {...item, screenBack: 'SearchProductCompany', isProfileCompany: true});
+// }
+
+// return <TouchableOpacity onPress={()=> showCompanyProfile(item)}>
+//         <View style={styles.item}>
+//           <View style={styles.section}>
+//             <TextUILIB textColor style={{maxWidth: '50%'}}>{item.empresa}</TextUILIB>
+//             {/* <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>-</TextUILIB> */}
+//             <Image style={{width: 45, height: 45, borderRadius: 25}} source={imageCompany} />
+//           </View>
+//           <TextUILIB color="gray" text90>{item.first_name + ' ' + item.last_name}</TextUILIB>
+//         </View>
+//       </TouchableOpacity>
+// };
 
 const List = ({ isCompany, empty, search, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
   const renderItem = ({ item }) => {
     if(isCompany) {
-      return <ItemCompany item={item} />;
+      return <ItemCompany item={item} searchPhrase={searchPhrase}/>;
     } else {
       return <ItemProduct item={item} userTelephone={userTelephone} />;
     }

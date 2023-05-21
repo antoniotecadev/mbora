@@ -21,13 +21,51 @@ export default function CompanyList({route, navigation}) {
   }
 
   const [company, setCompany] = useState([]);
+  const [isSearch, setIsSearch] = useState(false);
+  const [leastViewed, setLeastViewed] = useState(0);
   const [refreshing, setRefreshing] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [emptyCompany, setEmptyCompany] = useState(false);
+  const [loading, setLoading] = useState({fetch: false, search: false});
   const { showDialog, setShowDialog} = useContext(CartContext);
 
+  const searchCompany = async(isMore, searchPhrase)=> {
+    try {
+        let response =  await fetch(URL + "empresas/mbora/searchcompany/search/" + searchPhrase + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed,
+        {
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+            }
+        });
+        let rjd = await response.json();
+        if  (!rjd.success && rjd.message == 'Autenticação') {
+          setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
+        } else  if (!isEmpty(rjd)) {
+          setIsSearch(true);
+          setEmptyCompany(false);
+          if (isMore) {
+            pagination(rjd);
+            setCompany((prevState) => [...prevState, ...rjd]);
+          } else {
+            pagination(rjd);
+            setCompany(rjd);
+          }
+        } else {
+            setEmptyCompany(true);
+        }
+    } catch (error) {
+        setRefreshing(false);
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
+    }
+  };
+
+  function pagination(rjd) {
+    setLeastViewed(Math.min(... rjd.map(c => c.id)));
+  }
+
   const fetchCompanys = useCallback(async(isRefresh) => {
-    setLoading(true);
+    setLoading({fetch: true});
     try {
       let response =  await fetch(URL + 'empresas/mbora', {
           headers: {
@@ -38,6 +76,7 @@ export default function CompanyList({route, navigation}) {
       });
       let responseJsonData = await response.json();
       if(!isEmpty(responseJsonData)){
+        setIsSearch(false);
         setEmptyCompany(false);
         if(isRefresh) {
           setCompany(responseJsonData);
@@ -55,7 +94,7 @@ export default function CompanyList({route, navigation}) {
   const onRefresh = ()=> {
     setRefreshing(true);
     fetchCompanys(true).then(()=> {
-      setLoading(false);
+      setLoading({fetch: false});
       setRefreshing(false);
     });
   };
@@ -64,10 +103,10 @@ export default function CompanyList({route, navigation}) {
     return (
       <View style={styles.footer}>
         <TouchableOpacity
-          onPress={()=> fetchCompanys(false).then(()=> setLoading(false))}
+          onPress={()=> fetchCompanys(false).then(()=> setLoading({fetch: false}))}
           style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>{loading ? 'A carregar empresas': 'Ver mais'}</Text>
-          {loading ? (
+          <Text style={styles.btnText}>{loading.fetch ? 'A carregar empresas': 'Ver mais'}</Text>
+          {loading.fetch ? (
             <ActivityIndicator
               color="white"
               style={{marginLeft: 8}} />
@@ -85,7 +124,7 @@ export default function CompanyList({route, navigation}) {
         </TouchableOpacity>
       )
     })
-    fetchCompanys(true).then(()=> setLoading(false));
+    fetchCompanys(true).then(()=> setLoading({fetch: false}));
   }, []);
 
   useFocusEffect(useCallback(() => {
@@ -108,6 +147,13 @@ export default function CompanyList({route, navigation}) {
     }
   }, [route.params?.id, route.params?.estado]);
 
+  useEffect(() => {
+    if (route.params?.searchPhrase) {
+      setLoading({search: true});
+      searchCompany(false, route.params.searchPhrase).then(()=> setLoading({search: false}));
+    }
+  }, [route.params?.searchPhrase]);
+
   return (
     <>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
@@ -120,12 +166,22 @@ export default function CompanyList({route, navigation}) {
         keyExtractor={(item) => item.id.toString()}
         data={company}
         renderItem={renderCompany}
-        ListFooterComponent={!emptyCompany && FooterComponente}
+        ListFooterComponent={(!emptyCompany && !isSearch) && FooterComponente}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={!loading && <Text style={styles.emptyListStyle}>Sem empresas</Text>}
+        ListEmptyComponent={!loading.fetch && <Text style={styles.emptyListStyle}>Sem empresas</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>}
       />
+      {loading.search && <LoadingAnimation/>}
     </>
+  );
+}
+
+function LoadingAnimation() {
+  return (
+    <View style={styles.indicatorWrapper}>
+      <ActivityIndicator size={'large'} color={'orange'}/>
+      <Text style={styles.indicatorText}>Loading...</Text>
+    </View>
   );
 }
 
@@ -157,6 +213,21 @@ const styles = StyleSheet.create({
     color: 'gray',
     paddingTop: 150,
     textAlign: 'center',
+  },
+  indicatorWrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(100, 100, 100, 0.1)',
+  },
+  indicatorText: {
+    fontSize: 18,
+    marginTop: 12,
+    color: 'orange'
   }
 });
  
