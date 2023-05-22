@@ -9,6 +9,7 @@ import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
+import * as Constants from 'expo-constants';
 
 export default ProfileEdit = ({navigation})=> {
 
@@ -32,15 +33,15 @@ export default ProfileEdit = ({navigation})=> {
 
   const userUpdate = async (us, action, resetForm)=> {
       try {
-        let URL = 'http://192.168.18.4/mborasystem-admin/public/api/mbora/update/';
+        let API_URL = Constants.default.manifest.extra.API_URL + 'mbora/update/';
         if (action == 0) {
-            URL += 'name/user';
+          API_URL += 'name/user';
         } else if(action == 1) {
-            URL = 'email/user';
+          API_URL = 'email/user';
         } else if(action == 3) {
-            URL = 'password/user';
+          API_URL = 'password/user';
         }
-        let response = await fetch(URL,
+        let response = await fetch(API_URL,
         {
           method: 'PUT',
           headers: {

@@ -16,8 +16,9 @@ import { Entypo, Feather } from "@expo/vector-icons";
 import { useHeaderHeight } from '@react-navigation/elements';
 import { useStores } from "../stores";
 import { getValueItemAsync } from "../utils/utilitario";
+import * as Constants from 'expo-constants';
 
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
 
 const SearchProductCompany = ({route, navigation}) => {
 
@@ -38,9 +39,9 @@ const SearchProductCompany = ({route, navigation}) => {
 
   const search = async(nameImei, isMore) => {
     if(isCompany){
-      await getData(URL + "empresas/mbora/searchcompany/" + String(nameImei) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
+      await getData(API_URL + "empresas/mbora/searchcompany/" + String(nameImei) + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed, isMore);
     } else {
-      await getData(URL + "produtos/mbora/searchproduct/" + String(nameImei) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
+      await getData(API_URL + "produtos/mbora/searchproduct/" + String(nameImei) + '/isMoreProduct/' + isMore + '/leastViewed/' + leastViewed, isMore);
     }
   }
 

@@ -9,9 +9,10 @@ import { getValueItemAsync } from "../utils/utilitario";
 import { View as ViewUILIB, Text as TextUILIB } from "react-native-ui-lib";
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import { Feather } from "@expo/vector-icons";
+import * as Constants from 'expo-constants';
 
 const { width, height } = Dimensions.get('window');
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function PreviewProfilePhoto({route, navigation}) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
@@ -40,7 +41,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
 
     const updateProfilePhoto = async(photoURL)=> {
         try {
-            let response = await fetch(URL + 'mbora/update/profilephoto/user',
+            let response = await fetch(API_URL + 'mbora/update/profilephoto/user',
             {
                 method: 'PUT',
                 headers: {

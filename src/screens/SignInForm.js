@@ -11,6 +11,7 @@ import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
+import * as Constants from 'expo-constants';
 
 export default SignInForm = ()=> {
 
@@ -28,7 +29,7 @@ export default SignInForm = ()=> {
 
     const loginUser = async (credential)=> {
         try {
-            let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/auth/login',
+            let response = await fetch(Constants.default.manifest.extra.API_URL + 'auth/login',
             {
                 method: 'POST',
                 headers: {

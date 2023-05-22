@@ -8,15 +8,15 @@ import ToastMessage from '../components/ToastMessage';
 import ErrorMessage from '../components/ErrorMessage';
 import { CartContext } from '../CartContext';
 import { useFocusEffect  } from '@react-navigation/native';
-
-const ITEM_HEIGHT = 150;
-
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
+import * as Constants from 'expo-constants';
+
+const ITEM_HEIGHT = 150;
 
 const cardImage2 = require('../../assets/products/oleo.jpg');
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function ProductsList({ route, navigation }) {
 
@@ -117,7 +117,7 @@ export default function ProductsList({ route, navigation }) {
 
   const fetchCategorys = useCallback(async () => {
     try {
-      let response =  await fetch(URL + 'categorias/mbora');
+      let response =  await fetch(API_URL + 'categorias/mbora');
       let responseJsonData = await response.json();
       setCategorias(responseJsonData);
       setCategoryError(null);
@@ -129,7 +129,7 @@ export default function ProductsList({ route, navigation }) {
   const fetchProducts = useCallback(async (isRefresh) => {
     setLoading({pdt: true});
     try {
-      let response =  await fetch(URL + 'produtos/mbora/index/json', {
+      let response =  await fetch(API_URL + 'produtos/mbora/index/json', {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

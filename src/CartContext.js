@@ -2,6 +2,7 @@ import React, {createContext, useState} from 'react';
 import { getValueItemAsync } from './utils/utilitario';
 import { getProduct } from './services/ProductsService.js';
 import { deleteItemAsync } from 'expo-secure-store';
+import * as Constants from 'expo-constants';
 
 export const CartContext = createContext();
 
@@ -74,7 +75,7 @@ export function CartProvider(props) {
   const encomendar = async (setLoading, imei, productId, productName, productQuantity, clientData)=> {
     setLoading({encomenda: true});
     try {
-      let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/produtos/mbora/encomenda',
+      let response = await fetch(Constants.default.manifest.extra.API_URL + 'produtos/mbora/encomenda',
       {
         method: 'POST',
         headers: {

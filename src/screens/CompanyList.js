@@ -8,8 +8,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
+import * as Constants from 'expo-constants';
 
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function CompanyList({route, navigation}) {
 
@@ -30,7 +31,7 @@ export default function CompanyList({route, navigation}) {
 
   const searchCompany = async(isMore, searchPhrase)=> {
     try {
-        let response =  await fetch(URL + "empresas/mbora/searchcompany/search/" + searchPhrase + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed,
+        let response =  await fetch(API_URL + "empresas/mbora/searchcompany/search/" + searchPhrase + '/isMoreCompany/' + isMore + '/leastViewed/' + leastViewed,
         {
                 headers: {
                 Accept: 'application/json',
@@ -67,7 +68,7 @@ export default function CompanyList({route, navigation}) {
   const fetchCompanys = useCallback(async(isRefresh) => {
     setLoading({fetch: true});
     try {
-      let response =  await fetch(URL + 'empresas/mbora', {
+      let response =  await fetch(API_URL + 'empresas/mbora', {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',

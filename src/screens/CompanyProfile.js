@@ -12,9 +12,11 @@ import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import { AntDesign, Feather } from "@expo/vector-icons";
 import ListFollowers from '../components/ListFollowers';
+import * as Constants from 'expo-constants';
 
 const { width } = Dimensions.get('window');
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
+
 export default function CompanyProfile({ route, navigation }) {
     const [encomendas, setEncomendas] = useState([]);
     const [produts, setProduts] = useState([]);
@@ -43,7 +45,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            let response =  await fetch(URL + 'empresas/encomendas/mbora/imei/' + imei + '/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
+            let response =  await fetch(API_URL + 'empresas/encomendas/mbora/imei/' + imei + '/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -89,7 +91,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const fecthProducts = useCallback(async(isMoreView)=> {
         try {
-            let response =  await fetch(URL + 'produtos/servicos/mbora/lastVisible/' + lastVisible.produto + '/isMoreView/' + isMoreView + '/imei/' + imei,
+            let response =  await fetch(API_URL + 'produtos/servicos/mbora/lastVisible/' + lastVisible.produto + '/isMoreView/' + isMoreView + '/imei/' + imei,
             {
                     headers: {
                     Accept: 'application/json',
@@ -128,9 +130,9 @@ export default function CompanyProfile({ route, navigation }) {
         let url;
         try {
             if (action == 0) {
-              url =  URL + 'number/produtos/servicos/mbora/imei/' + imei;
+              url =  API_URL + 'number/produtos/servicos/mbora/imei/' + imei;
             } else if (action == 1) {
-              url =  URL + 'number/encomendas/empresas/mbora/imei/' + imei;
+              url =  API_URL + 'number/encomendas/empresas/mbora/imei/' + imei;
             }
             let response =  await fetch(url,
             {
@@ -227,7 +229,7 @@ export default function CompanyProfile({ route, navigation }) {
     }, [isFollower, loading.seguir])
 
     const numberViewsCompany = async()=> {
-      let response = await fetch(URL + 'number/visitas/empresas/mbora/imei/' + imei);
+      let response = await fetch(API_URL + 'number/visitas/empresas/mbora/imei/' + imei);
       let rjd = await response.json();
       setNumberVisita(isNumber(rjd.views) ? rjd.views : views_mbora);
     };
@@ -235,7 +237,7 @@ export default function CompanyProfile({ route, navigation }) {
     const followCompany = async()=> {
       setLoading({seguir: true}); 
       try {
-        let response = await fetch(URL + 'seguir/empresas/mbora/imei/' + imei + '/isFollower/' + isFollower,
+        let response = await fetch(API_URL + 'seguir/empresas/mbora/imei/' + imei + '/isFollower/' + isFollower,
         {
           headers: {
             Accept: 'application/json',
@@ -353,7 +355,7 @@ return (
                       <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshingEncomenda} empty={emptyEncomenda}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={2} lazy>
-                    <ListFollowers user={user} imei={imei} URL={URL} setNumberSeguidor={setNumberSeguidor}/>
+                    <ListFollowers user={user} imei={imei} API_URL={API_URL} setNumberSeguidor={setNumberSeguidor}/>
                   </TabController.TabPage>
               </TabController.PageCarousel>
           </TabController>

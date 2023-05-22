@@ -6,7 +6,7 @@ import { getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
 import { Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 
-export default function ListFollowers({user, imei, URL, setNumberSeguidor}) {
+export default function ListFollowers({user, imei, API_URL, setNumberSeguidor}) {
 
 const [follower, setFollower] = useState([]);
 const [refreshing, setRefreshing] = useState(false);
@@ -29,7 +29,7 @@ const renderFollowers = ({item}) => {
 const fetchFollowers = useCallback(async(isMoreView) => {
     setLoading(true);
     try {
-        let response =  await fetch(URL + 'seguidores/mbora/empresa/imei/'+ imei +'/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
+        let response =  await fetch(API_URL + 'seguidores/mbora/empresa/imei/'+ imei +'/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
         {
                 headers: {
                 Accept: 'application/json',

@@ -9,8 +9,9 @@ import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import { isEmpty, isInteger } from 'lodash';
 import ToastMessage from '../components/ToastMessage';
+import * as Constants from 'expo-constants';
 
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
 const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
 
 export const FindAccount = ({navigation})=> {
@@ -19,7 +20,7 @@ export const FindAccount = ({navigation})=> {
 
     const findAccount = async(email)=> {
         try {
-            let response = await fetch(URL + 'mbora/find/account/user/' + email);
+            let response = await fetch(API_URL + 'mbora/find/account/user/' + email);
             let rjd = await response.json();
             if(isEmpty(rjd)) {
                 setVisibleToast({visible: true, message: 'Conta não encontrada', backgroundColor: 'orangered'});
@@ -112,7 +113,7 @@ export const SendCode = ({route, navigation})=> {
     const sendCode = async()=> {
         setLoading(true);
         try {
-            let response = await fetch(URL + 'mbora/send/code/reset/password',
+            let response = await fetch(API_URL + 'mbora/send/code/reset/password',
             {
                 method: 'POST',
                 headers: {
@@ -163,7 +164,7 @@ export const ConfirmationAccount = ({route, navigation})=> {
     const codeCheck = async()=> {
         setLoading({codeCheck: true});
         try {
-            let response = await fetch(URL + 'mbora/code/check/reset',
+            let response = await fetch(API_URL + 'mbora/code/check/reset',
             {
                 method: 'POST',
                 headers: {
@@ -195,7 +196,7 @@ export const ConfirmationAccount = ({route, navigation})=> {
     const sendCode = async()=> {
         setLoading({sendCode: true});
         try {
-            let response = await fetch(URL + 'mbora/send/code/reset/password',
+            let response = await fetch(API_URL + 'mbora/send/code/reset/password',
             {
                 method: 'POST',
                 headers: {
@@ -262,7 +263,7 @@ export const CreateNewPassword = ({route, navigation})=> {
 
     const resetPassword = async (value)=> {
         try {
-            let response = await fetch(URL + 'mbora/reset/password',
+            let response = await fetch(API_URL + 'mbora/reset/password',
             {
                 method: 'PUT',
                 headers: {

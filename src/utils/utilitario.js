@@ -3,6 +3,7 @@ import 'intl/locale-data/jsonp/pt-AO';
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 import { Colors } from 'react-native-ui-lib';
 import { Alert } from 'react-native';
+import * as Constants from 'expo-constants';
 
 export const currency = function (price) {
     let p1 = price.slice(0, -2); // Números antes dos 2 últimos
@@ -74,7 +75,7 @@ export const getRandomColor = (code)=> {
 
 export const getCompany = async(imei, navigation, screenBack, isProfileCompany)=> {
     try {
-        let response =  await fetch('http://192.168.18.4/mborasystem-admin/public/api/empresas/mbora/imei/' + imei, {
+        let response =  await fetch(Constants.default.manifest.extra.API_URL + 'empresas/mbora/imei/' + imei, {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',

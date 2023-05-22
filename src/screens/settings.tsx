@@ -13,6 +13,7 @@ import {Action} from '../components/action';
 
 import { useNavigation } from '@react-navigation/native';
 import { getValueItemAsync } from '../utils/utilitario';
+import * as Constants from 'expo-constants';
 
 type PickersStateKey = keyof Omit<PickersState, 'show' | 'hide'>;
 type PickersState = {
@@ -143,7 +144,7 @@ export const Settings: React.FC = observer(() => {
   const logout = async ()=> {
     setLoading(true);
     try {
-      let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/mbora/logout/user',
+      let response = await fetch(Constants.default.manifest.extra.API_URL + 'mbora/logout/user',
       {
         method: 'POST',
         headers: {

@@ -7,7 +7,7 @@ import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
 import { isEmpty } from 'lodash';
 
-export default function CompanyFollowers({route, navigation, user, URL, setNumberEmpresaAseguir}) {
+export default function CompanyFollowers({route, navigation, user, API_URL, setNumberEmpresaAseguir}) {
 
   const {ui} = useStores();
   let color = getAppearenceColor(ui.appearanceName); 
@@ -26,7 +26,7 @@ export default function CompanyFollowers({route, navigation, user, URL, setNumbe
   const fetchCompanys = useCallback(async (isMoreView) => {
     setLoading(true);
     try {
-        let response =  await fetch(URL + 'empresas/mbora/aseguir/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
+        let response =  await fetch(API_URL + 'empresas/mbora/aseguir/lastVisible/' + lastVisible + '/isMoreView/' + isMoreView,
         {
                 headers: {
                 Accept: 'application/json',

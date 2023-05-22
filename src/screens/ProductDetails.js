@@ -21,9 +21,11 @@ import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { AlertDialog } from '../components/AlertDialog';
 import { isEmpty, isNumber } from 'lodash';
 import { AntDesign } from "@expo/vector-icons";
+import * as Constants from 'expo-constants';
 
 const imageProduct = require('../../assets/products/oleo.jpg');
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
+
 export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
@@ -38,7 +40,7 @@ export function ProductDetails({route, navigation}) {
   const addProductFavorite = async ()=> {
     setLoading({favorito: true}); 
     try {
-      let response = await fetch(URL + 'adicionar/produto/mbora/favorito',
+      let response = await fetch(API_URL + 'adicionar/produto/mbora/favorito',
       {
         method: 'POST',
         headers: {
@@ -96,7 +98,7 @@ export function ProductDetails({route, navigation}) {
   const removeProductFavorite = async ()=> { 
     setLoading({favorito: true}); 
     try {
-      let response = await fetch(URL + 'eliminar/produto/mbora/favorito',
+      let response = await fetch(API_URL + 'eliminar/produto/mbora/favorito',
       {
         method: 'DELETE',
         headers: {
@@ -124,7 +126,7 @@ export function ProductDetails({route, navigation}) {
   }
 
   const getViewNumberProduct = useCallback(async ()=> {
-    let response = await fetch(URL + 'produtos/mbora/view/count/' + produto.id);
+    let response = await fetch(API_URL + 'produtos/mbora/view/count/' + produto.id);
     let responseJsonData = await response.json();
     setView(responseJsonData.view);
   }, [produto.id]);

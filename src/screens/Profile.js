@@ -14,9 +14,11 @@ import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } 
 import * as ImagePicker from 'expo-image-picker';
 import { AntDesign, Feather } from "@expo/vector-icons";
 import CompanyFollowers from '../components/CompanyFollowers';
+import * as Constants from 'expo-constants';
 
 const { width } = Dimensions.get('window');
-const URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+const API_URL = Constants.default.manifest.extra.API_URL;
+
 export default function Profile({ route, navigation }) {
     const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const [encomendas, setEncomendas] = useState([]);
@@ -42,7 +44,7 @@ export default function Profile({ route, navigation }) {
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
-            let response =  await fetch(URL + 'encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
+            let response =  await fetch(API_URL + 'encomendas/mbora/lastVisible/' + lastVisible.encomenda + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -90,7 +92,7 @@ export default function Profile({ route, navigation }) {
 
     const fetchFavoritos = useCallback(async(isMoreView)=> {
         try {
-            let response =  await fetch(URL + 'produtos/favorito/mbora/lastVisible/' + lastVisible.favorito + '/isMoreView/' + isMoreView,
+            let response =  await fetch(API_URL + 'produtos/favorito/mbora/lastVisible/' + lastVisible.favorito + '/isMoreView/' + isMoreView,
             {
                     headers: {
                     Accept: 'application/json',
@@ -196,7 +198,7 @@ export default function Profile({ route, navigation }) {
 
     const getURLProfilePhoto = async()=> {
         try {
-            let response =  await fetch(URL + 'mbora/profilephoto/user/url',
+            let response =  await fetch(API_URL + 'mbora/profilephoto/user/url',
             {
                 headers: {
                 Accept: 'application/json',
@@ -319,7 +321,7 @@ export default function Profile({ route, navigation }) {
                         <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingFavorito} empty={emptyFavorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy>
-                        <CompanyFollowers route={route} navigation={navigation} user={user} URL={URL} setNumberEmpresaAseguir={setNumberEmpresaAseguir}/>
+                        <CompanyFollowers route={route} navigation={navigation} user={user} API_URL={API_URL} setNumberEmpresaAseguir={setNumberEmpresaAseguir}/>
                     </TabController.TabPage>
                 </TabController.PageCarousel>
             </TabController>
@@ -365,7 +367,7 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produt
         
         const removeProductFavorite = async()=> { 
             try {
-              let response = await fetch(URL + 'eliminar/produto/mbora/favorito',
+              let response = await fetch(API_URL + 'eliminar/produto/mbora/favorito',
               {
                 method: 'DELETE',
                 headers: {

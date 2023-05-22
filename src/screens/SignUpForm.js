@@ -9,6 +9,7 @@ import { getAppearenceColor, saveTokenId } from '../utils/utilitario';
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
+import * as Constants from 'expo-constants';
 
 export default SignUpForm = ({navigation})=> {
 
@@ -32,7 +33,7 @@ export default SignUpForm = ({navigation})=> {
 
     const createUserAccount = async (us)=> {
       try {
-        let response = await fetch('http://192.168.18.4/mborasystem-admin/public/api/auth/register',
+        let response = await fetch(Constants.default.manifest.extra.API_URL + 'auth/register',
         {
           method: 'POST',
           headers: {
