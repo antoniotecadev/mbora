@@ -416,7 +416,6 @@ const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, 
 const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
     return (
         <TouchableOpacity style={styles.fullphoto} onPress={()=> setViewFullPhoto(false)}>
-          <Text>{}</Text>
           <ImageCache style={styles.fullphoto} {...{preview, uri: photoURI}} />
             {/* Sem cahe <Image source={{ uri: photoURI }} style={styles.fullphoto}/> */}
             <Feather name='minimize-2' size={30} color='orange' style={{alignSelf: 'center', bottom: 40}} />
