@@ -217,17 +217,40 @@ export default function Profile({ route, navigation }) {
         }
     };
 
+    const Badge = () => (
+        <View style={[styles.badge, {borderWidth: 1.5, borderColor: color}]}>
+            <AntDesign name="camera" size={24} color="black" onPress={()=> pickImage()} />
+        </View>
+    );
+
     const UserPhoto = useCallback(({setViewFullPhoto})=> {
         return (
-            <Avatar 
+            <View style={styles.containerPhoto}>
+                <TouchableOpacity onPress={()=> setViewFullPhoto(true)}>
+                    <ImageCache style={styles.image} {...{preview, uri: image}}/>
+                </TouchableOpacity>
+                <Badge />
+            </View>
+             /* Sem cache 
+             <Avatar 
                 onPress={()=> setViewFullPhoto(true)}
                 source={image ? {uri: image} : preview} 
                 size={150} 
-                animate={true} 
+                animate={false} 
                 badgePosition={'BOTTOM_RIGHT'} 
-                badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: color, onPress:()=> pickImage()}} />
+                badgeProps={{icon: cameraIcon, size: 30, borderWidth: 1.5, borderColor: color, onPress:()=> pickImage()}} /> */
         )
     }, [image])
+
+    const ViewFullPhoto = useCallback(({photoURI, setViewFullPhoto})=> {
+        return (
+            <TouchableOpacity style={styles.fullphoto} onPress={()=> setViewFullPhoto(false)}>
+                <ImageCache style={styles.fullphoto} {...{preview, uri: photoURI}} />
+                {/* Sem cache <Image source={{ uri: photoURI }} style={styles.fullphoto}/> */}
+                <Feather name='minimize-2' size={30} color='orange' style={{alignSelf: 'center', bottom: 40}} />
+            </TouchableOpacity>
+        )
+    }, [image]);
 
     const NumberInformation = useCallback(()=> {
         return (
@@ -413,16 +436,6 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produt
         )
 }
 
-const ViewFullPhoto = ({photoURI, setViewFullPhoto})=> {
-    return (
-        <TouchableOpacity style={styles.fullphoto} onPress={()=> setViewFullPhoto(false)}>
-            <ImageCache style={styles.fullphoto} {...{preview, uri: photoURI}} />
-            {/* Sem cache <Image source={{ uri: photoURI }} style={styles.fullphoto}/> */}
-            <Feather name='minimize-2' size={30} color='orange' style={{alignSelf: 'center', bottom: 40}} />
-        </TouchableOpacity>
-    )
-}
-
 const FooterComponent = (props) => {
     return (
       <View style={styles.footer}>
@@ -489,7 +502,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
-      },
+    },
       loadMoreBtn: {
         padding: 10,
         backgroundColor: 'orange',
@@ -497,10 +510,28 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-      },
+    },
       btnText: {
         color: 'white',
         fontSize: 15,
         textAlign: 'center',
-      }
+    },
+      containerPhoto: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+    },
+      image: { 
+        height: 150, 
+        width: 150, 
+        borderRadius: 100 
+    },
+    badge: {
+        position: 'absolute',
+        backgroundColor: 'lightgray',
+        borderRadius: 25,
+        padding: 8,
+        bottom: 0,
+        right: 0,
+        margin: 8,
+      },
 });
