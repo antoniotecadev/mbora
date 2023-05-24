@@ -1,6 +1,6 @@
 import { isEmpty, isNumber } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, Dimensions, SafeAreaView } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, BackHandler, TouchableOpacity, View, ActivityIndicator, Dimensions, SafeAreaView } from 'react-native';
 import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
@@ -273,6 +273,11 @@ export default function CompanyProfile({ route, navigation }) {
         setNumberEncomenda(encomenda_number);
         setNumberSeguidor(followers_number);
         numberViewsCompany();
+        const backHandler = BackHandler.addEventListener(
+          'hardwareBackPress',
+          backAction,
+        );
+        return () => backHandler.remove();
     }, []);
 
     useEffect(() => {
@@ -286,7 +291,7 @@ export default function CompanyProfile({ route, navigation }) {
         });
     }, [viewHeader]);
 
-  const goBack = () => {
+  const backAction = () => {
     navigation.navigate({
       name: screenBack,
       params: isFollower == estado || (isFollower == false && isFollower != 0) || (estado == null && isFollower == false) ?
@@ -302,7 +307,7 @@ export default function CompanyProfile({ route, navigation }) {
   useEffect(()=> {
       navigation.setOptions({
           headerLeft: () => (
-              <TouchableOpacity style={{right: 10, paddingRight: 10, paddingVertical: 10}} onPress={() => goBack()}>
+              <TouchableOpacity style={{right: 10, paddingRight: 10, paddingVertical: 10}} onPress={() => backAction()}>
                 <AntDesign name='left' color={'orange'} size={24}/>
               </TouchableOpacity>
           ),

@@ -8,7 +8,8 @@ import {
   ActivityIndicator,
   Image,
   Dimensions,
-  Platform
+  Platform,
+  BackHandler,
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
@@ -138,7 +139,7 @@ export function ProductDetails({route, navigation}) {
     });
   }
 
-  const goBack = () => {
+  const backAction = () => {
     navigation.navigate({
       name: screenBack,
       params: isFavorito == isNumber(produto.isFavorito) ? {} : 
@@ -157,12 +158,17 @@ export function ProductDetails({route, navigation}) {
     } catch (error) {
       setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
     }
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+    return () => backHandler.remove();
   },[]);
 
   useEffect(()=> {
     navigation.setOptions({
         headerLeft: () => (
-            <TouchableOpacity style={{right: 10, paddingRight: 10, paddingVertical: 10}} onPress={() => goBack()}>
+            <TouchableOpacity style={{right: 10, paddingRight: 10, paddingVertical: 10}} onPress={() => backAction()}>
               <AntDesign name='left' color={'orange'} size={24}/>
             </TouchableOpacity>
         ),

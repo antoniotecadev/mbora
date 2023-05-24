@@ -1,5 +1,5 @@
 import React, { useState, useContext, useCallback } from 'react';
-import { View, StyleSheet, TextInput, SafeAreaView, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
+import { View, StyleSheet, TextInput, SafeAreaView, ScrollView, TouchableOpacity, Image, Alert, BackHandler } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
@@ -291,7 +291,7 @@ export const CreateNewPassword = ({route, navigation})=> {
         }
     }
 
-    const goBack = ()=> {
+    const backAction = ()=> {
         Alert.alert(
             'Cancelar a recuperação da conta?',
             'Tens certeza de que queres cancelar a recuperação de conta? Esta acção vai descartar as informações que inseriste até agora.',
@@ -302,15 +302,20 @@ export const CreateNewPassword = ({route, navigation})=> {
         )
     }
 
-    React.useEffect(()=>
+    React.useEffect(()=> {
         navigation.setOptions({
             headerLeft: () => (
-                <TouchableOpacity onPress={() => goBack()}>
+                <TouchableOpacity onPress={() => backAction()}>
                     <TextUILIB style={{color: 'orangered', fontWeight: 'bold'}}>CANCELAR</TextUILIB>
                 </TouchableOpacity>
             ),
         })
-    , [navigation]);
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+        return () => backHandler.remove();
+    }, [navigation]);
 
     return (
             <ViewUILIB bg-bgColor flex padding-16>
