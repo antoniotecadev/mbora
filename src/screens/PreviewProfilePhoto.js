@@ -8,14 +8,13 @@ import { AlertDialog } from "../components/AlertDialog";
 import { getValueItemAsync } from "../utils/utilitario";
 import { View as ViewUILIB, Text as TextUILIB } from "react-native-ui-lib";
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import * as Constants from 'expo-constants';
 
 const { width, height } = Dimensions.get('window');
 const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function PreviewProfilePhoto({route, navigation}) {
-    const cameraIcon = require('../../assets/icons-profile-camera-100.png');
     const { imageUri, userId } = route.params;
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false)
@@ -162,7 +161,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
                 <Text style={[styles.text, {color: 'orange', marginTop: 10}]} >Definindo foto de perfil...</Text> :
                 <>
                     <TouchableOpacity disabled={uploading} style={styles.button} onPress={()=> pickImage()}>
-                        <Image source={cameraIcon} style={styles.cameraIcon} /> 
+                        <AntDesign name="camera" size={24} color="black" />
                     </TouchableOpacity>
                     <TextUILIB $textDefault>Seleccionar foto de perfil</TextUILIB>
                 </>}
@@ -204,11 +203,6 @@ const styles = StyleSheet.create({
     text: {
         textAlign: 'center', 
     }, 
-    cameraIcon: {
-        width: 30,
-        height: 30,
-        borderRadius: 50, 
-    },
     fullphoto : {
         width: '100%', 
         height: width,
