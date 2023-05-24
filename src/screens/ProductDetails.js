@@ -6,20 +6,19 @@ import {
   TouchableOpacity, 
   StyleSheet,
   ActivityIndicator,
-  Image as Img,
+  Image,
   Dimensions,
   Platform
   } from 'react-native';
 
 import { CartContext } from '../CartContext';
 import { currency, getValueItemAsync, getCompany, numberFollowersAndViewsFormat, removeSpaceLowerCase } from '../utils/utilitario';
-import {Image} from 'react-native-expo-image-cache';
 import { Icon } from '../components/icon';
 import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { AlertDialog } from '../components/AlertDialog';
-import { isEmpty, isNumber } from 'lodash';
+import { isNumber } from 'lodash';
 import { AntDesign } from "@expo/vector-icons";
 import * as Constants from 'expo-constants';
 
@@ -170,7 +169,6 @@ export function ProductDetails({route, navigation}) {
     })
   }, [isFavorito, produto.isFavorito, screenBack]);
   
-  const preview = { uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" };
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
     <ViewUILIB style={{height: height}} bg-bgColor>
@@ -206,8 +204,7 @@ export function ProductDetails({route, navigation}) {
             {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
           </Text>
         </TouchableOpacity>
-        {/* <Image style={styles.image} {...{preview, uri}} /> */}
-        <Img style={styles.image} source= {imageProduct} />
+        <Image style={styles.image} source= {{uri: uri}}/>
         <View style={styles.infoContainer}>
         <View style={styles.divisor}></View>
           <View style={{
