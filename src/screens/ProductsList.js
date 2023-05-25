@@ -12,6 +12,7 @@ import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as Constants from 'expo-constants';
+import { isEmpty } from 'lodash';
 
 const ITEM_HEIGHT = 150;
 
@@ -137,7 +138,7 @@ export default function ProductsList({ route, navigation }) {
         }
       });
       let responseJsonData = await response.json();
-      if(!emptyProduct){
+      if(!isEmpty(responseJsonData)){
         setEmptyProduct(false);
         if(isRefresh) {
           setProdutos(responseJsonData);
