@@ -14,12 +14,13 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ProfileEdit from './ProfileEdit';
 import PreviewProfilePhoto from './PreviewProfilePhoto';
+import ProductCategoryList from './ProductCategoryList';
 import { FindAccount, ListAccount, SendCode, ConfirmationAccount, CreateNewPassword } from './FindAccount';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = '';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'ProductCategoryList' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -102,6 +103,14 @@ const screens: ScreenLayouts = {
       ...screenDefaultOptions(),
     }),
   },
+  ProductCategoryList: {
+    name: 'ProductCategoryList',
+    component: ProductCategoryList,
+    options: () => ({
+      title: 'Mbora',
+      headerTintColor: 'orange',
+    }),
+  },
   Profile: {
     name: 'Profile',
     component: Profile,
@@ -178,7 +187,7 @@ const screens: ScreenLayouts = {
 };
 
 const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm, screens.FindAccount, screens.ListAccount, screens.SendCode, screens.ConfirmationAccount, screens.CreateNewPassword]);
-const HomeStack = () => genStackNavigator([screens.Main, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings, screens.CompanyProfile]);
+const HomeStack = () => genStackNavigator([screens.Main, screens.ProductCategoryList, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings, screens.CompanyProfile]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile, screens.ProductDetails]);
 const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto, screens.CompanyProfile]);

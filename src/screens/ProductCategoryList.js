@@ -1,41 +1,36 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react';
-import { FlatList, StyleSheet, Alert, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
+import { FlatList, StyleSheet, View, Text, ActivityIndicator, RefreshControl } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useServices } from '../services';
 import { Product } from '../components/Product.js';
-import { Card } from 'react-native-ui-lib';
 import ToastMessage from '../components/ToastMessage';
-import ErrorMessage from '../components/ErrorMessage';
 import { CartContext } from '../CartContext';
-import { useFocusEffect  } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as Constants from 'expo-constants';
+import { View as ViewUILB } from 'react-native-ui-lib';
+import { isEmpty } from 'lodash';
 
-const ITEM_HEIGHT = 150;
-
-const cardImage2 = require('../../assets/products/oleo.jpg');
 const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function ProductsList({ route, navigation }) {
 
   const [produtos, setProdutos] = useState([]);
-  const [categorias, setCategorias] = useState([]);
-  const [loading, setLoading] = useState({ctg: false, pdt: false});
+  const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [emptyProduct, setEmptyProduct] = useState(false);
-  const [categoryError, setCategoryError] = useState(null);
 
-  const {ui, user} = useStores();
+  const { categoria } = route.params;
   const { nav } = useServices();
+  const {ui, user} = useStores();
   let color = getAppearenceColor(ui.appearanceName); 
-  const { error, setError, showDialog, setShowDialog} = useContext(CartContext);
+  const {showDialog, setShowDialog} = useContext(CartContext);
 
   const onRefresh = ()=> {
     setRefreshing(true);
     fetchProducts(true).then(()=> {
-      setLoading({pdt: false});
+      setLoading(false);
       setRefreshing(false);
     });
   };
@@ -54,37 +49,16 @@ export default function ProductsList({ route, navigation }) {
   },[]);
 
   const keyExtractor = (item)=> item.id;
-  const getItemLayout = (_, index)=>({ length: ITEM_HEIGHT, offset: ITEM_HEIGHT * index, index });
-
-  const renderItemCategory = useCallback(({ item: category }) => {
-    return (
-      <Card
-        onPress={() => navigation.navigate('ProductCategoryList', {categoria: category} )}
-        height={150}
-        marginR-8
-        width={100}
-        backgroundColor = 'orange'
-        elevation={1}
-      >
-        {/* <Card.Image style={styles.thumb} source={cardImage2} /> */}
-        <Card.Section
-          padding-4
-          backgroundColor = 'green'
-          content={[{ text: category.nome, text80: true, grey10: true, white: true }]}
-        />
-      </Card>
-    );
-  }, []);
 
   const FooterComponent = () => {
     return (
       <View style={styles.footer}>
         <TouchableOpacity
           activeOpacity={0.9}
-          onPress={()=> fetchProducts(false).then(()=> { setLoading({pdt: false}) })}
+          onPress={()=> fetchProducts(false).then(()=> { setLoading(false) })}
           style={styles.loadMoreBtn}>
-          <Text style={styles.btnText}>{loading.pdt ? 'A carregar produtos': 'Ver mais'}</Text>
-          {loading.pdt ? (
+          <Text style={styles.btnText}>{loading ? 'A carregar produtos': 'Ver mais'}</Text>
+          {loading ? (
             <ActivityIndicator
               color="white"
               style={{marginLeft: 8}} />
@@ -94,42 +68,10 @@ export default function ProductsList({ route, navigation }) {
     )
   }
 
-  const FlatListHeaderComponent = () =>  {
-    return (
-      <>
-        {categoryError == null ?
-        <FlatList
-        contentContainerStyle={styles.productsListContainer}
-        keyExtractor={keyExtractor}
-        data={categorias}
-        horizontal={true}
-        renderItem={renderItemCategory}
-        getItemLayout={getItemLayout}/>
-        :
-        <TouchableOpacity 
-          style={{padding: 10, backgroundColor: 'orangered'}} 
-          onPress={()=> { setLoading({ ctg: true}); fetchCategorys().then(()=> setLoading({ ctg: false}))}}>
-          {loading.ctg ? <ActivityIndicator color='white'/> : <Text style={{textAlign: 'center', color: 'white'}}>{categoryError}</Text>}
-        </TouchableOpacity>}
-      </>
-    );
-  }
-
-  const fetchCategorys = useCallback(async () => {
-    try {
-      let response =  await fetch(API_URL + 'categorias/mbora');
-      let responseJsonData = await response.json();
-      setCategorias(responseJsonData);
-      setCategoryError(null);
-    } catch (error) {
-      setCategoryError(error.message);
-    }
-  }, [])
-
   const fetchProducts = useCallback(async (isRefresh) => {
-    setLoading({pdt: true});
+    setLoading(true);
     try {
-      let response =  await fetch(API_URL + 'produtos/mbora/index/json', {
+      let response =  await fetch(API_URL + 'produtos/mbora/categoria/' + categoria.id, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
@@ -137,7 +79,7 @@ export default function ProductsList({ route, navigation }) {
         }
       });
       let responseJsonData = await response.json();
-      if(!emptyProduct){
+      if(!isEmpty(responseJsonData)){
         setEmptyProduct(false);
         if(isRefresh) {
           setProdutos(responseJsonData);
@@ -148,22 +90,16 @@ export default function ProductsList({ route, navigation }) {
         setEmptyProduct(true);
       }
     } catch (error) {
-      // setError(error.message); // Renderizar um component com mensagem de erro
       setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
     }
   }, []);
 
   useEffect(() => {
-    fetchCategorys();
-    fetchProducts(true).then(()=> setLoading({pdt: false}));
+    navigation.setOptions({
+        headerTitle: categoria.nome
+    });
+    fetchProducts(true).then(()=> setLoading(false));
   }, []);
-
-  useFocusEffect(useCallback(() => {
-      navigation.getParent()?.setOptions({
-        tabBarStyle: 'flex'
-      });
-    }, [navigation])
-  );
 
   useEffect(() => {
     if (route.params?.id || route.params?.isFavorito) {
@@ -179,10 +115,9 @@ export default function ProductsList({ route, navigation }) {
   }, [route.params?.id, route.params?.isFavorito]);
 
   return (
-    <>
+    <ViewUILB bg-bgColor flex>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
-      {/* { error == null ?  */}
       <FlatList
         columnWrapperStyle={{
           justifyContent: "space-between",
@@ -192,13 +127,12 @@ export default function ProductsList({ route, navigation }) {
         keyExtractor={keyExtractor}
         renderItem={renderItemProduct}
         data={produtos}
-        ListHeaderComponent={FlatListHeaderComponent}
+        // ListHeaderComponent={<Text style={styles.title}>{route.params.categoria.nome}</Text>}
         ListFooterComponent={!emptyProduct && FooterComponent}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={!loading.pdt && <Text style={styles.emptyListStyle}>Sem produtos</Text>}
+        ListEmptyComponent={!loading && <Text style={styles.emptyListStyle}>Sem produtos</Text>}
         refreshControl={<RefreshControl colors={['orange']} refreshing={refreshing} onRefresh={onRefresh}/>} />
-        {/* : <ErrorMessage onLoading={()=> { setError(null); fetchProducts(true).then(()=> { setLoading({pdt: false}) }) }} error={error} loading={loading} />} */}
-    </>
+    </ViewUILB>
   );
 }
 
@@ -241,5 +175,11 @@ const styles = StyleSheet.create({
     color: 'gray',
     paddingTop: 150,
     textAlign: 'center',
+  },
+  title: {
+    fontSize: 20,
+    color: 'white',
+    backgroundColor: 'orange',
+    padding: 5,
   }
 });

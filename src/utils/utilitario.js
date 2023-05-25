@@ -5,7 +5,7 @@ import { Colors } from 'react-native-ui-lib';
 import { Alert } from 'react-native';
 import * as Constants from 'expo-constants';
 
-export const currency = function (price) {
+export const currency = function (price = 0) {
     let p1 = price.slice(0, -2); // Números antes dos 2 últimos
     let p2 = price.slice(-2); // 2 últimos números
     let priceFormat = p1 + '.' + p2;
