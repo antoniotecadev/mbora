@@ -163,7 +163,7 @@ export function ProductDetails({route, navigation}) {
       backAction,
     );
     return () => backHandler.remove();
-  },[]);
+  },[produto.id]);
 
   useEffect(()=> {
     navigation.setOptions({
@@ -227,7 +227,9 @@ export function ProductDetails({route, navigation}) {
           <View style={styles.divisor}></View>
           <TextUILIB textColor style={styles.name}>{produto.nome}</TextUILIB>
           <Text style={styles.price}>{currency(String(produto.preco))}</Text>
-          <Text style={styles.description}>{produto.nomeCategoria}</Text>
+          <Text style={styles.description} onPress={() => navigation.navigate('ProductCategoryList', {categoria: {id: produto.idcategoria, nome: produto.nomeCategoria}} )}>
+            {produto.nomeCategoria}
+          </Text>
           <Tag tag = {produto.tag}/>
           <View style={styles.divisor}></View>
           <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
