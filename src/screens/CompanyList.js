@@ -7,7 +7,7 @@ import {Ionicons} from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useStores } from '../stores';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario.js';
-import { isEmpty } from 'lodash';
+import { isEmpty, isUndefined } from 'lodash';
 import * as Constants from 'expo-constants';
 
 const API_URL = Constants.default.manifest.extra.API_URL;
@@ -82,7 +82,11 @@ export default function CompanyList({route, navigation}) {
         if(isRefresh) {
           setCompany(responseJsonData);
         } else {
-          setCompany((prevState) => [...prevState, ...responseJsonData]);
+          setCompany((prevState) => {
+            const idsSet = new Set(prevState.map(c => c.id));
+            const newCompanys = responseJsonData.filter(item => !idsSet.has(item.id));
+            return [...prevState, ...newCompanys];
+          });
         }
       } else {
         setEmptyCompany(true);

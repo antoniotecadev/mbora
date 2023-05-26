@@ -10,7 +10,7 @@ import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as Constants from 'expo-constants';
 import { View as ViewUILB } from 'react-native-ui-lib';
-import { isEmpty } from 'lodash';
+import { isEmpty, isUndefined } from 'lodash';
 
 const API_URL = Constants.default.manifest.extra.API_URL;
 
@@ -84,7 +84,11 @@ export default function ProductsList({ route, navigation }) {
         if(isRefresh) {
           setProdutos(responseJsonData);
         } else {
-          setProdutos((prevState) => [...prevState, ...responseJsonData]);
+            setProdutos((prevState) => {
+                const idsSet = new Set(prevState.map(p => p.id));
+                const newProducts = responseJsonData.filter(item => !idsSet.has(item.id));
+                return [...prevState, ...newProducts];
+            });
         }
       } else {
         setEmptyProduct(true);

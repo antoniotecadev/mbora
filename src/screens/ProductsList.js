@@ -12,7 +12,7 @@ import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as Constants from 'expo-constants';
-import { isEmpty } from 'lodash';
+import { isEmpty, isUndefined } from 'lodash';
 
 const ITEM_HEIGHT = 150;
 
@@ -143,7 +143,11 @@ export default function ProductsList({ route, navigation }) {
         if(isRefresh) {
           setProdutos(responseJsonData);
         } else {
-          setProdutos((prevState) => [...prevState, ...responseJsonData]);
+          setProdutos((prevState) => {
+            const idsSet = new Set(prevState.map(p => p.id));
+            const newProducts = responseJsonData.filter(item => !idsSet.has(item.id));
+            return [...prevState, ...newProducts];
+          });
         }
       } else {
         setEmptyProduct(true);
