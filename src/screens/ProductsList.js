@@ -60,7 +60,7 @@ export default function ProductsList({ route, navigation }) {
   const renderItemCategory = useCallback(({ item: category }) => {
     return (
       <Card
-        onPress={() => navigation.navigate('ProductCategoryList', {categoria: category} )}
+        onPress={() => navigation.navigate('ProductCategoryList', {categoria: category, isTag: false} )}
         height={150}
         marginR-8
         width={100}

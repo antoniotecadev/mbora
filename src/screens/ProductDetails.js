@@ -139,6 +139,13 @@ export function ProductDetails({route, navigation}) {
     });
   }
 
+  const Tag = () => {
+    const tag = removeSpaceLowerCase('#' + produto.tag);
+    return <TouchableOpacity onPress={() => navigation.navigate('ProductCategoryList', {categoria: {id: produto.idcategoria, nome: tag}, isTag: true, tag: produto.tag})}>
+            <Text style={{color: 'green'}}>{tag}</Text>
+          </TouchableOpacity>
+  }
+
   const backAction = () => {
     navigation.navigate({
       name: screenBack,
@@ -227,10 +234,10 @@ export function ProductDetails({route, navigation}) {
           <View style={styles.divisor}></View>
           <TextUILIB textColor style={styles.name}>{produto.nome}</TextUILIB>
           <Text style={styles.price}>{currency(String(produto.preco))}</Text>
-          <Text style={styles.description} onPress={() => navigation.navigate('ProductCategoryList', {categoria: {id: produto.idcategoria, nome: produto.nomeCategoria}} )}>
+          <Text style={styles.description} onPress={() => navigation.navigate('ProductCategoryList', {categoria: {id: produto.idcategoria, nome: produto.nomeCategoria}, isTag: false})}>
             {produto.nomeCategoria}
           </Text>
-          <Tag tag = {produto.tag}/>
+          <Tag/>
           <View style={styles.divisor}></View>
           <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
           {produto.updated_at && <Text style={[styles.colorGrey, { marginTop: 8 }]}>Alterado {produto.updated_at}</Text>}
@@ -239,12 +246,6 @@ export function ProductDetails({route, navigation}) {
       </ScrollView>
     </ViewUILIB>
   );
-}
-
-const Tag = (props) => {
-  return <TouchableOpacity>
-          <Text style={{color: 'green'}}>{removeSpaceLowerCase('#' + props.tag)}</Text>
-        </TouchableOpacity>
 } 
 
 const IconButton = ({iconNames, text, size, onPress}) =>{

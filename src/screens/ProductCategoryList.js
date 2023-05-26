@@ -21,7 +21,7 @@ export default function ProductsList({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [emptyProduct, setEmptyProduct] = useState(false);
 
-  const { categoria } = route.params;
+  const { categoria, isTag, tag = null } = route.params;
   const { nav } = useServices();
   const {ui, user} = useStores();
   let color = getAppearenceColor(ui.appearanceName); 
@@ -71,7 +71,7 @@ export default function ProductsList({ route, navigation }) {
   const fetchProducts = useCallback(async (isRefresh) => {
     setLoading(true);
     try {
-      let response =  await fetch(API_URL + 'produtos/mbora/categoria/' + categoria.id, {
+      let response =  await fetch(API_URL + 'produtos/mbora/categoria/' + categoria.id + '/isTag/' + isTag + '/tag/' + tag, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
