@@ -20,8 +20,9 @@ import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 import { AlertDialog } from '../components/AlertDialog';
 import { isNumber } from 'lodash';
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, MaterialCommunityIcons, Fontisto  } from "@expo/vector-icons";
 import * as Constants from 'expo-constants';
+import Barcode from 'react-native-barcode-svg';
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 const API_URL = Constants.default.manifest.extra.API_URL;
@@ -30,6 +31,7 @@ export function ProductDetails({route, navigation}) {
   const { height } = Dimensions.get('window');
   const [view, setView] = useState(0);
   const [isFavorito, setIsFavorito] = useState(false);
+  const [viewCodeBar, setViewCodeBar] = useState(false);
   const [loading, setLoading] = useState({encomenda: false, favorito: false, companyProfile: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
 
@@ -199,11 +201,11 @@ export function ProductDetails({route, navigation}) {
       <ToastMessage />
       <ScrollView>
         <TouchableOpacity onPress={()=> {
-            if(!isProfileCompany){
-              setLoading({companyProfile: true});
-              getCompany(produto.imei, navigation, 'ProductDetails', isProfileCompany).then(()=> setLoading({companyProfile: false}));
-            }
-          }}>
+          if(!isProfileCompany){
+            setLoading({companyProfile: true});
+            getCompany(produto.imei, navigation, 'ProductDetails', isProfileCompany).then(()=> setLoading({companyProfile: false}));
+          }
+        }}>
           <View style={styles.section}>
             <TextUILIB $textDefault textColor>{produto.empresa}</TextUILIB>
             {loading.companyProfile ? <ActivityIndicator color={'orange'}/>: 
@@ -218,6 +220,11 @@ export function ProductDetails({route, navigation}) {
           </Text>
         </TouchableOpacity>
         <Image style={styles.image} source= {{uri: uri}}/>
+        {viewCodeBar && 
+        <View style={{alignItems: 'center', backgroundColor: 'lightgreen', paddingVertical: 2, marginHorizontal: 16, marginTop: 10}}>
+          <Barcode value={produto.codigoBarra} format="CODE128" />
+          <Text>{produto.codigoBarra}</Text>
+        </View>}
         <View style={styles.infoContainer}>
         <View style={styles.divisor}></View>
           <View style={{
@@ -227,8 +234,12 @@ export function ProductDetails({route, navigation}) {
               }}>
                 <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
                 {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
+                {produto.codigoBarra && 
+                (viewCodeBar ? 
+                  <MaterialCommunityIcons name="barcode-off" size={25} color="black" onPress={()=> setViewCodeBar(false)}/> :
+                  <Fontisto name="shopping-barcode" size={25} color="black" onPress={()=> setViewCodeBar(true)}/>)}  
                 {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
-                {produto.codigoBarra != null ? null : <IconButton text={'Bar code'} iconNames={'barcode-outline'} size={25}/>}
+                {/* {produto.codigoBarra && <IconButton text={viewCodeBar ? 'Ocultar' : 'Bar code'} iconNames={'barcode-outline'} size={25} onPress={()=> setViewCodeBar(!viewCodeBar)}/>} */}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
             </View>
           <View style={styles.divisor}></View>
@@ -262,7 +273,7 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
   },
   infoContainer: {
-    padding: 16,
+    paddingHorizontal: 16,
   },
   name: {
     fontSize: 22,
