@@ -10,8 +10,9 @@ import {
   Dimensions,
   Platform,
   BackHandler,
-  } from 'react-native';
-
+  Share,
+  Alert
+} from 'react-native';
 import { CartContext } from '../CartContext';
 import { currency, getValueItemAsync, getCompany, numberFollowersAndViewsFormat, removeSpaceLowerCase } from '../utils/utilitario';
 import { Icon } from '../components/icon';
@@ -159,7 +160,29 @@ export function ProductDetails({route, navigation}) {
       merge: true,
     });
   }
-  
+
+  const onShare = async () => {
+      const url = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
+      try {
+        const result = await Share.share({
+          title: produto.nome,       
+          message: 'Produto: ' + produto.nome + '\nPreço: ' + currency(String(produto.preco)) + '\n' + (Platform.OS == 'android' ? url : ''),
+          url: url,
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
+        }
+      } catch (error) {
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
+      }
+  };
+
   useEffect(() => {
     try {
       setIsFavorito(isNumber(produto.isFavorito));
@@ -236,11 +259,10 @@ export function ProductDetails({route, navigation}) {
                 {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
                 {produto.codigoBarra && 
                 (viewCodeBar ? 
-                  <MaterialCommunityIcons name="barcode-off" size={25} color="black" onPress={()=> setViewCodeBar(false)}/> :
-                  <Fontisto name="shopping-barcode" size={25} color="black" onPress={()=> setViewCodeBar(true)}/>)}  
+                  <MaterialCommunityIcons name="barcode-off" size={25} color="darkgreen" onPress={()=> setViewCodeBar(false)}/> :
+                  <Fontisto name="shopping-barcode" size={25} color="darkgreen" onPress={()=> setViewCodeBar(true)}/>)}  
                 {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
-                {/* {produto.codigoBarra && <IconButton text={viewCodeBar ? 'Ocultar' : 'Bar code'} iconNames={'barcode-outline'} size={25} onPress={()=> setViewCodeBar(!viewCodeBar)}/>} */}
-                <IconButton text={'Partilha'} iconNames={'share-outline'} size={25}/>
+                <IconButton text={'Partilha'} iconNames={'share-outline'} size={25} onPress={()=> onShare()}/>
             </View>
           <View style={styles.divisor}></View>
           <TextUILIB textColor style={styles.name}>{produto.nome}</TextUILIB>
