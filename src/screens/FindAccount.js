@@ -17,6 +17,7 @@ const preview = {uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAY
 export const FindAccount = ({navigation})=> {
 
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
+    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
     const findAccount = async(email)=> {
         try {
@@ -37,14 +38,22 @@ export const FindAccount = ({navigation})=> {
         <View style={{paddingHorizontal: 16}}>
         <ToastMessage/> 
         <TextUILIB textColor text60 marginV-10>Encontra a tua conta</TextUILIB>
-        <TextUILIB textColor marginB-20>Insira o seu endereço de e-mail</TextUILIB>
+        <TextUILIB textColor marginB-20>Insira o seu endereço de e-mail ou Telefone</TextUILIB>
           <Formik
             initialValues={{email: ''}}
             validationSchema={Yup.object({
-              email: Yup.string()
-                  .email('Email não é válido')              
-                  .required('Digite o seu email'),
-            })}
+                    email: Yup.string().when('type', { // Email e Telefone
+                        is: 'email',
+                        then: Yup.string()
+                            .email('Email não é válido')
+                            .required('Insira o email | telefone'),
+                        otherwise: Yup.string()
+                            .matches(phoneRegExp, 'Telefone não é válido')
+                            .min(9,'No mínimo 9 dígitos para Telefone')
+                            .required('Insira o email | telefone'),
+                    }),
+                })
+            }
             onSubmit={(values, formikActions) => {
               setTimeout(() => {
                 findAccount(values.email).then(()=> formikActions.setSubmitting(false));
@@ -58,7 +67,7 @@ export const FindAccount = ({navigation})=> {
                     onChangeText={props.handleChange('email')}
                     onBlur={props.handleBlur('email')}
                     value={props.values.email}
-                    placeholder="E-mail"
+                    placeholder="E-mail ou Telefone"
                     placeholderTextColor='gray'
                     style={styles.input}
                   />
