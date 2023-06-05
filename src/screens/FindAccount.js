@@ -88,7 +88,7 @@ export const ListAccount = ({route, navigation})=> {
                 <TextUILIB textColor text60 marginV-16 marginL-16>Selecciona a tua conta</TextUILIB>
                 <ViewUILIB bg-bgColor style={styles.item}>
                   <View style={styles.section}>
-                    <Image style={{width: 60, height: 60, borderRadius: 30}} source= {{uri: user.photo_path}} />
+                    <Image style={{width: 60, height: 60, borderRadius: 30}} source= {user.photo_path ? {uri: user.photo_path} : preview} />
                     <TextUILIB style={{maxWidth: '80%', alignSelf: 'center'}} textColor text70 marginL-5>{user.first_name + ' ' + user.last_name}</TextUILIB>
                   </View>
                 </ViewUILIB>
