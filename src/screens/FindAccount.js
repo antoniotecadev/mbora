@@ -17,7 +17,6 @@ const preview = {uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAY
 export const FindAccount = ({navigation})=> {
 
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
-    const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
     const findAccount = async(email)=> {
         try {
@@ -48,7 +47,6 @@ export const FindAccount = ({navigation})=> {
                             .email('Email não é válido')
                             .required('Insira o email | telefone'),
                         otherwise: Yup.string()
-                            .matches(phoneRegExp, 'Telefone não é válido')
                             .min(9,'No mínimo 9 dígitos para Telefone')
                             .required('Insira o email | telefone'),
                     }),
