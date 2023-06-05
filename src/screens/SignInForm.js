@@ -48,6 +48,7 @@ export default SignInForm = ()=> {
                     user.setUserLastName(rjd.data.last_name);
                     user.setUserTelephone(rjd.data.telephone);
                     user.setUserEmail(rjd.data.email);
+                    user.setAccountAdmin(rjd.data.account_admin);
                     user.setAuth(true);
                   })
                 .catch((error)=> setShowDialog({visible: true, title: 'Erro ao salvar token', message: error.message, color: 'orangered'}));

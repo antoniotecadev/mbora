@@ -48,6 +48,7 @@ export default (): JSX.Element => {
         user.setUserLastName(rjd.data.last_name);
         user.setUserTelephone(rjd.data.telephone);
         user.setUserEmail(rjd.data.email);
+        user.setAccountAdmin(rjd.data.account_admin);
         user.setAuth(true);
         await SplashScreen.hideAsync();
       } else {

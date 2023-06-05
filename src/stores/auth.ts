@@ -7,6 +7,7 @@ export class UserAuth implements IStore {
   userLastName = null;
   userEmail = null;
   userTelephone = null;
+  accountAdmin = false;
 
   setAuth = (v: boolean): void => {
     this.auth = v;
@@ -28,12 +29,16 @@ export class UserAuth implements IStore {
     this.userTelephone = v;
   };
 
+  setAccountAdmin = (v: boolean): void => {
+    this.accountAdmin = v;
+  };
+
   constructor() {
     makeAutoObservable(this);
 
     makePersistable(this, {
       name: UserAuth.name,
-      properties: ['auth', 'userFirstName', 'userLastName', 'userEmail', 'userTelephone'],
+      properties: ['auth', 'userFirstName', 'userLastName', 'userEmail', 'userTelephone', 'accountAdmin'],
     });
   }
 
