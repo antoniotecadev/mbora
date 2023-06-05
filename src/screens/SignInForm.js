@@ -12,6 +12,7 @@ import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
 import * as Constants from 'expo-constants';
+import { isEmpty } from 'lodash';
 
 export default SignInForm = ()=> {
 
@@ -22,7 +23,7 @@ export default SignInForm = ()=> {
     let passwordInput = null;
 
     const [error, setError] = useState({ 
-        email: null,
+        email: null, // Email ou Telefone
         password: null,
         emailPass: null
      });
@@ -91,9 +92,11 @@ export default SignInForm = ()=> {
           <Formik
             initialValues={{email: '', password: '' }}
             validationSchema={Yup.object({
-              email: Yup.string()
-                  .email('Email não é válido')              
-                  .required('Digite o email'),
+              email: Yup.string().when('type', { // Email e Telefone
+                is: 'email',
+                then: Yup.string().required('Digite o email | telefone'),
+                otherwise: Yup.string().required('Digite o email | telefone'),
+              }),
               password: Yup.string()
                   .required('Digite a palavra - passe'),
             })}
@@ -104,12 +107,17 @@ export default SignInForm = ()=> {
             }}>
             {props => (
               <ScrollView showsVerticalScrollIndicator={false}>
-                <TextInput
+                  <TextInput
                     keyboardType='email-address'
                     onChangeText={props.handleChange('email')}
-                    onBlur={props.handleBlur('email')}
+                    onBlur={()=> {
+                        if(!isEmpty(props.values.email)){
+                          return props.handleBlur('email')
+                        }
+                      }
+                    }
                     value={props.values.email}
-                    placeholder="E-mail"
+                    placeholder="E-mail ou Telefone"
                     placeholderTextColor='gray'
                     style={styles.input}
                     onSubmitEditing={() => {
@@ -121,7 +129,12 @@ export default SignInForm = ()=> {
                   <TextInput
                     keyboardType='default'
                     onChangeText={props.handleChange('password')}
-                    onBlur={props.handleBlur('password')}
+                    onBlur={()=> {
+                        if(!isEmpty(props.values.password)){
+                          return props.handleBlur('password')
+                        }
+                      }
+                    }
                     value={props.values.password}
                     placeholder="Palavra - passe"
                     placeholderTextColor='gray'
