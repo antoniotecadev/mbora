@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { isEmpty } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
-import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, SafeAreaView, Dimensions } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, Text, Image, TouchableOpacity, View, ActivityIndicator, SafeAreaView, Dimensions, Alert } from 'react-native';
 import { Avatar, TabController, Text as TextUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
@@ -38,6 +38,7 @@ export default function Profile({ route, navigation }) {
     const [numberEncomenda, setNumberEncomenda] = useState("-");
     const [numberFavorito, setNumberFavorito] = useState("-");
     const [numberEmpresaAseguir, setNumberEmpresaAseguir] = useState("-");
+    const [loading, setLoading] = useState(false)
 
     const { nav } = useServices();
     const {ui, user} = useStores();
@@ -155,6 +156,26 @@ export default function Profile({ route, navigation }) {
     //         setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
     //     }
     // }, [produts]);
+
+    const getCompanyProfile = async()=> {
+        try {
+            let response =  await fetch(Constants.default.manifest.extra.API_URL + 'empresa/mbora/perfil', {
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> Alert.alert('Ocorreu um erro', error.message)),
+                }
+            });
+            let responseJsonData = await response.json();
+            if(isEmpty(responseJsonData)) {
+                setShowDialog({visible: true, title: 'Ocorreu um erro', message: 'Empresa não encontrada', color: 'orangered'});
+            } else {
+                navigation.navigate('CompanyProfile', {...responseJsonData[0], screenBack: 'Profile', isProfileCompany: false});
+            }
+        } catch (error) {
+            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});
+        }
+    }
 
     const onRefresh = async (index)=> {
         switch (index) {
@@ -276,12 +297,23 @@ export default function Profile({ route, navigation }) {
     }, [])
 
     useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <TouchableOpacity style={{padding: 5, backgroundColor: 'green', borderRadius: 5}} onPress={() => alert()}>
-                    <Text style={{color: 'white', fontWeight: 'bold'}}>Empresa</Text>      
-                </TouchableOpacity>)
-        })
+        if(user.accountAdmin) {
+            navigation.setOptions({
+                headerRight: () => (
+                    <TouchableOpacity 
+                        style={{padding: 5, backgroundColor: 'green', borderRadius: 5}} 
+                        onPress={() => {
+                            setLoading(true); 
+                            getCompanyProfile().then(()=> setLoading(false));
+                        }}>
+                        {loading ? <ActivityIndicator color={'white'}/>      
+                        : <Text style={{color: 'white', fontWeight: 'bold'}}>Empresa</Text>}
+                    </TouchableOpacity>)
+            })
+        }
+    }, [user.accountAdmin, loading]);
+
+    useEffect(() => {
         getURLProfilePhoto();
         setRefreshingEncomenda(true);
         fetchEncomendas(false).then(()=> setRefreshingEncomenda(false));

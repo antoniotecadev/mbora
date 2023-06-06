@@ -20,7 +20,7 @@ const renderFollowers = ({item}) => {
             <ViewUILIB bg-bgColor style={styles.item}>
               <View style={styles.section}>
                 <Image style={{width: 60, height: 60, borderRadius: 30}} source= {{uri: item.photo_path}} />
-                <TextUILIB style={{maxWidth: '80%', alignSelf: 'center'}} textColor text70 marginL-5>{item.first_name + ' ' + item.last_name}</TextUILIB>
+                <TextUILIB style={{maxWidth: '80%', alignSelf: 'center'}} textColor text70 marginL-5>{(user.accountAdmin ? 'Eu - ' : '') + item.first_name + ' ' + item.last_name}</TextUILIB>
               </View>
             </ViewUILIB>
           </TouchableOpacity>
