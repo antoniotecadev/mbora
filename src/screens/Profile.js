@@ -276,6 +276,12 @@ export default function Profile({ route, navigation }) {
     }, [])
 
     useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => (
+                <TouchableOpacity style={{padding: 5, backgroundColor: 'green', borderRadius: 5}} onPress={() => alert()}>
+                    <Text style={{color: 'white', fontWeight: 'bold'}}>Empresa</Text>      
+                </TouchableOpacity>)
+        })
         getURLProfilePhoto();
         setRefreshingEncomenda(true);
         fetchEncomendas(false).then(()=> setRefreshingEncomenda(false));
