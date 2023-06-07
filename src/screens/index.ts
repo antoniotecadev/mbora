@@ -14,13 +14,14 @@ import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ProfileEdit from './ProfileEdit';
 import PreviewProfilePhoto from './PreviewProfilePhoto';
+import CompanyProfileEdit from './CompanyProfileEdit';
 import ProductCategoryList from './ProductCategoryList';
 import { FindAccount, ListAccount, SendCode, ConfirmationAccount, CreateNewPassword } from './FindAccount';
 
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = '';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'ProductCategoryList' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'ProductCategoryList' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'CompanyProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -136,6 +137,14 @@ const screens: ScreenLayouts = {
       headerTintColor: 'orange',
     }),
   },
+  CompanyProfileEdit: {
+    name: 'CompanyProfileEdit',
+    component: CompanyProfileEdit,
+    options: () => ({
+      title: 'Dados da empresa',
+      headerTintColor: 'orange',
+    }),
+  },
   Settings: {
     name: 'Settings',
     component: Settings,
@@ -190,7 +199,7 @@ const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpFo
 const HomeStack = () => genStackNavigator([screens.Main, screens.ProductCategoryList, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings, screens.CompanyProfile]);
 const CartStack = () => genStackNavigator([screens.Cart]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile, screens.ProductDetails, screens.ProductCategoryList]);
-const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto, screens.CompanyProfile, screens.ProductCategoryList]);
+const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto, screens.CompanyProfile, screens.CompanyProfileEdit, screens.ProductCategoryList]);
 
 // Tabs
 const tabs: TabScreenLayouts = {

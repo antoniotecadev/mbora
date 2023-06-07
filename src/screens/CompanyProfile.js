@@ -304,6 +304,29 @@ export default function CompanyProfile({ route, navigation }) {
     });
   }
 
+  useEffect(() => {
+
+    const data = {
+      first_name: first_name,
+      last_name: last_name,
+      company: empresa,
+      description: description,
+      email: email,
+      phone: phone,
+      alternative_phone: alternative_phone,
+      province: nomeProvincia,
+      district: district,
+      street: street,
+    }
+
+    navigation.setOptions({
+        headerRight: () => (
+            <TouchableOpacity onPress={() => user.accountAdmin ? nav.show('CompanyProfileEdit', data) : alert()}>
+              <Feather name={user.accountAdmin ? 'edit' : 'info'} size={24} color={'orange'}/>
+            </TouchableOpacity>)
+    })
+}, [user.accountAdmin]);
+
   useEffect(()=> {
       navigation.setOptions({
           headerLeft: () => (
