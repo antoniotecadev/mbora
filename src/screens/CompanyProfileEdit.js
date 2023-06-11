@@ -1,9 +1,9 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import React, { useState, useContext, useEffect, useMemo } from 'react';
+import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
-import { Colors, Text as TextUILIB} from 'react-native-ui-lib';
+import { Colors, Text as TextUILIB, ActionSheet} from 'react-native-ui-lib';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
@@ -12,24 +12,29 @@ import * as Constants from 'expo-constants';
 
 export default CompanyProfileEdit = ({route, navigation})=> {
 
-    const { first_name, last_name, company, description, email, phone, alternative_phone } = route.params;
+    const { first_name, last_name, company, description, email, phone, alternative_phone, province, district, street } = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
-    let nomeInput = null, sobrenomeInput = null, phoneInput = null, alternativephoneInput = null;
+    let nomeInput = null, sobrenomeInput = null, phoneInput = null, alternativephoneInput = null, provinceInput = null, districtInput = null, streetInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
     const initialValues = { 
-        first_name: null,
-        last_name: null,
-        company: null,
-        description: null,
-        email: null,
-        phone: null,
-        alternative_phone: null,
+      first_name: null,
+      last_name: null,
+      company: null,
+      description: null,
+      email: null,
+      phone: null,
+      alternative_phone: null,
+      province: null, 
+      district: null, 
+      street: null
     }
 
-    const [focus, setFocus] = useState({name: false, company: false, description: false, email: false, telefone: false})
+    const [focus, setFocus] = useState({name: false, company: false, description: false, email: false, telefone: false, location: false})
     const [error, setError] = useState(initialValues);
+    const [nameProvince, setNameProvince] = useState(province);
+    const [show, setShow] = useState(false);
 
     const companyUpdate = async (data, action)=> {
       try {
@@ -56,6 +61,21 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                     } else if (rjd.data.message.email != undefined) {
                         messageError = rjd.data.message.email;
                         setError({ email: messageError });
+                    } else if (rjd.data.message.phone != undefined) {
+                        messageError = rjd.data.message.phone;
+                        setError({ phone: messageError });
+                    } else if (rjd.data.message.alternative_phone != undefined) {
+                        messageError = rjd.data.message.alternative_phone;
+                        setError({ alternative_phone: messageError });
+                    } else if (rjd.data.message.provincia_id != undefined) {
+                        messageError = rjd.data.message.provincia_id;
+                        setError({ province: messageError });
+                    } else if (rjd.data.message.district != undefined) {
+                        messageError = rjd.data.message.district;
+                        setError({ district: messageError });
+                    } else if (rjd.data.message.street != undefined) {
+                        messageError = rjd.data.message.street;
+                        setError({ street: messageError });
                     } 
                 } else {
                     setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
@@ -65,6 +85,35 @@ export default CompanyProfileEdit = ({route, navigation})=> {
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
         }
     }
+
+    const provincesList = useMemo(() => 
+      [
+        {name: 'Bengo'}, {name: 'Benguela'}, {name: 'Bié'}, {name: 'Cabinda'}, {name: 'Cuando Cubango'}, {name: 'Cunene'},
+        {name: 'Huambo'}, {name: 'Huíla'}, {name: 'Kwanza Sul'}, {name: 'Kwanza Norte'}, {name: 'Luanda'}, {name: 'Lunda Norte'},
+        {name: 'Lunda Sul'}, {name: 'Malanje'}, {name: 'Moxico'}, {name: 'Namibe'}, {name: 'Uíge'}, {name: 'Zaire'}
+      ]
+    ,[]);
+
+    const ProvinceActionSheet = useMemo(() => {
+        return <ActionSheet
+                title={'Províncias'}
+                cancelButtonIndex={provincesList.length}
+                useNativeIOS
+                options={[
+                  ...provincesList.map(province => ({
+                    label: province.name,
+                    onPress: ()=> {
+                      setNameProvince(province.name);
+                    },
+                  })),
+                  {
+                    label: 'Cancelar',
+                  },
+                ]}
+                visible={show}
+                onDismiss={() => setShow(false)}
+              />
+      },[show]);
 
     useEffect(() => {
         navigation.getParent()?.setOptions({
@@ -334,6 +383,100 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                 <ErroMessage touched={props.touched.alternative_phone} errors={props.errors.alternative_phone} />
                 <ErroMessage touched={true} errors={error.alternative_phone} />
                 {focus.telefone && <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>}
+            </>
+          )}
+        </Formik>
+        <Formik
+          initialValues={{province: nameProvince || '', district: district || '', street: street || ''}}
+          validationSchema={Yup.object({
+            province: Yup.string()
+                .max(20,'No máximo 20 caracteres')
+                .required('Digite a província'),
+            district: Yup.string()
+                .max(20,'No máximo 20 caracteres')
+                .required('Digite o bairro'),
+            street: Yup.string()
+                .max(20,'No máximo 20 caracteres')
+                .required('Digite a rua'),
+          })}
+          onSubmit={(values, formikActions) => {
+            setTimeout(() => {
+              companyUpdate({...values, ...{province: nameProvince}}, 5).then(()=> { 
+                formikActions.setSubmitting(false)
+                formikActions.setValues({province: values.province, district: values.district, street: values.street})
+              });
+            }, 500);
+          }}>
+          {props => (
+            <>
+              <TextUILIB marginT-20 textColor style={{fontWeight: 'bold'}}>Localização da empresa</TextUILIB>
+              <TextInput
+                editable={false}
+                onPressIn={() => setShow(true)}
+                onPressOut={()=> setFocus({location: true})}
+                onFocus={()=> setFocus({location: true})}
+                onChangeText={props.handleChange('province')}
+                // onBlur={()=> {
+                //     if(province == props.values.province) {
+                //         if(!provinceInput.isFocused()) {
+                //           setFocus({location: false})
+                //         }
+                //     }
+                //     props.handleBlur('province')
+                // }}
+                value={nameProvince}
+                placeholder="Provincia"
+                placeholderTextColor='gray'
+                style={styles.input}
+                onSubmitEditing={() => {
+                  districtInput.focus()
+                }}
+                ref={el => provinceInput = el}
+              />
+              {ProvinceActionSheet}
+              <ErroMessage touched={props.touched.province} errors={props.errors.province} />
+              <ErroMessage touched={true} errors={error.province} />
+              <TextInput
+                  onFocus={()=> setFocus({location: true})}
+                  onChangeText={props.handleChange('district')}
+                  onBlur={()=> {
+                      if(district == props.values.district) {
+                          if(!districtInput.isFocused()) {
+                            setFocus({location: false})
+                          }
+                      }
+                      props.handleBlur('district')
+                  }}
+                  value={props.values.district}
+                  placeholder="Bairro"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  onSubmitEditing={() => {
+                    streetInput.focus()
+                  }}
+                  ref={el => districtInput = el}
+              />
+              <ErroMessage touched={props.touched.district} errors={props.errors.district} />
+              <ErroMessage touched={true} errors={error.district} />
+              <TextInput
+                  onFocus={()=> setFocus({location: true})}
+                  onChangeText={props.handleChange('street')}
+                  onBlur={()=> {
+                      if(street == props.values.street) {
+                      if(!streetInput.isFocused()) {
+                          setFocus({location: false})
+                      }                    }
+                      props.handleBlur('street')
+                  }}
+                  value={props.values.street}
+                  placeholder="Rua"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  ref={el => streetInput = el}
+              />
+              <ErroMessage touched={props.touched.street} errors={props.errors.street} />
+              <ErroMessage touched={true} errors={error.street} />
+              {focus.location && <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/>}
             </>
           )}
         </Formik>
