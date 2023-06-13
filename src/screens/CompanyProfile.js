@@ -37,6 +37,7 @@ export default function CompanyProfile({ route, navigation }) {
     const [numberVisita, setNumberVisita] = useState('-');
     const [isFollower, setIsFollower] = useState(false);
     const [loading, setLoading] = useState({seguir: false});
+    const [company, setCompany] = useState({});
 
     const { nav } = useServices();
     const {ui, user} = useStores();
@@ -203,15 +204,15 @@ export default function CompanyProfile({ route, navigation }) {
               </TouchableOpacity>
     }, [viewDetails])
 
-    const Details = useCallback(()=> {
+    const Details = ()=> {
       return <> 
-              <TextUILIB textColor text80>{description}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Localização: {`${nomeProvincia}, ${district} , ${street}`}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Email: {email}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Telefone 1 : {phone}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Telefone 2 : {alternative_phone}</TextUILIB>
+              <TextUILIB textColor text80>{company.description}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Localização: {`${company.nomeProvincia}, ${company.district} , ${company.street}`}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Email: {company.email}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Telefone 1 : {company.phone}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>Telefone 2 : {company.alternative_phone}</TextUILIB>
             </>
-    }, [])
+    }
 
     const ButtonsFollowerMaximise = useCallback(()=> {
       return  <>
@@ -261,6 +262,7 @@ export default function CompanyProfile({ route, navigation }) {
     }
 
     useEffect(() => {
+        setCompany(route.params);
         setRefreshingProduto(true);
         fecthProducts(false).then(()=> setRefreshingProduto(false));
         setRefreshingEncomenda(true);
@@ -309,14 +311,14 @@ export default function CompanyProfile({ route, navigation }) {
     const data = {
       first_name: first_name,
       last_name: last_name,
-      company: empresa,
-      description: description,
-      email: email,
-      phone: phone,
-      alternative_phone: alternative_phone,
-      province: nomeProvincia,
-      district: district,
-      street: street,
+      company: company.empresa || empresa,
+      description: company.description || description,
+      email: company.email || email,
+      phone: company.phone || phone,
+      alternative_phone: company.alternative_phone || alternative_phone,
+      province: company.nomeProvincia || nomeProvincia,
+      district: company.district || district,
+      street: company.street || street,
     }
 
     navigation.setOptions({
@@ -350,6 +352,12 @@ export default function CompanyProfile({ route, navigation }) {
     }
   }, [route.params?.id, route.params?.isFavorito]);
 
+  useEffect(() => {
+    if (route.params?.valuesCompany) {
+      setCompany({...route.params, ...route.params.valuesCompany});
+    }
+  }, [route.params?.valuesCompany]);
+
 return (
       <SafeAreaView flex>
         <ViewUILIB flex bg-bgColor>
@@ -360,7 +368,7 @@ return (
           {viewHeader ?
           <>
             {viewDetails ? <Details /> : <UserPhoto setViewFullPhoto={setViewFullPhoto}/>}
-            <TextUILIB textColor marginT-8 text70>{empresa}</TextUILIB>
+            <TextUILIB textColor marginT-8 text70>{company.empresa}</TextUILIB>
             <NumberInformation/>
             <ButtonViewDetails/>
             <ButtonsFollowerMaximise/>

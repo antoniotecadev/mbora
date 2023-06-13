@@ -1,12 +1,13 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
-import { Colors, Text as TextUILIB, ActionSheet} from 'react-native-ui-lib';
+import { Colors, Text as TextUILIB, ActionSheet } from 'react-native-ui-lib';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
+import { AntDesign } from "@expo/vector-icons";
 import ToastMessage from '../components/ToastMessage';
 import * as Constants from 'expo-constants';
 
@@ -26,15 +27,16 @@ export default CompanyProfileEdit = ({route, navigation})=> {
       email: null,
       phone: null,
       alternative_phone: null,
-      province: null, 
+      province_name: null, 
       district: null, 
       street: null
     }
 
-    const [focus, setFocus] = useState({name: false, company: false, description: false, email: false, telefone: false, location: false})
+    const [show, setShow] = useState(false);
+    const [valuesCompany, setValuesCompany] = useState({});
     const [error, setError] = useState(initialValues);
     const [nameProvince, setNameProvince] = useState(province);
-    const [show, setShow] = useState(false);
+    const [focus, setFocus] = useState({name: false, company: false, description: false, email: false, telefone: false, location: false})
 
     const companyUpdate = async (data, action)=> {
       try {
@@ -51,7 +53,8 @@ export default CompanyProfileEdit = ({route, navigation})=> {
             });
             let rjd = await response.json();
             if(rjd.success) {
-                setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
+              setValuesCompany({...valuesCompany, ...data});
+              setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
             } else {
                 if (rjd.message == 'Erro de validação') {
                     let messageError;
@@ -69,7 +72,7 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                         setError({ alternative_phone: messageError });
                     } else if (rjd.data.message.provincia_id != undefined) {
                         messageError = rjd.data.message.provincia_id;
-                        setError({ province: messageError });
+                        setError({ province_name: messageError });
                     } else if (rjd.data.message.district != undefined) {
                         messageError = rjd.data.message.district;
                         setError({ district: messageError });
@@ -100,10 +103,10 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                 cancelButtonIndex={provincesList.length}
                 useNativeIOS
                 options={[
-                  ...provincesList.map(province => ({
-                    label: province.name,
+                  ...provincesList.map(p => ({
+                    label: p.name,
                     onPress: ()=> {
-                      setNameProvince(province.name);
+                      setNameProvince(p.name);
                     },
                   })),
                   {
@@ -126,7 +129,25 @@ export default CompanyProfileEdit = ({route, navigation})=> {
             tabBarStyle: 'flex'
             });
         }
-    }, [])
+    }, []);
+
+    const backAction = () => {
+      navigation.navigate({
+        name: 'CompanyProfile',
+        params: {valuesCompany: valuesCompany},
+        merge: true,
+      });
+    }
+
+    useEffect(()=> {
+      navigation.setOptions({
+          headerLeft: () => (
+              <TouchableOpacity style={{right: 10, paddingRight: 10, paddingVertical: 10}} onPress={() => backAction()}>
+                <AntDesign name='left' color={'orange'} size={24}/>
+              </TouchableOpacity>
+          ),
+      })
+    }, [valuesCompany]);
 
     return (
     <SafeAreaView style={styles.container}>
@@ -387,9 +408,9 @@ export default CompanyProfileEdit = ({route, navigation})=> {
           )}
         </Formik>
         <Formik
-          initialValues={{province: nameProvince || '', district: district || '', street: street || ''}}
+          initialValues={{nomeProvincia: nameProvince || '', district: district || '', street: street || ''}}
           validationSchema={Yup.object({
-            province: Yup.string()
+            nomeProvincia: Yup.string()
                 .max(20,'No máximo 20 caracteres')
                 .required('Digite a província'),
             district: Yup.string()
@@ -401,9 +422,9 @@ export default CompanyProfileEdit = ({route, navigation})=> {
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
-              companyUpdate({...values, ...{province: nameProvince}}, 5).then(()=> { 
+              companyUpdate({...values, ...{nomeProvincia: nameProvince}}, 5).then(()=> { 
                 formikActions.setSubmitting(false)
-                formikActions.setValues({province: values.province, district: values.district, street: values.street})
+                formikActions.setValues({nomeProvincia: values.nomeProvincia, district: values.district, street: values.street})
               });
             }, 500);
           }}>
@@ -415,15 +436,7 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                 onPressIn={() => setShow(true)}
                 onPressOut={()=> setFocus({location: true})}
                 onFocus={()=> setFocus({location: true})}
-                onChangeText={props.handleChange('province')}
-                // onBlur={()=> {
-                //     if(province == props.values.province) {
-                //         if(!provinceInput.isFocused()) {
-                //           setFocus({location: false})
-                //         }
-                //     }
-                //     props.handleBlur('province')
-                // }}
+                onChangeText={props.handleChange('nomeProvincia')}
                 value={nameProvince}
                 placeholder="Provincia"
                 placeholderTextColor='gray'
@@ -434,8 +447,8 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                 ref={el => provinceInput = el}
               />
               {ProvinceActionSheet}
-              <ErroMessage touched={props.touched.province} errors={props.errors.province} />
-              <ErroMessage touched={true} errors={error.province} />
+              <ErroMessage touched={props.touched.nomeProvincia} errors={props.errors.nomeProvincia} />
+              <ErroMessage touched={true} errors={error.province_name} />
               <TextInput
                   onFocus={()=> setFocus({location: true})}
                   onChangeText={props.handleChange('district')}
