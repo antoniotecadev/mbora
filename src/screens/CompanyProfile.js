@@ -262,24 +262,24 @@ export default function CompanyProfile({ route, navigation }) {
     }
 
     useEffect(() => {
-        setCompany(route.params);
-        setRefreshingProduto(true);
-        fecthProducts(false).then(()=> setRefreshingProduto(false));
-        setRefreshingEncomenda(true);
-        fetchEncomendas(false).then(()=> setRefreshingEncomenda(false))
-        navigation.setOptions({
-          headerTitle: first_name + ' ' + last_name
-        })
-        setIsFollower(estado == 1);
-        setNumberProduto(product_number);
-        setNumberEncomenda(encomenda_number);
-        setNumberSeguidor(followers_number);
-        numberViewsCompany();
-        const backHandler = BackHandler.addEventListener(
-          'hardwareBackPress',
-          backAction,
-        );
-        return () => backHandler.remove();
+      setCompany(route.params);
+      setRefreshingProduto(true);
+      fecthProducts(false).then(()=> setRefreshingProduto(false));
+      setRefreshingEncomenda(true);
+      fetchEncomendas(false).then(()=> setRefreshingEncomenda(false))
+      navigation.setOptions({
+        headerTitle: first_name + ' ' + last_name
+      })
+      setIsFollower(estado == 1);
+      setNumberProduto(product_number);
+      setNumberEncomenda(encomenda_number);
+      setNumberSeguidor(followers_number);
+      numberViewsCompany();
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
+      return () => backHandler.remove();
     }, []);
 
     useEffect(() => {
