@@ -7,6 +7,7 @@ export class UserAuth implements IStore {
   userLastName = null;
   userEmail = null;
   userTelephone = null;
+  userIMEI = null;
   accountAdmin = false;
 
   setAuth = (v: boolean): void => {
@@ -29,6 +30,10 @@ export class UserAuth implements IStore {
     this.userTelephone = v;
   };
 
+  setIMEI = (v: string): void => {
+    this.userIMEI = v;
+  };
+
   setAccountAdmin = (v: boolean): void => {
     this.accountAdmin = v;
   };
@@ -38,7 +43,7 @@ export class UserAuth implements IStore {
 
     makePersistable(this, {
       name: UserAuth.name,
-      properties: ['auth', 'userFirstName', 'userLastName', 'userEmail', 'userTelephone', 'accountAdmin'],
+      properties: ['auth', 'userFirstName', 'userLastName', 'userEmail', 'userTelephone', 'userIMEI', 'accountAdmin'],
     });
   }
 

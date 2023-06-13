@@ -48,6 +48,7 @@ export default SignInForm = ()=> {
                     user.setUserLastName(rjd.data.last_name);
                     user.setUserTelephone(rjd.data.telephone);
                     user.setUserEmail(rjd.data.email);
+                    user.setIMEI(rjd.data.imei);
                     user.setAccountAdmin(rjd.data.account_admin);
                     user.setAuth(true);
                   })
