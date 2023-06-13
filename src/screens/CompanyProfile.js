@@ -323,11 +323,11 @@ export default function CompanyProfile({ route, navigation }) {
 
     navigation.setOptions({
         headerRight: () => (
-            <TouchableOpacity onPress={() => user.accountAdmin ? nav.show('CompanyProfileEdit', data) : alert()}>
-              <Feather name={user.accountAdmin ? 'edit' : 'info'} size={24} color={'orange'}/>
+            <TouchableOpacity onPress={() => user.accountAdmin && (user.userIMEI == imei) ? nav.show('CompanyProfileEdit', data) : setViewDetails(!viewDetails)}>
+              <Feather name={user.accountAdmin && (user.userIMEI == imei) ? 'edit' : 'info'} size={24} color={'orange'}/>
             </TouchableOpacity>)
     })
-}, [user.accountAdmin]);
+}, [user.accountAdmin, viewDetails]);
 
   useEffect(()=> {
       navigation.setOptions({
