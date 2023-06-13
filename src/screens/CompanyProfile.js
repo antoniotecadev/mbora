@@ -207,10 +207,10 @@ export default function CompanyProfile({ route, navigation }) {
     const Details = ()=> {
       return <> 
               <TextUILIB textColor text80>{company.description}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Localização: {`${company.nomeProvincia}, ${company.district} , ${company.street}`}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Email: {company.email}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Telefone 1 : {company.phone}</TextUILIB>
-              <TextUILIB marginT-5 color='gray'>Telefone 2 : {company.alternative_phone}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>{`${company.nomeProvincia}, ${company.district} , ${company.street}`}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>{company.email}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>{company.phone}</TextUILIB>
+              <TextUILIB marginT-5 color='gray'>{company.alternative_phone}</TextUILIB>
             </>
     }
 
