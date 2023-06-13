@@ -232,7 +232,7 @@ export default function CompanyProfile({ route, navigation }) {
     }, [isFollower, loading.seguir])
 
     const numberViewsCompany = async()=> {
-      let response = await fetch(API_URL + 'number/visitas/empresas/mbora/imei/' + imei);
+      let response = await fetch(API_URL + 'number/visitas/empresas/mbora/imei/' + imei + '/userImei/' + user.userIMEI);
       let rjd = await response.json();
       setNumberVisita(isNumber(rjd.views) ? rjd.views : views_mbora);
     };
