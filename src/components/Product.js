@@ -19,26 +19,6 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
     setExpanded(!expanded);
   }
 
-  const onShare = async () => {
-    try {
-      const result = await Share.share({
-        message:
-          'React Native | A framework for building native apps using React',
-      });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
-        }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
-      }
-    } catch (error) {
-      Alert.alert('Erro', error.message);
-    }
-  };
-
   const encomendarProduct = async (clientData)=> {
     await encomendar(setLoading, [produto.imei], [produto.id], [produto.nome], [1], clientData)
     .then(()=> {
