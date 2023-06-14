@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { View, StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
@@ -16,11 +16,14 @@ export default ProfileEdit = ({navigation})=> {
   const {user} = useStores();
   const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
-  let nomeInput = null, sobrenomeInput = null, passwordEmailInput=null, passwordInput = null, comfirmPasswordInput = null;
+  let nomeInput = null, sobrenomeInput = null, passwordTelephoneInput=null, passwordEmailInput=null, passwordInput = null, comfirmPasswordInput = null;
+  const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
   const initialValues = { 
     first_name: null,
     last_name: null,
+    telephone: null,
+    password_verify_telephone: null,
     email: null,
     password_verify_email: null,
     old_password: null,
@@ -28,7 +31,7 @@ export default ProfileEdit = ({navigation})=> {
     password_confirmation: null,
   }
 
-  const [focus, setFocus] = useState({name: false, email: false, password: false})
+  const [focus, setFocus] = useState({name: false, telephone: false, email: false, password: false})
   const [error, setError] = useState(initialValues);
 
   const userUpdate = async (us, action, resetForm)=> {
@@ -37,6 +40,8 @@ export default ProfileEdit = ({navigation})=> {
         if (action == 0) {
           API_URL += 'name/user';
         } else if(action == 1) {
+          API_URL += 'telephone/user';
+        } else if(action == 2) {
           API_URL = 'email/user';
         } else if(action == 3) {
           API_URL = 'password/user';
@@ -58,7 +63,7 @@ export default ProfileEdit = ({navigation})=> {
               navigation.setOptions({title: us.first_name + ' ' + us.last_name})
               user.setUserFirstName(rjd.data.first_name);
               user.setUserLastName(rjd.data.last_name);
-            } else if(action == 1) {
+            } else if(action == 2) {
               user.setUserEmail(us.email);
             }
             resetForm();
@@ -72,6 +77,12 @@ export default ProfileEdit = ({navigation})=> {
                 } else if (rjd.data.message.last_name != undefined) {
                     messageError = rjd.data.message.last_name;
                     setError({ last_name: messageError });
+                } else if (rjd.data.message.telephone != undefined) {
+                    messageError = rjd.data.message.telephone;
+                    setError({ telephone: messageError });
+                } else if (rjd.data.message.password_verify_telephone != undefined) {
+                    messageError = rjd.data.message.password_verify_telephone;
+                    setError({ password_verify_telephone: messageError });
                 } else if (rjd.data.message.email != undefined) {
                     messageError = rjd.data.message.email;
                     setError({ email: messageError });
@@ -93,7 +104,7 @@ export default ProfileEdit = ({navigation})=> {
             }
         }
       } catch (error) {
-            setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
+            setShowDialog({visible: true, title: 'Ocorreu um erro1', message: error.message, color: 'orangered'})
       }
     }
 
@@ -192,6 +203,66 @@ export default ProfileEdit = ({navigation})=> {
           )}
         </Formik>
         <Formik
+          initialValues={{telephone: user.userTelephone || '', password_verify_telephone: ''}}
+          validationSchema={Yup.object({
+            telephone: Yup.string()
+              .matches(phoneRegExp, 'Número de telefone não é válido')
+              .min(9,'No mínimo 9 dígitos')
+              .required('Digite o seu número de telefone'),
+            password_verify_telephone: Yup.string()
+              .required('Digite a sua palavra - passe'),
+          })}
+          onSubmit={(values, formikActions) => {
+            setTimeout(() => {
+              userUpdate(values, 1, formikActions.resetForm).then(()=> {
+                formikActions.setSubmitting(false)
+                formikActions.setValues({telephone: values.telephone})
+              });
+            }, 500);
+          }}>
+          {props => (
+            <>
+                <TextUILIB marginT-20 textColor style={{fontWeight: 'bold'}}>Telefone</TextUILIB>
+                <TextInput
+                  onFocus={()=> setFocus({telephone: true})}
+                  keyboardType='phone-pad'
+                  onChangeText={props.handleChange('telephone')}
+                  onBlur={()=> {
+                    if(user.userTelephone == props.values.telephone) {
+                      setFocus({telephone: false})
+                    }
+                    props.handleBlur('telephone')
+                  }}
+                  value={props.values.telephone}
+                  placeholder="Telefone"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  onSubmitEditing={() => {
+                    passwordTelephoneInput.focus()
+                  }}
+                />
+                <ErroMessage touched={props.touched.telephone} errors={props.errors.telephone} />
+                <ErroMessage touched={true} errors={error.telephone} />
+                {focus.telephone && <>
+                <TextInput
+                  keyboardType='visible-password'
+                  onChangeText={props.handleChange('password_verify_telephone')}
+                  onBlur={props.handleBlur('password_verify_telephone')}
+                  onFocus={()=> setError({password_verify_telephone: null})}
+                  value={props.values.password_verify_telephone}
+                  placeholder="Palavra - passe"
+                  placeholderTextColor='gray'
+                  style={styles.input}
+                  secureTextEntry={true}
+                  ref={el => passwordTelephoneInput = el}
+                />
+                <ErroMessage touched={props.touched.password_verify_telephone} errors={props.errors.password_verify_telephone} />
+                <ErroMessage touched={true} errors={error.password_verify_telephone} />
+                <ButtonSubmit onPress={props.handleSubmit} loading={props.isSubmitting} textButtonLoading='Guardando...' textButton='Guardar'/></>}
+            </>
+          )}
+        </Formik>
+        <Formik
           initialValues={{email: user.userEmail || '', password_verify_email: ''}}
           validationSchema={Yup.object({
             email: Yup.string()
@@ -202,7 +273,7 @@ export default ProfileEdit = ({navigation})=> {
           })}
           onSubmit={(values, formikActions) => {
             setTimeout(() => {
-              userUpdate(values, 1, formikActions.resetForm).then(()=> {
+              userUpdate(values, 2, formikActions.resetForm).then(()=> {
                 formikActions.setSubmitting(false)
                 formikActions.setValues({email: values.email})
               });
