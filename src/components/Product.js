@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
 import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB } from 'react-native-ui-lib';
 import { currency, numberFollowersAndViewsFormat } from '../utils/utilitario';
@@ -6,13 +6,14 @@ import {Image as ImageCache} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from './AlertDialog';
 
-export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress } ) {
+export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress, markAsViewed, accountAdmin, userIMEI } ) {
   
   const [showDialog, setShowDialog] = useState(false);
   const { addItemToCart, encomendar } = useContext(CartContext);
-  const [expanded, setExpanded] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [top] = useState(false)
+  const [expanded, setExpanded] = useState(false);
+  const [loadingViewed, setLoadingViewed] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [top] = useState(false);
 
   function onExpand() {
     setExpanded(!expanded);
@@ -69,7 +70,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(produto.code, produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.created_at)}
+        sectionHeader={HeaderElement(produto.code, produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.imei, produto.created_at, markAsViewed, accountAdmin, userIMEI, loadingViewed, setLoadingViewed)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -113,7 +114,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
   );
 }
 
-const HeaderElement = (code, nome, preco, isEncomenda, prod_quant, estado, data_cria) => {
+const HeaderElement = (code_encomenda, nome, preco, isEncomenda, prod_quant, estado, imei, data_cria, markAsViewed, accountAdmin, userIMEI, loading, setLoading) => {
   return (
     <View spread row maxWidth={180}>
       <TextUILIB textColor>
@@ -126,19 +127,33 @@ const HeaderElement = (code, nome, preco, isEncomenda, prod_quant, estado, data_
       <>
         <View style={styles.section}>
           <TextUILIB textColor text100M>Código: </TextUILIB>
-          <TextUILIB color='gray' text100M>{code}</TextUILIB>
+          <TextUILIB color='gray' text100M>{code_encomenda}</TextUILIB>
         </View>
         <View style={styles.section}>
           <TextUILIB textColor text100M>Quantidade: </TextUILIB>
           <TextUILIB color='gray' text100M>{prod_quant}</TextUILIB>
         </View>
+        {accountAdmin && (userIMEI == imei) ? 
+        (loading ? <ActivityIndicator color={'green'} size={'small'}/> :
+          estado == false && 
+        (<TouchableOpacity 
+          style={{padding: 5, backgroundColor: 'green', borderRadius: 5}} 
+          onPress={() => {
+            setLoading(true); 
+            markAsViewed(code_encomenda, setLoading).then(()=> setLoading(false));
+        }}>
+          <Text style={{color: 'white', fontSize: 10, textAlign: 'center'}}>
+            Marcar como visualizada
+          </Text>
+        </TouchableOpacity>))
+        :
         <View style={styles.section}>
           <TextUILIB textColor text100M>Estado:</TextUILIB>
           {estado == true ? 
           <TextUILIB color='green' text100M> visualizada</TextUILIB> 
           :
           <TextUILIB color='orangered' text100M> não visualizada</TextUILIB>}
-        </View>
+        </View>}
         <TextUILIB color='gray' marginB-4 f text100M>{data_cria}</TextUILIB>
       </>}
     </View>

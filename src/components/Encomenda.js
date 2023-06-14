@@ -1,17 +1,47 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import { StyleSheet, FlatList, Text, RefreshControl, TouchableOpacity, ActivityIndicator, View } from 'react-native';
 import { Product } from './Product';
-import { getRandomColor } from '../utils/utilitario';
+import * as Constants from 'expo-constants';
+import { getRandomColor, getValueItemAsync } from '../utils/utilitario';
+import { CartContext } from '../CartContext';
 
-export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refreshing, empty }) {
+const API_URL = Constants.default.manifest.extra.API_URL;
+
+export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refreshing, empty, accountAdmin = false, userIMEI = null }) {
 
     const [loading, setLoading] = useState(false);
+    const { setShowDialog, setVisibleToast } = useContext(CartContext);
+
+    const markAsViewed = async(code_encomenda, setLoadingViewed)=> {
+      try {
+        let response = await fetch(API_URL + 'encomenda/mark/viewed',
+        {
+          method: 'PUT',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+          },
+          body: JSON.stringify({code: code_encomenda})
+        });
+        let rjd = await response.json();
+        if(rjd.success) {
+          onRefresh();
+          setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
+        } else {
+          setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
+        }
+      } catch (error) {
+        setLoadingViewed(false);
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
+      }
+    }
 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => {
         let color = getRandomColor(product.code);
-        return <Product appearanceColor={color} produto={product} isEncomenda={true} key={product.id} />
+        return <Product appearanceColor={color} produto={product} isEncomenda={true} key={product.id} markAsViewed={markAsViewed} accountAdmin={accountAdmin} userIMEI={userIMEI}/>
     }, []);
 
     return(

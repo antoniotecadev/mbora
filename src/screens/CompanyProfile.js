@@ -388,7 +388,7 @@ return (
                       <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingProduto} empty={emptyProduto} isProfileCompany={isProfileCompany}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
-                      <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshingEncomenda} empty={emptyEncomenda}/>
+                      <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshingEncomenda} empty={emptyEncomenda} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={2} lazy>
                     <ListFollowers user={user} imei={imei} API_URL={API_URL} setNumberSeguidor={setNumberSeguidor}/>
