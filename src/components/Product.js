@@ -113,9 +113,8 @@ const HeaderElement = (code_encomenda, nome, preco, isEncomenda, prod_quant, est
           <TextUILIB textColor text100M>Quantidade: </TextUILIB>
           <TextUILIB color='gray' text100M>{prod_quant}</TextUILIB>
         </View>
-        {accountAdmin && (userIMEI == imei) ? 
+        {estado == false && accountAdmin && (userIMEI == imei) ? 
         (loading ? <ActivityIndicator color={'green'} size={'small'}/> :
-          estado == false && 
         (<TouchableOpacity 
           style={{padding: 5, backgroundColor: 'green', borderRadius: 5}} 
           onPress={() => {
