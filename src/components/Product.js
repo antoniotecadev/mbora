@@ -6,12 +6,12 @@ import {Image as ImageCache} from 'react-native-expo-image-cache';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from './AlertDialog';
 
-export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress, markAsViewed, accountAdmin, userIMEI } ) {
+export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress, markAsAnswered, accountAdmin, userIMEI } ) {
   
   const [showDialog, setShowDialog] = useState(false);
   const { addItemToCart, encomendar } = useContext(CartContext);
   const [expanded, setExpanded] = useState(false);
-  const [loadingViewed, setLoadingViewed] = useState(false);
+  const [loadingAnswered, setLoadingAnswered] = useState(false);
   const [loading, setLoading] = useState(false);
   const [top] = useState(false);
 
@@ -70,7 +70,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       <ExpandableSection
         top={top}
         expanded={expanded}
-        sectionHeader={HeaderElement(produto.code, produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.imei, produto.created_at, markAsViewed, accountAdmin, userIMEI, loadingViewed, setLoadingViewed)}
+        sectionHeader={HeaderElement(produto.code, produto.nome, produto.preco, isEncomenda, produto.prod_quant, produto.estado, produto.imei, produto.created_at, markAsAnswered, accountAdmin, userIMEI, loadingAnswered, setLoadingAnswered)}
         onPress={() => onExpand()}
       >
         <View maxWidth={180}>
@@ -114,7 +114,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
   );
 }
 
-const HeaderElement = (code_encomenda, nome, preco, isEncomenda, prod_quant, estado, imei, data_cria, markAsViewed, accountAdmin, userIMEI, loading, setLoading) => {
+const HeaderElement = (code_encomenda, nome, preco, isEncomenda, prod_quant, estado, imei, data_cria, markAsAnswered, accountAdmin, userIMEI, loading, setLoading) => {
   return (
     <View spread row maxWidth={180}>
       <TextUILIB textColor>
@@ -140,19 +140,19 @@ const HeaderElement = (code_encomenda, nome, preco, isEncomenda, prod_quant, est
           style={{padding: 5, backgroundColor: 'green', borderRadius: 5}} 
           onPress={() => {
             setLoading(true); 
-            markAsViewed(code_encomenda, setLoading).then(()=> setLoading(false));
+            markAsAnswered(code_encomenda, setLoading).then(()=> setLoading(false));
         }}>
           <Text style={{color: 'white', fontSize: 10, textAlign: 'center'}}>
-            Marcar como visualizada
+            Marcar como atendida
           </Text>
         </TouchableOpacity>))
         :
         <View style={styles.section}>
           <TextUILIB textColor text100M>Estado:</TextUILIB>
           {estado == true ? 
-          <TextUILIB color='green' text100M> visualizada</TextUILIB> 
+          <TextUILIB color='green' text100M> atendida</TextUILIB> 
           :
-          <TextUILIB color='orangered' text100M> não visualizada</TextUILIB>}
+          <TextUILIB color='orangered' text100M> não atendida</TextUILIB>}
         </View>}
         <TextUILIB color='gray' marginB-4 f text100M>{data_cria}</TextUILIB>
       </>}

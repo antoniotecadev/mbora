@@ -12,7 +12,7 @@ export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refr
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
 
-    const markAsViewed = async(code_encomenda, setLoadingViewed)=> {
+    const markAsAnswered = async(code_encomenda, setLoadingAnswered)=> {
       try {
         let response = await fetch(API_URL + 'encomenda/mark/viewed',
         {
@@ -32,7 +32,7 @@ export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refr
           setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
         }
       } catch (error) {
-        setLoadingViewed(false);
+        setLoadingAnswered(false);
         setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
       }
     }
@@ -41,7 +41,7 @@ export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refr
 
     const renderItemProduct = useCallback(({ item: product }) => {
         let color = getRandomColor(product.code);
-        return <Product appearanceColor={color} produto={product} isEncomenda={true} key={product.id} markAsViewed={markAsViewed} accountAdmin={accountAdmin} userIMEI={userIMEI}/>
+        return <Product appearanceColor={color} produto={product} isEncomenda={true} key={product.id} markAsAnswered={markAsAnswered} accountAdmin={accountAdmin} userIMEI={userIMEI}/>
     }, []);
 
     return(
