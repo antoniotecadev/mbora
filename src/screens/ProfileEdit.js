@@ -42,9 +42,9 @@ export default ProfileEdit = ({navigation})=> {
         } else if(action == 1) {
           API_URL += 'telephone/user';
         } else if(action == 2) {
-          API_URL = 'email/user';
+          API_URL += 'email/user';
         } else if(action == 3) {
-          API_URL = 'password/user';
+          API_URL += 'password/user';
         }
         let response = await fetch(API_URL,
         {
