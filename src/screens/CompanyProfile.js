@@ -385,7 +385,7 @@ return (
                   selectedLabelColor={'orange'}/>
               <TabController.PageCarousel>
                   <TabController.TabPage index={0}>
-                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingProduto} empty={emptyProduto} isProfileCompany={isProfileCompany}/>
+                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingProduto} empty={emptyProduto} isProfileCompany={isProfileCompany} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
                       <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshingEncomenda} empty={emptyEncomenda} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
@@ -407,7 +407,7 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty, isProfileCompany })=> {
+const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty, isProfileCompany, accountAdmin = false, userIMEI = null })=> {
 
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -429,8 +429,33 @@ const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-      return <Product appearanceColor={appearanceColor} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
+      return <Product appearanceColor={appearanceColor} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)} accountAdmin={accountAdmin} userIMEI={userIMEI} deleteProductService={deleteProductService}/>
     }, []);
+
+    const deleteProductService = async(productId, productName, companyImei, setLoadingDelete)=> { 
+      try {
+        let response = await fetch(API_URL + 'produto/servico/mbora/eliminar',
+        {
+          method: 'DELETE',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+          },
+          body: JSON.stringify({productId: productId, companyImei: companyImei})
+        });
+        let rjd = await response.json();
+        if(rjd.success) {
+          onRefresh(0);
+          setVisibleToast({visible: true, message: productName + ' elimiando(a).', backgroundColor: 'red'});
+        } else {
+          setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'});
+        }
+      } catch (error) {
+        setLoadingDelete(false);
+        setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
+      }
+  }
 
     return(
         <FlatList
