@@ -98,17 +98,20 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
               onPress={removeFavorite}>
               <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
-            <View style={[styles.section, {marginVertical: 8}]}>
-              <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
-              <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
-                size={20}
-                animate={false}
-                badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
-              />
-            </View>
-            <Text style={{ marginBottom: 8, color: Colors.grey30, fontSize: 10 }}>
-              {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
-            </Text>
+            {!isAdmin && 
+            <>
+              <View style={[styles.section, {marginVertical: 8}]}>
+                <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
+                <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
+                  size={20}
+                  animate={false}
+                  badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
+                />
+              </View>
+              <Text style={{ marginBottom: 8, color: Colors.grey30, fontSize: 10 }}>
+                {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
+              </Text>
+            </>}
             <Text style={{ marginBottom: 8, color: Colors.grey40, fontSize: 10 }}>{numberFollowersAndViewsFormat(produto.visualizacao, 'youtube')} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</Text>
           </View>
         </View>
