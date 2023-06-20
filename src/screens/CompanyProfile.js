@@ -285,7 +285,7 @@ export default function CompanyProfile({ route, navigation }) {
 
     const getPathProfilePhoto = async()=> {
       try {
-          let response =  await fetch(API_URL + 'empresa/mbora/profile/photo/path',
+          let response =  await fetch(API_URL + 'empresa/mbora/profile/photo/path/' + imei,
           {
               headers: {
                 Accept: 'application/json',
