@@ -216,23 +216,22 @@ export default function Profile({ route, navigation }) {
         });
         
         if (!result.canceled) {
-            nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri, userId: userId});
+            nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri, userIDIMEI: userId, isCompany: false});
         }
     };
 
-    const getURLProfilePhoto = async()=> {
+    const getPathProfilePhoto = async()=> {
         try {
-            let response =  await fetch(API_URL + 'mbora/profilephoto/user/url',
+            let response =  await fetch(API_URL + 'mbora/profile/photo/user/path',
             {
                 headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
                 }
             });
             let rjd = await response.json();
-            setImage(rjd.photo_url);
-            setUserId(rjd.user_id); // Este id será usado nome da foto de perfil, para evitir ter mais de duma foto de usuario no firebase storage
+            return rjd;
         } catch (error) {
             setShowDialog({visible: true, title: 'Erro Foto de Perfil', message: error.message, color: 'orangered'});
         }
@@ -314,7 +313,10 @@ export default function Profile({ route, navigation }) {
     }, [user.accountAdmin, loading]);
 
     useEffect(() => {
-        getURLProfilePhoto();
+        getPathProfilePhoto().then((data)=> {
+            setUserId(data.user_id); // Este id será usado nome da foto de perfil, para evitir ter mais de duma foto de usuario no firebase storage
+            setImage(data.photo_url);
+        });
         setRefreshingEncomenda(true);
         fetchEncomendas(false).then(()=> setRefreshingEncomenda(false));
         setRefreshingFavorito(true);
@@ -554,7 +556,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         textAlign: 'center',
     },
-      containerPhoto: {
+    containerPhoto: {
         flexDirection: 'row',
         alignItems: 'flex-end',
     },
@@ -571,5 +573,5 @@ const styles = StyleSheet.create({
         bottom: 0,
         right: 0,
         margin: 8,
-      },
+    },
 });

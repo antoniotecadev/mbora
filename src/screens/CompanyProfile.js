@@ -1,7 +1,7 @@
 import { isEmpty, isNumber } from 'lodash';
 import React, { useState, useCallback, useContext, useEffect } from 'react';
 import { StyleSheet, FlatList, RefreshControl, Text, BackHandler, TouchableOpacity, View, ActivityIndicator, Dimensions, SafeAreaView } from 'react-native';
-import { Avatar, TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
+import { TabController, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 import { CartContext } from '../CartContext';
 import { AlertDialog } from '../components/AlertDialog';
 import Encomenda from '../components/Encomenda';
@@ -13,6 +13,7 @@ import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } 
 import { AntDesign, Feather } from "@expo/vector-icons";
 import ListFollowers from '../components/ListFollowers';
 import * as Constants from 'expo-constants';
+import * as ImagePicker from 'expo-image-picker';
 import {Image as ImageCache, CacheManager} from 'react-native-expo-image-cache';
 
 const { width } = Dimensions.get('window');
@@ -42,9 +43,10 @@ export default function CompanyProfile({ route, navigation }) {
     const { nav } = useServices();
     const {ui, user} = useStores();
     const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, screenBack, isProfileCompany} = route.params;
-    const { showDialog, setShowDialog } = useContext(CartContext);
+    const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
     let color = getAppearenceColor(ui.appearanceName);
+    const isAdmin= user.accountAdmin && (user.userIMEI == imei);
 
     const fetchEncomendas = useCallback(async (isMoreView) => {
         try {
@@ -175,16 +177,36 @@ export default function CompanyProfile({ route, navigation }) {
         }
     }
 
+
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 4],
+          quality: 0.2,
+      });
+      
+      if (!result.canceled) {
+          nav.show('PreviewProfilePhoto', {imageUri: result.assets[0].uri, userIDIMEI: user.userIMEI, isCompany: true});
+      }
+    };
+
     const UserPhoto = useCallback(({setViewFullPhoto})=> {
         return (
-            <Avatar 
-                onPress={()=> setViewFullPhoto(true)}
-                source={image ? {uri: image} : preview} 
-                size={150} 
-                animate={true} 
-             />
+             <View style={styles.containerPhoto}>
+                <TouchableOpacity onPress={()=> setViewFullPhoto(true)}>
+                    <ImageCache style={styles.image} {...{preview, uri: image}}/>
+                </TouchableOpacity>
+                {isAdmin && <Badge />}
+            </View>
         )
-    }, [image])
+    }, [image, isAdmin]);
+
+    const Badge = () => (
+      <View style={[styles.badge, {borderWidth: 1.5, borderColor: color}]}>
+          <AntDesign name="camera" size={24} color="black" onPress={()=> pickImage()} />
+      </View>
+    );
 
     const NumberInformation = useCallback(()=> {
         return (
@@ -261,7 +283,27 @@ export default function CompanyProfile({ route, navigation }) {
       }
     }
 
+    const getPathProfilePhoto = async()=> {
+      try {
+          let response =  await fetch(API_URL + 'empresa/mbora/profile/photo/path',
+          {
+              headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + await getValueItemAsync('token').catch((error)=> setShowDialog({visible: true, title: 'Erro Token', message: error.message, color: 'orangered'})),
+              }
+          });
+          let rjd = await response.json();
+          return rjd;
+      } catch (error) {
+          setShowDialog({visible: true, title: 'Erro Foto de Perfil', message: error.message, color: 'orangered'});
+      }
+  };
+
     useEffect(() => {
+      getPathProfilePhoto().then((data)=> {
+        setImage(data.photo_path);
+      });
       setCompany(route.params);
       setRefreshingProduto(true);
       fecthProducts(false).then(()=> setRefreshingProduto(false));
@@ -281,6 +323,13 @@ export default function CompanyProfile({ route, navigation }) {
       );
       return () => backHandler.remove();
     }, []);
+
+    useEffect(() => {
+      if (route.params?.photoURL) {
+          setImage(route.params.photoURL);
+          setVisibleToast({visible: true, message: 'Foto de perfil alterada', backgroundColor: 'green'});
+      }
+    }, [route.params?.photoURL]);
 
     useEffect(() => {
         navigation.setOptions({
@@ -323,8 +372,8 @@ export default function CompanyProfile({ route, navigation }) {
 
     navigation.setOptions({
         headerRight: () => (
-            <TouchableOpacity onPress={() => user.accountAdmin && (user.userIMEI == imei) ? nav.show('CompanyProfileEdit', data) : setViewDetails(!viewDetails)}>
-              <Feather name={user.accountAdmin && (user.userIMEI == imei) ? 'edit' : 'info'} size={24} color={'orange'}/>
+            <TouchableOpacity onPress={() => isAdmin ? nav.show('CompanyProfileEdit', data) : setViewDetails(!viewDetails)}>
+              <Feather name={isAdmin ? 'edit' : 'info'} size={24} color={'orange'}/>
             </TouchableOpacity>)
     })
 }, [user.accountAdmin, viewDetails]);
@@ -564,5 +613,23 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 15,
         textAlign: 'center',
-      }
+      },
+      containerPhoto: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+    },
+    image: { 
+        height: 150, 
+        width: 150, 
+        borderRadius: 100 
+    },
+    badge: {
+        position: 'absolute',
+        backgroundColor: 'lightgray',
+        borderRadius: 25,
+        padding: 8,
+        bottom: 0,
+        right: 0,
+        margin: 8,
+    },
 });

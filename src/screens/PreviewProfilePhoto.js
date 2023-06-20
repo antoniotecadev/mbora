@@ -15,7 +15,12 @@ const { width, height } = Dimensions.get('window');
 const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function PreviewProfilePhoto({route, navigation}) {
-    const { imageUri, userId } = route.params;
+    const { imageUri, userIDIMEI, isCompany } = route.params;
+
+    const path = isCompany ? 'empresas/empresa_' + userIDIMEI + '/foto/foto_perfil_' + userIDIMEI : 'usuarios/perfil_' + userIDIMEI + '/foto/foto_perfil_' + userIDIMEI;
+    const url = isCompany ? 'empresa/mbora/update/profile/photo' : 'mbora/update/profile/photo/user';
+    const screenBack = isCompany ? 'CompanyProfile' : 'Profile';
+    
     const [image, setImage] = useState(null);
     const [uploading, setUploading] = useState(false)
     const [viewFullPhoto, setViewFullPhoto] = useState(false)
@@ -40,7 +45,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
 
     const updateProfilePhoto = async(photoURL)=> {
         try {
-            let response = await fetch(API_URL + 'mbora/update/profilephoto/user',
+            let response = await fetch(API_URL + url,
             {
                 method: 'PUT',
                 headers: {
@@ -56,7 +61,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
             if(rjd.success) {
                 setUploading(false);
                 navigation.navigate({
-                    name: 'Profile',
+                    name: screenBack,
                     params: { photoURL: photoURL },
                     merge: true,
                 });
@@ -86,7 +91,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
                 uploading ? <ActivityIndicator color={'orange'}/> :
                 <TouchableOpacity style={{padding: 10}} onPress={async() => {
                     try {
-                        if(userId == null) {
+                        if(userIDIMEI == null) {
                             setShowDialog({visible: true, title: 'Ocorreu um erro', message: 'Identificador de usuário não encontrado.', color: 'orangered'});
                             return;
                         }
@@ -97,8 +102,8 @@ export default function PreviewProfilePhoto({route, navigation}) {
                         });
                         const metadata = { contentType: 'image/jpeg' };
                         let imageFile = await fetch(newImage.uri);
-                        let imageBlob = await imageFile.blob()
-                        const storageRef = ref(storage, 'usuarios/perfil/foto/foto_perfil_' + userId);
+                        let imageBlob = await imageFile.blob();
+                        const storageRef = ref(storage, path);
                         uploadTask = uploadBytesResumable(storageRef, imageBlob, metadata);
                         uploadTask.on('state_changed',
                         () => {
