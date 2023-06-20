@@ -10,13 +10,13 @@ const preview = {uri: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAY
 export function CompanyCard(props) {
 
     const { nav } = useServices();
-    const {empresa, followers_number, views_mbora, estado, description} = props;
+    const {empresa, followers_number, views_mbora, estado, description, photo_path} = props;
 
     return (
         <Card style={[styles.card, {backgroundColor: props.appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={() => {
             nav.show('CompanyProfile', {...props, isProfileCompany: true});
         }}>
-            <ImageCache style={styles.thumb} {...{preview, uri: ''}}/>
+            <ImageCache style={styles.thumb} {...{preview, uri: photo_path}}/>
             {(estado == 1) && <Text color='white' style={styles.aseguir}>A seguir</Text>}
             <View maxWidth={180}>
                 <View row style={styles.section}>
