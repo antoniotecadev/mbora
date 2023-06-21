@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions, Animated } from "react-native";
+import { Text, Image, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions, Animated, Platform } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL  } from "firebase/storage";
 import app from "../services/firebase";
@@ -101,7 +101,7 @@ export default function PreviewProfilePhoto({route, navigation}) {
                             format: SaveFormat.JPEG
                         });
                         const metadata = { contentType: 'image/jpeg' };
-                        let imageFile = await fetch(newImage.uri);
+                        let imageFile = await fetch(Platform.OS === 'ios' ? newImage.uri.replace('file://', '') : newImage.uri);
                         let imageBlob = await imageFile.blob();
                         const storageRef = ref(storage, path);
                         uploadTask = uploadBytesResumable(storageRef, imageBlob, metadata);
