@@ -543,7 +543,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
     },
-      loadMoreBtn: {
+    loadMoreBtn: {
         padding: 10,
         backgroundColor: 'orange',
         borderRadius: 4,
@@ -551,7 +551,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-      btnText: {
+    btnText: {
         color: 'white',
         fontSize: 15,
         textAlign: 'center',
@@ -560,10 +560,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
     },
-      image: { 
+    image: { 
         height: 150, 
         width: 150, 
-        borderRadius: 100 
+        borderRadius: 10 
     },
     badge: {
         position: 'absolute',
