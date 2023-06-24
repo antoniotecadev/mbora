@@ -19,6 +19,8 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [loadingAnswered, setLoadingAnswered] = useState(false);
 
+  const clientData = isEncomenda ? 'Cliente: ' + produto.first_name + ' ' +  produto.last_name + '\n' +'Email: ' + produto.email : '';
+
   function onExpand() {
     setExpanded(!expanded);
   }
@@ -59,7 +61,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       showDialog={showDialog} 
       setShowDialog={setShowDialog} 
       titulo={'Encomenda'} 
-      mensagem={'Empresa: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
+      mensagem={'Empresa: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco)) + '\n' + clientData} 
       cor={'green'} 
       isEncomenda={true}
       userTelephone={userTelephone || produto.client_phone}
@@ -67,6 +69,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       moreDetails={produto.client_info_ad}
       isDetailsEncomenda={isEncomenda}
       clientCoordinate={produto.client_coordinate}
+      clientPhoto={produto.photo_path}
       onPress={encomendarProduct}
       />}
     <Card style={[styles.card, {backgroundColor: appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={isEncomenda ? ()=> setShowDialog(true) : onPress}>
