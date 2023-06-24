@@ -58,14 +58,18 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
     <AlertDialog 
       showDialog={showDialog} 
       setShowDialog={setShowDialog} 
-      titulo='Encomenda' 
-      mensagem={'Destino: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
-      cor='green' 
+      titulo={'Encomenda'} 
+      mensagem={'Empresa: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco))} 
+      cor={'green'} 
       isEncomenda={true}
-      userTelephone={userTelephone}
+      userTelephone={userTelephone || produto.client_phone}
+      clientAddress={produto.client_address}
+      moreDetails={produto.client_info_ad}
+      isDetailsEncomenda={isEncomenda}
+      clientCoordinate={produto.client_coordinate}
       onPress={encomendarProduct}
       />}
-    <Card style={[styles.card, {backgroundColor: appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={onPress}>
+    <Card style={[styles.card, {backgroundColor: appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={isEncomenda ? ()=> setShowDialog(true) : onPress}>
     <ImageCache style={styles.thumb} {...{preview, uri}}/>
       <ExpandableSection
         top={top}

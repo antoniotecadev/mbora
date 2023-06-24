@@ -19,16 +19,20 @@ const [drag, setDrag] = useState(false);
     useEffect(() => {
     (async () => {
         try {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== 'granted') {
-                setErrorMsg('Permission to access location was denied');
-                return;
+            if(props.coordinate.latlng.latitude == 0 && props.coordinate.latlng.longitude == 0) {
+                let { status } = await Location.requestForegroundPermissionsAsync();
+                if (status !== 'granted') {
+                    setErrorMsg('Permission to access location was denied');
+                    return;
+                }
+                let location = await Location.getCurrentPositionAsync({});
+                let locationGeocode = await Location.reverseGeocodeAsync({latitude: location.coords.latitude, longitude: location.coords.longitude, altitude: location.coords.altitude, accuracy: location.coords.accuracy});
+                setLocation(locationGeocode);
+                setCoordinate({latitude: location.coords.latitude, longitude: location.coords.longitude});
+                props.setCoordinate({latlng: {latitude: location.coords.latitude, longitude: location.coords.longitude}, locationGeocode: locationGeocode[0]});
+            } else {
+                animateRegionAndMarker(props.coordinate.latlng);
             }
-            let location = await Location.getCurrentPositionAsync({});
-            let locationGeocode = await Location.reverseGeocodeAsync({latitude: location.coords.latitude, longitude: location.coords.longitude, altitude: location.coords.altitude, accuracy: location.coords.accuracy});
-            setLocation(locationGeocode);
-            setCoordinate({latitude: location.coords.latitude, longitude: location.coords.longitude});
-            props.setCoordinate({latlng: {latitude: location.coords.latitude, longitude: location.coords.longitude}, locationGeocode: locationGeocode[0]});
         } catch (error) {
             Alert.alert('Erro', error.message);
         }

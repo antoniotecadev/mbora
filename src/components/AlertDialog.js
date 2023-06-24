@@ -7,7 +7,7 @@ import { ErroMessage } from './Form';
 import { getAppearenceColor } from '../utils/utilitario';
 import ModalMaps from './Modal';
 
-export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, userTelephone = null, onPress})=> {
+export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, userTelephone = null, clientAddress = null, moreDetails = null, isDetailsEncomenda = false, clientCoordinate, onPress})=> {
     let addressInput = null, informationInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -27,7 +27,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
 
     return (
     <Formik
-      initialValues={{address: '', telephone: userTelephone || '', information: ''}}
+      initialValues={{address: clientAddress || '', telephone: userTelephone || '', information: moreDetails || ''}}
       validationSchema={Yup.object({
         address: Yup.string()
             .max(50,'No máximo 50 caracteres')
@@ -60,10 +60,10 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
           {isEncomenda && 
           <>
             {props.values.information && Platform.OS === 'ios' && <TextUILIB marginB-20 marginH-15 style={{color: 'gray'}}>Informação: {props.values.information}</TextUILIB>}
-            <TextUILIB marginH-20 textColor>*Telefone</TextUILIB>
+            <TextUILIB marginH-20 textColor>{isDetailsEncomenda ? 'Telefone de cliente' : '*Telefone'}</TextUILIB>
             <TextInput
               color={props.isSubmitting ? 'gray' : 'black'}
-              editable={!props.isSubmitting}
+              editable={!props.isSubmitting && !isDetailsEncomenda}
               keyboardType='phone-pad'
               onChangeText={props.handleChange('telephone')}
               onBlur={props.handleBlur('telephone')}
@@ -74,10 +74,10 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
             <ViewUILIB marginL-12>
               <ErroMessage touched={props.touched.telephone} errors={props.errors.telephone}/>
             </ViewUILIB>
-            <TextUILIB textColor marginH-20>*Endereço</TextUILIB>
+            <TextUILIB textColor marginH-20>{isDetailsEncomenda ? 'Endereço de cliente' : '*Endereço'}</TextUILIB>
             <TextInput
               color={props.isSubmitting ? 'gray' : 'black'}
-              editable={!props.isSubmitting}
+              editable={!props.isSubmitting && !isDetailsEncomenda}
               onChangeText={props.handleChange('address')}
               onBlur={props.handleBlur('address')}
               value={props.values.address}
@@ -90,11 +90,11 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
               <ErroMessage touched={props.touched.address} errors={props.errors.address}/>
             </ViewUILIB>
             <TextUILIB textColor marginH-20>Localização no Mapa</TextUILIB>
-            <ModalMaps setCoordinate={setCoordinate} isSubmitting={props.isSubmitting}/>
+            <ModalMaps setCoordinate={setCoordinate} isSubmitting={props.isSubmitting} isDetailsEncomenda={isDetailsEncomenda} clientCoordinate={clientCoordinate}/>
             <TextUILIB textColor marginH-20>Informações adicionais</TextUILIB>
             <TextInput
               color={props.isSubmitting ? 'gray' : 'black'}
-              editable={!props.isSubmitting}
+              editable={!props.isSubmitting && !isDetailsEncomenda}
               placeholder="Mais detalhes..."
               style={styles.input}
               onChangeText={props.handleChange('information')}
@@ -108,8 +108,11 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
           </>}
           <ViewUILIB marginB-10 marginR-20 right>
             {isEncomenda ?
-            <ButtonUILIB label={props.isSubmitting ? 'A encomendar...' : 'Encomendar'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} disabled={props.isSubmitting} onPress={props.handleSubmit}/>
+            (isDetailsEncomenda ? 
+            <ButtonUILIB label={'Fechar'} backgroundColor = {'orangered'} size={ButtonUILIB.sizes.medium} onPress={()=> setShowDialog(false)}/>
             :
+            <ButtonUILIB label={props.isSubmitting ? 'A encomendar...' : 'Encomendar'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} disabled={props.isSubmitting} onPress={props.handleSubmit}/>
+            ):
             <ButtonUILIB label={'OK'} backgroundColor = {cor} size={ButtonUILIB.sizes.medium} onPress={()=> setShowDialog({visible: false})}/>}
           </ViewUILIB>
           </ScrollView>

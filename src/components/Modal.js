@@ -6,8 +6,13 @@ import Maps from './Maps';
 
 
 const ModalMaps = (props) => {
+
   const [modalVisible, setModalVisible] = useState(false);
-  const [coordinate, setCoordinate] = useState({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}})
+  const [coordinate, setCoordinate] = useState({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}});
+
+  const containsLatLng = props?.clientCoordinate && props.isDetailsEncomenda;
+  const clientCoordinate = containsLatLng ? JSON.parse(props.clientCoordinate) : coordinate;
+  const notContainsLocation = (clientCoordinate.latlng.latitude == 0) && (clientCoordinate.latlng.longitude == 0);
 
   useEffect(() => {
     props.setCoordinate({coorLoc: coordinate});
@@ -23,7 +28,7 @@ const ModalMaps = (props) => {
           // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-        <Maps setCoordinate={setCoordinate}/>
+        <Maps coordinate={coordinate} setCoordinate={setCoordinate}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Pressable
@@ -34,14 +39,28 @@ const ModalMaps = (props) => {
             </View>
         </View> 
       </Modal>
+      {props.isDetailsEncomenda &&
+      (notContainsLocation ? <Text style={{fontSize: 10, padding: 10, color: 'gray'}}>Sem localização</Text>:
+      <ButtonUILIB
+        disabled={props.isSubmitting}
+        backgroundColor='orange'
+        style={[styles.button]}
+        onPress={() => {
+          setCoordinate(clientCoordinate)
+          setModalVisible(true);
+        }}>
+          <Text style={styles.textStyle}>Ver Localização</Text>
+      </ButtonUILIB>)}
+      {!props.isDetailsEncomenda &&
       <ButtonUILIB
         disabled={props.isSubmitting}
         backgroundColor='orange'
         style={[styles.button]}
         onPress={() => setModalVisible(true)}>
         <Text style={styles.textStyle}>{coordinate.latlng.latitude == 0 ? 'Adicionar Localização' : 'Alterar Localização'}</Text>
-      </ButtonUILIB>
-      {coordinate.latlng.latitude != 0 && <><ButtonUILIB
+      </ButtonUILIB>}
+      {(coordinate.latlng.latitude != 0) &&
+      <ButtonUILIB
         disabled={props.isSubmitting}
         backgroundColor='green'
         style={[styles.button]}
@@ -53,17 +72,18 @@ const ModalMaps = (props) => {
                     str += k + ": " + locationData[k] + "\n";
                 }
             });
-            Alert.alert('Localização Adicionada', str);
+            Alert.alert('Localização', str);
         }}>
-            <Text style={styles.textStyle}>Ver Localização</Text>
-      </ButtonUILIB>
+          <Text style={styles.textStyle}>Dados de Localização</Text>
+      </ButtonUILIB>}
+      {((coordinate.latlng.latitude != 0) && !props.isDetailsEncomenda) &&
       <ButtonUILIB
         disabled={props.isSubmitting}
         backgroundColor='red'
         style={[styles.button]}
         onPress={() => setCoordinate({latlng: {latitude: 0, longitude: 0}, locationGeocode: {}})}>
-            <Text style={styles.textStyle}>Remover Localização</Text>
-      </ButtonUILIB></>}
+        <Text style={styles.textStyle}>Remover Localização</Text>
+      </ButtonUILIB>}
     </View>
   );
 };
