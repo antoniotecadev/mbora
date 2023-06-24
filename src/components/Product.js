@@ -69,7 +69,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       moreDetails={produto.client_info_ad}
       isDetailsEncomenda={isEncomenda}
       clientCoordinate={produto.client_coordinate}
-      clientPhoto={produto.photo_path}
+      clientOrcompanyPhoto={produto.photo_path}
       onPress={encomendarProduct}
       />}
     <Card style={[styles.card, {backgroundColor: appearanceColor, shadowColor: Colors.getScheme() === 'light' ? Colors.dmBlack : 'white'}]} center onPress={isEncomenda ? ()=> setShowDialog(true) : onPress}>
