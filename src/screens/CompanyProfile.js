@@ -42,9 +42,10 @@ export default function CompanyProfile({ route, navigation }) {
 
     const { nav } = useServices();
     const {ui, user} = useStores();
-    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, screenBack, isProfileCompany} = route.params;
+    const {id, estado, empresa, imei, first_name, last_name, email, phone, alternative_phone, nomeProvincia, district, street, product_number, encomenda_number, followers_number, views_mbora, description, coordinate, screenBack, isProfileCompany} = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
 
+    const companyCoordinate = JSON.parse(coordinate);
     let color = getAppearenceColor(ui.appearanceName);
     const isAdmin= user.accountAdmin && (user.userIMEI == imei);
 
@@ -368,6 +369,7 @@ export default function CompanyProfile({ route, navigation }) {
       province: company.nomeProvincia || nomeProvincia,
       district: company.district || district,
       street: company.street || street,
+      companyCoordinate: company.coordinate || companyCoordinate,
     }
 
     navigation.setOptions({
@@ -376,7 +378,7 @@ export default function CompanyProfile({ route, navigation }) {
               <Feather name={isAdmin ? 'edit' : 'info'} size={24} color={'orange'}/>
             </TouchableOpacity>)
     })
-}, [user.accountAdmin, viewDetails]);
+  }, [user.accountAdmin, viewDetails, company]);
 
   useEffect(()=> {
       navigation.setOptions({
@@ -402,7 +404,7 @@ export default function CompanyProfile({ route, navigation }) {
   }, [route.params?.id, route.params?.isFavorito]);
 
   useEffect(() => {
-    if (route.params?.valuesCompany) {
+    if (route.params?.valuesCompany && !isEmpty(route.params.valuesCompany)) {
       setCompany({...route.params, ...route.params.valuesCompany});
     }
   }, [route.params?.valuesCompany]);
@@ -418,6 +420,7 @@ return (
           <>
             {viewDetails ? <Details /> : <UserPhoto setViewFullPhoto={setViewFullPhoto}/>}
             <TextUILIB textColor marginT-8 text70>{company.empresa}</TextUILIB>
+            {(isAdmin && companyCoordinate.latlng.latitude == 0) && <TextUILIB color='orangered' marginV-8 style={{fontSize: 10}} onPress={()=> nav.show('CompanyProfileEdit', data)}>Adiciona a localização da empresa no mapa</TextUILIB>}
             <NumberInformation/>
             <ButtonViewDetails/>
             <ButtonsFollowerMaximise/>

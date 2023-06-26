@@ -1,21 +1,24 @@
 import React, { useState, useContext, useEffect, useMemo } from 'react';
-import { StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Modal, Pressable, TextInput, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, TouchableOpacity, View, Text, ActivityIndicator } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, ErroMessage } from '../components/Form';
-import { Colors, Text as TextUILIB, ActionSheet } from 'react-native-ui-lib';
+import { Colors, Text as TextUILIB, ActionSheet, Button as ButtonUILIB } from 'react-native-ui-lib';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import { AntDesign } from "@expo/vector-icons";
 import ToastMessage from '../components/ToastMessage';
 import * as Constants from 'expo-constants';
+import Maps from '../components/Maps';
+import { isObject } from 'lodash';
 
 export default CompanyProfileEdit = ({route, navigation})=> {
 
-    const { first_name, last_name, company, description, email, phone, alternative_phone, province, district, street } = route.params;
+    const { first_name, last_name, company, description, email, phone, alternative_phone, province, district, street, companyCoordinate } = route.params;
     const { showDialog, setShowDialog, setVisibleToast } = useContext(CartContext);
-
+    
+    const companyCoordinates = isObject(companyCoordinate) ? companyCoordinate : JSON.parse(companyCoordinate);
     let nomeInput = null, sobrenomeInput = null, phoneInput = null, alternativephoneInput = null, provinceInput = null, districtInput = null, streetInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -29,13 +32,17 @@ export default CompanyProfileEdit = ({route, navigation})=> {
       alternative_phone: null,
       province_name: null, 
       district: null, 
-      street: null
+      street: null,
+      coordinate: null
     }
 
     const [show, setShow] = useState(false);
-    const [valuesCompany, setValuesCompany] = useState({});
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(initialValues);
+    const [valuesCompany, setValuesCompany] = useState({});
+    const [modalVisible, setModalVisible] = useState(false);
     const [nameProvince, setNameProvince] = useState(province);
+    const [coordinate, setCoordinate] = useState(companyCoordinates);
     const [focus, setFocus] = useState({name: false, company: false, description: false, email: false, telefone: false, location: false})
 
     const companyUpdate = async (data, action)=> {
@@ -79,6 +86,9 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                     } else if (rjd.data.message.street != undefined) {
                         messageError = rjd.data.message.street;
                         setError({ street: messageError });
+                    } else if (rjd.data.message.coordinate != undefined) {
+                      messageError = rjd.data.message.coordinate;
+                      setError({ coordinate: messageError });
                     } 
                 } else {
                     setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
@@ -317,7 +327,7 @@ export default CompanyProfileEdit = ({route, navigation})=> {
           {props => (
             <>
                 <TextUILIB marginT-20 textColor style={{fontWeight: 'bold'}}>E-mail</TextUILIB>
-                <TextUILIB style={{color: 'gray', fontSize: 10}}>Usar e-mail válido para receber informações relacionada as suas actividades na Aplicação, como as encomendas dos clientes e outras.</TextUILIB>
+                <TextUILIB style={styles.textSmall}>Usar e-mail válido para receber informações relacionada as suas actividades na Aplicação, como as encomendas dos clientes e outras.</TextUILIB>
                 <TextInput
                     onFocus={()=> setFocus({email: true})}
                     keyboardType='email-address'
@@ -493,6 +503,47 @@ export default CompanyProfileEdit = ({route, navigation})=> {
             </>
           )}
         </Formik>
+        <TextUILIB marginT-10 textColor>Localizaçao no Mapa</TextUILIB>
+        <TextUILIB style={styles.textSmall}>Adicione a localização para que os clientes possam encontrar a sua empresa no mapa.</TextUILIB>
+        <TextUILIB marginT-10 style={styles.textSmall}>{JSON.stringify(coordinate.latlng)}</TextUILIB>
+        <TextUILIB marginT-10 style={styles.textSmall}>{JSON.stringify(coordinate.locationGeocode)}</TextUILIB>
+        <ButtonSubmit onPress={()=> setModalVisible(true)} loading={false} textButtonLoading='Guardando...' textButton={coordinate.latlng.latitude == 0 ? 'Adicionar' : 'Alterar'}/>
+        <ErroMessage touched={true} errors={error.coordinate} />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <Maps coordinate={coordinate} setCoordinate={setCoordinate}/>
+        <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+                {loading ? 
+                <ActivityIndicator style={{margin: 20}} color={'green'}/>:
+                <Pressable style={[styles.button, {backgroundColor: 'green'}]}
+                  onPress={() => {
+                    setTimeout(() => {
+                      setLoading(true);
+                      companyUpdate({coordinate: coordinate}, 6).then(()=> {
+                        setLoading(false);
+                        setModalVisible(false);
+                      });
+                    }, 500);
+                }}>
+                  <Text style={{color: 'white'}}>Guardar</Text>
+                </Pressable>}
+                <Pressable
+                    style={[styles.button, {backgroundColor: 'orangered'}]}
+                    onPress={() => {
+                      setCoordinate(companyCoordinates);
+                      setModalVisible(false)
+                    }}>
+                    <Text style={{color: 'white'}}>Cancelar</Text>
+                </Pressable>
+            </View>
+        </View> 
+        </Modal>
         </ScrollView>
         </KeyboardAvoidingView>
       </SafeAreaView>
@@ -525,5 +576,43 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     fontWeight: 'bold'
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin:10
+  },
+  centeredView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalView: {
+    marginTop: 5,
+    marginBottom: 15,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin:10
+  },
+  buttonClose: {
+    backgroundColor: 'orange',
+  },
+  textSmall: {
+    color: 'gray',
+    fontSize: 10
   }
 });
