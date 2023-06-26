@@ -89,12 +89,19 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                     } else if (rjd.data.message.coordinate != undefined) {
                       messageError = rjd.data.message.coordinate;
                       setError({ coordinate: messageError });
+                      setCoordinate(companyCoordinates);
                     } 
                 } else {
+                    if(action == 6) {
+                      setCoordinate(companyCoordinates);
+                    }
                     setShowDialog({visible: true, title: 'Ocorreu um erro', message: rjd.data.message, color: 'orangered'})
                 }
             }
         } catch (error) {
+            if(action == 6) {
+              setCoordinate(companyCoordinates);
+            }
             setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'})
         }
     }
