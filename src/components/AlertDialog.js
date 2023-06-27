@@ -101,7 +101,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
               <ErroMessage touched={props.touched.address} errors={props.errors.address}/>
             </ViewUILIB>
             <TextUILIB textColor marginH-20>Localização no Mapa</TextUILIB>
-            <ModalMaps clientName={clientName} setCoordinate={setCoordinate} companyName={companyName} companyCoordinate={JSON.parse(companyCoordinate)} isSubmitting={props.isSubmitting} isDetailsEncomenda={isDetailsEncomenda} clientCoordinate={clientCoordinate}/>
+            <ModalMaps clientName={clientName} clientCoordinate={clientCoordinate} setCoordinate={setCoordinate} companyName={companyName} companyCoordinate={JSON.parse(companyCoordinate)} isSubmitting={props.isSubmitting} isDetailsEncomenda={isDetailsEncomenda} />
             <TextUILIB textColor marginH-20>Informações adicionais</TextUILIB>
             <TextInput
               color={props.isSubmitting ? 'gray' : 'black'}
