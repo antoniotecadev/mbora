@@ -4,7 +4,6 @@ import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
 import { Button as ButtonUILIB } from 'react-native-ui-lib';
 import Maps from './Maps';
 
-
 const ModalMaps = (props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -28,7 +27,7 @@ const ModalMaps = (props) => {
           // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
-        <Maps coordinate={coordinate} setCoordinate={setCoordinate}/>
+        <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Pressable

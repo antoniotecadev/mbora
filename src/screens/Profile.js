@@ -382,7 +382,7 @@ export default function Profile({ route, navigation }) {
                         <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(0)} refreshing={refreshingEncomenda} empty={emptyEncomenda} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={1} lazy>
-                        <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingFavorito} empty={emptyFavorito}/>
+                        <Favoritos nav={nav} appearanceColor={color} fetchFavoritos={fetchFavoritos} userName={user.userFirstName + ' ' + user.userLastName} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingFavorito} empty={emptyFavorito}/>
                     </TabController.TabPage>
                     <TabController.TabPage index={2} lazy>
                         <CompanyFollowers route={route} navigation={navigation} user={user} API_URL={API_URL} setNumberEmpresaAseguir={setNumberEmpresaAseguir}/>
@@ -400,7 +400,7 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produts, onRefresh, refreshing, empty })=> {
+const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userName, userTelephone, produts, onRefresh, refreshing, empty })=> {
 
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -456,7 +456,7 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userTelephone, produt
               setShowDialog({visible: true, title: 'Ocorreu um erro', message: error.message, color: 'orangered'});     
             }
         }
-        return <Product appearanceColor={appearanceColor} isFavorite={true} removeFavorite={()=> removeProductFavorite()} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
+        return <Product appearanceColor={appearanceColor} isFavorite={true} removeFavorite={()=> removeProductFavorite()} produto={product} key={product.id} userName={userName} userTelephone={userTelephone} onPress={()=> showProductDetails(product)}/>
     }, []);
 
     return(

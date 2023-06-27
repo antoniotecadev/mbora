@@ -437,7 +437,7 @@ return (
                   selectedLabelColor={'orange'}/>
               <TabController.PageCarousel>
                   <TabController.TabPage index={0}>
-                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingProduto} empty={emptyProduto} isProfileCompany={isProfileCompany} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
+                      <ProdutosServicos nav={nav} appearanceColor={color} fecthProducts={fecthProducts} userName={user.userFirstName + ' ' + user.userLastName} userTelephone={user.userTelephone} produts={produts} onRefresh={onRefresh} refreshing={refreshingProduto} empty={emptyProduto} isProfileCompany={isProfileCompany} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
                   </TabController.TabPage>
                   <TabController.TabPage index={1} lazy>
                       <Encomenda fetchEncomendas={fetchEncomendas} encomendas={encomendas} onRefresh={()=> onRefresh(1)} refreshing={refreshingEncomenda} empty={emptyEncomenda} accountAdmin={user.accountAdmin} userIMEI={user.userIMEI}/>
@@ -459,7 +459,7 @@ const Numeros = ({text, numero}) => {
             </TouchableOpacity>
 }
 
-const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, produts, onRefresh, refreshing, empty, isProfileCompany, accountAdmin = false, userIMEI = null })=> {
+const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userName, userTelephone, produts, onRefresh, refreshing, empty, isProfileCompany, accountAdmin = false, userIMEI = null })=> {
 
     const [loading, setLoading] = useState(false);
     const { setShowDialog, setVisibleToast } = useContext(CartContext);
@@ -481,7 +481,7 @@ const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userTelephone, 
     const keyExtractor = (item)=> item.id;
 
     const renderItemProduct = useCallback(({ item: product }) => { 
-      return <Product appearanceColor={appearanceColor} produto={product} key={product.id} userTelephone={userTelephone} onPress={()=> showProductDetails(product)} accountAdmin={accountAdmin} userIMEI={userIMEI} deleteProductService={deleteProductService}/>
+      return <Product appearanceColor={appearanceColor} produto={product} key={product.id} userName={userName} userTelephone={userTelephone} onPress={()=> showProductDetails(product)} accountAdmin={accountAdmin} userIMEI={userIMEI} deleteProductService={deleteProductService}/>
     }, []);
 
     const deleteProductService = async(productId, productName, companyImei, setLoadingDelete)=> { 

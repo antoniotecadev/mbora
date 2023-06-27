@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import MapView, { Marker, Callout, UrlTile } from 'react-native-maps';
-import { StyleSheet, View, Image, Alert, Text } from 'react-native';
-import * as Location from 'expo-location';
 import { isEmpty } from 'lodash';
+import * as Location from 'expo-location';
 import { RadioButton, RadioGroup } from 'react-native-ui-lib';
+import { StyleSheet, View, Image, Alert, Text } from 'react-native';
+import MapView, { Marker, Callout, UrlTile, Polyline } from 'react-native-maps';
+// import MapViewDirections from 'react-native-maps-directions';
 
 export default function Maps(props) {
 
 let mapView = null;
 
-const [mapType, setMapType] = useState('standard');
-const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
+const [drag, setDrag] = useState(false);
 const [region, setRegion] = useState(null);
 const [location, setLocation] = useState(null);
 const [errorMsg, setErrorMsg] = useState(null);
-const [drag, setDrag] = useState(false);
+const [mapType, setMapType] = useState('standard');
+const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
 
     useEffect(() => {
     (async () => {
@@ -80,36 +81,22 @@ const [drag, setDrag] = useState(false);
             loadingEnabled // Indicador de carregamento do mapa
             onPress={(e)=> animateRegionAndMarker(e.nativeEvent.coordinate)}
             >
+            {/* Usar este componente oculta o componente Polyline
             <UrlTile
                 urlTemplate={"http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"}
                 maximumZ={19}
                 flipY={false}
-            />
-            <Marker
-                key={1}
-                draggable
-                title='Localizaçõa actual'
-                description='Pressione o marcador e arraste para a localização onde irá receber o produto.'
-                coordinate={coordinate}
-                onDragStart={()=> setDrag(true)}
-                onDragEnd={(e) => { 
-                    setDrag(false);
-                    animateRegionAndMarker(e.nativeEvent.coordinate);
-                }}>
-                    {drag ? <Text style={{color: 'green'}}>Arrastando...🚶‍♂️</Text>:
-                    <Text style={{color: 'green', fontWeight: 'bold'}}>Cliente Mbora 🙋‍♂️</Text>}
-                    <Text style={{color: 'orange'}}>António Teca</Text>
-                    <Image source={require('../../assets/icon-location-client-mbora.png')} style={{height: 50, width:50, resizeMode:"contain" }} />
-                    <Callout tooltip={true} style={{
-                            width: 200,
-                            backgroundColor: 'orange',
-                            padding: 5,
-                            zIndex: 10
-                        }}>
-                        <Text style={{color: 'green', fontWeight: 'bold'}}>Dica:</Text>
-                        <Text style={{color: 'white'}}>Click ou arraste o marcador em uma região para marcar a localização onde irá receber o produto.</Text>
-                    </Callout>
-            </Marker>
+            /> */}
+            <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+            <ClientOrCompanyMarker id={2} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+            <Polyline
+                coordinates={[coordinate, props.companyCoordinate.latlng]}
+                fillColor="#16b4f7"
+                strokeColor={"#000"}
+                strokeWidth={5}
+                geodesic={true}
+                lineCap='round'
+                />
         </MapView>
         <View style={{position: "absolute", bottom: 50, backgroundColor: 'white'}}>
         <RadioGroup padding-10 initialValue='standard' onValueChange={value => setMapType(value)}>
@@ -118,13 +105,47 @@ const [drag, setDrag] = useState(false);
             <RadioButton size={20} marginB-10 color='blue' value='hybrid' label='Híbrido' labelStyle={{color: 'blue'}}/>
             <RadioButton size={20} color='black' value='terrain' label='Terreno' labelStyle={{color: 'black'}}/>
         </RadioGroup>
-            {/*<Text style={styles.text}>{text}</Text>
+            {/* 
             <Text style={styles.text}>{JSON.stringify(coordinate, null, 3)}</Text>
-            <Text style={styles.text}>{JSON.stringify(region, null, 3)}</Text>*/}
+            <Text style={styles.text}>{JSON.stringify(props.companyCoordinate.latlng, null, 3)}</Text>
+            <Text style={styles.text}>{text}</Text>
+            <Text style={styles.text}>{JSON.stringify(region, null, 3)}</Text>
+            */}
         </View>
     </View>
   );
 }
+
+const ClientOrCompanyMarker = ({id, dataClientOrCompany, drag, setDrag, animateRegionAndMarker}) => {
+    return (
+        <Marker
+            key={id}
+            draggable={id == 1}
+            title='Localizaçõa actual'
+            description='Pressione o marcador e arraste para a localização onde irá receber o produto.'
+            coordinate={dataClientOrCompany.coordinate}
+            onDragStart={()=> setDrag(true)}
+            onDragEnd={(e) => { 
+                setDrag(false);
+                animateRegionAndMarker(e.nativeEvent.coordinate);
+            }}>
+                {drag ? <Text style={{color: 'green'}}>Arrastando...</Text>:
+                <Text style={{color: 'green', fontWeight: 'bold'}}>{dataClientOrCompany.title}</Text>}
+                <Text style={{color: 'black'}}>{dataClientOrCompany.name}</Text>
+                <Image source={require('../../assets/icon-location-client-mbora.png')} style={{height: 50, width:50, resizeMode:"contain" }} />
+                <Callout tooltip={true} style={{
+                        width: 200,
+                        backgroundColor: 'orange',
+                        padding: 5,
+                        zIndex: 10
+                    }}>
+                    <Text style={{color: 'green', fontWeight: 'bold'}}>Dica:</Text>
+                    {id == 1 ? <Text style={{color: 'white'}}>Click ou arraste o marcador em uma região para marcar a localização onde irá receber o produto.</Text>
+                    :<Text style={{color: 'white'}}>Empresa vendedora.</Text>}
+                </Callout>
+        </Marker>
+    )
+} 
 
 const regionContainingPoints = points => {
     let minLat, maxLat, minLng, maxLng;

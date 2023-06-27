@@ -7,7 +7,7 @@ import { CartContext } from '../CartContext';
 import { AlertDialog } from './AlertDialog';
 import { AntDesign } from "@expo/vector-icons";
 
-export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userTelephone = null, onPress, markAsAnswered, accountAdmin, userIMEI, deleteProductService } ) {
+export function Product({appearanceColor, isEncomenda = false, isFavorite = false, removeFavorite, produto, userName = null, userTelephone = null, onPress, markAsAnswered, accountAdmin, userIMEI, deleteProductService } ) {
   
   const isAdmin = (accountAdmin && (userIMEI == produto.imei));
 
@@ -68,7 +68,10 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       clientAddress={produto.client_address}
       moreDetails={produto.client_info_ad}
       isDetailsEncomenda={isEncomenda}
+      clientName={userName}
       clientCoordinate={produto.client_coordinate}
+      companyName={produto.empresa}
+      companyCoordinate={produto.company_coordinate}
       clientOrcompanyPhoto={produto.photo_path}
       onPress={encomendarProduct}
       />}
