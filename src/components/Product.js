@@ -68,7 +68,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       clientAddress={produto.client_address}
       moreDetails={produto.client_info_ad}
       isDetailsEncomenda={isEncomenda}
-      clientName={userName}
+      clientName={userName || produto.first_name + ' ' +  produto.last_name}
       clientCoordinate={produto.client_coordinate}
       companyName={produto.empresa}
       companyCoordinate={produto.company_coordinate}
