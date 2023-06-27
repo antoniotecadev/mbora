@@ -1,8 +1,10 @@
-import { isNull } from 'lodash';
 import React, {useState, useEffect} from 'react';
-import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
-import { Button as ButtonUILIB } from 'react-native-ui-lib';
 import Maps from './Maps';
+import { isNull } from 'lodash';
+import { AntDesign } from "@expo/vector-icons";
+import { Button as ButtonUILIB } from 'react-native-ui-lib';
+import {Alert, Modal, StyleSheet, Text, Pressable, View} from 'react-native';
+
 
 const ModalMaps = (props) => {
 
@@ -25,15 +27,14 @@ const ModalMaps = (props) => {
         visible={modalVisible}
         onRequestClose={() => {
           // Alert.alert('Modal has been closed.');
-          setModalVisible(!modalVisible);
         }}>
         <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={styles.textStyle}>OK</Text>
+                    onPress={() => setModalVisible(false)}>
+                    <AntDesign name='closecircle' size={30} color='white' onPress={() => setModalVisible(false)}/>
                 </Pressable>
             </View>
         </View> 
@@ -97,7 +98,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: 'white',
     borderRadius: 20,
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -114,11 +117,12 @@ const styles = StyleSheet.create({
     margin:10
   },
   buttonClose: {
-    backgroundColor: 'orange',
+    backgroundColor: 'orangered',
   },
   textStyle: {
     color: 'white',
     textAlign: 'center',
+    fontWeight: 'bold'
   },
 });
 
