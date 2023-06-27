@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import * as Location from 'expo-location';
 import { RadioButton, RadioGroup } from 'react-native-ui-lib';
-import { StyleSheet, View, Image, Alert, Text } from 'react-native';
+import { StyleSheet, View, Image, Alert, Text, Pressable } from 'react-native';
 import MapView, { Marker, Callout, UrlTile, Polyline } from 'react-native-maps';
 // import MapViewDirections from 'react-native-maps-directions';
 
@@ -32,7 +32,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 setCoordinate({latitude: location.coords.latitude, longitude: location.coords.longitude});
                 props.setCoordinate({latlng: {latitude: location.coords.latitude, longitude: location.coords.longitude}, locationGeocode: locationGeocode[0]});
             } else {
-                animateRegionAndMarker(props.coordinate.latlng);
+                animateRegionAndMarker(props.coordinate.latlng, 1);
             }
         } catch (error) {
             Alert.alert('Erro', error.message);
@@ -56,12 +56,14 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
         setRegion(region);
     }
 
-    const animateRegionAndMarker = async (latlng)=> {
+    const animateRegionAndMarker = async (latlng, idMarker)=> {
         mapView.animateToRegion(regionContainingPoints([latlng]), 1000);
         let lctGc = await getLocationGeocode(latlng);
         setTimeout(() => {
-            setCoordinate(latlng);
-            props.setCoordinate({latlng: latlng, locationGeocode: lctGc[0]});
+            if(idMarker == 1) {
+                setCoordinate(latlng);
+                props.setCoordinate({latlng: latlng, locationGeocode: lctGc[0]});
+            }
         }, 1000);
     }
 
@@ -79,7 +81,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
             showsCompass // Mostarr bússola
             showsIndoors // Mapa interno
             loadingEnabled // Indicador de carregamento do mapa
-            onPress={(e)=> animateRegionAndMarker(e.nativeEvent.coordinate)}
+            onPress={(e)=> animateRegionAndMarker(e.nativeEvent.coordinate, 1)}
             >
             {/* Usar este componente oculta o componente Polyline
             <UrlTile
@@ -110,7 +112,15 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
             <Text style={styles.text}>{JSON.stringify(props.companyCoordinate.latlng, null, 3)}</Text>
             <Text style={styles.text}>{text}</Text>
             <Text style={styles.text}>{JSON.stringify(region, null, 3)}</Text>
-            */}
+        */}
+        </View>
+        <View style={styles.viewStyleButtom}>
+            <Pressable style={[styles.button, {backgroundColor: 'green'}]} onPress={() => animateRegionAndMarker(coordinate, 1)}>
+                <Text style={[styles.text, {color: 'white'}]}>Cliente</Text>
+            </Pressable>
+            <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, 2)}>
+                <Text style={[styles.text, {color: 'white'}]}>Empresa</Text>
+            </Pressable>
         </View>
     </View>
   );
@@ -127,7 +137,7 @@ const ClientOrCompanyMarker = ({id, dataClientOrCompany, drag, setDrag, animateR
             onDragStart={()=> setDrag(true)}
             onDragEnd={(e) => { 
                 setDrag(false);
-                animateRegionAndMarker(e.nativeEvent.coordinate);
+                animateRegionAndMarker(e.nativeEvent.coordinate, id);
             }}>
                 {drag ? <Text style={{color: 'green'}}>Arrastando...</Text>:
                 <Text style={{color: 'green', fontWeight: 'bold'}}>{dataClientOrCompany.title}</Text>}
@@ -195,5 +205,19 @@ container: {
     color: 'black',
     textAlign: 'left',
     fontSize: 10
+  },
+  viewStyleButtom: {
+    position: "absolute", 
+    bottom: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   }
+  ,
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin:10
+  },
 });

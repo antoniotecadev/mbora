@@ -31,10 +31,8 @@ const ModalMaps = (props) => {
         <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate}/>
         <Pressable style={styles.centeredView} onPress={()=> setModalVisible(false)}>
             <View style={styles.modalView}>
-                <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(false)}>
-                    <AntDesign name='closecircle' size={30} color='white' onPress={() => setModalVisible(false)}/>
+                <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(false)}>
+                  <AntDesign name='closecircle' size={30} color='white' onPress={() => setModalVisible(false)}/>
                 </Pressable>
             </View>
         </Pressable> 
