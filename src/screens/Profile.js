@@ -408,6 +408,7 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userName, userTelepho
     const showProductDetails = (product)=> {
         nav.show('ProductDetails', {
           produto: product,
+          userName: userName,
           userTelephone: userTelephone,
           screenBack: 'Profile',
           isProfileCompany: false

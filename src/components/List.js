@@ -16,10 +16,15 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 const imageCompany = require('../../assets/products/cantina2.jpg');
 const imageProduct = require('../../assets/products/oleo.jpg');
 
-const ItemProduct = ({ item, userTelephone }) => {
+const ItemProduct = ({ item, userTelephone, userName }) => {
 const navigation = useNavigation();
 const showProductDetails = (item)=> {
-  navigation.navigate('ProductDetails', { produto: item, userTelephone: userTelephone, screenBack: 'SearchProductCompany' });
+  navigation.navigate('ProductDetails', { 
+    produto: item,
+    userName: userName, 
+    userTelephone: userTelephone, 
+    screenBack: 'SearchProductCompany' 
+  });
 }
 return <TouchableOpacity onPress={()=> showProductDetails(item)}>
         <View style={styles.item}>
@@ -71,12 +76,12 @@ return <TouchableOpacity onPress={()=> showCompanyList()}>
 //       </TouchableOpacity>
 // };
 
-const List = ({ isCompany, empty, search, loading, setLoading, searchPhrase, data, windowHeight, userTelephone }) => {
+const List = ({ isCompany, empty, search, loading, setLoading, searchPhrase, data, windowHeight, userName, userTelephone }) => {
   const renderItem = ({ item }) => {
     if(isCompany) {
       return <ItemCompany item={item} searchPhrase={searchPhrase}/>;
     } else {
-      return <ItemProduct item={item} userTelephone={userTelephone} />;
+      return <ItemProduct item={item}  userName={userName} userTelephone={userTelephone}/>;
     }
   };
 

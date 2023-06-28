@@ -467,6 +467,7 @@ const ProdutosServicos = ({ nav, appearanceColor, fecthProducts, userName, userT
     const showProductDetails = (product)=> {
         let data = {
           produto: product,
+          userName: userName,
           userTelephone: userTelephone,
           screenBack: 'CompanyProfile',
           isProfileCompany: true

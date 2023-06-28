@@ -44,6 +44,7 @@ export default function ProductsList({ route, navigation }) {
   const showProductDetails = (product)=> {
     nav.show('ProductDetails', {
       produto: product,
+      userName: user.userFirstName + ' ' + user.userLastName,
       userTelephone: user.userTelephone,
       screenBack: 'Main',
       isProfileCompany: false

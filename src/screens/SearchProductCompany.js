@@ -151,6 +151,7 @@ const SearchProductCompany = ({route, navigation}) => {
             searchPhrase={searchPhrase}
             data={data}
             windowHeight={height}
+            userName={user.userFirstName + ' ' + user.userLastName}
             userTelephone={user.userTelephone}
           />
       )}
