@@ -222,7 +222,7 @@ export function ProductDetails({route, navigation}) {
       isDetailsEncomenda={false}
       clientName={userName}
       companyName={produto.empresa}
-      companyCoordinate={produto.company_coordinate}
+      companyCoordinate={JSON.parse(produto.company_coordinate)}
       onPress={encomendarProduct}
       />}
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}

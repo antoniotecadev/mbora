@@ -28,14 +28,14 @@ const ModalMaps = (props) => {
         onRequestClose={() => {
           // Alert.alert('Modal has been closed.');
         }}>
-        <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate}/>
-        <Pressable style={styles.centeredView} onPress={()=> setModalVisible(false)}>
+        <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate} companyNameAndCoordinate={props.companyNameAndCoordinate}/>
+        <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(false)}>
                   <AntDesign name='closecircle' size={30} color='white' onPress={() => setModalVisible(false)}/>
                 </Pressable>
             </View>
-        </Pressable> 
+        </View> 
       </Modal>
       {props.isDetailsEncomenda &&
       (notContainsLocation ? <Text style={{fontSize: 10, padding: 10, color: 'gray'}}>Sem localização</Text>:

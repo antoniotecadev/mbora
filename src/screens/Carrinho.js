@@ -70,6 +70,18 @@ export function Carrinho() {
         return [product_id, contact_imei, name_product, quant_prod];
     }
 
+    function getNameAndCoordinateCompany(array) {
+        let company = [];
+        for (let index = 0; index < array.length; index++) {
+            company.push({
+                id: index,
+                companyName: array[index]['product']['empresa'],
+                companyCoordinate: JSON.parse(array[index]['product']['company_coordinate']),
+            });
+        }
+        return company;
+    }
+
     function getValueInArray(array) {
         let element = '';
         for (let index = 0; index < array.length; index++) {
@@ -82,14 +94,20 @@ export function Carrinho() {
         <View>
             {showDialogLocal &&
             <AlertDialog 
-            showDialog={showDialogLocal} 
-            setShowDialog={setShowDialogLocal} 
-            titulo='Encomenda' 
-            mensagem={getValueInArray(items)} 
-            cor='green' 
-            onPress={encomendarProduct}
-            isEncomenda={true}
-            userTelephone={user.userTelephone}/>}
+                showDialog={showDialogLocal} 
+                setShowDialog={setShowDialogLocal} 
+                titulo='Encomenda' 
+                mensagem={getValueInArray(items)} 
+                cor='green' 
+                isEncomenda={true}
+                userTelephone={user.userTelephone}
+                isDetailsEncomenda={false}
+                clientName={user.userFirstName + ' ' + user.userLastName}
+                companyName={null}
+                companyCoordinate={null}
+                companyNameAndCoordinate={getNameAndCoordinateCompany(items)}
+                onPress={encomendarProduct}
+            />}
             {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
             <ToastMessage />
             <FlatList

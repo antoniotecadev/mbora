@@ -1,14 +1,14 @@
 import React, {useState, useCallback} from 'react';
-import {StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, View} from 'react-native';
-import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { Button as ButtonUILIB, Constants, Dialog, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
+import { Formik } from 'formik';
+import ModalMaps from './Modal';
 import { ErroMessage } from './Form';
 import { getAppearenceColor } from '../utils/utilitario';
-import ModalMaps from './Modal';
 import {Image as ImageCache} from 'react-native-expo-image-cache';
+import {StyleSheet, TextInput, ScrollView, KeyboardAvoidingView, View} from 'react-native';
+import { Button as ButtonUILIB, Constants, Dialog, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 
-export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, clientName, userTelephone = null, clientAddress = null, moreDetails = null, isDetailsEncomenda = false, clientCoordinate, clientOrcompanyPhoto = null, companyName, companyCoordinate, onPress})=> {
+export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, isEncomenda = false, clientName, userTelephone = null, clientAddress = null, moreDetails = null, isDetailsEncomenda = false, clientCoordinate, clientOrcompanyPhoto = null, companyName, companyCoordinate, companyNameAndCoordinate = null, onPress})=> {
     let addressInput = null, informationInput = null;
     const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
     
@@ -101,7 +101,7 @@ export const AlertDialog = ({showDialog, setShowDialog, titulo, mensagem, cor, i
               <ErroMessage touched={props.touched.address} errors={props.errors.address}/>
             </ViewUILIB>
             <TextUILIB textColor marginH-20>Localização no Mapa</TextUILIB>
-            <ModalMaps clientName={clientName} clientCoordinate={clientCoordinate} setCoordinate={setCoordinate} companyName={companyName} companyCoordinate={JSON.parse(companyCoordinate)} isSubmitting={props.isSubmitting} isDetailsEncomenda={isDetailsEncomenda} />
+            <ModalMaps clientName={clientName} clientCoordinate={clientCoordinate} setCoordinate={setCoordinate} companyName={companyName} companyCoordinate={companyCoordinate} companyNameAndCoordinate={companyNameAndCoordinate} isSubmitting={props.isSubmitting} isDetailsEncomenda={isDetailsEncomenda} />
             <TextUILIB textColor marginH-20>Informações adicionais</TextUILIB>
             <TextInput
               color={props.isSubmitting ? 'gray' : 'black'}

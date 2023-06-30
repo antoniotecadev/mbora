@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { isEmpty } from 'lodash';
 import * as Location from 'expo-location';
 import { RadioButton, RadioGroup } from 'react-native-ui-lib';
-import { StyleSheet, View, Image, Alert, Text, Pressable } from 'react-native';
 import MapView, { Marker, Callout, UrlTile, Polyline } from 'react-native-maps';
+import { StyleSheet, View, Image, Alert, Text, Pressable, ScrollView } from 'react-native';
 // import MapViewDirections from 'react-native-maps-directions';
 
 export default function Maps(props) {
@@ -32,7 +32,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 setCoordinate({latitude: location.coords.latitude, longitude: location.coords.longitude});
                 props.setCoordinate({latlng: {latitude: location.coords.latitude, longitude: location.coords.longitude}, locationGeocode: locationGeocode[0]});
             } else {
-                animateRegionAndMarker(props.coordinate.latlng, 1);
+                animateRegionAndMarker(props.coordinate.latlng, true);
             }
         } catch (error) {
             Alert.alert('Erro', error.message);
@@ -56,11 +56,11 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
         setRegion(region);
     }
 
-    const animateRegionAndMarker = async (latlng, idMarker)=> {
+    const animateRegionAndMarker = async (latlng, moveMarker)=> {
         mapView.animateToRegion(regionContainingPoints([latlng]), 1000);
         let lctGc = await getLocationGeocode(latlng);
         setTimeout(() => {
-            if(idMarker == 1) {
+            if(moveMarker) {
                 setCoordinate(latlng);
                 props.setCoordinate({latlng: latlng, locationGeocode: lctGc[0]});
             }
@@ -80,8 +80,8 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
             showsMyLocationButton // Button para mover o mapa até a localização do usuário
             showsCompass // Mostarr bússola
             showsIndoors // Mapa interno
-            loadingEnabled // Indicador de carregamento do mapa
-            onPress={(e)=> animateRegionAndMarker(e.nativeEvent.coordinate, 1)}
+            loadingEnabled={true} // Indicador de carregamento do mapa
+            onDoublePress={(e)=> animateRegionAndMarker(e.nativeEvent.coordinate, true)}
             >
             {/* Usar este componente oculta o componente Polyline
             <UrlTile
@@ -89,16 +89,31 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 maximumZ={19}
                 flipY={false}
             /> */}
-            <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
-            <ClientOrCompanyMarker id={2} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
-            <Polyline
-                coordinates={[coordinate, props.companyCoordinate.latlng]}
-                fillColor="#16b4f7"
-                strokeColor={"#000"}
-                strokeWidth={5}
-                geodesic={true}
-                lineCap='round'
+            <ClientOrCompanyMarker id={0} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+            {props.companyName == null ? 
+                props.companyNameAndCoordinate.map((c) => (
+                <Fragment key={c.id}>
+                    <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                    <Polyline
+                        coordinates={[coordinate, c.companyCoordinate.latlng]}
+                        fillColor="#16b4f7"
+                        strokeColor={"#000"}
+                        strokeWidth={5}
+                        lineCap='round'
+                    />
+                </Fragment>
+                ))
+            : 
+            <>
+                <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                <Polyline
+                    coordinates={[coordinate, props.companyCoordinate.latlng]}
+                    fillColor="#16b4f7"
+                    strokeColor={"#000"}
+                    strokeWidth={5}
+                    lineCap='round'
                 />
+            </>}
         </MapView>
         <View style={{position: "absolute", bottom: 50, backgroundColor: 'white'}}>
         <RadioGroup padding-10 initialValue='standard' onValueChange={value => setMapType(value)}>
@@ -115,12 +130,23 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
         */}
         </View>
         <View style={styles.viewStyleButtom}>
-            <Pressable style={[styles.button, {backgroundColor: 'green'}]} onPress={() => animateRegionAndMarker(coordinate, 1)}>
-                <Text style={[styles.text, {color: 'white'}]}>Cliente</Text>
+            <Pressable style={[styles.button, {backgroundColor: 'green'}]} onPress={() => animateRegionAndMarker(coordinate, true)}>
+                <Text style={[styles.text, {color: 'white'}]}>{props.clientName}</Text>
             </Pressable>
-            <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, 2)}>
-                <Text style={[styles.text, {color: 'white'}]}>Empresa</Text>
-            </Pressable>
+            {props.companyName == null ? 
+            <ScrollView horizontal={true}>
+                {props.companyNameAndCoordinate.map((c) => (
+                <Fragment key={c.id}>
+                    <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(c.companyCoordinate.latlng, false)}>
+                        <Text style={[styles.text, {color: 'white'}]}>{c.companyName}</Text>
+                    </Pressable>
+                </Fragment>
+                ))}
+            </ScrollView>
+            :
+            <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, false)}>
+                <Text style={[styles.text, {color: 'white'}]}>{props.companyName}</Text>
+            </Pressable>}
         </View>
     </View>
   );
@@ -130,17 +156,17 @@ const ClientOrCompanyMarker = ({id, dataClientOrCompany, drag, setDrag, animateR
     return (
         <Marker
             key={id}
-            draggable={id == 1}
+            draggable={id == 0}
             title='Localizaçõa actual'
             description='Pressione o marcador e arraste para a localização onde irá receber o produto.'
             coordinate={dataClientOrCompany.coordinate}
             onDragStart={()=> setDrag(true)}
             onDragEnd={(e) => { 
                 setDrag(false);
-                animateRegionAndMarker(e.nativeEvent.coordinate, id);
+                animateRegionAndMarker(e.nativeEvent.coordinate, id == 0);
             }}>
                 {drag ? <Text style={{color: 'green'}}>Arrastando...</Text>:
-                <Text style={{color: 'green', fontWeight: 'bold'}}>{dataClientOrCompany.title}</Text>}
+                <Text style={[styles.textMarker, {color: id == 0 ? 'green' : 'rgb(255, 140, 0)'}]}>{dataClientOrCompany.title}</Text>}
                 <Text style={{color: 'black'}}>{dataClientOrCompany.name}</Text>
                 <Image source={require('../../assets/icon-location-client-mbora.png')} style={{height: 50, width:50, resizeMode:"contain" }} />
                 <Callout tooltip={true} style={{
@@ -150,7 +176,7 @@ const ClientOrCompanyMarker = ({id, dataClientOrCompany, drag, setDrag, animateR
                         zIndex: 10
                     }}>
                     <Text style={{color: 'green', fontWeight: 'bold'}}>Dica:</Text>
-                    {id == 1 ? <Text style={{color: 'white'}}>Click ou arraste o marcador em uma região para marcar a localização onde irá receber o produto.</Text>
+                    {id == 0 ? <Text style={{color: 'white'}}>Click ou arraste o marcador em uma região para marcar a localização onde irá receber o produto.</Text>
                     :<Text style={{color: 'white'}}>Empresa vendedora.</Text>}
                 </Callout>
         </Marker>
@@ -196,28 +222,30 @@ const regionContainingPoints = points => {
 const styles = StyleSheet.create({   
 container: {
     flex: 1,
-  },
-  map: {
+},
+map: {
     width: '100%',
     height: '100%',
-  },
-  text: {
+},
+text: {
     color: 'black',
     textAlign: 'left',
     fontSize: 10
-  },
-  viewStyleButtom: {
+},
+viewStyleButtom: {
     position: "absolute", 
     bottom: 0,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-  }
-  ,
-  button: {
+},
+button: {
     borderRadius: 20,
     padding: 10,
     elevation: 2,
     margin:10
-  },
+},
+textMarker: {
+    backgroundColor: 'white'
+}
 });

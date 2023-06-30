@@ -71,7 +71,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
       clientName={userName || produto.first_name + ' ' +  produto.last_name}
       clientCoordinate={produto.client_coordinate}
       companyName={produto.empresa}
-      companyCoordinate={produto.company_coordinate}
+      companyCoordinate={JSON.parse(produto.company_coordinate)}
       clientOrcompanyPhoto={produto.photo_path}
       onPress={encomendarProduct}
       />}
