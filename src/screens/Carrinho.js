@@ -13,8 +13,6 @@ const iconButton = { round: true, iconStyle: { tintColor: Colors.white } };
 
 export function Carrinho() {
 
-    const [id, setId] = useState([])
-    const [imei, setImei] = useState([])
     const [loading, setLoading] = useState(false)
     const [showDialogLocal, setShowDialogLocal] = useState(false);
 
