@@ -19,6 +19,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
 
     useEffect(() => {
     (async () => {
+        alert(props.isDetails)
         try {
             if(props.coordinate.latlng.latitude == 0 && props.coordinate.latlng.longitude == 0) {
                 let { status } = await Location.requestForegroundPermissionsAsync();
@@ -89,7 +90,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 maximumZ={19}
                 flipY={false}
             /> */}
-            <ClientOrCompanyMarker id={0} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+            <ClientOrCompanyMarker id={0} draggable={!props.isDetails} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
             {props.companyName == null ? 
                 props.companyNameAndCoordinate.map((c) => (
                 <Fragment key={c.id}>
@@ -152,11 +153,11 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
   );
 }
 
-const ClientOrCompanyMarker = ({id, dataClientOrCompany, drag, setDrag, animateRegionAndMarker}) => {
+const ClientOrCompanyMarker = ({id, draggable = false, dataClientOrCompany, drag, setDrag, animateRegionAndMarker}) => {
     return (
         <Marker
             key={id}
-            draggable={id == 0}
+            draggable={id == 0 && draggable}
             title='Localizaçõa actual'
             description='Pressione o marcador e arraste para a localização onde irá receber o produto.'
             coordinate={dataClientOrCompany.coordinate}

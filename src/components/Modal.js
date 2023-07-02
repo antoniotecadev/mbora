@@ -28,7 +28,7 @@ const ModalMaps = (props) => {
         onRequestClose={() => {
           // Alert.alert('Modal has been closed.');
         }}>
-        <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate} companyNameAndCoordinate={props.companyNameAndCoordinate}/>
+        <Maps clientName={props.clientName} coordinate={coordinate} setCoordinate={setCoordinate} actionMap={0} companyName={props.companyName} companyCoordinate={props.companyCoordinate} companyNameAndCoordinate={props.companyNameAndCoordinate} isDetails={props.isDetailsEncomenda}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(false)}>
