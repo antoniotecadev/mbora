@@ -89,31 +89,35 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 maximumZ={19}
                 flipY={false}
             /> */}
-            <ClientOrCompanyMarker id={0} draggable={!props.isDetails} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
-            {props.companyName == null ? 
-                props.companyNameAndCoordinate.map((c) => (
-                <Fragment key={c.id}>
-                    <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+            {props.isEditCompanyCoordinate ? 
+            <ClientOrCompanyMarker id={0} draggable={true} dataClientOrCompany={{name: props.companyName, coordinate: coordinate, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>:
+            <Fragment>
+                <ClientOrCompanyMarker id={0} draggable={!props.isDetails} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                {props.companyName == null ? 
+                    props.companyNameAndCoordinate.map((c) => (
+                    <Fragment key={c.id}>
+                        <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                        <Polyline
+                            coordinates={[coordinate, c.companyCoordinate.latlng]}
+                            fillColor="#16b4f7"
+                            strokeColor={"#000"}
+                            strokeWidth={5}
+                            lineCap='round'
+                        />
+                    </Fragment>
+                    ))
+                : 
+                <Fragment>
+                    <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
                     <Polyline
-                        coordinates={[coordinate, c.companyCoordinate.latlng]}
+                        coordinates={[coordinate, props.companyCoordinate.latlng]}
                         fillColor="#16b4f7"
                         strokeColor={"#000"}
                         strokeWidth={5}
                         lineCap='round'
                     />
-                </Fragment>
-                ))
-            : 
-            <>
-                <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
-                <Polyline
-                    coordinates={[coordinate, props.companyCoordinate.latlng]}
-                    fillColor="#16b4f7"
-                    strokeColor={"#000"}
-                    strokeWidth={5}
-                    lineCap='round'
-                />
-            </>}
+                </Fragment>}
+            </Fragment>}
         </MapView>
         <View style={{position: "absolute", bottom: 50, backgroundColor: 'white'}}>
         <RadioGroup padding-10 initialValue='standard' onValueChange={value => setMapType(value)}>
@@ -129,6 +133,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
             <Text style={styles.text}>{JSON.stringify(region, null, 3)}</Text>
         */}
         </View>
+        {!props.isEditCompanyCoordinate &&
         <View style={styles.viewStyleButtom}>
             <Pressable style={[styles.button, {backgroundColor: 'green'}]} onPress={() => animateRegionAndMarker(coordinate, true)}>
                 <Text style={[styles.text, {color: 'white'}]}>{props.clientName}</Text>
@@ -147,7 +152,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
             <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, false)}>
                 <Text style={[styles.text, {color: 'white'}]}>{props.companyName}</Text>
             </Pressable>}
-        </View>
+        </View>}
     </View>
   );
 }

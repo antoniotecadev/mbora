@@ -523,7 +523,7 @@ export default CompanyProfileEdit = ({route, navigation})=> {
           onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        <Maps coordinate={coordinate} setCoordinate={setCoordinate}/>
+        <Maps isEditCompanyCoordinate={true} companyName={company} coordinate={coordinate} setCoordinate={setCoordinate} companyCoordinate={{latlng: {latitude: 0, longitude: 0}}}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
                 {loading ? 
