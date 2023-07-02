@@ -13,32 +13,37 @@ import {
   Share,
   Alert
 } from 'react-native';
-import { CartContext } from '../CartContext';
 import { currency, getValueItemAsync, getCompany, numberFollowersAndViewsFormat, removeSpaceLowerCase } from '../utils/utilitario';
-import { Icon } from '../components/icon';
-import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
-import ToastMessage from '../components/ToastMessage';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { AlertDialog } from '../components/AlertDialog';
 import { isNumber } from 'lodash';
-import { AntDesign, MaterialCommunityIcons, Fontisto  } from "@expo/vector-icons";
+import { useStores } from '../stores';
+import { Icon } from '../components/icon';
 import * as Constants from 'expo-constants';
+import { CartContext } from '../CartContext';
 import Barcode from 'react-native-barcode-svg';
+import ToastMessage from '../components/ToastMessage';
+import { AlertDialog } from '../components/AlertDialog';
+import { AntDesign, MaterialCommunityIcons, Fontisto  } from "@expo/vector-icons";
+import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 
 const imageProduct = require('../../assets/products/oleo.jpg');
 const API_URL = Constants.default.manifest.extra.API_URL;
 
 export function ProductDetails({route, navigation}) {
-  const { height } = Dimensions.get('window');
+  
   const [view, setView] = useState(0);
   const [isFavorito, setIsFavorito] = useState(false);
   const [viewCodeBar, setViewCodeBar] = useState(false);
   const [loading, setLoading] = useState({encomenda: false, favorito: false, companyProfile: false});
   const [showDialogLocal, setShowDialogLocal] = useState(false);
-
+  
+  const { user } = useStores();
+  const { height } = Dimensions.get('window');
   const { produto, userName, userTelephone, screenBack, isProfileCompany } = route.params;
-  const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
+  // const { getItem, setItem, removeItem } = useAsyncStorage('p-' + produto.id);
   const { addItemToCart, setVisibleToast, encomendar, showDialog, setShowDialog } = useContext(CartContext);
+
+  const isAdmin = (user.accountAdmin && (user.userIMEI == produto.imei));
 
   const addProductFavorite = async ()=> {
     setLoading({favorito: true}); 
@@ -260,13 +265,13 @@ export function ProductDetails({route, navigation}) {
                 alignItems: 'center',
                 justifyContent: 'space-between',
               }}>
-                <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>
-                {loading.encomenda ? <ActivityIndicator color='orange'/> : <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
+                {!isAdmin && <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>}
+                {loading.encomenda ? <ActivityIndicator color='orange'/> : !isAdmin && <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
                 {produto.codigoBarra && 
                 (viewCodeBar ? 
                   <MaterialCommunityIcons name="barcode-off" size={25} color="darkgreen" onPress={()=> setViewCodeBar(false)}/> :
                   <Fontisto name="shopping-barcode" size={25} color="darkgreen" onPress={()=> setViewCodeBar(true)}/>)}  
-                {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
+                {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : !isAdmin && <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
                 <IconButton text={'Partilha'} iconNames={'share-outline'} size={25} onPress={()=> onShare()}/>
             </View>
           <View style={styles.divisor}></View>
