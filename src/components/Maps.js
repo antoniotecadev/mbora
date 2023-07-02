@@ -19,7 +19,6 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
 
     useEffect(() => {
     (async () => {
-        alert(props.isDetails)
         try {
             if(props.coordinate.latlng.latitude == 0 && props.coordinate.latlng.longitude == 0) {
                 let { status } = await Location.requestForegroundPermissionsAsync();
