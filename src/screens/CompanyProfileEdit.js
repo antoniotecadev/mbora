@@ -526,6 +526,14 @@ export default CompanyProfileEdit = ({route, navigation})=> {
         <Maps isEditCompanyCoordinate={true} companyName={company} coordinate={coordinate} setCoordinate={setCoordinate} companyCoordinate={{latlng: {latitude: 0, longitude: 0}}}/>
         <View style={styles.centeredView}>
             <View style={styles.modalView}>
+                <Pressable
+                    style={[styles.button, {backgroundColor: 'orangered'}]}
+                    onPress={() => {
+                      setCoordinate(companyCoordinates);
+                      setModalVisible(false)
+                    }}>
+                    <Text style={{color: 'white'}}>Cancelar</Text>
+                </Pressable>
                 {loading ? 
                 <ActivityIndicator style={{margin: 20}} color={'green'}/>:
                 <Pressable style={[styles.button, {backgroundColor: 'green'}]}
@@ -540,14 +548,6 @@ export default CompanyProfileEdit = ({route, navigation})=> {
                 }}>
                   <Text style={{color: 'white'}}>Guardar</Text>
                 </Pressable>}
-                <Pressable
-                    style={[styles.button, {backgroundColor: 'orangered'}]}
-                    onPress={() => {
-                      setCoordinate(companyCoordinates);
-                      setModalVisible(false)
-                    }}>
-                    <Text style={{color: 'white'}}>Cancelar</Text>
-                </Pressable>
             </View>
         </View> 
         </Modal>
@@ -600,6 +600,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
