@@ -3,7 +3,7 @@ import { isEmpty } from 'lodash';
 import * as Location from 'expo-location';
 import { RadioButton, RadioGroup } from 'react-native-ui-lib';
 import MapView, { Marker, Callout, UrlTile, Polyline } from 'react-native-maps';
-import { StyleSheet, View, Image, Alert, Text, Pressable, ScrollView } from 'react-native';
+import { StyleSheet, View, Image, Alert, Text, Pressable, ScrollView, Linking } from 'react-native';
 // import MapViewDirections from 'react-native-maps-directions';
 
 export default function Maps(props) {
@@ -136,27 +136,35 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
         */}
         </View>
         {!props.isEditCompanyCoordinate &&
-        <View style={styles.viewStyleButtom}>
-            <Pressable style={[styles.button, {backgroundColor: 'green'}]} onPress={() => animateRegionAndMarker(coordinate, true)}>
-                <Text style={[styles.text, {color: 'white'}]}>{props.clientName}</Text>
-            </Pressable>
-            {props.companyName == null ? 
-            <ScrollView horizontal={true}>
-                {props.companyNameAndCoordinate.map((c) => (
-                    (c.companyCoordinate.latlng.latitude != 0) &&
-                    <Fragment key={c.id}>
-                        <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(c.companyCoordinate.latlng, false)}>
-                            <Text style={[styles.text, {color: 'white'}]}>{c.companyName}</Text>
-                        </Pressable>
-                    </Fragment>
-                ))}
-            </ScrollView>
-            :
-            (props.companyCoordinate.latlng.latitude != 0) &&
-            <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, false)}>
-                <Text style={[styles.text, {color: 'white'}]}>{props.companyName}</Text>
-            </Pressable>}
-        </View>}
+         <Fragment>
+            <View style={styles.viewStyleButtom}>
+                <Pressable style={[styles.button, {backgroundColor: 'green'}]} onPress={() => animateRegionAndMarker(coordinate, true)}>
+                    <Text style={[styles.text, {color: 'white'}]}>{props.clientName}</Text>
+                </Pressable>
+                {props.companyName == null ? 
+                <ScrollView horizontal={true}>
+                    {props.companyNameAndCoordinate.map((c) => (
+                        (c.companyCoordinate.latlng.latitude != 0) &&
+                        <Fragment key={c.id}>
+                            <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(c.companyCoordinate.latlng, false)}>
+                                <Text style={[styles.text, {color: 'white'}]}>{c.companyName}</Text>
+                            </Pressable>
+                        </Fragment>
+                    ))}
+                </ScrollView>
+                :
+                (props.companyCoordinate.latlng.latitude != 0) &&
+                <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, false)}>
+                    <Text style={[styles.text, {color: 'white'}]}>{props.companyName}</Text>
+                </Pressable>}
+            </View>
+            {(props.isDetails && (props.companyCoordinate.latlng.latitude != 0)) && 
+            <View style={styles.viewGoogleMaps}>
+                <Pressable style={[styles.googleMaps]} onPress={() => Linking.openURL('https://www.google.com/maps/dir/?api=1&origin=' + props.companyCoordinate.latlng.latitude + '%2C' + props.companyCoordinate.latlng.longitude + '&destination=' + coordinate.latitude + '%2C' + coordinate.longitude)}>
+                    <Text style={[styles.text, {color: 'white'}]}>Google Maps</Text>
+                </Pressable>
+            </View>}
+        </Fragment>}
     </View>
   );
 }
@@ -253,6 +261,17 @@ button: {
     padding: 10,
     elevation: 2,
     margin:10
+},
+viewGoogleMaps: {
+    position: "absolute", 
+    top: 50,
+},
+googleMaps: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    margin:10,
+    backgroundColor: 'black'
 },
 textMarker: {
     backgroundColor: 'white'
