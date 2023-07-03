@@ -213,80 +213,80 @@ export function ProductDetails({route, navigation}) {
   
   const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
-    <ViewUILIB style={{height: height}} bg-bgColor>
-    {showDialogLocal &&
-    <AlertDialog 
-      showDialog={showDialogLocal} 
-      setShowDialog={setShowDialogLocal} 
-      titulo='Encomenda' 
-      mensagem={'\nEmpresa: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco)) + '\n'} 
-      cor='green' 
-      isEncomenda={true}
-      userTelephone={userTelephone}
-      isDetailsEncomenda={false}
-      clientName={userName}
-      companyName={produto.empresa}
-      companyCoordinate={JSON.parse(produto.company_coordinate)}
-      onPress={encomendarProduct}
-      />}
-      {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
-      <ToastMessage />
-      <ScrollView>
-        <TouchableOpacity onPress={()=> {
-          if(!isProfileCompany){
-            setLoading({companyProfile: true});
-            getCompany(produto.imei, navigation, 'ProductDetails', isProfileCompany).then(()=> setLoading({companyProfile: false}));
-          }
-        }}>
-          <View style={styles.section}>
-            <TextUILIB $textDefault textColor>{produto.empresa}</TextUILIB>
-            {loading.companyProfile ? <ActivityIndicator color={'orange'}/>: 
-            <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
-              size={20}
-              animate={false}
-              badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
-            />}
-          </View>
-          <Text style={{ marginHorizontal: 16, marginBottom: 16, color: Colors.grey40 }}>
-            {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
-          </Text>
-        </TouchableOpacity>
-        <Image style={styles.image} source= {{uri: uri}}/>
-        {viewCodeBar && 
-        <View style={{alignItems: 'center', backgroundColor: 'lightgreen', paddingVertical: 2, marginHorizontal: 16, marginTop: 10}}>
-          <Barcode value={produto.codigoBarra} format="CODE128" />
-          <Text>{produto.codigoBarra}</Text>
-        </View>}
-        <View style={styles.infoContainer}>
-        <View style={styles.divisor}></View>
-          <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-                {!isAdmin && <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>}
-                {loading.encomenda ? <ActivityIndicator color='orange'/> : !isAdmin && <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
-                {produto.codigoBarra && 
-                (viewCodeBar ? 
-                  <MaterialCommunityIcons name="barcode-off" size={25} color="darkgreen" onPress={()=> setViewCodeBar(false)}/> :
-                  <Fontisto name="shopping-barcode" size={25} color="darkgreen" onPress={()=> setViewCodeBar(true)}/>)}  
-                {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : !isAdmin && <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
-                <IconButton text={'Partilha'} iconNames={'share-outline'} size={25} onPress={()=> onShare()}/>
+    <ScrollView>
+      <ViewUILIB style={{height: height}} bg-bgColor>
+      {showDialogLocal &&
+      <AlertDialog 
+        showDialog={showDialogLocal} 
+        setShowDialog={setShowDialogLocal} 
+        titulo='Encomenda' 
+        mensagem={'\nEmpresa: ' + produto.empresa + '\n' +'Produto: ' + produto.nome + '\n' + 'Preço: ' + currency(String(produto.preco)) + '\n'} 
+        cor='green' 
+        isEncomenda={true}
+        userTelephone={userTelephone}
+        isDetailsEncomenda={false}
+        clientName={userName}
+        companyName={produto.empresa}
+        companyCoordinate={JSON.parse(produto.company_coordinate)}
+        onPress={encomendarProduct}
+        />}
+        {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
+        <ToastMessage />
+          <TouchableOpacity onPress={()=> {
+            if(!isProfileCompany){
+              setLoading({companyProfile: true});
+              getCompany(produto.imei, navigation, 'ProductDetails', isProfileCompany).then(()=> setLoading({companyProfile: false}));
+            }
+          }}>
+            <View style={styles.section}>
+              <TextUILIB $textDefault textColor>{produto.empresa}</TextUILIB>
+              {loading.companyProfile ? <ActivityIndicator color={'orange'}/>: 
+              <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
+                size={20}
+                animate={false}
+                badgeProps={{ size: 6, borderWidth: 0, backgroundColor: Colors.$backgroundSuccessHeavy }}
+              />}
             </View>
+            <Text style={{ marginHorizontal: 16, marginBottom: 16, color: Colors.grey40 }}>
+              {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
+            </Text>
+          </TouchableOpacity>
+          <Image style={styles.image} source= {{uri: uri}}/>
+          {viewCodeBar && 
+          <View style={{alignItems: 'center', backgroundColor: 'lightgreen', paddingVertical: 2, marginHorizontal: 16, marginTop: 10}}>
+            <Barcode value={produto.codigoBarra} format="CODE128" />
+            <Text>{produto.codigoBarra}</Text>
+          </View>}
+          <View style={styles.infoContainer}>
           <View style={styles.divisor}></View>
-          <TextUILIB textColor style={styles.name}>{produto.nome}</TextUILIB>
-          <Text style={styles.price}>{currency(String(produto.preco))}</Text>
-          <Text style={styles.description} onPress={() => navigation.navigate('ProductCategoryList', {categoria: {id: produto.idcategoria, nome: produto.nomeCategoria}, isTag: false})}>
-            {produto.nomeCategoria}
-          </Text>
-          <Tag/>
-          <View style={styles.divisor}></View>
-          <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
-          {produto.updated_at && <Text style={[styles.colorGrey, { marginTop: 8 }]}>Alterado {produto.updated_at}</Text>}
-          <Text style={[styles.colorGrey, { marginTop: 8 }]}>{numberFollowersAndViewsFormat(view, 'youtube')} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
-        </View>
-      </ScrollView>
-    </ViewUILIB>
+            <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                  {!isAdmin && <IconButton text={'Carrinho'} iconNames={'cart-outline'} size={25} onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}/>}
+                  {loading.encomenda ? <ActivityIndicator color='orange'/> : !isAdmin && <IconButton text={'Encomenda'} iconNames={'chatbox-outline'} size={25} onPress={()=> setShowDialogLocal(true)}/>}
+                  {produto.codigoBarra && 
+                  (viewCodeBar ? 
+                    <MaterialCommunityIcons name="barcode-off" size={25} color="darkgreen" onPress={()=> setViewCodeBar(false)}/> :
+                    <Fontisto name="shopping-barcode" size={25} color="darkgreen" onPress={()=> setViewCodeBar(true)}/>)}  
+                  {loading.favorito ? <ActivityIndicator style={{marginHorizontal: Platform.OS == 'ios' ? 12 : 10}} color='orange'/> : !isAdmin && <IconButton text={'Favorito'} iconNames={isFavorito ? 'star-sharp' : 'star-outline'} size={25} onPress={()=> isFavorito ?  removeProductFavorite().then(()=> setLoading({favorito: false})) : addProductFavorite().then(()=> setLoading({favorito: false}))}/>}
+                  <IconButton text={'Partilha'} iconNames={'share-outline'} size={25} onPress={()=> onShare()}/>
+              </View>
+            <View style={styles.divisor}></View>
+            <TextUILIB textColor style={styles.name}>{produto.nome}</TextUILIB>
+            <Text style={styles.price}>{currency(String(produto.preco))}</Text>
+            <Text style={styles.description} onPress={() => navigation.navigate('ProductCategoryList', {categoria: {id: produto.idcategoria, nome: produto.nomeCategoria}, isTag: false})}>
+              {produto.nomeCategoria}
+            </Text>
+            <Tag/>
+            <View style={styles.divisor}></View>
+            <Text style={styles.colorGrey}>Publicado {produto.created_at}</Text>
+            {produto.updated_at && <Text style={[styles.colorGrey, { marginTop: 8 }]}>Alterado {produto.updated_at}</Text>}
+            <Text style={[styles.colorGrey, { marginTop: 8 }]}>{numberFollowersAndViewsFormat(view, 'youtube')} {Number(produto.visualizacao) > 1 ? 'visualizações' : 'visualização'}</Text>
+          </View>
+      </ViewUILIB>
+    </ScrollView>
   );
 } 
 
