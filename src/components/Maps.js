@@ -90,14 +90,14 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 flipY={false}
             /> */}
             {props.isEditCompanyCoordinate ? 
-            <ClientOrCompanyMarker id={0} draggable={true} dataClientOrCompany={{name: props.companyName, coordinate: coordinate, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>:
+            <ClientOrCompanyMarker id={0} draggable={true} dataClientOrCompany={{name: props.companyName, coordinate: coordinate, title: 'Empresa ®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>:
             <Fragment>
-                <ClientOrCompanyMarker id={0} draggable={!props.isDetails} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                <ClientOrCompanyMarker id={0} draggable={!props.isDetails} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ©'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
                 {props.companyName == null ? 
                     props.companyNameAndCoordinate.map((c) => (
                     (c.companyCoordinate.latlng.latitude != 0) &&
                         <Fragment key={c.id}>
-                            <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                            <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa ®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
                             <Polyline
                                 coordinates={[coordinate, c.companyCoordinate.latlng]}
                                 fillColor="#16b4f7"
@@ -110,7 +110,7 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 : 
                 (props.companyCoordinate.latlng.latitude != 0) &&
                 <Fragment>
-                    <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                    <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa ®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
                     <Polyline
                         coordinates={[coordinate, props.companyCoordinate.latlng]}
                         fillColor="#16b4f7"
