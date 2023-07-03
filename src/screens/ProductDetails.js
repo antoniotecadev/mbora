@@ -26,7 +26,6 @@ import { AlertDialog } from '../components/AlertDialog';
 import { AntDesign, MaterialCommunityIcons, Fontisto  } from "@expo/vector-icons";
 import { Avatar, Colors, Text as TextUILIB, View as ViewUILIB } from 'react-native-ui-lib';
 
-const imageProduct = require('../../assets/products/oleo.jpg');
 const API_URL = Constants.default.manifest.extra.API_URL;
 
 export function ProductDetails({route, navigation}) {

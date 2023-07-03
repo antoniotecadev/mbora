@@ -16,7 +16,6 @@ import { isEmpty } from 'lodash';
 
 const ITEM_HEIGHT = 150;
 
-const cardImage2 = require('../../assets/products/oleo.jpg');
 const API_URL = Constants.default.manifest.extra.API_URL;
 
 export default function ProductsList({ route, navigation }) {

@@ -1,6 +1,5 @@
 import React, {createContext, useState} from 'react';
 import { getValueItemAsync } from './utils/utilitario';
-import { getProduct } from './services/ProductsService.js';
 import { deleteItemAsync } from 'expo-secure-store';
 import * as Constants from 'expo-constants';
 import { Alert } from 'react-native';
@@ -14,7 +13,6 @@ export function CartProvider(props) {
   const [visibleToast, setVisibleToast] = useState({visible: false, message: null, backgroundColor: null});
   
   function addItemToCart(produto, msg, bckClr) {
-    // const product = getProduct(id);
     setVisibleToast({visible: true, message: msg, backgroundColor: bckClr});
     const product = produto;
     setItems((prevItems) => {
