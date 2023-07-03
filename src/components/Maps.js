@@ -101,9 +101,8 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                             <Polyline
                                 coordinates={[coordinate, c.companyCoordinate.latlng]}
                                 fillColor="#16b4f7"
-                                strokeColor={"#000"}
+                                strokeColor={"#16b4f7"}
                                 strokeWidth={5}
-                                lineCap='round'
                             />
                         </Fragment>
                     ))
@@ -114,9 +113,8 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                     <Polyline
                         coordinates={[coordinate, props.companyCoordinate.latlng]}
                         fillColor="#16b4f7"
-                        strokeColor={"#000"}
+                        strokeColor={"#16b4f7"}
                         strokeWidth={5}
-                        lineCap='round'
                     />
                 </Fragment>}
             </Fragment>}
