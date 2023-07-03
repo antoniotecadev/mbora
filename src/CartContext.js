@@ -3,6 +3,7 @@ import { getValueItemAsync } from './utils/utilitario';
 import { getProduct } from './services/ProductsService.js';
 import { deleteItemAsync } from 'expo-secure-store';
 import * as Constants from 'expo-constants';
+import { Alert } from 'react-native';
 
 export const CartContext = createContext();
 
@@ -98,8 +99,6 @@ export function CartProvider(props) {
         let rjd = await response.json();
         if(rjd.success) {
           setShowDialog({visible: true, title: 'Encomenda', message: productName + ' ' + rjd.data.message, color: 'green'});
-          // setVisibleToast({visible: true, message: rjd.message, backgroundColor: 'green'});
-          // alert(JSON.stringify(rjd.data.message, null, 2));
         } else {
           if (rjd.message == 'Erro de validação') {
               let messageError;
@@ -108,18 +107,18 @@ export function CartProvider(props) {
               } else {
                 messageError = rjd.data.message.id_produts_mbora;
               }
-              setShowDialog({visible: true, title: rjd.message, message: messageError[0], color: 'orangered'});
+              Alert.alert(rjd.message, messageError[0]);
           } else if (rjd.message == 'Autenticação') {
-            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
+            Alert.alert(rjd.message, rjd.data.message);
             await deleteItemAsync('token');
             props.user.setAuth(false);
           } else {
-            setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orangered'});
+            Alert.alert(rjd.message, rjd.data.message);
           }
       }
     } catch (error) {
       setLoading({encomenda: false});
-      setShowDialog({visible: true, title: 'Erro', message: error.message, color: 'orangered'});
+      Alert.alert('Ocorreu um erro', error.message);
     }
   }
   
