@@ -95,18 +95,20 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
                 <ClientOrCompanyMarker id={0} draggable={!props.isDetails} dataClientOrCompany={{name: props.clientName, coordinate: coordinate, title: 'Cliente Mbora ✅'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
                 {props.companyName == null ? 
                     props.companyNameAndCoordinate.map((c) => (
-                    <Fragment key={c.id}>
-                        <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
-                        <Polyline
-                            coordinates={[coordinate, c.companyCoordinate.latlng]}
-                            fillColor="#16b4f7"
-                            strokeColor={"#000"}
-                            strokeWidth={5}
-                            lineCap='round'
-                        />
-                    </Fragment>
+                    (c.companyCoordinate.latlng.latitude != 0) &&
+                        <Fragment key={c.id}>
+                            <ClientOrCompanyMarker id={c.id + 1} dataClientOrCompany={{name: c.companyName, coordinate: c.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
+                            <Polyline
+                                coordinates={[coordinate, c.companyCoordinate.latlng]}
+                                fillColor="#16b4f7"
+                                strokeColor={"#000"}
+                                strokeWidth={5}
+                                lineCap='round'
+                            />
+                        </Fragment>
                     ))
                 : 
+                (props.companyCoordinate.latlng.latitude != 0) &&
                 <Fragment>
                     <ClientOrCompanyMarker id={1} dataClientOrCompany={{name: props.companyName, coordinate: props.companyCoordinate.latlng, title: 'Empresa®'}} drag={drag} setDrag={setDrag} animateRegionAndMarker={animateRegionAndMarker}/>
                     <Polyline
@@ -141,14 +143,16 @@ const [coordinate, setCoordinate] = useState({latitude: 0, longitude: 0})
             {props.companyName == null ? 
             <ScrollView horizontal={true}>
                 {props.companyNameAndCoordinate.map((c) => (
-                <Fragment key={c.id}>
-                    <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(c.companyCoordinate.latlng, false)}>
-                        <Text style={[styles.text, {color: 'white'}]}>{c.companyName}</Text>
-                    </Pressable>
-                </Fragment>
+                    (c.companyCoordinate.latlng.latitude != 0) &&
+                    <Fragment key={c.id}>
+                        <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(c.companyCoordinate.latlng, false)}>
+                            <Text style={[styles.text, {color: 'white'}]}>{c.companyName}</Text>
+                        </Pressable>
+                    </Fragment>
                 ))}
             </ScrollView>
             :
+            (props.companyCoordinate.latlng.latitude != 0) &&
             <Pressable style={[styles.button, {backgroundColor: 'orange'}]} onPress={() => animateRegionAndMarker(props.companyCoordinate.latlng, false)}>
                 <Text style={[styles.text, {color: 'white'}]}>{props.companyName}</Text>
             </Pressable>}
