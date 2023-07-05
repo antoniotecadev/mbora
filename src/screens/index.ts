@@ -9,10 +9,11 @@ import { ProductDetails } from './ProductDetails.js';
 import { Carrinho } from './Carrinho.js';
 import { Settings } from './settings';
 import { genRootNavigator, genStackNavigator, genTabNavigator } from '../services/navigation/help';
-import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount } from '../services/navigation/options';
+import { screenDefaultOptions, tabBarDefaultOptions, badgeCartCount, badgeUnreadNotificationCount } from '../services/navigation/options';
 import SignInForm from './SignInForm';
 import SignUpForm from './SignUpForm';
 import ProfileEdit from './ProfileEdit';
+import Notification from './Notification';
 import PreviewProfilePhoto from './PreviewProfilePhoto';
 import CompanyProfileEdit from './CompanyProfileEdit';
 import ProductCategoryList from './ProductCategoryList';
@@ -21,7 +22,7 @@ import { FindAccount, ListAccount, SendCode, ConfirmationAccount, CreateNewPassw
 // Describe your screens here
 export type Tabs = 'Main' | 'Profile' | 'Cart' | 'Notification' | 'Company';
 export type Modal = '';
-export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'ProductCategoryList' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'CompanyProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
+export type Screen = 'SignInForm' | 'SignUpForm' | 'FindAccount' | 'ListAccount' | 'SendCode' | 'ConfirmationAccount' | 'CreateNewPassword' | 'Main' | 'ProductCategoryList' | 'Profile'| 'ProfileEdit' | 'PreviewProfilePhoto' | 'CompanyProfileEdit' | 'Settings' | 'ProductDetails' | 'Cart' | 'Notification' | 'CompanyList' | 'CompanyProfile' | 'SearchProductCompany';
 
 export type ModalProps = {
   ExampleModal: undefined;
@@ -169,6 +170,14 @@ const screens: ScreenLayouts = {
       title: 'Carrinho de encomenda',
     }),
   },
+  Notification: {
+    name: 'Notification',
+    component: Notification,
+    options: () => ({
+      headerTintColor: 'orange',
+      title: 'Notificação',
+    }),
+  },
   CompanyList: {
     name: 'CompanyList',
     component: CompanyList,
@@ -198,6 +207,7 @@ const screens: ScreenLayouts = {
 const SigInStack = () => genStackNavigator([screens.SignInForm, screens.SignUpForm, screens.FindAccount, screens.ListAccount, screens.SendCode, screens.ConfirmationAccount, screens.CreateNewPassword]);
 const HomeStack = () => genStackNavigator([screens.Main, screens.ProductCategoryList, screens.Profile, screens.ProductDetails, screens.Cart, screens.SearchProductCompany, screens.Settings, screens.CompanyProfile]);
 const CartStack = () => genStackNavigator([screens.Cart]);
+const NotificationStack = () => genStackNavigator([screens.Notification]);
 const CompanyStack = () => genStackNavigator([screens.CompanyList, screens.SearchProductCompany, screens.CompanyProfile, screens.ProductDetails, screens.ProductCategoryList]);
 const ProfileStack = () => genStackNavigator([screens.Profile, screens.ProductDetails, screens.ProfileEdit, screens.PreviewProfilePhoto, screens.CompanyProfile, screens.CompanyProfileEdit, screens.ProductCategoryList]);
 
@@ -230,9 +240,10 @@ const tabs: TabScreenLayouts = {
   },
   Notification: {
     name: 'NotificationNavigator',
-    component: CartStack,
+    component: NotificationStack,
     options: () => ({
       title: 'Notificação',
+      tabBarBadge: badgeUnreadNotificationCount(),
       ...tabBarDefaultOptions('NotificationNavigator'),
     }),
   },

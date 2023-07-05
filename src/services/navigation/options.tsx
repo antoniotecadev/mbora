@@ -50,6 +50,10 @@ export const badgeCartCount = () => {
   const { getItemsCount } = useContext(CartContext);
   return getItemsCount();
 };
+export const badgeUnreadNotificationCount = () => {
+  const { unreadNotificationsNumber } = useContext(CartContext);
+  return unreadNotificationsNumber;
+};
 // return (
 //   <Badge backgroundColor={Colors.red20} containerStyle={{ position: 'absolute', top: -4, right: -4 }} label={String(getItemsCount())} size={12} />
 // );

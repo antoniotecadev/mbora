@@ -462,7 +462,7 @@ const Favoritos = ({ nav, appearanceColor, fetchFavoritos, userName, userTelepho
     return(
         <FlatList
             columnWrapperStyle={{
-            justifyContent: "space-between",
+                justifyContent: "space-between",
             }}
             numColumns={2}
             contentContainerStyle={styles.productsListContainer}

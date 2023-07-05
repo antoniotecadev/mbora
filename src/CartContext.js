@@ -9,6 +9,7 @@ export const CartContext = createContext();
 export function CartProvider(props) {
   const [items, setItems] = useState([]);
   const [error, setError] = useState(null);
+  const [unreadNotificationsNumber, setUnreadNotificationsNumber] = useState(0);
   const [showDialog, setShowDialog] = useState({visible: false, title: null, message: null, color: null});
   const [visibleToast, setVisibleToast] = useState({visible: false, message: null, backgroundColor: null});
   
@@ -122,7 +123,7 @@ export function CartProvider(props) {
   
   return (
     <CartContext.Provider 
-      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast, error, setError, showDialog, setShowDialog, encomendar}}>
+      value={{items, setItems, getItemsCount, addItemToCart, getTotalPrice, quantity, removeItemToCart, visibleToast, setVisibleToast, error, setError, showDialog, setShowDialog, encomendar, unreadNotificationsNumber, setUnreadNotificationsNumber}}>
       {props.children}
     </CartContext.Provider>
   );
