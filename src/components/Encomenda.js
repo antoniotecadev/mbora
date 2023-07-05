@@ -14,7 +14,7 @@ export default function Encomenda({ fetchEncomendas, encomendas, onRefresh, refr
 
     const markAsAnswered = async(code_encomenda, setLoadingAnswered)=> {
       try {
-        let response = await fetch(API_URL + 'encomenda/mark/viewed',
+        let response = await fetch(API_URL + 'encomenda/mark/answered',
         {
           method: 'PUT',
           headers: {
