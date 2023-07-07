@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { View, StyleSheet, Share, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
+import React, { useState, useContext, useEffect, Fragment } from 'react';
+import { View, StyleSheet, Alert, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
 import { Card, Colors, Avatar, Typography, ExpandableSection, Text as TextUILIB } from 'react-native-ui-lib';
 import { currency, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import {Image as ImageCache} from 'react-native-expo-image-cache';
@@ -88,20 +88,20 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
             {isEncomenda || isAdmin ?
             !isEncomenda && (loadingDelete ? <ActivityIndicator style={{alignItems: 'left'}} color={'orangered'} /> : <AntDesign name='delete' size={20} color='orangered' onPress={()=> deleteProduct()}/>)
             : 
-            <>
+            !isAdmin &&
+            <Fragment>
               <TouchableOpacity 
                 style={[styles.button, { backgroundColor: 'orange' }]} 
                 onPress={()=> addItemToCart(produto, produto.nome + ' adicionado ao carrinho.', 'green')}>
                 <Text style={styles.textButton}>Adicionar ao Carrinho</Text>
               </TouchableOpacity>
-
-            {loading ? <ActivityIndicator /> :
-            <TouchableOpacity 
-              style={[styles.button, { backgroundColor: 'green' }]} 
-              onPress={()=> setShowDialog(true)}>
-              <Text style={styles.textButton}>Encomendar Agora</Text>
-            </TouchableOpacity>}</>}
-
+              {loading ? <ActivityIndicator /> :
+              <TouchableOpacity 
+                style={[styles.button, { backgroundColor: 'green' }]} 
+                onPress={()=> setShowDialog(true)}>
+                <Text style={styles.textButton}>Encomendar Agora</Text>
+              </TouchableOpacity>}
+            </Fragment>}
             {isFavorite && 
             <TouchableOpacity 
               style={[styles.button, { backgroundColor: 'orangered' }]} 
@@ -109,7 +109,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
               <Text style={styles.textButton}>Remover</Text>
             </TouchableOpacity>}
             {!isAdmin && 
-            <>
+            <Fragment>
               <View style={[styles.section, {marginVertical: 8}]}>
                 <TextUILIB textColor style={{ ...Typography.text90 }}>{produto.empresa}</TextUILIB>
                 <Avatar source={{ uri: 'https://lh3.googleusercontent.com/-cw77lUnOvmI/AAAAAAAAAAI/AAAAAAAAAAA/WMNck32dKbc/s181-c/104220521160525129167.jpg' }}
@@ -121,7 +121,7 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
               <Text style={{ marginBottom: 8, color: Colors.grey30, fontSize: 10 }}>
                 {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
               </Text>
-            </>}
+            </Fragment>}
             <Text style={{ marginBottom: 8, color: Colors.grey40, fontSize: 10 }}>{numberFollowersAndViewsFormat(produto.visualizacao, 'youtube')} {produto.visualizacao > 1 ? 'visualizações' : 'visualização'}</Text>
           </View>
         </View>
