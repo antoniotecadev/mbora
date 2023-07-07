@@ -34,9 +34,9 @@ export function Product({appearanceColor, isEncomenda = false, isFavorite = fals
   }
 
   const deleteProduct = () =>
-    Alert.alert('Eliminar ' + produto.nome, 'Este produto ou serviço pode estar associado a uma encomenda, tem certeza que quer eliminar?', [
+    Alert.alert(produto.nome, 'Este produto ou serviço pode estar associado a uma encomenda, tem certeza que quer eliminar?', [
       {
-        text: 'Sim',
+        text: 'Eliminar',
         onPress: () => {
           setLoadingDelete(true);
           deleteProductService(produto.id, produto.nome, produto.imei, setLoadingDelete).then(()=> setLoadingDelete(false));
