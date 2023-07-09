@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react';
-import { View, StyleSheet, TextInput, Button, ScrollView, Text, TouchableOpacity, Image, SafeAreaView } from 'react-native';
+import { View, StyleSheet, TextInput, Button, ScrollView, Text, TouchableOpacity, Image, SafeAreaView, Platform, Alert  } from 'react-native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { ButtonSubmit, FormHeader, ErroMessage } from '../components/Form';
-import { modelName as device_name } from 'expo-device';
+import { modelName as device_name, isDevice } from 'expo-device';
 import { getAppearenceColor, getValueItemAsync, saveTokenId } from '../utils/utilitario';
 import { Colors, Text as TextUILIB } from 'react-native-ui-lib';
 import { useServices } from '../services';
@@ -11,8 +11,9 @@ import { useStores } from '../stores';
 import { AlertDialog } from '../components/AlertDialog';
 import { CartContext } from '../CartContext';
 import ToastMessage from '../components/ToastMessage';
-import * as Constants from 'expo-constants';
 import { isEmpty } from 'lodash';
+import * as Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 export default SignInForm = ()=> {
 
@@ -85,6 +86,38 @@ export default SignInForm = ()=> {
          });
     }
 
+    async function registerForPushNotificationsAsync() {
+      let token;
+      if (isDevice) { // Você deve verificar se o aplicativo está sendo executado em um dispositivo físico, pois as notificações por push não funcionam em um emulador/simulador.
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+          const { status } = await Notifications.requestPermissionsAsync();
+          finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+          alert('Failed to get push token for push notification!');
+          return;
+        }
+        // Isso fornece o ExpoPushToken.
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        console.log(token);
+      } else {
+        alert('Must use physical device for Push Notifications');
+      }
+      // No Android, você precisa especificar um canal.
+      if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+          name: 'default',
+          importance: Notifications.AndroidImportance.MAX,
+          vibrationPattern: [0, 250, 250, 250],
+          lightColor: '#FF231F7C',
+        });
+      }
+    
+      return token;
+    }
+
     return (
       <SafeAreaView style={styles.container}>
         {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
@@ -104,7 +137,13 @@ export default SignInForm = ()=> {
             })}
             onSubmit={(values, formikActions) => {
               setTimeout(() => {
-                loginUser({...{device_name}, ...values}).then(()=> formikActions.setSubmitting(false));
+                registerForPushNotificationsAsync().then(token => {
+                  loginUser({...{exponentPushToken: token, device_name}, ...values}).then(()=> formikActions.setSubmitting(false));
+                  formikActions.setSubmitting(false);
+                }).catch((error)=> {
+                  formikActions.setSubmitting(false);
+                  Alert.alert('Ocorreu um erro', error.message)
+                });
               }, 500);
             }}>
             {props => (
