@@ -9,12 +9,15 @@ import {configureDesignSystem} from './src/utils/designSystem';
 import {hydrateStores, StoresProvider, useStores} from './src/stores';
 import {initServices, ServicesProvider} from './src/services';
 import { getValueItemAsync } from './src/utils/utilitario';
+import * as Constants from 'expo-constants';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
 LogBox.ignoreLogs(['Require']);
-let URL = 'http://192.168.18.4/mborasystem-admin/public/api/'; 
+
+const API_URL = Constants.default.manifest.extra.API_URL;
+
 export default (): JSX.Element => {
 
   const {user} = useStores();
@@ -33,7 +36,7 @@ export default (): JSX.Element => {
 
   const checkUserAuthenticated = async () => {
     try {
-      let response = await fetch(URL + 'user/autenticated',
+      let response = await fetch(API_URL + 'user/autenticated',
       {
         method: 'POST',
         headers: {
