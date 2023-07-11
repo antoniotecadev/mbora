@@ -148,7 +148,7 @@ export const SendCode = ({route, navigation})=> {
     }
 
     return (
-            <ViewUILIB bg-bgColor flex padding-16 centerH>
+            <ViewUILIB bg-bgColor padding-16 centerH style={{flex: 1}}>
                 {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <UserPhoto/>
                 <TextUILIB textColor marginT-8 text70 style={{fontWeight: 'bold'}}>{user.first_name + ' ' + user.last_name}</TextUILIB>
@@ -231,7 +231,7 @@ export const ConfirmationAccount = ({route, navigation})=> {
     }
 
     return (
-            <ViewUILIB bg-bgColor flex padding-16>
+            <ViewUILIB bg-bgColor padding-16 style={{flex: 1}}>
                 <ToastMessage/> 
                 {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB textColor text60>Confirma a tua conta</TextUILIB>
@@ -325,7 +325,7 @@ export const CreateNewPassword = ({route, navigation})=> {
     }, [navigation]);
 
     return (
-            <ViewUILIB bg-bgColor flex padding-16>
+            <ViewUILIB bg-bgColor padding-16 style={{flex: 1}}>
                 {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
                 <TextUILIB textColor text60>Criar uma palavra - passe nova</TextUILIB>
                 <TextUILIB textColor marginV-8 text80>
