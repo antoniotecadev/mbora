@@ -410,7 +410,7 @@ export default function CompanyProfile({ route, navigation }) {
   }, [route.params?.valuesCompany]);
 
 return (
-        <ViewUILIB style={{flex: 1}} bg-bgColor>
+        <SafeAreaView style={{flex: 1}} bg-bgColor>
           <ToastMessage />
           {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
           {viewFullPhoto ? <ViewFullPhoto photoURI={image} setViewFullPhoto={setViewFullPhoto} /> :
@@ -446,7 +446,7 @@ return (
                   </TabController.TabPage>
               </TabController.PageCarousel>
           </TabController>
-        </ViewUILIB>
+        </SafeAreaView>
     );
 }
 
