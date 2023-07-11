@@ -100,8 +100,7 @@ export default SignInForm = ()=> {
           return;
         }
         // Isso fornece o ExpoPushToken.
-        token = (await Notifications.getExpoPushTokenAsync()).data;
-        console.log(token);
+        token = (await Notifications.getExpoPushTokenAsync({experienceId:'@antonioteca/mbora'})).data;
       } else {
         alert('Must use physical device for Push Notifications');
       }
@@ -139,7 +138,6 @@ export default SignInForm = ()=> {
               setTimeout(() => {
                 registerForPushNotificationsAsync().then(token => {
                   loginUser({...{exponentPushToken: token, device_name}, ...values}).then(()=> formikActions.setSubmitting(false));
-                  formikActions.setSubmitting(false);
                 }).catch((error)=> {
                   formikActions.setSubmitting(false);
                   Alert.alert('Ocorreu um erro', error.message)
