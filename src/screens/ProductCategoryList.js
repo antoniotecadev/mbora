@@ -126,7 +126,7 @@ export default function ProductsList({ route, navigation }) {
   }, [route.params?.id, route.params?.isFavorito]);
 
   return (
-    <ViewUILB bg-bgColor flex>
+    <ViewUILB bg-bgColor style={{flex: 1}}>
       {showDialog.visible && <AlertDialog showDialog={showDialog.visible} setShowDialog={setShowDialog} titulo={showDialog.title} mensagem={showDialog.message} cor={showDialog.color}/>}
       <ToastMessage />
       <FlatList
