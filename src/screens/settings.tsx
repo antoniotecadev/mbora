@@ -169,7 +169,7 @@ export const Settings: React.FC = observer(() => {
   }
 
   return (
-    <View flex bg-bgColor>
+    <View bg-bgColor style={{flex: 1}}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View padding-s4>
           <Section bg title="UI">
