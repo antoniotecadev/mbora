@@ -87,7 +87,7 @@ const List = ({ isCompany, empty, search, loading, setLoading, searchPhrase, dat
   };
 
   return (
-    <ViewUILIB flex style={{height: windowHeight}} bg-bgColor>
+    <ViewUILIB style={{height: windowHeight, flex: 1}} bg-bgColor>
       <FlatList
         data={data}
         renderItem={renderItem}
