@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react';
-import { getValueItemAsync } from './utils/utilitario';
+import { getValueItemAsync, sendPushNotification } from './utils/utilitario';
 import { deleteItemAsync } from 'expo-secure-store';
 import * as Constants from 'expo-constants';
 import { Alert } from 'react-native';
@@ -97,7 +97,8 @@ export function CartProvider(props) {
       );
         let rjd = await response.json();
         if(rjd.success) {
-          setShowDialog({visible: true, title: 'Encomenda', message: productName + ' ' + rjd.data.message, color: 'green'});
+          rjd.data.exponentPushTokens.map((token)=> sendPushNotification(token, 'Encomenda', rjd.data.user_name + ' efectuou uma encomenda em sua empresa'));
+          setShowDialog({visible: true, title: 'Encomenda', message: productName + ' ' + rjd.message, color: 'green'});
         } else {
           if (rjd.message == 'Erro de validação') {
               let messageError;
