@@ -222,7 +222,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20
   },
-  textButton: { 
+  textButton: {
+    fontSize: 12,
     color: 'white', 
     textAlign: 'center' 
   },
