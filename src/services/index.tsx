@@ -3,13 +3,11 @@ import React from 'react';
 import {OnStart} from './onStart';
 import {Nav} from './navigation';
 import {Translate} from './translate';
-import {Api} from './api';
 
 export const services = {
   t: new Translate(), // should be first
   nav: new Nav(),
   onStart: new OnStart(),
-  api: new Api(),
 };
 type ContextServices = typeof services;
 

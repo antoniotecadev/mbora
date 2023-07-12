@@ -7,7 +7,7 @@ import { UserAuth } from './auth';
 
 export const stores = {
   ui: new UIStore(),
-  counter: new CounterStore(),
+  notification: new CounterStore(),
   user: new UserAuth(),
 };
 type ContextStores = typeof stores;

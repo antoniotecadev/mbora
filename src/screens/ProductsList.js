@@ -13,6 +13,7 @@ import { AlertDialog } from '../components/AlertDialog';
 import { getAppearenceColor, getValueItemAsync } from '../utils/utilitario';
 import * as Constants from 'expo-constants';
 import { isEmpty } from 'lodash';
+import { autorun } from 'mobx';
 
 const ITEM_HEIGHT = 150;
 
@@ -27,10 +28,10 @@ export default function ProductsList({ route, navigation }) {
   const [emptyProduct, setEmptyProduct] = useState(false);
   const [categoryError, setCategoryError] = useState(null);
 
-  const {ui, user} = useStores();
+  const {ui, user, notification} = useStores();
   const { nav } = useServices();
   let color = getAppearenceColor(ui.appearanceName); 
-  const { error, setError, showDialog, setShowDialog} = useContext(CartContext);
+  const { error, setError, showDialog, setShowDialog, setUnreadNotificationsNumber} = useContext(CartContext);
 
   const onRefresh = ()=> {
     setRefreshing(true);
@@ -165,6 +166,9 @@ export default function ProductsList({ route, navigation }) {
   }, []);
 
   useEffect(() => {
+    autorun(() => { // Actualizar número de notificações do badge, quando receber notificação
+      setUnreadNotificationsNumber(notification.value);
+    });
     fetchCategorys();
     fetchProducts(true).then(()=> setLoading({pdt: false}));
   }, []);

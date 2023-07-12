@@ -7,18 +7,15 @@ export class CounterStore implements IStore {
     this.value += 1;
   };
   dec = (): void => {
-    this.value -= 1;
+    if(this.value > 0) {
+      this.value -= 1;
+    }
   };
   reset = (): void => {
     this.value = 0;
   };
   set = (v: number): void => {
     this.value = v;
-  };
-
-  loading = false;
-  setLoading = (v: boolean): void => {
-    this.loading = v;
   };
 
   constructor() {

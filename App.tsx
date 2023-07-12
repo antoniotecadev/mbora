@@ -30,18 +30,19 @@ Notifications.setNotificationHandler({
 
 export default (): JSX.Element => {
 
-  const {user} = useStores();
-
+  const {user, notification} = useStores();
+  
   const notificationListener = useRef(null);
   const responseListener = useRef(null);
   
   const startApp = useCallback(async () => {
     // Esse ouvinte é acionado sempre que uma notificação é recebida enquanto o aplicativo está em primeiro plano.
-    notificationListener.current = Notifications.addNotificationReceivedListener(async notification => {
-      await Notifications.setBadgeCountAsync(1)
+    notificationListener.current = Notifications.addNotificationReceivedListener(async n => {
+      notification.inc()
+      await Notifications.setBadgeCountAsync(notification.value)
     });
     // Esse ouvinte é acionado sempre que um usuário toca ou interage com uma notificação (funciona quando um aplicativo é colocado em primeiro plano, em segundo plano ou morto).
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {});
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(r => notification.dec());
 
     await hydrateStores();
     await initServices();

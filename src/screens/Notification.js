@@ -1,5 +1,6 @@
 import React, {useState, useCallback, useContext, useEffect} from "react";
 import { isEmpty } from "lodash";
+import { useStores } from "../stores";
 import * as Constants from 'expo-constants';
 import { CartContext } from "../CartContext";
 import { Feather } from "@expo/vector-icons";
@@ -19,8 +20,9 @@ export default function Notification() {
     const [notificacoes, setNotificacoes] = useState([]);
     const [loadingMarkAsRead, setLoadingMarkAsRead] = useState(false);
     const [numeroTotalNotificacoes, setNumeroTotalNotificacoes] = useState(0);
-
-    const { showDialog, setShowDialog, setUnreadNotificationsNumber } = useContext(CartContext);
+    
+    const {notification} = useStores();
+    const { showDialog, setShowDialog } = useContext(CartContext);
 
     const fetchNotifications = useCallback(async (isMoreView) => {
         try {
@@ -37,7 +39,7 @@ export default function Notification() {
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
             } else  if (!isEmpty(rjd.notificacao)) {
                 setEmpty(false);
-                setUnreadNotificationsNumber(rjd.numeroNotificacoesNaolida);
+                notification.set(rjd.numeroNotificacoesNaolida)
                 if (isMoreView) {
                     pagination(rjd.notificacao);
                     setNotificacoes((prevState) => [...prevState, ...rjd.notificacao]);
@@ -88,6 +90,7 @@ export default function Notification() {
             });
             let rjd = await response.json();
             if(rjd.success) {
+                notification.dec();
                 onRefresh();
                 setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'green'});
             } else {
@@ -104,8 +107,10 @@ export default function Notification() {
         return <TouchableOpacity 
                 key={item.notification_id} 
                 onPress={()=> {
-                    setLoadingMarkAsRead(true);
-                    markAsRead(item.id).then(()=> setLoadingMarkAsRead(false))
+                    if(item.read_at == null) {
+                        setLoadingMarkAsRead(true);
+                        markAsRead(item.id).then(()=> setLoadingMarkAsRead(false))
+                    }
                 }}>
                     <View style={{backgroundColor: item.read_at ? null : 'aliceblue', padding: 10}}>
                         <View style={styles.section}>
