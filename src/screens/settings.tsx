@@ -172,7 +172,7 @@ export const Settings: React.FC = observer(() => {
     <View bg-bgColor style={{flex: 1}}>
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         <View padding-s4>
-          <Section bg title="UI">
+          {/* <Section bg title="UI">
             <Action
               title="Aparência"
               info={ui.appearanceName}
@@ -204,7 +204,7 @@ export const Settings: React.FC = observer(() => {
               <Action title="Github" icon="logo-github" onPress={openLink(links.github)} />
               <Action title="Website" icon="earth-outline" onPress={openLink(links.website)} />
             </View>
-          </Section>
+          </Section> */}
 
           <Section bg title="Acerca">
             <View>
