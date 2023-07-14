@@ -2,8 +2,9 @@ import 'intl';
 import 'intl/locale-data/jsonp/pt-AO';
 import { getItemAsync, setItemAsync } from 'expo-secure-store';
 import { Colors } from 'react-native-ui-lib';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import * as Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 export const currency = function (price = 0) {
     let p1 = price.slice(0, -2); // Números antes dos 2 últimos
@@ -107,4 +108,18 @@ export async function sendPushNotification(exponentPushToken, title, body) {
       },
       body: JSON.stringify(message),
     });
+}
+
+export async function scheduleNotificationAsyncIphone(notification) {
+    if(notification > 0 && Platform.OS == 'ios') {
+        Notifications.scheduleNotificationAsync({
+          content: {
+            title: "Encomenda",
+            body: 'Encomendas efectuada(s) para sua empresa, actualize as suas notificações.',
+          },
+          trigger: {
+            seconds: 10,
+          },
+        });
+    }
 }

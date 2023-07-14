@@ -9,12 +9,12 @@ import { Product } from '../components/Product';
 import ToastMessage from '../components/ToastMessage';
 import { useServices } from '../services';
 import { useStores } from '../stores';
-import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat } from '../utils/utilitario';
 import { AntDesign, Feather } from "@expo/vector-icons";
 import ListFollowers from '../components/ListFollowers';
 import * as Constants from 'expo-constants';
 import * as ImagePicker from 'expo-image-picker';
 import {Image as ImageCache, CacheManager} from 'react-native-expo-image-cache';
+import { getAppearenceColor, getValueItemAsync, numberFollowersAndViewsFormat, scheduleNotificationAsyncIphone } from '../utils/utilitario';
 
 const { width } = Dimensions.get('window');
 const API_URL = Constants.default.manifest.extra.API_URL;
@@ -106,6 +106,7 @@ export default function CompanyProfile({ route, navigation }) {
                 }
             });
             let rjd = await response.json();
+            scheduleNotificationAsyncIphone(rjd.numeroNotificacoesNaolida);
             if  (!rjd.success && rjd.message == 'Autenticação') {
               setShowDialog({visible: true, title: rjd.message, message: rjd.data.message, color: 'orange'});
             } else  if (!isEmpty(rjd.produtoServico)) {
