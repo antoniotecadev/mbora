@@ -10,6 +10,7 @@ import {hydrateStores, StoresProvider, useStores} from './src/stores';
 import {initServices, ServicesProvider} from './src/services';
 import { getValueItemAsync } from './src/utils/utilitario';
 import * as Constants from 'expo-constants';
+import * as TaskManager from 'expo-task-manager';
 import * as Notifications from 'expo-notifications';
 
 // Keep the splash screen visible while we fetch resources
@@ -34,7 +35,18 @@ export default (): JSX.Element => {
   
   const notificationListener = useRef(null);
   const responseListener = useRef(null);
-  
+
+  const BACKGROUND_NOTIFICATION_TASK = 'BACKGROUND-NOTIFICATION-TASK';
+
+  TaskManager.defineTask(BACKGROUND_NOTIFICATION_TASK, async({ data, error, executionInfo }) => {
+    if (error) {
+      return;
+    } else {
+      notification.inc()
+      await Notifications.setBadgeCountAsync(notification.value)
+    }
+  });
+    
   const startApp = useCallback(async () => {
     // Esse ouvinte é acionado sempre que uma notificação é recebida enquanto o aplicativo está em primeiro plano.
     notificationListener.current = Notifications.addNotificationReceivedListener(async n => {
@@ -84,8 +96,18 @@ export default (): JSX.Element => {
     }
   }
 
+  const registerTaskAsync = async () => {
+    try {
+      await Notifications.registerTaskAsync(BACKGROUND_NOTIFICATION_TASK);
+      console.log('Background notification task registered successfully.');
+    } catch (e) {
+      console.log('Error registering background notification task:', e);
+    }
+  };
+
   useEffect(() => {
     startApp();
+    registerTaskAsync();
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
