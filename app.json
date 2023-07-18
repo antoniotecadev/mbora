@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "antonioteca",
     "name": "Mbora",
     "slug": "mbora",
     "version": "1.0.0",
@@ -11,6 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "privacy": "public",
     "updates": {
       "fallbackToCacheTimeout": 0
     },
