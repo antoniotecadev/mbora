@@ -36,7 +36,8 @@
     },
     "description": "Production-ready starter for Expo (React Native) App! Powered by cli-rn, React Navigation (v6), RN UI lib, Mobx, Reanimated 2, Dark Mode, Localization, and much more.",
     "extra": {
-      "API_URL": "http://192.168.18.4/mborasystem-admin/public/api/",
+      // "API_URL": "http://192.168.18.4/mborasystem-admin/public/api/",
+      "API_URL": "http://gator2007.temp.domains/~yogatcss/mborasystem-admin/public/api/",
       "API_KEY": "your-api-key",
       "eas": {
         "projectId": "9c41eeba-4d96-4e82-a51e-a6d57157153b"
