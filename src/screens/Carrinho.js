@@ -15,8 +15,6 @@ export function Carrinho() {
     const {user} = useStores();
     const { items, getTotalPrice, getItemsCount, quantity, removeItemToCart, encomendar, showDialog, setShowDialog } = useContext(CartContext);
 
-    const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";
-
     const encomendarProduct = async (clientData)=> {
         let array = getIdImeiNameQty(items);
         await encomendar(setLoading, array[1], array[0], array[2], array[3], clientData)
@@ -37,7 +35,7 @@ export function Carrinho() {
                 activeOpacity={1}
                 style={styles.card}
                 activeScale={0.96}>
-                <Card.Image source={{uri: uri }} style={{ width: 100, height: '100%' }} />
+                <Card.Image source={{uri: item.urlImage }} style={{ width: 100, height: '100%' }} />
                 <View style={{maxWidth: '100%', margin: 8 }}>
                     <TextUILIB textColor>
                         {item.product.nome}

@@ -211,7 +211,6 @@ export function ProductDetails({route, navigation}) {
     })
   }, [isFavorito, produto.isFavorito, screenBack]);
   
-  const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";  
   return (
     <ScrollView>
       <ViewUILIB style={{height: height}} bg-bgColor>
@@ -251,7 +250,7 @@ export function ProductDetails({route, navigation}) {
               {`${produto.nomeProvincia}, ${produto.district} , ${produto.street}`}
             </Text>
           </TouchableOpacity>
-          <Image style={styles.image} source= {{uri: uri}}/>
+          <Image style={styles.image} source= {{uri: produto.urlImage}}/>
           {viewCodeBar && 
           <View style={{alignItems: 'center', backgroundColor: 'lightgreen', paddingVertical: 2, marginHorizontal: 16, marginTop: 10}}>
             <Barcode value={produto.codigoBarra} format="CODE128" />

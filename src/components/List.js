@@ -17,7 +17,6 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 const ItemProduct = ({ item, userTelephone, userName }) => {
 
 const navigation = useNavigation();
-const uri = "https://firebasestorage.googleapis.com/v0/b/react-native-e.appspot.com/o/b47b03a1e22e3f1fd884b5252de1e64a06a14126.png?alt=media&token=d636c423-3d94-440f-90c1-57c4de921641";
 
 const showProductDetails = (item)=> {
   navigation.navigate('ProductDetails', { 
@@ -32,7 +31,7 @@ return <TouchableOpacity onPress={()=> showProductDetails(item)}>
           <View style={styles.section}>
             <TextUILIB textColor style={{maxWidth: '50%'}}>{item.nome}</TextUILIB>
             <TextUILIB textColor text90 marginT-1 style={{maxWidth: '30%'}}>{currency(String(item.preco))}</TextUILIB>
-            <Image style={{width: 45, height: 45, borderRadius: 25}} source={{uri: uri}} />
+            <Image style={{width: 45, height: 45, borderRadius: 25, resizeMode: 'contain'}} source={{uri: item.urlImage}} />
           </View>
           <TextUILIB color="gray" text100L>{item.empresa}</TextUILIB>
         </View>
